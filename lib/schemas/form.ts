@@ -10,3 +10,11 @@ export const editUserSchema = z.object({
   avatar: z.string(),
   password: z.string(),
 })
+
+export const createTagSchema = z.object({
+  name: z.string(),
+})
+
+export const createFolderSchema = z.object({
+  name: z.string(),
+})
