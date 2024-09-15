@@ -1,7 +1,7 @@
-import { siteConfig } from '@/config/site'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { redirect } from 'next/navigation'
+import { siteConfig } from '@/config/site'
 import { createClient } from '@/lib/supabase/server'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoginForm } from '@/components/login/login-form'
 
 export default async function LoginPage() {

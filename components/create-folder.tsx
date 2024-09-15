@@ -1,15 +1,17 @@
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+'use client'
+
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { Button } from './ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from './ui/input'
-import { Spinner } from './spinner'
+import type { z } from 'zod'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Spinner } from './spinner'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
 
 export function CreateFolder() {
   const supabase = createClient()
@@ -46,13 +48,23 @@ export function CreateFolder() {
       <DialogTrigger asChild>
         <Button variant="outline">Create folder</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-sm" onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent
+        className="max-w-sm"
+        onInteractOutside={(e) => {
+          e.preventDefault()
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Create folder</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <form
+            onSubmit={(e) => {
+              void form.handleSubmit(onSubmit)(e)
+            }}
+            className="space-y-2"
+          >
             <FormField
               name="name"
               control={form.control}

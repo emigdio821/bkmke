@@ -1,7 +1,7 @@
-import { Menu } from './menu'
-import { TypographyH3 } from '../ui/typography'
 import { siteConfig } from '@/config/site'
 import { createClient } from '@/lib/supabase/server'
+import { TypographyH3 } from '../ui/typography'
+import { Menu } from './menu'
 
 export async function Sidebar() {
   const supabase = createClient()
@@ -11,9 +11,9 @@ export async function Sidebar() {
   if (error || tagsError) return null
 
   return (
-    <aside className="fixed top-0 left-0 z-20 h-screen hidden sm:block w-64 lg:w-72">
-      <div className="relative h-full flex flex-col border-r">
-        <span className="flex items-center p-6 pb-0 max-h-14 ustify-center">
+    <aside className="fixed left-0 top-0 z-20 hidden h-screen w-64 sm:block lg:w-72">
+      <div className="relative flex h-full flex-col border-r">
+        <span className="ustify-center flex max-h-14 items-center p-6 pb-0">
           <TypographyH3>{siteConfig.name}</TypographyH3>
         </span>
         <Menu folders={folders} tags={tags} />
