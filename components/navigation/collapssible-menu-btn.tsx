@@ -1,13 +1,13 @@
 'use client'
 
+import { useState } from 'react'
+import Link from 'next/link'
+import { ChevronDownIcon, DotIcon, type LucideIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { cn } from '@/lib/utils'
-import { ChevronDownIcon, DotIcon, type LucideIcon } from 'lucide-react'
-import Link from 'next/link'
-import { useState } from 'react'
 
-type Submenu = {
+interface Submenu {
   href: string
   label: string
   active: boolean
@@ -34,7 +34,7 @@ export function CollapsibleMenuButton({ icon: Icon, label, active, submenus }: C
             'bg-accent': active,
           })}
         >
-          <div className="w-full items-center flex justify-between">
+          <div className="flex w-full items-center justify-between">
             <div className="flex items-center">
               <span className="mr-2">
                 <Icon className="size-4" />
@@ -54,11 +54,11 @@ export function CollapsibleMenuButton({ icon: Icon, label, active, submenus }: C
             key={href}
             variant="ghost"
             className={cn('w-full justify-start', {
-              'bg-accent cursor-default': active,
+              'cursor-default bg-accent': active,
             })}
           >
             <Link href={href}>
-              <span className="mr-2 ml-2">{Icon ? <Icon className="size-4" /> : <DotIcon className="size-4" />}</span>
+              <span className="ml-2 mr-2">{Icon ? <Icon className="size-4" /> : <DotIcon className="size-4" />}</span>
               <p className="max-w-[170px] truncate">{label}</p>
             </Link>
           </Button>

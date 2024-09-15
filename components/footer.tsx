@@ -1,9 +1,9 @@
 'use client'
 
 import { siteConfig } from '@/config/site'
+import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { ThemeToggler } from '@/components/theme-toggler'
-import { cn } from '@/lib/utils'
 
 export function Footer({ noPadding = false }: { noPadding?: boolean }) {
   return (

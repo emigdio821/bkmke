@@ -1,17 +1,17 @@
 'use client'
 
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import type { z } from 'zod'
+import { loginSchema } from '@/lib/schemas/form'
+import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { loginSchema } from '@/lib/schemas/form'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { Input } from '@/components/ui/input'
-import { createClient } from '@/lib/supabase/client'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
 import { Spinner } from '@/components/spinner'
-import { useState } from 'react'
 
 export function LoginForm() {
   const supabase = createClient()
@@ -41,7 +41,12 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form
+        onSubmit={(e) => {
+          void form.handleSubmit(onSubmit)(e)
+        }}
+        className="space-y-2"
+      >
         <FormField
           control={form.control}
           name="email"

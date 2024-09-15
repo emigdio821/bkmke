@@ -1,4 +1,4 @@
-import { Group } from '@/types'
+import type { Group } from '@/types'
 import { BookmarkIcon, FolderIcon, FoldersIcon, HashIcon, TagIcon } from 'lucide-react'
 
 export function getMenuList(pathname: string): Group[] {

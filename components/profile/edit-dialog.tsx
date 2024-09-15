@@ -1,19 +1,19 @@
 'use client'
 
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import type { User } from '@supabase/auth-js'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import type { z } from 'zod'
+import { editUserSchema } from '@/lib/schemas/form'
+import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { editUserSchema } from '@/lib/schemas/form'
-import { Spinner } from '@/components/spinner'
 import { Input } from '@/components/ui/input'
-import { createClient } from '@/lib/supabase/client'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { User } from '@supabase/auth-js'
+import { Spinner } from '@/components/spinner'
 
 export function EditDialog({ user }: { user: User }) {
   const router = useRouter()
@@ -60,13 +60,23 @@ export function EditDialog({ user }: { user: User }) {
       <DialogTrigger asChild>
         <Button>Edit</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-sm" onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent
+        className="max-w-sm"
+        onInteractOutside={(e) => {
+          e.preventDefault()
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <form
+            onSubmit={(e) => {
+              void form.handleSubmit(onSubmit)(e)
+            }}
+            className="space-y-2"
+          >
             <FormField
               control={form.control}
               name="avatar"

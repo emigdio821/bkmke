@@ -1,18 +1,18 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import type { Group } from '@/types'
+import { BookmarkIcon, FolderIcon, FoldersIcon, HashIcon, TagIcon } from 'lucide-react'
+import type { Tables } from '@/types/database.types'
+import { UserProfileDropdown } from '@/components/user-profile-dropdown'
+import { CreateFolder } from '../create-folder'
+import { CreateTag } from '../create-tag'
 import { CollapsibleGroupLabel } from './collapsible-group-label'
 import { SubMenu } from './sub-menu'
-import { UserProfileDropdown } from '@/components/user-profile-dropdown'
-import { Group } from '@/types'
-import { BookmarkIcon, FolderIcon, FoldersIcon, HashIcon, TagIcon } from 'lucide-react'
-import { Tables } from '@/types/database.types'
-import { CreateTag } from '../create-tag'
-import { CreateFolder } from '../create-folder'
 
 interface MenuProps {
-  folders: Tables<'folders'>[]
-  tags: Tables<'tags'>[]
+  folders: Array<Tables<'folders'>>
+  tags: Array<Tables<'tags'>>
 }
 
 export function Menu({ folders, tags }: MenuProps) {
@@ -82,8 +82,8 @@ export function Menu({ folders, tags }: MenuProps) {
   }
 
   return (
-    <nav className="h-full w-full p-4 overflow-y-auto sm:p-6">
-      <ul className="flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] sm:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1">
+    <nav className="h-full w-full overflow-y-auto p-4 sm:p-6">
+      <ul className="flex min-h-[calc(100vh-48px-36px-16px-32px)] flex-col items-start space-y-1 sm:min-h-[calc(100vh-32px-40px-32px)]">
         {menuList.map(({ id, groupLabel, groupIcon: GroupIcon, menus }) => (
           <li className="w-full space-y-2" key={id}>
             {GroupIcon || groupLabel ? (
@@ -95,7 +95,7 @@ export function Menu({ folders, tags }: MenuProps) {
             )}
           </li>
         ))}
-        <li className="w-full pt-10 grow flex flex-col gap-1 justify-end">
+        <li className="flex w-full grow flex-col justify-end gap-1 pt-10">
           <CreateFolder />
           <CreateTag />
           <UserProfileDropdown />

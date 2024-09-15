@@ -8,7 +8,7 @@ interface SpinnerProps {
 
 export function Spinner({ className, barsClassName }: SpinnerProps) {
   return (
-    <div className={cn('h-4 w-4', className)}>
+    <div className={cn('size-4', className)}>
       <div className="relative left-1/2 top-1/2 h-[inherit] w-[inherit]">
         {Array.from(Array(12).keys()).map((n) => (
           <div

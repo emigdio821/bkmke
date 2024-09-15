@@ -1,4 +1,4 @@
-import { type Metadata } from 'next'
+import type { Metadata } from 'next'
 import { siteConfig } from '@/config/site'
 import { Footer } from '@/components/footer'
 

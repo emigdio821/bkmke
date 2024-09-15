@@ -16,6 +16,7 @@ export default [
       'react-hooks': reactHooks,
     },
     rules: {
+      '@typescript-eslint/no-magic-numbers': 'off',
       '@typescript-eslint/triple-slash-reference': 'off',
       '@typescript-eslint/prefer-nullish-coalescing': 'off',
       '@typescript-eslint/strict-boolean-expressions': 'off',

@@ -1,12 +1,12 @@
-import { EditDialog } from '@/components/profile/edit-dialog'
+import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+import { Avatar } from '@radix-ui/react-avatar'
+import { siteConfig } from '@/config/site'
+import { createClient } from '@/lib/supabase/server'
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { TypographyH3 } from '@/components/ui/typography'
-import { siteConfig } from '@/config/site'
-import { createClient } from '@/lib/supabase/server'
-import { Avatar } from '@radix-ui/react-avatar'
-import { redirect } from 'next/navigation'
-import type { Metadata } from 'next'
+import { EditDialog } from '@/components/profile/edit-dialog'
 
 export const metadata: Metadata = {
   title: {
@@ -28,13 +28,13 @@ export default async function ProfilePage() {
       <Card className="mt-4">
         <CardHeader className="items-start">
           <Avatar>
-            <AvatarImage src={user.user_metadata.avatar} alt="User avatar" className="rounded-full size-16" />
+            <AvatarImage src={user.user_metadata.avatar} alt="User avatar" className="size-16 rounded-full" />
             <AvatarFallback>
-              <div className="rounded-[inherit] bg-gradient-to-r size-16 from-emerald-500 to-indigo-400" />
+              <div className="size-16 rounded-[inherit] bg-gradient-to-r from-emerald-500 to-indigo-400" />
             </AvatarFallback>
           </Avatar>
         </CardHeader>
-        <CardContent className="text-sm flex flex-col">
+        <CardContent className="flex flex-col text-sm">
           {user.user_metadata.name && (
             <span>
               <span className="text-muted-foreground">Name: </span>

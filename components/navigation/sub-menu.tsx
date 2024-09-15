@@ -1,8 +1,8 @@
+import Link from 'next/link'
 import type { Menu } from '@/types'
+import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
 import { CollapsibleMenuButton } from './collapssible-menu-btn'
-import { cn } from '@/lib/utils'
-import Link from 'next/link'
 
 export function SubMenu({ menus }: { menus: Menu[] }) {
   return (
@@ -14,7 +14,7 @@ export function SubMenu({ menus }: { menus: Menu[] }) {
               asChild
               variant="ghost"
               className={cn('w-full justify-start', {
-                'bg-accent cursor-default': active,
+                'cursor-default bg-accent': active,
               })}
             >
               <Link href={href}>
