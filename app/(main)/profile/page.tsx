@@ -5,7 +5,7 @@ import { siteConfig } from '@/config/site'
 import { createClient } from '@/lib/supabase/server'
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { TypographyH3 } from '@/components/ui/typography'
+import { TypographyH4 } from '@/components/ui/typography'
 import { EditDialog } from '@/components/profile/edit-dialog'
 
 export const metadata: Metadata = {
@@ -24,13 +24,13 @@ export default async function ProfilePage() {
 
   return (
     <>
-      <TypographyH3>Profile</TypographyH3>
+      <TypographyH4>Profile</TypographyH4>
       <Card className="mt-4">
         <CardHeader className="items-start">
           <Avatar>
-            <AvatarImage src={user.user_metadata.avatar} alt="User avatar" className="size-16 rounded-full" />
+            <AvatarImage src={user.user_metadata.avatar} alt="User avatar" className="size-16 rounded-md" />
             <AvatarFallback>
-              <div className="size-16 rounded-[inherit] bg-gradient-to-r from-emerald-500 to-indigo-400" />
+              <div className="size-16 rounded-md bg-gradient-to-r from-emerald-500 to-indigo-400" />
             </AvatarFallback>
           </Avatar>
         </CardHeader>

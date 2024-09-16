@@ -9,9 +9,15 @@ interface CollapseMenuButtonProps {
   groupIcon?: LucideIcon
   groupLabel?: string
   children?: React.ReactNode
+  itemCount: number
 }
 
-export function CollapsibleGroupLabel({ groupIcon: GroupIcon, groupLabel, children }: CollapseMenuButtonProps) {
+export function CollapsibleGroupLabel({
+  groupIcon: GroupIcon,
+  groupLabel,
+  itemCount,
+  children,
+}: CollapseMenuButtonProps) {
   const [isCollapsed, setIsCollapsed] = useState(true)
 
   if (!GroupIcon && !groupLabel) return null
@@ -19,7 +25,7 @@ export function CollapsibleGroupLabel({ groupIcon: GroupIcon, groupLabel, childr
   return (
     <Collapsible open={isCollapsed} onOpenChange={setIsCollapsed} className="w-full">
       <CollapsibleTrigger className="[&[data-state=open]>div>div>svg]:rotate-180" asChild>
-        <Button variant="ghost" className="w-full justify-start">
+        <Button variant="link" className="h-9 w-full justify-start px-4 py-2 text-foreground">
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center">
               {GroupIcon && (
@@ -27,7 +33,11 @@ export function CollapsibleGroupLabel({ groupIcon: GroupIcon, groupLabel, childr
                   <GroupIcon className="size-4" />
                 </span>
               )}
-              {groupLabel && <p className="max-w-[150px] truncate">{groupLabel}</p>}
+              {groupLabel && (
+                <p className="max-w-[150px] truncate">
+                  {groupLabel} <span className="text-xs text-muted-foreground">({itemCount})</span>
+                </p>
+              )}
             </div>
             <div className="whitespace-nowrap">
               <ChevronDownIcon className="size-4" />

@@ -56,12 +56,13 @@ export const columns: Array<ColumnDef<Bookmark>> = [
 
       return (
         <Button
-          variant="ghost"
+          variant="link"
+          className="text-muted-foreground"
           onClick={() => {
             column.toggleSorting(sortDirection === 'asc')
           }}
         >
-          Email
+          Name
           {sortDirection === 'asc' ? (
             <ArrowUpIcon className="ml-2 size-4" />
           ) : (
@@ -87,7 +88,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       const tagLinks = tags.map((tag, index) => (
         <Fragment key={tag}>
           <Button variant="link" asChild>
-            <Link href={`/tags/${tag}`}>#{tag}</Link>
+            <Link href={`/tags/${tag}`}>{tag}</Link>
           </Button>
           {index < tags.length - 1 && <span key={`${tag}-separator`}>, </span>}
         </Fragment>

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { Menu } from '@/types'
 import { cn } from '@/lib/utils'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 import { CollapsibleMenuButton } from './collapssible-menu-btn'
 
 export function SubMenu({ menus }: { menus: Menu[] }) {
@@ -12,9 +12,9 @@ export function SubMenu({ menus }: { menus: Menu[] }) {
           <div className="w-full" key={href}>
             <Button
               asChild
-              variant="ghost"
-              className={cn('w-full justify-start', {
-                'cursor-default bg-accent': active,
+              variant="link"
+              className={cn('h-9 w-full justify-start px-4 py-2 text-foreground', {
+                'cursor-default bg-accent hover:no-underline': active,
               })}
             >
               <Link href={href}>

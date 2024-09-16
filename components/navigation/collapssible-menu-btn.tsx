@@ -29,9 +29,9 @@ export function CollapsibleMenuButton({ icon: Icon, label, active, submenus }: C
     <Collapsible open={isCollapsed} onOpenChange={setIsCollapsed} className="w-full">
       <CollapsibleTrigger className="[&[data-state=open]>div>div>svg]:rotate-180" asChild>
         <Button
-          variant="ghost"
-          className={cn('w-full justify-start', {
-            'bg-accent': active,
+          variant="link"
+          className={cn('h-9 w-full justify-start px-4 py-2 text-foreground', {
+            'cursor-default bg-accent hover:no-underline': active,
           })}
         >
           <div className="flex w-full items-center justify-between">
@@ -52,9 +52,9 @@ export function CollapsibleMenuButton({ icon: Icon, label, active, submenus }: C
           <Button
             asChild
             key={href}
-            variant="ghost"
-            className={cn('w-full justify-start', {
-              'cursor-default bg-accent': active,
+            variant="link"
+            className={cn('h-9 w-full justify-start px-4 py-2 text-foreground', {
+              'cursor-default bg-accent hover:no-underline': active,
             })}
           >
             <Link href={href}>

@@ -1,6 +1,8 @@
+import { Suspense } from 'react'
 import { Footer } from '@/components/footer'
 import { Navbar } from '@/components/navbar'
 import { Sidebar } from '@/components/navigation/sidebar'
+import { SidebarSkeleton } from '@/components/skeletons'
 
 interface MainLayoutProps {
   children: React.ReactNode
@@ -8,13 +10,15 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <>
-      <Sidebar />
-      <main className="sm:ml-64 lg:ml-72">
+    <div className="relative flex justify-center">
+      <Suspense fallback={<SidebarSkeleton />}>
+        <Sidebar />
+      </Suspense>
+      <main className="flex h-screen w-full flex-col">
         <Navbar />
-        <section className="p-4 sm:p-6">{children}</section>
+        <section className="p-4">{children}</section>
+        <Footer />
       </main>
-      <Footer />
-    </>
+    </div>
   )
 }

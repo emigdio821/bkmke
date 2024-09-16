@@ -2,9 +2,11 @@
 
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
+import { FOLDERS_QUERY } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -14,6 +16,7 @@ import { Button } from './ui/button'
 import { Input } from './ui/input'
 
 export function CreateFolder() {
+  const queryClient = useQueryClient()
   const supabase = createClient()
   const [openDialog, setOpenDialog] = useState(false)
   const form = useForm<z.infer<typeof createFolderSchema>>({
@@ -31,6 +34,7 @@ export function CreateFolder() {
       return
     }
 
+    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
     setOpenDialog(false)
     toast.success('Success', { description: 'Folder created' })
   }

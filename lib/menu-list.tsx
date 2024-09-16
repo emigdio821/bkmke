@@ -7,8 +7,8 @@ export function getMenuList(pathname: string): Group[] {
       id: '1',
       menus: [
         {
-          href: '/my-bookmarks',
-          label: 'My bookmarks',
+          href: '/bookmarks',
+          label: 'Bookmarks',
           active: pathname === '/my-bookmarks',
           icon: BookmarkIcon,
           submenus: [],

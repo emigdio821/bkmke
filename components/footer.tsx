@@ -9,8 +9,8 @@ export function Footer({ noPadding = false }: { noPadding?: boolean }) {
   return (
     <footer
       className={cn('mt-auto flex items-center justify-center gap-2 p-4', {
-        'ml-0': noPadding,
-        'sm:ml-64 lg:ml-72': !noPadding,
+        // 'ml-0': noPadding,
+        // 'sm:ml-64 lg:ml-72': !noPadding,
       })}
     >
       <span className="flex h-5 items-center gap-2 text-sm">

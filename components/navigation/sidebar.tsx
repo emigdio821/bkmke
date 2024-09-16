@@ -1,23 +1,52 @@
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
 import { siteConfig } from '@/config/site'
+import { FOLDERS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/server'
-import { TypographyH3 } from '../ui/typography'
+import { TypographyH4 } from '@/components/ui/typography'
 import { Menu } from './menu'
 
 export async function Sidebar() {
   const supabase = createClient()
-  const { data: folders, error } = await supabase.schema('public').from('folders').select()
-  const { data: tags, error: tagsError } = await supabase.schema('public').from('tags').select()
+  const queryClient = new QueryClient()
 
-  if (error || tagsError) return null
+  const { data: folders, error } = await supabase
+    .schema('public')
+    .from('folders')
+    .select()
+    .order('name', { ascending: true })
+
+  const { data: tags, error: tagsError } = await supabase
+    .schema('public')
+    .from('tags')
+    .select()
+    .order('name', { ascending: true })
+
+  if (error) {
+    console.log('Failed to fetch folders', error.message)
+  }
+
+  if (tagsError) {
+    console.log('Failed to fetch tags', tagsError.message)
+  }
+
+  if (folders) {
+    await queryClient.setQueryData([FOLDERS_QUERY], folders)
+  }
+
+  if (tags) {
+    await queryClient.setQueryData([TAGS_QUERY], tags)
+  }
 
   return (
-    <aside className="fixed left-0 top-0 z-20 hidden h-screen w-64 sm:block lg:w-72">
-      <div className="relative flex h-full flex-col border-r">
-        <span className="ustify-center flex max-h-14 items-center p-6 pb-0">
-          <TypographyH3>{siteConfig.name}</TypographyH3>
-        </span>
-        <Menu folders={folders} tags={tags} />
-      </div>
-    </aside>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <aside className="hidden h-screen min-w-52 sm:block lg:min-w-60">
+        <div className="relative flex h-full flex-col border-r">
+          <span className="flex max-h-14 items-center p-4 pb-0">
+            <TypographyH4>{siteConfig.name}</TypographyH4>
+          </span>
+          <Menu />
+        </div>
+      </aside>
+    </HydrationBoundary>
   )
 }

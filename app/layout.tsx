@@ -38,7 +38,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body className={cn('bg-background antialiased', fontSans.className)}>
         <Providers>
-          <main className="relative flex min-h-screen flex-col">{children}</main>
+          <main className="relative m-auto flex min-h-screen w-full max-w-4xl flex-col">{children}</main>
         </Providers>
       </body>
     </html>
