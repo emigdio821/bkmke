@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import type { Bookmark } from '@/types'
 import {
   flexRender,
   getCoreRowModel,
@@ -12,19 +13,38 @@ import {
   type ColumnFiltersState,
   type SortingState,
 } from '@tanstack/react-table'
+import { useTags } from '@/hooks/use-tags'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter'
 import { DataTablePagination } from '@/components/data-table-pagination'
+import { CreateBookmarkDialog } from './create-dialog'
 
-interface DataTableProps<TData, TValue> {
-  columns: Array<ColumnDef<TData, TValue>>
-  data: TData[]
+interface DataTableProps {
+  columns: Array<ColumnDef<Bookmark>>
+  data: Bookmark[]
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable({ columns, data }: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([{ id: 'name', desc: false }])
   const [rowSelection, setRowSelection] = useState({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const { data: tags } = useTags()
+
+  const getTagsFilterData = useMemo(() => {
+    const data = []
+    if (tags) {
+      for (const tag of tags) {
+        data.push({
+          label: tag.name,
+          value: tag.id.toString(),
+        })
+      }
+    }
+
+    return data
+  }, [tags])
 
   const table = useReactTable({
     data,
@@ -44,14 +64,18 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   })
 
   return (
-    <div>
-      <div className="flex items-center py-4">
+    <>
+      <div className="mb-4 flex flex-col-reverse items-center gap-2 md:flex-row">
         <Input
           className="max-w-sm"
           placeholder="Filter by name"
-          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+          value={(table.getColumn('name')?.getFilterValue() as string) || ''}
           onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
         />
+        <div className="flex items-center space-x-2">
+          <DataTableFacetedFilter column={table.getColumn('tags')} title="Tags" options={getTagsFilterData} />
+          <CreateBookmarkDialog trigger={<Button>Create bookmark</Button>} />
+        </div>
       </div>
       <div className="mb-2 overflow-y-hidden rounded-md border">
         <Table>
@@ -88,6 +112,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </Table>
       </div>
       <DataTablePagination table={table} />
-    </div>
+    </>
   )
 }

@@ -1,8 +1,10 @@
 import { z } from 'zod'
 
+const requiredString = z.string().min(1, 'Required field')
+
 export const loginSchema = z.object({
-  email: z.string().min(1, 'Required field').email(),
-  password: z.string().min(1, 'Required field'),
+  email: requiredString.email(),
+  password: requiredString,
 })
 
 export const editUserSchema = z.object({
@@ -12,9 +14,16 @@ export const editUserSchema = z.object({
 })
 
 export const createTagSchema = z.object({
-  name: z.string(),
+  name: requiredString,
 })
 
 export const createFolderSchema = z.object({
-  name: z.string(),
+  name: requiredString,
+})
+
+export const createBookmarkSchema = z.object({
+  name: requiredString,
+  description: z.string(),
+  url: z.string().url(),
+  tags: z.string().array(),
 })

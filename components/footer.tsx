@@ -10,7 +10,6 @@ export function Footer() {
         <span>{new Date().getFullYear()}</span>
         <Separator orientation="vertical" />
         <span className="font-semibold">{siteConfig.name}</span>
-        <Separator orientation="vertical" />
       </span>
     </footer>
   )

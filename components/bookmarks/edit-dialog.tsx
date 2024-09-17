@@ -1,44 +1,46 @@
+'use client'
+
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { TAGS_QUERY } from '@/lib/constants'
-import { createTagSchema } from '@/lib/schemas/form'
+import { FOLDERS_QUERY } from '@/lib/constants'
+import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Spinner } from './spinner'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
+import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/spinner'
 
-interface CreateTagDialogProps {
+interface EditBookmarkDialogProps {
   trigger?: React.ReactNode
 }
 
-export function CreateTagDialog({ trigger }: CreateTagDialogProps) {
+export function EditBookmarkDialog({ trigger }: EditBookmarkDialogProps) {
   const queryClient = useQueryClient()
   const supabase = createClient()
   const [openDialog, setOpenDialog] = useState(false)
-  const form = useForm<z.infer<typeof createTagSchema>>({
-    resolver: zodResolver(createTagSchema),
+  const form = useForm<z.infer<typeof createFolderSchema>>({
+    resolver: zodResolver(createFolderSchema),
     defaultValues: {
       name: '',
     },
   })
 
-  async function onSubmit(values: z.infer<typeof createTagSchema>) {
-    const { error } = await supabase.schema('public').from('tags').insert(values)
+  async function onSubmit(values: z.infer<typeof createFolderSchema>) {
+    const { error } = await supabase.schema('public').from('folders').insert(values)
 
     if (error) {
       toast.error('Error', { description: error.message })
       return
     }
 
-    await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
     setOpenDialog(false)
-    toast.success('Success', { description: 'Tag created' })
+    toast.success('Success', { description: 'Folder created' })
   }
 
   return (
@@ -51,7 +53,8 @@ export function CreateTagDialog({ trigger }: CreateTagDialogProps) {
         setOpenDialog(isOpen)
       }}
     >
-      <DialogTrigger asChild>{trigger || <Button variant="outline">Create tag</Button>}</DialogTrigger>
+      <DialogTrigger asChild>{trigger || <Button variant="outline">Edit bookmark</Button>}</DialogTrigger>
+
       <DialogContent
         className="max-w-sm"
         aria-describedby={undefined}
@@ -60,7 +63,7 @@ export function CreateTagDialog({ trigger }: CreateTagDialogProps) {
         }}
       >
         <DialogHeader>
-          <DialogTitle>Create tag</DialogTitle>
+          <DialogTitle>Edit bookmark</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -75,7 +78,7 @@ export function CreateTagDialog({ trigger }: CreateTagDialogProps) {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tag name</FormLabel>
+                  <FormLabel>Folder name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

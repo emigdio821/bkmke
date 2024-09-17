@@ -8,25 +8,25 @@ export type Database = {
           created_at: string
           description: string | null
           id: number
-          name: string | null
+          name: string
           updated_at: string | null
-          url: string | null
+          url: string
         }
         Insert: {
           created_at?: string
           description?: string | null
           id?: number
-          name?: string | null
+          name: string
           updated_at?: string | null
-          url?: string | null
+          url: string
         }
         Update: {
           created_at?: string
           description?: string | null
           id?: number
-          name?: string | null
+          name?: string
           updated_at?: string | null
-          url?: string | null
+          url?: string
         }
         Relationships: []
       }
@@ -89,22 +89,22 @@ export type Database = {
       }
       tag_items: {
         Row: {
-          bookmark_id: number | null
+          bookmark_id: number
           created_at: string
           id: number
-          tag_id: number | null
+          tag_id: number
         }
         Insert: {
-          bookmark_id?: number | null
+          bookmark_id: number
           created_at?: string
           id?: number
-          tag_id?: number | null
+          tag_id: number
         }
         Update: {
-          bookmark_id?: number | null
+          bookmark_id?: number
           created_at?: string
           id?: number
-          tag_id?: number | null
+          tag_id?: number
         }
         Relationships: [
           {

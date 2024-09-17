@@ -1,4 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
+import type { Tables } from './database.types'
 
 export interface Submenu {
   href: string
@@ -20,4 +21,13 @@ export interface Group {
   groupLabel?: string
   groupIcon?: LucideIcon
   menus: Menu[]
+}
+
+export type Bookmark = Tables<'bookmarks'> & {
+  tag_items: Array<{
+    tag_id: number | null
+    tags: {
+      name: string
+    } | null
+  }>
 }

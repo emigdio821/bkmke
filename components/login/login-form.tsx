@@ -73,9 +73,11 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>
-          Log in {isLoading && <Spinner className="ml-2" />}
-        </Button>
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+          <Button type="submit" disabled={isLoading}>
+            Log in {isLoading && <Spinner className="ml-2" />}
+          </Button>
+        </div>
       </form>
     </Form>
   )

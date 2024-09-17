@@ -2,9 +2,19 @@
 
 import { Fragment } from 'react'
 import Link from 'next/link'
+import type { Bookmark } from '@/types'
 import type { ColumnDef } from '@tanstack/react-table'
-import { ArrowDownIcon, ArrowUpIcon, MoreHorizontal } from 'lucide-react'
-import type { Tables } from '@/types/database.types'
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  BookTextIcon,
+  CopyIcon,
+  ExternalLinkIcon,
+  MoreHorizontal,
+  PencilIcon,
+  Trash2Icon,
+} from 'lucide-react'
+import { extractUrlDomain, handleCopyToClipboard } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -14,15 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-
-type Bookmark = Tables<'bookmarks'> & {
-  tag_items: Array<{
-    tag_id: number | null
-    tags: {
-      name: string
-    } | null
-  }>
-}
+import { EditBookmarkDialog } from './edit-dialog'
 
 export const columns: Array<ColumnDef<Bookmark>> = [
   // {
@@ -82,6 +84,12 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   {
     accessorKey: 'url',
     header: 'URL',
+    cell: ({ row }) => {
+      const url = row.original.url || ''
+      const domain = extractUrlDomain(url)
+
+      return domain || url
+    },
   },
   {
     accessorKey: 'description',
@@ -90,6 +98,12 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   {
     accessorKey: 'tags',
     header: 'Tags',
+    filterFn: (row, _, value) => {
+      const hasTag = row.original.tag_items.some((item) => {
+        return value.includes(item.tag_id?.toString())
+      })
+      return hasTag
+    },
     cell: ({ row }) => {
       const tags = row.original.tag_items
       const tagLinks = tags?.map((tag, index) => (
@@ -107,7 +121,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      // const bookmark = row.original
+      const bookmark = row.original
 
       return (
         <DropdownMenu>
@@ -118,10 +132,41 @@ export const columns: Array<ColumnDef<Bookmark>> = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Details</DropdownMenuItem>
-            <DropdownMenuItem>Open in new tab</DropdownMenuItem>
+            <EditBookmarkDialog
+              trigger={
+                <DropdownMenuItem
+                  onSelect={(e) => {
+                    e.preventDefault()
+                  }}
+                >
+                  <PencilIcon className="mr-2 size-4" />
+                  Edit
+                </DropdownMenuItem>
+              }
+            />
+            <DropdownMenuItem>
+              <BookTextIcon className="mr-2 size-4" />
+              Details
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                void handleCopyToClipboard(bookmark.url, 'URL copied')
+              }}
+            >
+              <CopyIcon className="mr-2 size-4" />
+              Copy URL
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <a href={bookmark.url} target="_blank">
+                <ExternalLinkIcon className="mr-2 size-4" />
+                Open in new tab
+              </a>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive">Delete</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive focus:text-destructive">
+              <Trash2Icon className="mr-2 size-4" />
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

@@ -1,85 +1,66 @@
 'use client'
 
+import { useCallback, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import type { Group } from '@/types'
+import type { Group, Menu as GroupMenu } from '@/types'
 import { BookmarkIcon, FolderIcon, FoldersIcon, HashIcon, TagIcon } from 'lucide-react'
 import { useFolders } from '@/hooks/use-folders'
 import { useTags } from '@/hooks/use-tags'
+import { SidebarSkeleton } from '@/components/skeletons'
 import { UserProfileDropdown } from '@/components/user-profile-dropdown'
 import { CollapsibleGroupLabel } from './collapsible-group-label'
 import { SubMenu } from './sub-menu'
 
 export function Menu() {
   const pathname = usePathname()
-  const { data: folders } = useFolders()
-  const { data: tags } = useTags()
+  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: tags, isLoading: tagsLoading } = useTags()
+  const [menuList, setMenuList] = useState<Group[]>([])
 
-  const menuList: Group[] = [
-    {
-      id: 'my-bookmarks-link',
-      menus: [
-        {
-          href: '/bookmarks',
-          label: 'Bookmarks',
-          active: pathname === '/bookmarks',
-          icon: BookmarkIcon,
-          submenus: [],
-        },
-      ],
-    },
-  ]
+  const generateMenuList = useCallback(() => {
+    const foldersMenu: GroupMenu[] =
+      folders?.map((folder) => ({
+        href: `/folders/${folder.id}`,
+        label: folder.name,
+        active: pathname.includes(`/folders/${folder.id}`),
+        icon: FolderIcon,
+        submenus: [],
+      })) || []
 
-  function getFolderSubmenus() {
-    const menus = []
-    if (folders) {
-      for (const folder of folders) {
-        menus.push({
-          href: `/folders/${folder.id}`,
-          label: folder.name,
-          active: pathname.includes(`/folders/${folder.id}`),
-          icon: FolderIcon,
-          submenus: [],
-        })
-      }
-    }
+    const tagsMenu: GroupMenu[] =
+      tags?.map((tag) => ({
+        href: `/tags/${tag.id}`,
+        label: tag.name,
+        active: pathname.includes(`/tags/${tag.id}`),
+        icon: HashIcon,
+        submenus: [],
+      })) || []
 
-    return menus
-  }
-
-  function getTagsSubmenus() {
-    const menus = []
-    if (tags) {
-      for (const tag of tags) {
-        menus.push({
-          href: `/tags/${tag.id}`,
-          label: tag.name,
-          active: pathname.includes(`/tags/${tag.id}`),
-          icon: HashIcon,
-          submenus: [],
-        })
-      }
-    }
+    const menus: Group[] = [
+      {
+        id: 'my-bookmarks-link',
+        menus: [
+          {
+            href: '/bookmarks',
+            label: 'Bookmarks',
+            active: pathname === '/bookmarks',
+            icon: BookmarkIcon,
+            submenus: [],
+          },
+        ],
+      },
+      { id: 'folders-menu', groupLabel: 'Folders', groupIcon: FoldersIcon, menus: foldersMenu },
+      { id: 'tags-menu', groupLabel: 'Tags', groupIcon: TagIcon, menus: tagsMenu },
+    ]
 
     return menus
-  }
+  }, [folders, tags, pathname])
 
-  if (folders && folders.length > 0) {
-    menuList.push({
-      id: 'folders-menu',
-      groupLabel: 'Folders',
-      groupIcon: FoldersIcon,
-      menus: getFolderSubmenus(),
-    })
-  }
+  useEffect(() => {
+    setMenuList(generateMenuList())
+  }, [generateMenuList])
 
-  if (tags && tags.length > 0) {
-    menuList.push({
-      id: 'tags-menu',
-      groupLabel: 'Tags',
-      groupIcon: TagIcon,
-      menus: getTagsSubmenus(),
-    })
-  }
+  if (foldersLoading || tagsLoading) return <SidebarSkeleton />
 
   return (
     <nav className="my-2 h-full w-full overflow-y-auto px-4 py-2">
