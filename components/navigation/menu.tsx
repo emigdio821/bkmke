@@ -6,8 +6,6 @@ import { BookmarkIcon, FolderIcon, FoldersIcon, HashIcon, TagIcon } from 'lucide
 import { useFolders } from '@/hooks/use-folders'
 import { useTags } from '@/hooks/use-tags'
 import { UserProfileDropdown } from '@/components/user-profile-dropdown'
-import { CreateFolder } from '../create-folder'
-import { CreateTag } from '../create-tag'
 import { CollapsibleGroupLabel } from './collapsible-group-label'
 import { SubMenu } from './sub-menu'
 
@@ -84,16 +82,12 @@ export function Menu() {
   }
 
   return (
-    <nav className="h-full w-full overflow-y-auto p-4">
-      <ul className="flex min-h-[calc(100vh-48px-36px-16px-32px)] flex-col items-start space-y-1 sm:min-h-[calc(100vh-32px-40px-32px)]">
+    <nav className="my-2 h-full w-full overflow-y-auto px-4 py-2">
+      <ul className="flex h-full flex-col items-start space-y-1">
         {menuList.map(({ id, groupLabel, groupIcon: GroupIcon, menus }) => (
           <li className="w-full space-y-2" key={id}>
             {GroupIcon || groupLabel ? (
-              <CollapsibleGroupLabel
-                groupIcon={GroupIcon}
-                groupLabel={groupLabel}
-                itemCount={menus.length}
-              >
+              <CollapsibleGroupLabel groupIcon={GroupIcon} groupLabel={groupLabel} itemCount={menus.length}>
                 <SubMenu menus={menus} />
               </CollapsibleGroupLabel>
             ) : (
@@ -101,9 +95,7 @@ export function Menu() {
             )}
           </li>
         ))}
-        <li className="flex w-full grow flex-col justify-end gap-1 pt-10">
-          <CreateFolder />
-          <CreateTag />
+        <li className="flex w-full grow flex-col justify-end pt-4">
           <UserProfileDropdown />
         </li>
       </ul>

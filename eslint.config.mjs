@@ -8,7 +8,15 @@ export default [
   jsxA11y.flatConfigs.recommended,
   prettierConfig,
   {
-    ignores: ['.next', 'build', 'eslint.config.mjs', 'postcss.config.mjs', 'components/ui', 'prettier.config.mjs'],
+    ignores: [
+      '.next',
+      'build',
+      'components/ui',
+      'eslint.config.mjs',
+      'postcss.config.mjs',
+      'types/database.*.*',
+      'prettier.config.mjs',
+    ],
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],

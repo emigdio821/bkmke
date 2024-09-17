@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { User } from '@supabase/auth-js'
+import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
+import { PROFILE_QUERY } from '@/lib/constants'
 import { editUserSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -16,8 +17,8 @@ import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
 export function EditDialog({ user }: { user: User }) {
-  const router = useRouter()
   const supabase = createClient()
+  const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
   const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
@@ -42,9 +43,9 @@ export function EditDialog({ user }: { user: User }) {
       return
     }
 
+    await queryClient.invalidateQueries({ queryKey: [PROFILE_QUERY] })
     setOpenDialog(false)
     toast.success('Success', { description: 'Profile updated' })
-    router.refresh()
   }
 
   return (
@@ -58,10 +59,11 @@ export function EditDialog({ user }: { user: User }) {
       }}
     >
       <DialogTrigger asChild>
-        <Button>Edit</Button>
+        <Button variant="outline">Edit</Button>
       </DialogTrigger>
       <DialogContent
         className="max-w-sm"
+        aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault()
         }}

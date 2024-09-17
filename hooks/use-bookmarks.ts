@@ -9,8 +9,8 @@ export function useBookmarks() {
     const { data, error } = await supabase
       .schema('public')
       .from('bookmarks')
-      .select()
-      .order('name', { ascending: true })
+      .select('*, tag_items(tag_id, tags(name))')
+      .order('name')
 
     if (error) {
       console.log('Unable to fetch bookmarks', error.message)

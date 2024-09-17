@@ -15,7 +15,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-type Bookmark = Tables<'bookmarks'>
+type Bookmark = Tables<'bookmarks'> & {
+  tag_items: Array<{
+    tag_id: number | null
+    tags: {
+      name: string
+    } | null
+  }>
+}
 
 export const columns: Array<ColumnDef<Bookmark>> = [
   // {
@@ -84,13 +91,13 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     accessorKey: 'tags',
     header: 'Tags',
     cell: ({ row }) => {
-      const tags = row.original.tags
-      const tagLinks = tags.map((tag, index) => (
-        <Fragment key={tag}>
+      const tags = row.original.tag_items
+      const tagLinks = tags?.map((tag, index) => (
+        <Fragment key={`${tag.tag_id}-tag-table-item`}>
           <Button variant="link" asChild>
-            <Link href={`/tags/${tag}`}>{tag}</Link>
+            <Link href={`/tags/${tag.tag_id}`}>{tag.tags?.name}</Link>
           </Button>
-          {index < tags.length - 1 && <span key={`${tag}-separator`}>, </span>}
+          {index < tags.length - 1 && <span key={`${tag.tag_id}-separator`}>, </span>}
         </Fragment>
       ))
 

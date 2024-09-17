@@ -7,27 +7,17 @@ import type { z } from 'zod'
 import { TAGS_QUERY } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Spinner } from './spinner'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 
-export function CreateTag() {
+interface CreateTagDialogProps {
+  trigger?: React.ReactNode
+}
+
+export function CreateTagDialog({ trigger }: CreateTagDialogProps) {
   const queryClient = useQueryClient()
   const supabase = createClient()
   const [openDialog, setOpenDialog] = useState(false)
@@ -61,11 +51,10 @@ export function CreateTag() {
         setOpenDialog(isOpen)
       }}
     >
-      <DialogTrigger asChild>
-        <Button variant="outline">Create tag</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger || <Button variant="outline">Create tag</Button>}</DialogTrigger>
       <DialogContent
         className="max-w-sm"
+        aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault()
         }}

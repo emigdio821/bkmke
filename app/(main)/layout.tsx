@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import { Footer } from '@/components/footer'
 import { Navbar } from '@/components/navbar'
 import { Sidebar } from '@/components/navigation/sidebar'
 import { SidebarSkeleton } from '@/components/skeletons'
@@ -10,14 +9,13 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="relative flex justify-center">
+    <div className="relative flex">
       <Suspense fallback={<SidebarSkeleton />}>
         <Sidebar />
       </Suspense>
-      <main className="flex h-screen w-full flex-col">
+      <main className="flex h-full w-full flex-col">
         <Navbar />
         <section className="p-4">{children}</section>
-        <Footer />
       </main>
     </div>
   )

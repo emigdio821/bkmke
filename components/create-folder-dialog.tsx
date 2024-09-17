@@ -15,7 +15,11 @@ import { Spinner } from './spinner'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 
-export function CreateFolder() {
+interface CreateFolderDialogProps {
+  trigger?: React.ReactNode
+}
+
+export function CreateFolderDialog({ trigger }: CreateFolderDialogProps) {
   const queryClient = useQueryClient()
   const supabase = createClient()
   const [openDialog, setOpenDialog] = useState(false)
@@ -49,11 +53,11 @@ export function CreateFolder() {
         setOpenDialog(isOpen)
       }}
     >
-      <DialogTrigger asChild>
-        <Button variant="outline">Create folder</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger || <Button variant="outline">Create tag</Button>}</DialogTrigger>
+
       <DialogContent
         className="max-w-sm"
+        aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault()
         }}

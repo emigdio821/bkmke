@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: RootLayoutProps) {
   return (
     <>
       <section className="p-4">{children}</section>
-      <Footer noPadding />
+      <Footer />
     </>
   )
 }

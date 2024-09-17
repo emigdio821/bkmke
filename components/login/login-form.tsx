@@ -36,7 +36,7 @@ export function LoginForm() {
       return
     }
 
-    router.push('/my-bookmarks')
+    router.push('/bookmarks')
   }
 
   return (
@@ -73,7 +73,7 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" disabled={isLoading}>
           Log in {isLoading && <Spinner className="ml-2" />}
         </Button>
       </form>
