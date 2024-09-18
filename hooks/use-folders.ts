@@ -6,11 +6,7 @@ export function useFolders() {
   const supabase = createClient()
 
   async function getFolders() {
-    const { data, error } = await supabase
-      .schema('public')
-      .from('folders')
-      .select()
-      .order('name', { ascending: true })
+    const { data, error } = await supabase.from('folders').select().order('name')
 
     if (error) {
       console.log('Unable to fetch folders', error.message)

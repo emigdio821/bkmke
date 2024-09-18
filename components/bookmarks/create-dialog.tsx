@@ -58,7 +58,7 @@ export function CreateBookmarkDialog({ trigger }: CreateBookmarkDialogProps) {
       description,
       url,
     }
-    const { data: bookmark, error } = await supabase.schema('public').from('bookmarks').insert(bookmarkPaylaod).select()
+    const { data: bookmark, error } = await supabase.from('bookmarks').insert(bookmarkPaylaod).select()
 
     if (bookmark && bookmark.length > 0 && tagIds.length > 0) {
       const tagItemsPromises = []
@@ -66,7 +66,7 @@ export function CreateBookmarkDialog({ trigger }: CreateBookmarkDialogProps) {
       for (const tagId of tagIds) {
         const tagItemsPayload = { bookmark_id: bookmark[0].id, tag_id: Number(tagId) }
 
-        tagItemsPromises.push(supabase.schema('public').from('tag_items').insert(tagItemsPayload))
+        tagItemsPromises.push(supabase.from('tag_items').insert(tagItemsPayload))
       }
 
       await Promise.all(tagItemsPromises)

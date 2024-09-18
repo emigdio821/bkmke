@@ -1,6 +1,6 @@
 import { siteConfig } from '@/config/site'
 import { TypographyH4 } from '@/components/ui/typography'
-import { Menu } from './menu'
+import { NavContent } from './nav-content'
 
 export async function Sidebar() {
   return (
@@ -9,7 +9,7 @@ export async function Sidebar() {
         <span className="flex max-h-14 items-center p-4 pb-0">
           <TypographyH4>{siteConfig.name}</TypographyH4>
         </span>
-        <Menu />
+        <NavContent />
       </div>
     </aside>
   )

@@ -6,7 +6,7 @@ export function useTagItems() {
   const supabase = createClient()
 
   async function getTagItems() {
-    const { data, error } = await supabase.schema('public').from('tag_items').select()
+    const { data, error } = await supabase.from('tag_items').select()
 
     if (error) {
       console.log('Unable to fetch tags', error.message)

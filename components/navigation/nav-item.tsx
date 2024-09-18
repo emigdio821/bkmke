@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { CollapsibleMenuButton } from './collapssible-menu-btn'
 
-export function SubMenu({ menus }: { menus: Menu[] }) {
+export function NavItem({ menus }: { menus: Menu[] }) {
   return (
     <>
       {menus.map(({ href, label, icon: Icon, active, submenus }) =>

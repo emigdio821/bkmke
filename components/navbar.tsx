@@ -2,7 +2,7 @@ import { MenuIcon } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { Menu } from './navigation/menu'
+import { NavContent } from './navigation/nav-content'
 import { TypographyH4 } from './ui/typography'
 
 export function Navbar() {
@@ -22,7 +22,7 @@ export function Navbar() {
                   <TypographyH4>{siteConfig.name}</TypographyH4>
                 </SheetTitle>
               </SheetHeader>
-              <Menu />
+              <NavContent />
             </SheetContent>
           </Sheet>
           <TypographyH4>{siteConfig.name}</TypographyH4>

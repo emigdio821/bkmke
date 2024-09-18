@@ -32,7 +32,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
 
   async function handleDeleteBookmark(id: number) {
     const supabase = createClient()
-    const { error } = await supabase.schema('public').from('bookmarks').delete().eq('id', id)
+    const { error } = await supabase.from('bookmarks').delete().eq('id', id)
 
     if (error) {
       throw new Error(error.message)

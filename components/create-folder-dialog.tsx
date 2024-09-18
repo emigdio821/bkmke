@@ -31,7 +31,7 @@ export function CreateFolderDialog({ trigger }: CreateFolderDialogProps) {
   })
 
   async function onSubmit(values: z.infer<typeof createFolderSchema>) {
-    const { error } = await supabase.schema('public').from('folders').insert(values)
+    const { error } = await supabase.from('folders').insert(values)
 
     if (error) {
       toast.error('Error', { description: error.message })

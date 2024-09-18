@@ -29,7 +29,7 @@ export function CreateTagDialog({ trigger }: CreateTagDialogProps) {
   })
 
   async function onSubmit(values: z.infer<typeof createTagSchema>) {
-    const { error } = await supabase.schema('public').from('tags').insert(values)
+    const { error } = await supabase.from('tags').insert(values)
 
     if (error) {
       toast.error('Error', { description: error.message })

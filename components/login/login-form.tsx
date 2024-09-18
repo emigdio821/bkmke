@@ -36,7 +36,7 @@ export function LoginForm() {
       return
     }
 
-    router.push('/bookmarks')
+    router.push('/')
   }
 
   return (

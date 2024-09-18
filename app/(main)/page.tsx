@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { siteConfig } from '@/config/site'
 import { TypographyH4 } from '@/components/ui/typography'
-import { BookmarksClientPage } from './page.client'
+import { BookmarksClientPage } from './bookmarks/page.client'
 
 export const metadata: Metadata = {
   title: {
