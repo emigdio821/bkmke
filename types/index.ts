@@ -23,11 +23,17 @@ export interface Group {
   menus: Menu[]
 }
 
+export interface TagItem {
+  id: number
+  tags: {
+    id: number
+    name: string
+  } | null
+}
+
 export type Bookmark = Tables<'bookmarks'> & {
-  tag_items: Array<{
-    tag_id: number | null
-    tags: {
-      name: string
-    } | null
-  }>
+  tag_items: TagItem[]
+  folders: {
+    name: string
+  } | null
 }

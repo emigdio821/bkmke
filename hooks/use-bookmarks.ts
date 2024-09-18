@@ -9,7 +9,7 @@ export function useBookmarks() {
     const { data, error } = await supabase
       .schema('public')
       .from('bookmarks')
-      .select('*, tag_items(tag_id, tags(name))')
+      .select('*, tag_items(id, tags(id,name)), folders(name)')
       .order('name')
 
     if (error) {

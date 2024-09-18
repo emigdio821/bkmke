@@ -4,37 +4,13 @@ import { Fragment } from 'react'
 import Link from 'next/link'
 import type { Bookmark } from '@/types'
 import type { ColumnDef } from '@tanstack/react-table'
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  BookTextIcon,
-  CopyIcon,
-  ExternalLinkIcon,
-  MoreHorizontal,
-  PencilIcon,
-  Trash2Icon,
-} from 'lucide-react'
-import { extractUrlDomain, handleCopyToClipboard } from '@/lib/utils'
+import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
+import { extractUrlDomain } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { EditBookmarkDialog } from './edit-dialog'
+import { RowActions } from './row-actions'
 
 export const columns: Array<ColumnDef<Bookmark>> = [
-  // {
-  //   accessorKey: 'created_at',
-  //   header: 'Created at',
-  // },
-  // {
-  //   accessorKey: 'updated_at',
-  //   header: 'Updated at',
-  // },
   {
     id: 'select',
     header: ({ table }) => (
@@ -100,18 +76,18 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     header: 'Tags',
     filterFn: (row, _, value) => {
       const hasTag = row.original.tag_items.some((item) => {
-        return value.includes(item.tag_id?.toString())
+        return value.includes(item.id.toString())
       })
       return hasTag
     },
     cell: ({ row }) => {
       const tags = row.original.tag_items
       const tagLinks = tags?.map((tag, index) => (
-        <Fragment key={`${tag.tag_id}-tag-table-item`}>
+        <Fragment key={`${tag.id}-tag-table-item`}>
           <Button variant="link" asChild>
-            <Link href={`/tags/${tag.tag_id}`}>{tag.tags?.name}</Link>
+            <Link href={`/tags/${tag.tags?.id}`}>{tag.tags?.name}</Link>
           </Button>
-          {index < tags.length - 1 && <span key={`${tag.tag_id}-separator`}>, </span>}
+          {index < tags.length - 1 && <span key={`${tag.tags?.id}-separator`}>, </span>}
         </Fragment>
       ))
 
@@ -119,57 +95,21 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     },
   },
   {
-    id: 'actions',
+    accessorKey: 'folder_id',
+    header: 'Folder',
     cell: ({ row }) => {
       const bookmark = row.original
+      const folderName = bookmark.folders?.name
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="size-8 p-0">
-              <span className="sr-only">Open row actions</span>
-              <MoreHorizontal className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <EditBookmarkDialog
-              trigger={
-                <DropdownMenuItem
-                  onSelect={(e) => {
-                    e.preventDefault()
-                  }}
-                >
-                  <PencilIcon className="mr-2 size-4" />
-                  Edit
-                </DropdownMenuItem>
-              }
-            />
-            <DropdownMenuItem>
-              <BookTextIcon className="mr-2 size-4" />
-              Details
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                void handleCopyToClipboard(bookmark.url, 'URL copied')
-              }}
-            >
-              <CopyIcon className="mr-2 size-4" />
-              Copy URL
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <a href={bookmark.url} target="_blank">
-                <ExternalLinkIcon className="mr-2 size-4" />
-                Open in new tab
-              </a>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive">
-              <Trash2Icon className="mr-2 size-4" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button variant="link" asChild>
+          <Link href={`/folders/${bookmark.folder_id}`}>{folderName}</Link>
+        </Button>
       )
     },
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => <RowActions row={row} />,
   },
 ]

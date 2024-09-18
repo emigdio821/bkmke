@@ -7,6 +7,7 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          folder_id: number | null
           id: number
           name: string
           updated_at: string | null
@@ -15,6 +16,7 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
+          folder_id?: number | null
           id?: number
           name: string
           updated_at?: string | null
@@ -23,39 +25,15 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
+          folder_id?: number | null
           id?: number
           name?: string
           updated_at?: string | null
           url?: string
         }
-        Relationships: []
-      }
-      folder_items: {
-        Row: {
-          bookmark_id: number | null
-          folder_id: number | null
-          id: number
-        }
-        Insert: {
-          bookmark_id?: number | null
-          folder_id?: number | null
-          id?: number
-        }
-        Update: {
-          bookmark_id?: number | null
-          folder_id?: number | null
-          id?: number
-        }
         Relationships: [
           {
-            foreignKeyName: 'folder_items_bookmark_id_fkey'
-            columns: ['bookmark_id']
-            isOneToOne: false
-            referencedRelation: 'bookmarks'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'folder_items_folder_id_fkey'
+            foreignKeyName: 'bookmarks_folder_id_fkey'
             columns: ['folder_id']
             isOneToOne: false
             referencedRelation: 'folders'
