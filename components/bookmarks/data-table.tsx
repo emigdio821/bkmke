@@ -12,6 +12,7 @@ import {
   type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
+  type VisibilityState,
 } from '@tanstack/react-table'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
@@ -19,6 +20,7 @@ import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter'
 import { DataTablePagination } from '@/components/data-table-pagination'
+import { DataTableColumnFilter } from '../data-table-column-filter'
 import { CreateBookmarkDialog } from './create-dialog'
 
 interface DataTableProps {
@@ -30,6 +32,8 @@ export function DataTable({ columns, data }: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([{ id: 'name', desc: false }])
   const [rowSelection, setRowSelection] = useState({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+
   const { data: tags } = useTags()
 
   const getTagsFilterData = useMemo(() => {
@@ -56,10 +60,12 @@ export function DataTable({ columns, data }: DataTableProps) {
     onRowSelectionChange: setRowSelection,
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
       rowSelection,
       columnFilters,
+      columnVisibility,
     },
   })
 
@@ -74,6 +80,7 @@ export function DataTable({ columns, data }: DataTableProps) {
         />
         <div className="flex items-center space-x-2">
           <DataTableFacetedFilter column={table.getColumn('tags')} title="Tags" options={getTagsFilterData} />
+          <DataTableColumnFilter table={table} />
           <CreateBookmarkDialog trigger={<Button>Create bookmark</Button>} />
         </div>
       </div>

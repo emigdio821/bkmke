@@ -43,10 +43,11 @@ export function NavItemsSkeleton() {
 export function BookmarksPageSkeleton() {
   return (
     <div className="w-full">
-      <div className="mb-4 flex flex-col-reverse items-center gap-2 sm:flex-row">
+      <div className="mb-4 flex flex-col-reverse items-center gap-2 md:flex-row">
         <Skeleton className="h-9 w-full max-w-sm" />
         <div className="flex items-center space-x-2">
           <Skeleton className="h-9 w-[87px]" />
+          <Skeleton className="h-9 w-[90px]" />
           <Skeleton className="h-9 w-[141px]" />
         </div>
       </div>

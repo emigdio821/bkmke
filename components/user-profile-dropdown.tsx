@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { Avatar } from '@radix-ui/react-avatar'
 import { BookmarkPlusIcon, FolderPlusIcon, LogOutIcon, PlusIcon, SettingsIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
@@ -15,6 +16,7 @@ import {
 import { CreateTagDialog } from '@/components/create-tag-dialog'
 import { CreateBookmarkDialog } from './bookmarks/create-dialog'
 import { CreateFolderDialog } from './create-folder-dialog'
+import { AvatarFallback, AvatarImage } from './ui/avatar'
 import { Skeleton } from './ui/skeleton'
 
 export function UserProfileDropdown() {
@@ -45,10 +47,23 @@ export function UserProfileDropdown() {
       </Button>
     )
 
+  const profileNameOrEmail = profile.user_metadata.name || profile.email
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{profile.user_metadata.name || profile.email}</Button>
+        <Button variant="outline" className="justify-between gap-2 text-muted-foreground">
+          <span title={profileNameOrEmail} className="max-w-40 truncate">
+            {profileNameOrEmail}
+          </span>
+
+          <Avatar>
+            <AvatarImage src={profile.user_metadata.avatar || ''} className="size-5 rounded-full" />
+            <AvatarFallback>
+              <div className="size-5 rounded-md bg-gradient-to-r from-emerald-500 to-indigo-400" />
+            </AvatarFallback>
+          </Avatar>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <CreateTagDialog

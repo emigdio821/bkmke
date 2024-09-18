@@ -12,7 +12,7 @@ import { editUserSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
@@ -85,6 +85,7 @@ export function EditDialog({ user }: { user: User }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Avatar URL</FormLabel>
+                  <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -97,7 +98,7 @@ export function EditDialog({ user }: { user: User }) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Account name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
