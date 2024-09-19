@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { BOOKMARKS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { handleCopyToClipboard } from '@/lib/utils'
+import { handleCopyToClipboard, urlWithUTMSource } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -70,7 +70,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
-            void handleCopyToClipboard(bookmark.url, 'URL copied')
+            void handleCopyToClipboard(urlWithUTMSource(bookmark.url), 'URL copied')
           }}
         >
           <CopyIcon className="mr-2 size-4" />
@@ -90,7 +90,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
           }
         />
         <DropdownMenuItem asChild>
-          <a href={bookmark.url} target="_blank">
+          <a href={urlWithUTMSource(bookmark.url)} target="_blank">
             <ExternalLinkIcon className="mr-2 size-4" />
             Open in new tab
           </a>

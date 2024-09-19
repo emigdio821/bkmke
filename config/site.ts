@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: 'bkmk',
-  url: 'tbd',
+  url: 'bkmk.vercel.app',
   ogImage: 'tbd',
   description: 'Simple bookmark manager.',
   links: {

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Menu } from '@/types'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { CollapsibleMenuButton } from './collapssible-menu-btn'
+import { CollapsibleMenuButton } from './collapsible-menu-btn'
 
 export function NavItem({ menus }: { menus: Menu[] }) {
   return (

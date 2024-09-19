@@ -2,10 +2,11 @@
 
 import { Fragment } from 'react'
 import Link from 'next/link'
-import type { Bookmark } from '@/types'
+import type { Bookmark, OGInfo } from '@/types'
 import type { ColumnDef } from '@tanstack/react-table'
-import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
-import { extractUrlDomain } from '@/lib/utils'
+import { ArrowDownIcon, ArrowUpIcon, ImageOffIcon } from 'lucide-react'
+import { formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RowActions } from './row-actions'
@@ -56,20 +57,45 @@ export const columns: Array<ColumnDef<Bookmark>> = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      const bookmark = row.original
+      const ogInfo = row.original.og_info as unknown as OGInfo
+
+      return (
+        <div className="flex max-w-48 flex-col items-start">
+          <Button variant="link" type="button" className="text-foreground">
+            <Avatar className="mr-2 size-4 rounded-[4px]">
+              <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
+              <AvatarFallback className="rounded-[inherit]">
+                <ImageOffIcon className="size-4 text-muted-foreground" />
+              </AvatarFallback>
+            </Avatar>
+            <span className="max-w-44 truncate">{bookmark.name}</span>
+          </Button>
+          {bookmark.description && (
+            <p className="line-clamp-2 text-muted-foreground" title={bookmark.description}>
+              {bookmark.description}
+            </p>
+          )}
+          <small className="text-muted-foreground/80">{formatDateFromString(bookmark.created_at)}</small>
+        </div>
+      )
+    },
   },
   {
     accessorKey: 'url',
     header: 'URL',
     cell: ({ row }) => {
-      const url = row.original.url || ''
-      const domain = extractUrlDomain(url)
+      const url = row.original.url
 
-      return domain || url
+      return (
+        <Button asChild variant="link">
+          <a href={urlWithUTMSource(url)} target="_blank">
+            {simplifiedURL(url)}
+          </a>
+        </Button>
+      )
     },
-  },
-  {
-    accessorKey: 'description',
-    header: 'Description',
   },
   {
     accessorKey: 'tags',

@@ -15,13 +15,12 @@ import {
   type VisibilityState,
 } from '@tanstack/react-table'
 import { useTags } from '@/hooks/use-tags'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { DataTableColumnFilter } from '@/components/data-table-column-filter'
 import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter'
 import { DataTablePagination } from '@/components/data-table-pagination'
-import { DataTableColumnFilter } from '../data-table-column-filter'
-import { CreateBookmarkDialog } from './create-dialog'
+import { CreateBookmarkDropdown } from './create/create-bookmark-dropdown'
 
 interface DataTableProps {
   columns: Array<ColumnDef<Bookmark>>
@@ -81,7 +80,7 @@ export function DataTable({ columns, data }: DataTableProps) {
         <div className="flex items-center space-x-2">
           <DataTableFacetedFilter column={table.getColumn('tags')} title="Tags" options={getTagsFilterData} />
           <DataTableColumnFilter table={table} />
-          <CreateBookmarkDialog trigger={<Button>Create bookmark</Button>} />
+          <CreateBookmarkDropdown />
         </div>
       </div>
       <div className="mb-2 overflow-y-hidden rounded-md border">

@@ -1,9 +1,8 @@
 'use client'
 
-import { Avatar } from '@radix-ui/react-avatar'
 import { RefreshCwIcon } from 'lucide-react'
 import { useProfile } from '@/hooks/use-profile'
-import { AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { EditDialog } from '@/components/settings/profile/edit-dialog'
@@ -24,9 +23,9 @@ export function ProfileSettings() {
         {profile ? (
           <>
             <div className="flex items-center space-x-2">
-              <Avatar>
-                <AvatarImage src={profile.user_metadata.avatar} alt="User avatar" className="size-16 rounded-md" />
-                <AvatarFallback>
+              <Avatar className="size-16 rounded-md">
+                <AvatarImage src={profile.user_metadata.avatar} alt="User avatar" />
+                <AvatarFallback asChild>
                   <div className="size-16 rounded-md bg-gradient-to-r from-emerald-500 to-indigo-400" />
                 </AvatarFallback>
               </Avatar>

@@ -31,9 +31,18 @@ export interface TagItem {
   } | null
 }
 
+type FolderItem = {
+  name: string
+} | null
+
 export type Bookmark = Tables<'bookmarks'> & {
   tag_items: TagItem[]
-  folders: {
-    name: string
-  } | null
+  folders: FolderItem
+}
+
+export interface OGInfo {
+  title: string
+  imageUrl: string
+  faviconUrl: string
+  description: string
 }

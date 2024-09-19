@@ -74,13 +74,18 @@ export function BookmarksPageSkeleton() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.from(Array(8).keys()).map((n) => (
+            {Array.from(Array(2).keys()).map((n) => (
               <TableRow key={n}>
                 <TableCell className="pr-0">
                   <Skeleton className="size-4 rounded-[4px]" />
                 </TableCell>
                 <TableCell>
-                  <Skeleton className="h-2 w-24" />
+                  <div className="w-48">
+                    <Skeleton className="h-2 w-24" />
+                    <Skeleton className="mt-2 h-2 w-36" />
+                    <Skeleton className="mt-2 h-2 w-36" />
+                    <Skeleton className="mt-2 h-2 w-16" />
+                  </div>
                 </TableCell>
                 <TableCell>
                   <Skeleton className="h-2 w-24" />

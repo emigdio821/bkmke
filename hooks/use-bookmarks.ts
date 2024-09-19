@@ -7,7 +7,6 @@ export function useBookmarks() {
 
   async function getBookmarks() {
     const { data, error } = await supabase
-      .schema('public')
       .from('bookmarks')
       .select('*, tag_items(id, tags(id,name)), folders(name)')
       .order('name')

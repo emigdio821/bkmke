@@ -26,7 +26,7 @@ export function TagsNavItems() {
                     {
                       href: `/tags/${folder.id}`,
                       label: folder.name,
-                      active: pathname.includes(`/tags/${folder.id}`),
+                      active: pathname === `/tags/${folder.id}`,
                       icon: HashIcon,
                       submenus: [],
                     },

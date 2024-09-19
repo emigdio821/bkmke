@@ -10,6 +10,7 @@ export type Database = {
           folder_id: number | null
           id: number
           name: string
+          og_info: Json | null
           updated_at: string | null
           url: string
         }
@@ -19,6 +20,7 @@ export type Database = {
           folder_id?: number | null
           id?: number
           name: string
+          og_info?: Json | null
           updated_at?: string | null
           url: string
         }
@@ -28,6 +30,7 @@ export type Database = {
           folder_id?: number | null
           id?: number
           name?: string
+          og_info?: Json | null
           updated_at?: string | null
           url?: string
         }

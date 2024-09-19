@@ -5,7 +5,7 @@ import { useBookmarks } from '@/hooks/use-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 import { columns } from '@/components/bookmarks/columns'
-import { CreateBookmarkDialog } from '@/components/bookmarks/create-dialog'
+import { CreateBookmarkDropdown } from '@/components/bookmarks/create/create-bookmark-dropdown'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { BookmarksPageSkeleton } from '@/components/skeletons'
 
@@ -36,10 +36,8 @@ export function BookmarksClientPage() {
             <Card>
               <CardContent className="p-6">
                 <CardDescription>
-                  You have no bookmarks yet.
-                  <p className="text-sm">
-                    Start creating one <CreateBookmarkDialog trigger={<Button variant="underlineLink">here</Button>} />.
-                  </p>
+                  You have no bookmarks yet. <br />
+                  Start creating one <CreateBookmarkDropdown trigger={<Button variant="underlineLink">here</Button>} />.
                 </CardDescription>
               </CardContent>
             </Card>

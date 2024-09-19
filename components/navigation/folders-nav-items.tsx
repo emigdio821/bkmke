@@ -26,7 +26,7 @@ export function FoldersNavItems() {
                     {
                       href: `/folders/${folder.id}`,
                       label: folder.name,
-                      active: pathname.includes(`/folders/${folder.id}`),
+                      active: pathname === `/folders/${folder.id}`,
                       icon: FolderIcon,
                       submenus: [],
                     },

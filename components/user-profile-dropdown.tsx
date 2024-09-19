@@ -1,22 +1,25 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Avatar } from '@radix-ui/react-avatar'
 import { BookmarkPlusIcon, FolderPlusIcon, LogOutIcon, PlusIcon, SettingsIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
-import { Button } from '@/components/ui/button'
+import { CreateBookmarkSubmenu } from './bookmarks/create/create-bookmark-submenu'
+import { CreateFolderDialog } from './create-folder-dialog'
+import { CreateTagDialog } from './create-tag-dialog'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { Button } from './ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { CreateTagDialog } from '@/components/create-tag-dialog'
-import { CreateBookmarkDialog } from './bookmarks/create-dialog'
-import { CreateFolderDialog } from './create-folder-dialog'
-import { AvatarFallback, AvatarImage } from './ui/avatar'
+} from './ui/dropdown-menu'
 import { Skeleton } from './ui/skeleton'
 
 export function UserProfileDropdown() {
@@ -52,20 +55,20 @@ export function UserProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="justify-between gap-2 text-muted-foreground">
+        <Button variant="outline" className="justify-between gap-2">
           <span title={profileNameOrEmail} className="max-w-40 truncate">
             {profileNameOrEmail}
           </span>
 
-          <Avatar>
-            <AvatarImage src={profile.user_metadata.avatar || ''} className="size-5 rounded-full" />
-            <AvatarFallback>
-              <div className="size-5 rounded-md bg-gradient-to-r from-emerald-500 to-indigo-400" />
+          <Avatar className="size-5">
+            <AvatarImage src={profile.user_metadata.avatar || ''} />
+            <AvatarFallback asChild>
+              <div className="size-5 bg-gradient-to-r from-emerald-500 to-indigo-400" />
             </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="start">
         <CreateTagDialog
           trigger={
             <DropdownMenuItem
@@ -90,18 +93,17 @@ export function UserProfileDropdown() {
             </DropdownMenuItem>
           }
         />
-        <CreateBookmarkDialog
-          trigger={
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault()
-              }}
-            >
-              <BookmarkPlusIcon className="mr-2 size-4" />
-              Create bookmark
-            </DropdownMenuItem>
-          }
-        />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <BookmarkPlusIcon className="mr-2 size-4" />
+            Create bookmark
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <CreateBookmarkSubmenu />
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/settings">

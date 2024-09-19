@@ -1,39 +1,53 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import type { OGInfo } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 import { BOOKMARKS_QUERY } from '@/lib/constants'
-import { createBookmarkSchema } from '@/lib/schemas/form'
+import { createManualBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { useFolders } from '@/hooks/use-folders'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
-interface CreateBookmarkDialogProps {
+interface CreateManualBookmarkDialogProps {
   trigger?: React.ReactNode
 }
 
-export function CreateBookmarkDialog({ trigger }: CreateBookmarkDialogProps) {
+export function CreateManualBookmarkDialog({ trigger }: CreateManualBookmarkDialogProps) {
   const queryClient = useQueryClient()
   const supabase = createClient()
   const [openDialog, setOpenDialog] = useState(false)
   const { data: tags } = useTags()
-  const form = useForm<z.infer<typeof createBookmarkSchema>>({
-    resolver: zodResolver(createBookmarkSchema),
+  const { data: folders } = useFolders()
+  const form = useForm<z.infer<typeof createManualBookmarkSchema>>({
+    resolver: zodResolver(createManualBookmarkSchema),
     defaultValues: {
       url: '',
       name: '',
       description: '',
       tags: [],
+      folderId: '',
     },
   })
 
@@ -51,14 +65,53 @@ export function CreateBookmarkDialog({ trigger }: CreateBookmarkDialogProps) {
     return data
   }, [tags])
 
-  async function onSubmit(values: z.infer<typeof createBookmarkSchema>) {
-    const { name, description, url, tags: tagIds } = values
-    const bookmarkPaylaod = {
+  const getFoldersData = useMemo(() => {
+    const data = []
+    if (folders) {
+      for (const folder of folders) {
+        data.push({
+          label: folder.name,
+          value: folder.id.toString(),
+        })
+      }
+    }
+
+    return data
+  }, [folders])
+
+  async function onSubmit(values: z.infer<typeof createManualBookmarkSchema>) {
+    const { name, description, url, tags: tagIds, folderId } = values
+
+    let ogInfoPayload = null
+
+    try {
+      const { data: ogInfo } = await axios.get<OGInfo>('/api/og-info', { params: { url } })
+
+      ogInfoPayload = {
+        title: ogInfo.title,
+        imageUrl: ogInfo.imageUrl,
+        faviconUrl: ogInfo.faviconUrl,
+        description: ogInfo.description,
+      } satisfies OGInfo
+    } catch (err) {
+      ogInfoPayload = {
+        title: name,
+        description,
+        imageUrl: '',
+        faviconUrl: '',
+      } satisfies OGInfo
+      console.log('Get og info error:', err)
+    }
+
+    const bookmarkPayload = {
+      url,
       name,
       description,
-      url,
+      folder_id: folderId ? Number(folderId) : null,
+      og_info: ogInfoPayload,
     }
-    const { data: bookmark, error } = await supabase.from('bookmarks').insert(bookmarkPaylaod).select()
+
+    const { data: bookmark, error } = await supabase.from('bookmarks').insert(bookmarkPayload).select()
 
     if (bookmark && bookmark.length > 0 && tagIds.length > 0) {
       const tagItemsPromises = []
@@ -79,7 +132,7 @@ export function CreateBookmarkDialog({ trigger }: CreateBookmarkDialogProps) {
 
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
     setOpenDialog(false)
-    toast.success('Success', { description: 'Folder created' })
+    toast.success('Success', { description: 'Bookmark created' })
   }
 
   return (
@@ -93,7 +146,7 @@ export function CreateBookmarkDialog({ trigger }: CreateBookmarkDialogProps) {
         setOpenDialog(isOpen)
       }}
     >
-      <DialogTrigger asChild>{trigger || <Button variant="outline">Create bookmark</Button>}</DialogTrigger>
+      <DialogTrigger asChild>{trigger || <Button variant="outline">Manual bookmark creation</Button>}</DialogTrigger>
 
       <DialogContent
         className="max-w-sm"
@@ -103,9 +156,9 @@ export function CreateBookmarkDialog({ trigger }: CreateBookmarkDialogProps) {
         }}
       >
         <DialogHeader>
-          <DialogTitle>Create bookmark</DialogTitle>
+          <DialogTitle>Manual bookmark creation</DialogTitle>
+          <DialogDescription>Create your bookmark by adding the details by yourself.</DialogDescription>
         </DialogHeader>
-
         <Form {...form}>
           <form
             onSubmit={(e) => {
@@ -153,6 +206,47 @@ export function CreateBookmarkDialog({ trigger }: CreateBookmarkDialogProps) {
               )}
             />
             <FormField
+              name="folderId"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>
+                      Add to folder
+                      {field.value && (
+                        <>
+                          <span className="text-muted-foreground"> · </span>
+                          <Button
+                            variant="link"
+                            onClick={() => {
+                              form.setValue('folderId', '')
+                            }}
+                          >
+                            Clear selection
+                          </Button>
+                        </>
+                      )}
+                    </FormLabel>
+                    <FormControl>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select folder" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {getFoldersData.map((folder) => (
+                            <SelectItem key={`${folder.value}-folder-select`} value={`${folder.value}`}>
+                              {folder.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <FormField
               name="tags"
               control={form.control}
               render={({ field }) => (
@@ -170,7 +264,6 @@ export function CreateBookmarkDialog({ trigger }: CreateBookmarkDialogProps) {
                 </FormItem>
               )}
             />
-
             <DialogFooter>
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 Create {form.formState.isSubmitting && <Spinner className="ml-2" />}

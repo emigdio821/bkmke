@@ -21,9 +21,16 @@ export const createFolderSchema = z.object({
   name: requiredString,
 })
 
-export const createBookmarkSchema = z.object({
+export const createManualBookmarkSchema = z.object({
   name: requiredString,
   description: z.string(),
+  url: z.string().url(),
+  tags: z.string().array(),
+  folderId: z.string(),
+})
+
+export const createAutomaticBookmarkSchema = z.object({
+  folderId: z.string(),
   url: z.string().url(),
   tags: z.string().array(),
 })
