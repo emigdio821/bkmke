@@ -15,7 +15,12 @@ export function TagsNavItems() {
 
   return (
     <>
-      <CollapsibleGroupLabel groupIcon={TagIcon} groupLabel="Tags" itemCount={tags?.length || 0}>
+      <CollapsibleGroupLabel
+        groupLabel="Tags"
+        groupIcon={TagIcon}
+        itemCount={tags?.length || 0}
+        isActive={pathname.startsWith('/tags')}
+      >
         {tags && !error && (
           <>
             {tags.length > 0 ? (

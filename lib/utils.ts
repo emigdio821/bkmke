@@ -26,14 +26,18 @@ export function originURL(url: string) {
 }
 
 export async function handleCopyToClipboard(text: string, message?: string) {
-  const promise = navigator.clipboard.writeText(text)
-  toast.promise(promise, {
-    success: message || 'Text copied to your clipboard',
-    error: (err) => {
-      console.log('Copy to clipboard error', err)
-      return 'Unable to copy to your clipboard at this time, try again'
-    },
-  })
+  try {
+    const promise = navigator.clipboard.writeText(text)
+    toast.promise(promise, {
+      success: message || 'Text copied to your clipboard',
+      error: (err) => {
+        console.log('Copy to clipboard error', err)
+        return 'Unable to copy to your clipboard at this time, try again'
+      },
+    })
+  } catch {
+    toast.error('Error', { description: 'Unable to copy to your clipboard, try again' })
+  }
 }
 
 export function formatDateFromString(str: string) {

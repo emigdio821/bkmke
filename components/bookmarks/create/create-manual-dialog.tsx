@@ -5,6 +5,7 @@ import type { OGInfo } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
+import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -27,6 +28,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { CreateFolderDialog } from '@/components/create-folder-dialog'
+import { CreateTagDialog } from '@/components/create-tag-dialog'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
@@ -205,65 +208,84 @@ export function CreateManualBookmarkDialog({ trigger }: CreateManualBookmarkDial
                 </FormItem>
               )}
             />
-            <FormField
-              name="folderId"
-              control={form.control}
-              render={({ field }) => {
-                return (
+
+            <div className="flex w-full items-end space-x-2">
+              <FormField
+                name="folderId"
+                control={form.control}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex-grow">
+                      <FormLabel>
+                        Add to folder
+                        {field.value && (
+                          <>
+                            <span className="text-muted-foreground"> · </span>
+                            <Button
+                              variant="link"
+                              onClick={() => {
+                                form.setValue('folderId', '')
+                              }}
+                            >
+                              Clear selection
+                            </Button>
+                          </>
+                        )}
+                      </FormLabel>
+                      <FormControl>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select folder" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {getFoldersData.map((folder) => (
+                              <SelectItem key={`${folder.value}-folder-select`} value={`${folder.value}`}>
+                                {folder.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
+              />
+              <CreateFolderDialog
+                trigger={
+                  <Button size="icon">
+                    <PlusIcon className="size-4" />
+                  </Button>
+                }
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <FormField
+                name="tags"
+                control={form.control}
+                render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Add to folder
-                      {field.value && (
-                        <>
-                          <span className="text-muted-foreground"> · </span>
-                          <Button
-                            variant="link"
-                            onClick={() => {
-                              form.setValue('folderId', '')
-                            }}
-                          >
-                            Clear selection
-                          </Button>
-                        </>
-                      )}
-                    </FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select folder" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {getFoldersData.map((folder) => (
-                            <SelectItem key={`${folder.value}-folder-select`} value={`${folder.value}`}>
-                              {folder.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <MultiSelect
+                        title="Tags"
+                        options={getTagsData}
+                        onChange={(options) => {
+                          form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
-                )
-              }}
-            />
-            <FormField
-              name="tags"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <MultiSelect
-                      title="Tags"
-                      options={getTagsData}
-                      onChange={(options) => {
-                        form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                )}
+              />
+              <CreateTagDialog
+                trigger={
+                  <Button size="icon">
+                    <PlusIcon className="size-4" />
+                  </Button>
+                }
+              />
+            </div>
             <DialogFooter>
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 Create {form.formState.isSubmitting && <Spinner className="ml-2" />}

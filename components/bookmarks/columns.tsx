@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
 import type { ColumnDef } from '@tanstack/react-table'
-import { ArrowDownIcon, ArrowUpIcon, ImageOffIcon } from 'lucide-react'
+import { ArrowDownIcon, ArrowUpIcon, GlobeIcon } from 'lucide-react'
 import { formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -67,7 +67,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
             <Avatar className="mr-2 size-4 rounded-[4px]">
               <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
               <AvatarFallback className="rounded-[inherit]">
-                <ImageOffIcon className="size-4 text-muted-foreground" />
+                <GlobeIcon className="size-4 text-muted-foreground" />
               </AvatarFallback>
             </Avatar>
             <span className="max-w-44 truncate">{bookmark.name}</span>

@@ -62,9 +62,9 @@ export function MultiSelect<TData, TValue>({ title, options, onChange }: DataTab
       <PopoverContent className="w-[200px] p-0" align="start">
         <Command>
           <CommandInput placeholder={title} />
-          <CommandList>
+          <CommandList className="max-h-full overflow-hidden">
             <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup>
+            <CommandGroup className="max-h-60 overflow-auto">
               {options.map((option) => {
                 const isSelected = selectedValues.includes(option.value)
                 return (
@@ -97,7 +97,7 @@ export function MultiSelect<TData, TValue>({ title, options, onChange }: DataTab
                   }}
                   className="justify-center text-center"
                 >
-                  Clear filters
+                  Clear selected
                 </CommandItem>
               ) : (
                 <CommandItem

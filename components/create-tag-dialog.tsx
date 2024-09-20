@@ -48,12 +48,13 @@ export function CreateTagDialog({ trigger }: CreateTagDialogProps) {
         if (form.formState.isSubmitting) {
           setOpenDialog(true)
         }
+        if (isOpen) form.reset()
         setOpenDialog(isOpen)
       }}
     >
       <DialogTrigger asChild>{trigger || <Button variant="outline">Create tag</Button>}</DialogTrigger>
       <DialogContent
-        className="max-w-sm"
+        className="max-w-xs"
         aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault()
@@ -66,6 +67,7 @@ export function CreateTagDialog({ trigger }: CreateTagDialogProps) {
         <Form {...form}>
           <form
             onSubmit={(e) => {
+              e.stopPropagation()
               void form.handleSubmit(onSubmit)(e)
             }}
             className="space-y-2"

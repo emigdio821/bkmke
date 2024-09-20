@@ -39,7 +39,7 @@ export function CollapsibleMenuButton({ icon: Icon, label, active, submenus }: C
               <span className="mr-2">
                 <Icon className="size-4" />
               </span>
-              <p className="max-w-[150px] truncate">{label}</p>
+              <p className="max-w-24 truncate">{label}</p>
             </div>
             <div className="whitespace-nowrap">
               <ChevronDownIcon className="size-4" />
@@ -58,7 +58,7 @@ export function CollapsibleMenuButton({ icon: Icon, label, active, submenus }: C
             })}
           >
             <Link href={href}>
-              <span className="ml-2 mr-2">{Icon ? <Icon className="size-4" /> : <DotIcon className="size-4" />}</span>
+              {Icon ? <Icon className="mr-2 size-4" /> : <DotIcon className="mr-2 size-4" />}
               <p className="max-w-[170px] truncate">{label}</p>
             </Link>
           </Button>

@@ -50,13 +50,14 @@ export function CreateFolderDialog({ trigger }: CreateFolderDialogProps) {
         if (form.formState.isSubmitting) {
           setOpenDialog(true)
         }
+        if (isOpen) form.reset()
         setOpenDialog(isOpen)
       }}
     >
-      <DialogTrigger asChild>{trigger || <Button variant="outline">Create tag</Button>}</DialogTrigger>
+      <DialogTrigger asChild>{trigger || <Button variant="outline">Create folder</Button>}</DialogTrigger>
 
       <DialogContent
-        className="max-w-sm"
+        className="max-w-xs"
         aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault()
@@ -69,6 +70,7 @@ export function CreateFolderDialog({ trigger }: CreateFolderDialogProps) {
         <Form {...form}>
           <form
             onSubmit={(e) => {
+              e.stopPropagation()
               void form.handleSubmit(onSubmit)(e)
             }}
             className="space-y-2"

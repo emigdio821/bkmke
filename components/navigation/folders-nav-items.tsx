@@ -15,7 +15,12 @@ export function FoldersNavItems() {
 
   return (
     <>
-      <CollapsibleGroupLabel groupIcon={FoldersIcon} groupLabel="Folders" itemCount={folders?.length || 0}>
+      <CollapsibleGroupLabel
+        groupLabel="Folders"
+        groupIcon={FoldersIcon}
+        itemCount={folders?.length || 0}
+        isActive={pathname.startsWith('/folders')}
+      >
         {folders && !error && (
           <>
             {folders.length > 0 ? (
