@@ -17,9 +17,9 @@ import {
 import { useTags } from '@/hooks/use-tags'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { DataTableColumnFilter } from '@/components/data-table-column-filter'
-import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter'
-import { DataTablePagination } from '@/components/data-table-pagination'
+import { DataTableColumnFilter } from '@/components/data-table/column-filter'
+import { DataTableFacetedFilter } from '@/components/data-table/faceted-filter'
+import { DataTablePagination } from '@/components/data-table/pagination'
 import { CreateBookmarkDropdown } from './create/create-bookmark-dropdown'
 
 interface DataTableProps {

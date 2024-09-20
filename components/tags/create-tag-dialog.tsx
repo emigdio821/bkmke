@@ -7,11 +7,11 @@ import type { z } from 'zod'
 import { TAGS_QUERY } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Spinner } from './spinner'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
+import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/spinner'
 
 interface CreateTagDialogProps {
   trigger?: React.ReactNode

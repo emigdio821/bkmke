@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
 import { CreateBookmarkSubmenu } from './bookmarks/create/create-bookmark-submenu'
 import { CreateFolderDialog } from './create-folder-dialog'
-import { CreateTagDialog } from './create-tag-dialog'
+import { CreateTagDialog } from './tags/create-tag-dialog'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
 import {

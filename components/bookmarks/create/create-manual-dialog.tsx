@@ -29,9 +29,9 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { CreateFolderDialog } from '@/components/create-folder-dialog'
-import { CreateTagDialog } from '@/components/create-tag-dialog'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
+import { CreateTagDialog } from '@/components/tags/create-tag-dialog'
 
 interface CreateManualBookmarkDialogProps {
   trigger?: React.ReactNode

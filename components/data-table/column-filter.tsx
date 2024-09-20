@@ -1,11 +1,11 @@
 import type { Table } from '@tanstack/react-table'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from './ui/button'
 
 interface DataTableColumnFilterProps<T> {
   table: Table<T>
