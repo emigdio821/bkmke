@@ -1,4 +1,5 @@
 import type { Bookmark } from '@/types'
+import NiceModal from '@ebay/nice-modal-react'
 import { useQueryClient } from '@tanstack/react-query'
 import type { Row } from '@tanstack/react-table'
 import {
@@ -10,6 +11,7 @@ import {
   PencilIcon,
   Trash2Icon,
 } from 'lucide-react'
+import { toast } from 'sonner'
 import { BOOKMARKS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { handleCopyToClipboard, urlWithUTMSource } from '@/lib/utils'
@@ -23,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { AlertActionDialog } from '@/components/alert-action-dialog'
-import { MoveToFolderDialog } from '../move-to-folder-dialog'
+import { MoveToFolderDialog } from '@/components/bookmarks/move-to-folder-dialog'
 import { EditBookmarkDialog } from './edit-dialog'
 
 export function RowActions({ row }: { row: Row<Bookmark> }) {
@@ -38,6 +40,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
       throw new Error(error.message)
     }
 
+    toast.success('Success', { description: 'Bookmark has beed deleted' })
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
   }
 
@@ -49,8 +52,8 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
           <MoreHorizontal className="size-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>{bookmark.name}</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="max-w-52">
+        <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-all p-0">{bookmark.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <EditBookmarkDialog
           trigger={
@@ -76,19 +79,15 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
           <CopyIcon className="mr-2 size-4" />
           Copy URL
         </DropdownMenuItem>
-        <MoveToFolderDialog
-          bookmark={bookmark}
-          trigger={
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault()
-              }}
-            >
-              <FolderInputIcon className="mr-2 size-4" />
-              Move to folder
-            </DropdownMenuItem>
-          }
-        />
+        <DropdownMenuItem
+          onSelect={(e) => {
+            void NiceModal.show(MoveToFolderDialog, { bookmark })
+          }}
+        >
+          <FolderInputIcon className="mr-2 size-4" />
+          Move to folder
+        </DropdownMenuItem>
+
         <DropdownMenuItem asChild>
           <a href={urlWithUTMSource(bookmark.url)} target="_blank">
             <ExternalLinkIcon className="mr-2 size-4" />
@@ -96,22 +95,19 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
           </a>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <AlertActionDialog
-          trigger={
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault()
-              }}
-              className="text-destructive focus:text-destructive"
-            >
-              <Trash2Icon className="mr-2 size-4" />
-              Delete
-            </DropdownMenuItem>
-          }
-          action={async () => {
-            await handleDeleteBookmark(bookmark.id)
+        <DropdownMenuItem
+          onSelect={() => {
+            void NiceModal.show(AlertActionDialog, {
+              action: async () => {
+                await handleDeleteBookmark(bookmark.id)
+              },
+            })
           }}
-        />
+          className="text-destructive focus:text-destructive"
+        >
+          <Trash2Icon className="mr-2 size-4" />
+          Delete
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

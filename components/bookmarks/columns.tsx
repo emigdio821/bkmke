@@ -101,8 +101,8 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     accessorKey: 'tags',
     header: 'Tags',
     filterFn: (row, _, value) => {
-      const hasTag = row.original.tag_items.some((item) => {
-        return value.includes(item.id.toString())
+      const hasTag = row.original.tag_items.some((tag) => {
+        return value.includes(tag.tags?.id.toString())
       })
       return hasTag
     },

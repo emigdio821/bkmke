@@ -1,10 +1,12 @@
 import { useCallback, useState } from 'react'
 import type { Bookmark } from '@/types'
+import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { BOOKMARKS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -12,22 +14,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Spinner } from './spinner'
-import { Button } from './ui/button'
-import { Skeleton } from './ui/skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Spinner } from '@/components/spinner'
 
 interface MoveToFolderDialogProps {
-  trigger?: React.ReactNode
   bookmark: Bookmark
 }
 
-export function MoveToFolderDialog({ trigger, bookmark }: MoveToFolderDialogProps) {
+export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDialogProps) => {
   const queryClient = useQueryClient()
   const supabase = createClient()
-  const [openDialog, setOpenDialog] = useState(false)
+  const modal = useModal()
   const [isLoading, setLoading] = useState(false)
   const [selectValue, setSelectValue] = useState(`${bookmark.folder_id}`)
   const { data: folders, isLoading: foldersLoading } = useFolders()
@@ -39,7 +38,7 @@ export function MoveToFolderDialog({ trigger, bookmark }: MoveToFolderDialogProp
     }
 
     if (selectValue === `${bookmark.folder_id}`) {
-      setOpenDialog(false)
+      await modal.hide()
       return
     }
 
@@ -56,21 +55,28 @@ export function MoveToFolderDialog({ trigger, bookmark }: MoveToFolderDialogProp
     }
 
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    setOpenDialog(false)
+    toast.success('Success', { description: 'Bookmark has been moved to selected folder' })
+    await modal.hide()
     setLoading(false)
-  }, [bookmark.folder_id, bookmark.id, queryClient, selectValue, supabase])
+  }, [bookmark.folder_id, bookmark.id, modal, queryClient, selectValue, supabase])
 
   return (
     <Dialog
-      open={openDialog}
+      open={modal.visible}
       onOpenChange={(isOpen) => {
-        !isLoading && setOpenDialog(isOpen)
+        if (isOpen) {
+          void modal.show()
+        } else {
+          void modal.hide()
+        }
       }}
     >
-      <DialogTrigger asChild>{trigger || <Button variant="outline">Move to folder</Button>}</DialogTrigger>
       <DialogContent
         className="max-w-sm"
         aria-describedby={undefined}
+        onCloseAutoFocus={() => {
+          modal.remove()
+        }}
         onInteractOutside={(e) => {
           e.preventDefault()
         }}
@@ -114,4 +120,4 @@ export function MoveToFolderDialog({ trigger, bookmark }: MoveToFolderDialogProp
       </DialogContent>
     </Dialog>
   )
-}
+})

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'sonner'
 import {
   AlertDialog,
@@ -9,25 +10,22 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Spinner } from './spinner'
-import { Button } from './ui/button'
 
 interface AlertActionDialogProps<T = unknown> {
-  trigger?: React.ReactNode
   action: (...args: never[]) => T | Promise<T>
 }
 
-export function AlertActionDialog({ trigger, action }: AlertActionDialogProps) {
-  const [openDialog, setOpenDialog] = useState(false)
+export const AlertActionDialog = NiceModal.create(({ action }: AlertActionDialogProps) => {
+  const modal = useModal()
   const [isLoading, setLoading] = useState(false)
 
   async function handleAction() {
     setLoading(true)
     try {
       await action()
-      setOpenDialog(false)
+      await modal.hide()
     } catch (err) {
       console.log('Alert action dialog error', err)
       toast.error('Error', { description: 'Unable to perform this action, try again' })
@@ -38,15 +36,20 @@ export function AlertActionDialog({ trigger, action }: AlertActionDialogProps) {
 
   return (
     <AlertDialog
-      open={openDialog}
+      open={modal.visible}
       onOpenChange={(isOpen) => {
-        if (!isLoading) {
-          setOpenDialog(isOpen)
+        if (isOpen) {
+          void modal.show()
+        } else {
+          void modal.hide()
         }
       }}
     >
-      <AlertDialogTrigger asChild>{trigger || <Button>Alert</Button>}</AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent
+        onCloseAutoFocus={() => {
+          modal.remove()
+        }}
+      >
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
@@ -67,4 +70,4 @@ export function AlertActionDialog({ trigger, action }: AlertActionDialogProps) {
       </AlertDialogContent>
     </AlertDialog>
   )
-}
+})
