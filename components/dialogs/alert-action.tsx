@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { GenericFn } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'sonner'
 import {
@@ -13,12 +14,12 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Spinner } from '@/components/spinner'
 
-interface AlertActionDialogProps<T = unknown> {
+interface AlertActionDialogProps<T> {
   message?: string
-  action: (...args: never[]) => T | Promise<T>
+  action: GenericFn<T>
 }
 
-export const AlertActionDialog = NiceModal.create(({ action, message }: AlertActionDialogProps) => {
+export const AlertActionDialog = NiceModal.create(<T,>({ action, message }: AlertActionDialogProps<T>) => {
   const modal = useModal()
   const [isLoading, setLoading] = useState(false)
 

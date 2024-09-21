@@ -3,9 +3,9 @@
 import { Fragment } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
+import { IconArrowUp, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
-import { ArrowDownIcon, ArrowUpIcon, GlobeIcon } from 'lucide-react'
-import { formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
+import { cn, formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -49,11 +49,11 @@ export const columns: Array<ColumnDef<Bookmark>> = [
           }}
         >
           Name
-          {sortDirection === 'asc' ? (
-            <ArrowUpIcon className="ml-2 size-4" />
-          ) : (
-            <ArrowDownIcon className="ml-2 size-4" />
-          )}
+          <IconArrowUp
+            className={cn('ml-2 size-4', {
+              'rotate-180': sortDirection === 'asc',
+            })}
+          />
         </Button>
       )
     },
@@ -67,7 +67,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
             <Avatar className="mr-2 size-4 rounded-[4px]">
               <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
               <AvatarFallback className="rounded-[inherit]">
-                <GlobeIcon className="size-4 text-muted-foreground" />
+                <IconWorld className="size-4 text-muted-foreground" />
               </AvatarFallback>
             </Avatar>
             <span className="max-w-44 truncate">{bookmark.name}</span>

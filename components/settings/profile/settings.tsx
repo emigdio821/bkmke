@@ -1,6 +1,6 @@
 'use client'
 
-import { RefreshCwIcon } from 'lucide-react'
+import { IconReload } from '@tabler/icons-react'
 import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -58,7 +58,7 @@ export function ProfileSettings() {
                   void refetch()
                 }}
               >
-                Refetch <RefreshCwIcon className="ml-2 size-4" />
+                Refetch <IconReload className="ml-2 size-4" />
               </Button>
             </div>
           </div>

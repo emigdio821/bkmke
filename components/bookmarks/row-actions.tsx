@@ -1,16 +1,16 @@
 import type { Bookmark } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
+import {
+  IconCopy,
+  IconDots,
+  IconExternalLink,
+  IconFolderShare,
+  IconId,
+  IconPencil,
+  IconTrash,
+} from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import type { Row } from '@tanstack/react-table'
-import {
-  BookTextIcon,
-  CopyIcon,
-  ExternalLinkIcon,
-  FolderInputIcon,
-  MoreHorizontal,
-  PencilIcon,
-  Trash2Icon,
-} from 'lucide-react'
 import { toast } from 'sonner'
 import { BOOKMARKS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
@@ -49,7 +49,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="size-6 hover:bg-muted-foreground/10">
           <span className="sr-only">Open row actions</span>
-          <MoreHorizontal className="size-4" />
+          <IconDots className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-w-52">
@@ -62,13 +62,13 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
                 e.preventDefault()
               }}
             >
-              <PencilIcon className="mr-2 size-4" />
+              <IconPencil className="mr-2 size-4" />
               Edit
             </DropdownMenuItem>
           }
         />
         <DropdownMenuItem>
-          <BookTextIcon className="mr-2 size-4" />
+          <IconId className="mr-2 size-4" />
           Details
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -76,7 +76,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
             void handleCopyToClipboard(urlWithUTMSource(bookmark.url), 'URL copied')
           }}
         >
-          <CopyIcon className="mr-2 size-4" />
+          <IconCopy className="mr-2 size-4" />
           Copy URL
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -84,13 +84,13 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
             void NiceModal.show(MoveToFolderDialog, { bookmark })
           }}
         >
-          <FolderInputIcon className="mr-2 size-4" />
+          <IconFolderShare className="mr-2 size-4" />
           Move to folder
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
           <a href={urlWithUTMSource(bookmark.url)} target="_blank">
-            <ExternalLinkIcon className="mr-2 size-4" />
+            <IconExternalLink className="mr-2 size-4" />
             Open in new tab
           </a>
         </DropdownMenuItem>
@@ -105,7 +105,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
           }}
           className="text-destructive focus:text-destructive"
         >
-          <Trash2Icon className="mr-2 size-4" />
+          <IconTrash className="mr-2 size-4" />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

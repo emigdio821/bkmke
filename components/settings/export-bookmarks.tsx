@@ -1,6 +1,6 @@
 'use client'
 
-import { FileDownIcon } from 'lucide-react'
+import { IconFileDownload } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -30,11 +30,11 @@ export function ExportBookmarks() {
             <DropdownMenuLabel>Export as</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <FileDownIcon className="mr-2 size-4" />
+              <IconFileDownload className="mr-2 size-4" />
               <span className="font-mono">.html</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <FileDownIcon className="mr-2 size-4" />
+              <IconFileDownload className="mr-2 size-4" />
               <span className="font-mono">.csv</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

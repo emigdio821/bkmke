@@ -1,11 +1,11 @@
-import type { LucideIcon } from 'lucide-react'
+import type { TablerIcon } from '@tabler/icons-react'
 import type { Tables } from './database.types'
 
 export interface NavMenu {
   href?: string
   label: string
   active: boolean
-  icon?: LucideIcon
+  icon?: TablerIcon
   submenus: NavMenu[]
   withItemCount?: boolean
   actions?: React.ReactNode
@@ -34,3 +34,5 @@ export interface OGInfo {
   faviconUrl: string
   description: string
 }
+
+export type GenericFn<T> = (...args: never[]) => T | Promise<T>

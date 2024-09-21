@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import type { NavMenu } from '@/types'
-import { ChevronRightIcon } from 'lucide-react'
+import { IconChevronRight } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
@@ -25,7 +25,7 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
           >
             <div className="flex items-center">
               <span className="chevron mr-2">
-                <ChevronRightIcon className="size-4" />
+                <IconChevronRight className="size-4" />
               </span>
               {Icon && (
                 <span className="mr-2">

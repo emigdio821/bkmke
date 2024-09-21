@@ -1,6 +1,6 @@
 'use client'
 
-import { MoonIcon, SunIcon } from 'lucide-react'
+import { IconMoon, IconSun } from '@tabler/icons-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,8 +24,8 @@ export function AppearanceSettings() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant="outline">
-              <MoonIcon className="hidden size-4 dark:block" />
-              <SunIcon className="size-4 dark:hidden" />
+              <IconMoon className="hidden size-4 dark:block" />
+              <IconSun className="size-4 dark:hidden" />
               <span className="sr-only">Toggle app appearance</span>
             </Button>
           </DropdownMenuTrigger>

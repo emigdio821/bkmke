@@ -1,11 +1,11 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { BookmarkIcon } from 'lucide-react'
+import { IconBookmarks } from '@tabler/icons-react'
+import { FoldersNavItems } from '@/components/folders/nav-items'
+import { TagsNavItems } from '@/components/tags/nav-items'
 import { UserProfileDropdown } from '@/components/user-profile-dropdown'
-import { FoldersNavItems } from './folders-nav-items'
 import { NavItem } from './nav-item'
-import { TagsNavItems } from './tags-nav-items'
 
 export function NavContent() {
   const pathname = usePathname()
@@ -20,7 +20,7 @@ export function NavContent() {
                 href: '/',
                 label: 'Bookmarks',
                 active: pathname === '/',
-                icon: BookmarkIcon,
+                icon: IconBookmarks,
                 submenus: [],
               },
             ]}

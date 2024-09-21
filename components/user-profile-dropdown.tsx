@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { BookmarkPlusIcon, LogOutIcon, PlusIcon, SettingsIcon } from 'lucide-react'
+import { IconBookmarkPlus, IconLogout, IconPlus, IconSettings } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
@@ -75,14 +75,14 @@ export function UserProfileDropdown() {
                 e.preventDefault()
               }}
             >
-              <PlusIcon className="mr-2 size-4" />
+              <IconPlus className="mr-2 size-4" />
               Create tag
             </DropdownMenuItem>
           }
         />
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <BookmarkPlusIcon className="mr-2 size-4" />
+            <IconBookmarkPlus className="mr-2 size-4" />
             Create bookmark
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
@@ -94,7 +94,7 @@ export function UserProfileDropdown() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/settings">
-            <SettingsIcon className="mr-2 size-4" />
+            <IconSettings className="mr-2 size-4" />
             Settings
           </Link>
         </DropdownMenuItem>
@@ -103,7 +103,7 @@ export function UserProfileDropdown() {
             void handleLogOut()
           }}
         >
-          <LogOutIcon className="mr-2 size-4" />
+          <IconLogout className="mr-2 size-4" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

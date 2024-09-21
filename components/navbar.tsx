@@ -1,4 +1,4 @@
-import { MenuIcon } from 'lucide-react'
+import { IconMenu } from '@tabler/icons-react'
 import { siteConfig } from '@/config/site'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
@@ -13,7 +13,7 @@ export function Navbar() {
           <Sheet>
             <SheetTrigger className="md:hidden" asChild>
               <Button className="h-8" variant="outline" size="icon">
-                <MenuIcon size={20} />
+                <IconMenu className="size-5" />
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex h-full max-w-72 flex-col justify-between p-0 sm:w-72">

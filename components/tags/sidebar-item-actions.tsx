@@ -15,14 +15,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
-import { EditFolderDialog } from '@/components/dialogs/folders/edit-folder'
+import { EditTagDialog } from '@/components/dialogs/tags/edit-tag'
 
-export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
+export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
   const queryClient = useQueryClient()
 
   async function handleDeleteFolder(id: number) {
     const supabase = createClient()
-    const { error } = await supabase.from('folders').delete().eq('id', id)
+    const { error } = await supabase.from('tags').delete().eq('id', id)
 
     if (error) {
       throw new Error(error.message)
@@ -31,7 +31,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
     toast.success('Success', {
       description: (
         <div>
-          Folder <span className="font-semibold">{folder.name}</span> has been deleted.
+          Folder <span className="font-semibold">{tag.name}</span> has been deleted.
         </div>
       ),
     })
@@ -48,12 +48,12 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-52">
-        <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-all p-0">{folder.name}</DropdownMenuLabel>
+        <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-all p-0">{tag.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {
-            void NiceModal.show(EditFolderDialog, {
-              folder,
+            void NiceModal.show(EditTagDialog, {
+              tag,
             })
           }}
         >
@@ -66,7 +66,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
             void NiceModal.show(AlertActionDialog, {
               message: 'This action will also delete all bookmarks related to this folder.',
               action: async () => {
-                await handleDeleteFolder(folder.id)
+                await handleDeleteFolder(tag.id)
               },
             })
           }}

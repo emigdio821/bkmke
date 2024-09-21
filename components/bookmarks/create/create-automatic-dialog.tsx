@@ -4,9 +4,9 @@ import { useMemo, useState } from 'react'
 import type { OGInfo } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { IconPlus } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
-import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -236,7 +236,7 @@ export function CreateAutomaticBookmarkDialog({ trigger }: CreateAutomaticBookma
                   void NiceModal.show(CreateFolderDialog)
                 }}
               >
-                <PlusIcon className="size-4" />
+                <IconPlus className="size-4" />
               </Button>
             </div>
             <div className="flex items-center space-x-2">
@@ -261,7 +261,7 @@ export function CreateAutomaticBookmarkDialog({ trigger }: CreateAutomaticBookma
               <CreateTagDialog
                 trigger={
                   <Button size="icon">
-                    <PlusIcon className="size-4" />
+                    <IconPlus className="size-4" />
                   </Button>
                 }
               />

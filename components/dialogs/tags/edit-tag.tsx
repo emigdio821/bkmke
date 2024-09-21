@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 import type { Tables } from '@/types/database.types'
-import { FOLDERS_QUERY } from '@/lib/constants'
-import { createFolderSchema } from '@/lib/schemas/form'
+import { TAGS_QUERY } from '@/lib/constants'
+import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -16,19 +16,19 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
-export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'folders'> }) => {
+export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> }) => {
   const modal = useModal()
   const queryClient = useQueryClient()
   const supabase = createClient()
-  const form = useForm<z.infer<typeof createFolderSchema>>({
-    resolver: zodResolver(createFolderSchema),
+  const form = useForm<z.infer<typeof createTagSchema>>({
+    resolver: zodResolver(createTagSchema),
     defaultValues: {
-      name: folder.name,
+      name: tag.name,
     },
   })
 
-  async function onSubmit(values: z.infer<typeof createFolderSchema>) {
-    const { error } = await supabase.from('folders').update(values).eq('id', folder.id)
+  async function onSubmit(values: z.infer<typeof createTagSchema>) {
+    const { error } = await supabase.from('tags').update(values).eq('id', tag.id)
 
     if (error) {
       toast.error('Error', { description: error.message })
@@ -36,9 +36,9 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
     }
 
     toast.success('Success', {
-      description: 'Folder has been updated.',
+      description: 'Tag has been updated.',
     })
-    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY] })
     await modal.hide()
   }
 
@@ -65,7 +65,7 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
         }}
       >
         <DialogHeader>
-          <DialogTitle>Edit folder</DialogTitle>
+          <DialogTitle>Edit tag</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -81,7 +81,7 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Folder name</FormLabel>
+                  <FormLabel>Tag name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

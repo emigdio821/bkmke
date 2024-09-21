@@ -1,6 +1,6 @@
 'use client'
 
-import { RefreshCwIcon } from 'lucide-react'
+import { IconReload } from '@tabler/icons-react'
 import { useBookmarks } from '@/hooks/use-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
@@ -20,7 +20,7 @@ export function BookmarksClientPage() {
         <p>Unable to fetch bookmarks, try again.</p>
         <p className="flex items-center">
           <Button variant="link">
-            Refetch <RefreshCwIcon className="ml-2 size-4" />
+            Refetch <IconReload className="ml-2 size-4" />
           </Button>
         </p>
       </div>
