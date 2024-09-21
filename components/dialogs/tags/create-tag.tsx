@@ -1,63 +1,70 @@
-import { useState } from 'react'
+'use client'
+
+import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { TAGS_QUERY } from '@/lib/constants'
-import { createTagSchema } from '@/lib/schemas/form'
+import { FOLDERS_QUERY } from '@/lib/constants'
+import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
-interface CreateTagDialogProps {
-  trigger?: React.ReactNode
-}
-
-export function CreateTagDialog({ trigger }: CreateTagDialogProps) {
+export const CreateTagDialog = NiceModal.create(() => {
+  const modal = useModal()
   const queryClient = useQueryClient()
   const supabase = createClient()
-  const [openDialog, setOpenDialog] = useState(false)
-  const form = useForm<z.infer<typeof createTagSchema>>({
-    resolver: zodResolver(createTagSchema),
+  const form = useForm<z.infer<typeof createFolderSchema>>({
+    resolver: zodResolver(createFolderSchema),
     defaultValues: {
       name: '',
     },
   })
 
-  async function onSubmit(values: z.infer<typeof createTagSchema>) {
-    const { error } = await supabase.from('tags').insert(values)
+  async function onSubmit(values: z.infer<typeof createFolderSchema>) {
+    const { error } = await supabase.from('folders').insert(values)
 
     if (error) {
       toast.error('Error', { description: error.message })
       return
     }
 
-    await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY] })
-    setOpenDialog(false)
-    toast.success('Success', { description: 'Tag created' })
+    toast.success('Success', {
+      description: (
+        <div>
+          Folder <span className="font-semibold">{values.name}</span> has been created.
+        </div>
+      ),
+    })
+    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
+    await modal.hide()
   }
 
   return (
     <Dialog
-      open={openDialog}
+      open={modal.visible}
       onOpenChange={(isOpen) => {
-        if (form.formState.isSubmitting) {
-          setOpenDialog(true)
+        if (form.formState.isSubmitting) return
+        if (isOpen) {
+          void modal.show()
+        } else {
+          void modal.hide()
         }
-        if (isOpen) form.reset()
-        setOpenDialog(isOpen)
       }}
     >
-      <DialogTrigger asChild>{trigger || <Button variant="outline">Create tag</Button>}</DialogTrigger>
       <DialogContent
         className="max-w-xs"
         aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault()
+        }}
+        onCloseAutoFocus={() => {
+          modal.remove()
         }}
       >
         <DialogHeader>
@@ -96,4 +103,4 @@ export function CreateTagDialog({ trigger }: CreateTagDialogProps) {
       </DialogContent>
     </Dialog>
   )
-}
+})

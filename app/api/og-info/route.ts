@@ -44,7 +44,13 @@ function constructFavicon(faviconStatus: FaviconStatus, origin: string | null, u
   if (faviconStatus.ok) {
     return faviconStatus.url
   }
-  return origin ? `${origin}/${faviconStatus.url}` : getFaviconFromGoogle(url)
+
+  if (origin) {
+    const hostname = new URL(origin).hostname
+    return `${origin}/${faviconStatus.url.replace(hostname, '')}`
+  }
+
+  return getFaviconFromGoogle(url)
 }
 
 export async function GET(request: NextRequest) {

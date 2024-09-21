@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
+import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
 
 interface SidebarFoldersActionsProps<T> {
   tags: Array<Tables<'tags'>>
@@ -32,7 +32,7 @@ export function SidebarTagsActions<T>({ tags, refetch }: SidebarFoldersActionsPr
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {
-            void NiceModal.show(CreateFolderDialog)
+            void NiceModal.show(CreateTagDialog)
           }}
         >
           <IconFolderPlus className="mr-2 size-4" />

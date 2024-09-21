@@ -1,22 +1,19 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import NiceModal from '@ebay/nice-modal-react'
 import { IconBookmarkPlus, IconLogout, IconPlus, IconSettings } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
-import { CreateBookmarkSubmenu } from './bookmarks/create/create-bookmark-submenu'
-import { CreateTagDialog } from './tags/create-tag-dialog'
+import { CreateBookmarkDialog } from './dialogs/bookmarks/create'
+import { CreateTagDialog } from './dialogs/tags/create-tag'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { Skeleton } from './ui/skeleton'
@@ -68,29 +65,22 @@ export function UserProfileDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
-        <CreateTagDialog
-          trigger={
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault()
-              }}
-            >
-              <IconPlus className="mr-2 size-4" />
-              Create tag
-            </DropdownMenuItem>
-          }
-        />
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
-            <IconBookmarkPlus className="mr-2 size-4" />
-            Create bookmark
-          </DropdownMenuSubTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuSubContent>
-              <CreateBookmarkSubmenu />
-            </DropdownMenuSubContent>
-          </DropdownMenuPortal>
-        </DropdownMenuSub>
+        <DropdownMenuItem
+          onSelect={() => {
+            void NiceModal.show(CreateTagDialog)
+          }}
+        >
+          <IconPlus className="mr-2 size-4" />
+          Create tag
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => {
+            void NiceModal.show(CreateBookmarkDialog)
+          }}
+        >
+          <IconBookmarkPlus className="mr-2 size-4" />
+          Create bookmark
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/settings">

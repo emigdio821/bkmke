@@ -67,7 +67,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
             </DropdownMenuItem>
           }
         />
-        <DropdownMenuItem>
+        <DropdownMenuItem disabled>
           <IconId className="mr-2 size-4" />
           Details
         </DropdownMenuItem>

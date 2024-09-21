@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import type { Bookmark } from '@/types'
+import NiceModal from '@ebay/nice-modal-react'
 import {
   flexRender,
   getCoreRowModel,
@@ -15,12 +16,13 @@ import {
   type VisibilityState,
 } from '@tanstack/react-table'
 import { useTags } from '@/hooks/use-tags'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { DataTableColumnFilter } from '@/components/data-table/column-filter'
 import { DataTableFacetedFilter } from '@/components/data-table/faceted-filter'
 import { DataTablePagination } from '@/components/data-table/pagination'
-import { CreateBookmarkDropdown } from './create/create-bookmark-dropdown'
+import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 
 interface DataTableProps {
   columns: Array<ColumnDef<Bookmark>>
@@ -80,7 +82,14 @@ export function DataTable({ columns, data }: DataTableProps) {
         <div className="flex items-center space-x-2">
           <DataTableFacetedFilter column={table.getColumn('tags')} title="Tags" options={getTagsFilterData} />
           <DataTableColumnFilter table={table} />
-          <CreateBookmarkDropdown />
+          <Button
+            type="button"
+            onClick={() => {
+              void NiceModal.show(CreateBookmarkDialog)
+            }}
+          >
+            Create bookmark
+          </Button>
         </div>
       </div>
       <div className="mb-2 overflow-y-hidden rounded-md border">
