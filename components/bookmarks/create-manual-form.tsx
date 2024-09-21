@@ -123,7 +123,7 @@ export function CreateManualForm() {
     }
 
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    toast.success('Success', { description: 'Bookmark created.' })
+    toast.success('Success', { description: 'Bookmark has been created.' })
     await NiceModal.hide(CreateBookmarkDialog)
     NiceModal.remove(CreateBookmarkDialog)
   }
@@ -158,7 +158,7 @@ export function CreateManualForm() {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea className="max-h-32" {...field} />
+                  <Textarea className="max-h-40 min-h-32" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

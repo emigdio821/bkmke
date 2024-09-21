@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { MoveToFolderDialog } from '@/components/bookmarks/move-to-folder-dialog'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
-import { EditBookmarkDialog } from './edit-dialog'
+import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
 
 export function RowActions({ row }: { row: Row<Bookmark> }) {
   const bookmark = row.original
@@ -55,18 +55,14 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
       <DropdownMenuContent align="end" className="max-w-52">
         <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-all p-0">{bookmark.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <EditBookmarkDialog
-          trigger={
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault()
-              }}
-            >
-              <IconPencil className="mr-2 size-4" />
-              Edit
-            </DropdownMenuItem>
-          }
-        />
+        <DropdownMenuItem
+          onSelect={() => {
+            void NiceModal.show(EditBookmarkDialog, { bookmark })
+          }}
+        >
+          <IconPencil className="mr-2 size-4" />
+          Edit
+        </DropdownMenuItem>
         <DropdownMenuItem disabled>
           <IconId className="mr-2 size-4" />
           Details
@@ -80,7 +76,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
           Copy URL
         </DropdownMenuItem>
         <DropdownMenuItem
-          onSelect={(e) => {
+          onSelect={() => {
             void NiceModal.show(MoveToFolderDialog, { bookmark })
           }}
         >
