@@ -47,7 +47,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="size-8 p-0">
+        <Button variant="ghost" size="icon" className="size-6 hover:bg-muted-foreground/10">
           <span className="sr-only">Open row actions</span>
           <MoreHorizontal className="size-4" />
         </Button>

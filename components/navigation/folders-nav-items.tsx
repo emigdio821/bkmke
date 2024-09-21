@@ -1,73 +1,116 @@
 import { usePathname } from 'next/navigation'
-import { FolderIcon, FoldersIcon, RefreshCwIcon } from 'lucide-react'
+import { FolderIcon, FolderPlusIcon, FoldersIcon, MoreHorizontal, RefreshCwIcon, SearchCheckIcon } from 'lucide-react'
 import { useFolders } from '@/hooks/use-folders'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { CreateFolderDialog } from '@/components/create-folder-dialog'
+import { SidebarItemActions } from '@/components/folders/sidebar-item-actions'
 import { NavItemsSkeleton } from '@/components/skeletons'
-import { CollapsibleGroupLabel } from './collapsible-group-label'
 import { NavItem } from './nav-item'
 
 export function FoldersNavItems() {
   const pathname = usePathname()
-  const { data: folders, isLoading, error } = useFolders()
+  const { data: folders, isLoading, error, refetch } = useFolders()
 
   if (isLoading) return <NavItemsSkeleton />
 
+  if (error) {
+    return (
+      <Button
+        onClick={() => {
+          void refetch()
+        }}
+        variant="ghost"
+        className="w-full justify-start"
+      >
+        <RefreshCwIcon className="mr-2 size-4" />
+        Refresh folders
+      </Button>
+    )
+  }
+
   return (
     <>
-      <CollapsibleGroupLabel
-        groupLabel="Folders"
-        groupIcon={FoldersIcon}
-        itemCount={folders?.length || 0}
-        isActive={pathname.startsWith('/folders')}
-      >
-        {folders && !error && (
-          <>
-            {folders.length > 0 ? (
-              folders.map((folder) => (
-                <NavItem
-                  key={`${folder.id}-tag-item`}
-                  menus={[
-                    {
-                      href: `/folders/${folder.id}`,
-                      label: folder.name,
-                      active: pathname === `/folders/${folder.id}`,
-                      icon: FolderIcon,
-                      submenus: [],
-                    },
-                  ]}
-                />
-              ))
-            ) : (
-              <div className="px-4 py-2 text-sm text-muted-foreground">
-                <p>You have no folders yet.</p>
-                <p className="flex items-center">
-                  <span>Create one</span>
-                  <CreateFolderDialog
-                    trigger={
-                      <Button variant="underlineLink" className="ml-1">
-                        here
-                      </Button>
-                    }
-                  />
-                  .
-                </p>
-              </div>
-            )}
-          </>
-        )}
+      {!folders?.length ? (
+        <CreateFolderDialog
+          trigger={
+            <Button variant="ghost" className="w-full justify-start">
+              <FolderPlusIcon className="mr-2 size-4" />
+              Create folder
+            </Button>
+          }
+        />
+      ) : (
+        <NavItem
+          menus={[
+            {
+              label: 'Folders',
+              withItemCount: true,
+              active: pathname.startsWith('/folders'),
+              icon: FoldersIcon,
+              actions: (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="icon" type="button" variant="ghost">
+                      <span className="sr-only">Open folders actions</span>
+                      <MoreHorizontal className="size-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Folders</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <CreateFolderDialog
+                      trigger={
+                        <DropdownMenuItem
+                          onSelect={(e) => {
+                            e.preventDefault()
+                          }}
+                        >
+                          <FolderPlusIcon className="mr-2 size-4" />
+                          Create folder
+                        </DropdownMenuItem>
+                      }
+                    />
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        void refetch()
+                      }}
+                    >
+                      <RefreshCwIcon className="mr-2 size-4" />
+                      Reload data
+                    </DropdownMenuItem>
+                    {folders && folders.length > 10 && (
+                      <DropdownMenuItem>
+                        <SearchCheckIcon className="mr-2 size-4" />
+                        Toggle search
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ),
 
-        {error && (
-          <div className="px-4 py-2 text-sm text-muted-foreground">
-            <p>Unable to fetch folders, try again.</p>
-            <p className="flex items-center">
-              <Button variant="link">
-                Refetch <RefreshCwIcon className="ml-2 size-4" />
-              </Button>
-            </p>
-          </div>
-        )}
-      </CollapsibleGroupLabel>
+              submenus:
+                (folders.length > 0 &&
+                  folders.map((folder) => ({
+                    href: `/folders/${folder.id}`,
+                    label: folder.name,
+                    actions: <SidebarItemActions folder={folder} />,
+                    active: pathname === `/folders/${folder.id}`,
+                    icon: FolderIcon,
+                    submenus: [],
+                  }))) ||
+                [],
+            },
+          ]}
+        />
+      )}
     </>
   )
 }

@@ -11,7 +11,7 @@ export function NavContent() {
   const pathname = usePathname()
 
   return (
-    <nav className="my-2 h-full w-full overflow-y-auto px-4 py-2">
+    <nav className="my-2 h-full w-full overflow-auto px-4 py-2">
       <ul className="flex h-full flex-col items-start space-y-1">
         <li className="w-full space-y-2">
           <NavItem

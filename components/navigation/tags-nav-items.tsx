@@ -1,72 +1,115 @@
 import { usePathname } from 'next/navigation'
-import { HashIcon, RefreshCwIcon, TagIcon } from 'lucide-react'
+import { FolderPlusIcon, HashIcon, MoreHorizontal, RefreshCwIcon, SearchCheckIcon, TagIcon } from 'lucide-react'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { CreateFolderDialog } from '@/components/create-folder-dialog'
 import { NavItemsSkeleton } from '@/components/skeletons'
-import { CreateTagDialog } from '@/components/tags/create-tag-dialog'
-import { CollapsibleGroupLabel } from './collapsible-group-label'
 import { NavItem } from './nav-item'
 
 export function TagsNavItems() {
   const pathname = usePathname()
-  const { data: tags, isLoading, error } = useTags()
+  const { data: tags, isLoading, error, refetch } = useTags()
 
   if (isLoading) return <NavItemsSkeleton />
 
+  if (error) {
+    return (
+      <Button
+        onClick={() => {
+          void refetch()
+        }}
+        variant="ghost"
+        className="w-full justify-start"
+      >
+        <RefreshCwIcon className="mr-2 size-4" />
+        Refresh folders
+      </Button>
+    )
+  }
+
   return (
     <>
-      <CollapsibleGroupLabel
-        groupLabel="Tags"
-        groupIcon={TagIcon}
-        itemCount={tags?.length || 0}
-        isActive={pathname.startsWith('/tags')}
-      >
-        {tags && !error && (
-          <>
-            {tags.length > 0 ? (
-              tags.map((folder) => (
-                <NavItem
-                  key={`${folder.id}-tag-item`}
-                  menus={[
-                    {
-                      href: `/tags/${folder.id}`,
-                      label: folder.name,
-                      active: pathname === `/tags/${folder.id}`,
-                      icon: HashIcon,
-                      submenus: [],
-                    },
-                  ]}
-                />
-              ))
-            ) : (
-              <div className="px-4 py-2 text-sm text-muted-foreground">
-                <p>You have no tags yet.</p>
-                <p className="flex items-center">
-                  <span>Create one</span>
-                  <CreateTagDialog
-                    trigger={
-                      <Button variant="underlineLink" className="ml-1">
-                        here
-                      </Button>
-                    }
-                  />
-                  .
-                </p>
-              </div>
-            )}
-          </>
-        )}
-        {error && (
-          <div className="px-4 py-2 text-sm text-muted-foreground">
-            <p>Unable to fetch tags, try again.</p>
-            <p className="flex items-center">
-              <Button variant="link">
-                Refetch <RefreshCwIcon className="ml-2 size-4" />
-              </Button>
-            </p>
-          </div>
-        )}
-      </CollapsibleGroupLabel>
+      {!tags?.length ? (
+        <CreateFolderDialog
+          trigger={
+            <Button variant="ghost" className="w-full justify-start">
+              <FolderPlusIcon className="mr-2 size-4" />
+              Create folder
+            </Button>
+          }
+        />
+      ) : (
+        <NavItem
+          menus={[
+            {
+              label: 'Tags',
+              withItemCount: true,
+              active: pathname.startsWith('/tags'),
+              icon: TagIcon,
+              actions: (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="icon" type="button" variant="ghost">
+                      <span className="sr-only">Open tags actions</span>
+                      <MoreHorizontal className="size-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Tags</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <CreateFolderDialog
+                      trigger={
+                        <DropdownMenuItem
+                          onSelect={(e) => {
+                            e.preventDefault()
+                          }}
+                        >
+                          <FolderPlusIcon className="mr-2 size-4" />
+                          Create folder
+                        </DropdownMenuItem>
+                      }
+                    />
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        void refetch()
+                      }}
+                    >
+                      <RefreshCwIcon className="mr-2 size-4" />
+                      Reload data
+                    </DropdownMenuItem>
+                    {tags && tags.length > 10 && (
+                      <DropdownMenuItem>
+                        <SearchCheckIcon className="mr-2 size-4" />
+                        Toggle search
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ),
+
+              submenus:
+                (tags.length > 0 &&
+                  tags.map((tag) => ({
+                    href: `/tags/${tag.id}`,
+                    label: tag.name,
+                    // actions: <SidebarItemActions folder={folder} />,
+                    active: pathname === `/tags/${tag.id}`,
+                    icon: HashIcon,
+                    submenus: [],
+                  }))) ||
+                [],
+            },
+          ]}
+        />
+      )}
     </>
   )
 }

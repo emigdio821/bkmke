@@ -121,7 +121,7 @@ export function EditDialog({ user }: { user: User }) {
             />
 
             <DialogFooter>
-              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+              <Button type="submit" disabled={form.formState.isSubmitting}>
                 Save {form.formState.isSubmitting && <Spinner className="ml-2" />}
               </Button>
             </DialogFooter>

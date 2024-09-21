@@ -1,11 +1,10 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { BookmarkPlusIcon, FolderPlusIcon, LogOutIcon, PlusIcon, SettingsIcon } from 'lucide-react'
+import { BookmarkPlusIcon, LogOutIcon, PlusIcon, SettingsIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
 import { CreateBookmarkSubmenu } from './bookmarks/create/create-bookmark-submenu'
-import { CreateFolderDialog } from './create-folder-dialog'
 import { CreateTagDialog } from './tags/create-tag-dialog'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
@@ -78,18 +77,6 @@ export function UserProfileDropdown() {
             >
               <PlusIcon className="mr-2 size-4" />
               Create tag
-            </DropdownMenuItem>
-          }
-        />
-        <CreateFolderDialog
-          trigger={
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault()
-              }}
-            >
-              <FolderPlusIcon className="mr-2 size-4" />
-              Create folder
             </DropdownMenuItem>
           }
         />
