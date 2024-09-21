@@ -36,7 +36,7 @@ export async function handleCopyToClipboard(text: string, message?: string) {
       },
     })
   } catch {
-    toast.error('Error', { description: 'Unable to copy to your clipboard, try again' })
+    toast.error('Error', { description: 'Unable to copy to your clipboard, try again.' })
   }
 }
 

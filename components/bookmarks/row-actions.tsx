@@ -40,7 +40,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
       throw new Error(error.message)
     }
 
-    toast.success('Success', { description: 'Bookmark has beed deleted' })
+    toast.success('Success', { description: 'Bookmark has been deleted.' })
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
   }
 

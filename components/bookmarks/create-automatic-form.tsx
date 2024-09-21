@@ -123,7 +123,7 @@ export function CreateAutomaticForm() {
     }
 
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    toast.success('Success', { description: 'Bookmark created' })
+    toast.success('Success', { description: 'Bookmark created.' })
     await NiceModal.hide(CreateBookmarkDialog)
     NiceModal.remove(CreateBookmarkDialog)
   }

@@ -45,7 +45,7 @@ export function EditDialog({ user }: { user: User }) {
 
     await queryClient.invalidateQueries({ queryKey: [PROFILE_QUERY] })
     setOpenDialog(false)
-    toast.success('Success', { description: 'Profile updated' })
+    toast.success('Success', { description: 'Profile has been updated.' })
   }
 
   return (

@@ -40,7 +40,7 @@ export function EditBookmarkDialog({ trigger }: EditBookmarkDialogProps) {
 
     await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
     setOpenDialog(false)
-    toast.success('Success', { description: 'Folder created' })
+    toast.success('Success', { description: 'Folder created.' })
   }
 
   return (

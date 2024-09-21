@@ -33,7 +33,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
 
   const handleMoveToFolder = useCallback(async () => {
     if (!selectValue) {
-      toast.warning('Please, select a folder')
+      toast.warning('Please, select a folder.')
       return
     }
 
@@ -55,7 +55,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
     }
 
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    toast.success('Success', { description: 'Bookmark has been moved to selected folder' })
+    toast.success('Success', { description: 'Bookmark has been moved to selected folder.' })
     await modal.hide()
     setLoading(false)
   }, [bookmark.folder_id, bookmark.id, modal, queryClient, selectValue, supabase])

@@ -48,7 +48,7 @@ export function SidebarFoldersActions<T>({ folders, refetch }: SidebarFoldersAct
           Reload data
         </DropdownMenuItem>
         {folders.length > 10 && (
-          <DropdownMenuItem>
+          <DropdownMenuItem disabled>
             <IconInputSearch className="mr-2 size-4" />
             Toggle search
           </DropdownMenuItem>

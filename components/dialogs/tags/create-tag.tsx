@@ -6,8 +6,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { FOLDERS_QUERY } from '@/lib/constants'
-import { createFolderSchema } from '@/lib/schemas/form'
+import { TAGS_QUERY } from '@/lib/constants'
+import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -19,15 +19,15 @@ export const CreateTagDialog = NiceModal.create(() => {
   const modal = useModal()
   const queryClient = useQueryClient()
   const supabase = createClient()
-  const form = useForm<z.infer<typeof createFolderSchema>>({
-    resolver: zodResolver(createFolderSchema),
+  const form = useForm<z.infer<typeof createTagSchema>>({
+    resolver: zodResolver(createTagSchema),
     defaultValues: {
       name: '',
     },
   })
 
-  async function onSubmit(values: z.infer<typeof createFolderSchema>) {
-    const { error } = await supabase.from('folders').insert(values)
+  async function onSubmit(values: z.infer<typeof createTagSchema>) {
+    const { error } = await supabase.from('tags').insert(values)
 
     if (error) {
       toast.error('Error', { description: error.message })
@@ -37,11 +37,11 @@ export const CreateTagDialog = NiceModal.create(() => {
     toast.success('Success', {
       description: (
         <div>
-          Folder <span className="font-semibold">{values.name}</span> has been created.
+          Tag <span className="font-semibold">{values.name}</span> has been created.
         </div>
       ),
     })
-    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY] })
     await modal.hide()
   }
 

@@ -3,7 +3,7 @@ import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
-import { BOOKMARKS_QUERY, FOLDERS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import {
@@ -31,11 +31,11 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
     toast.success('Success', {
       description: (
         <div>
-          Folder <span className="font-semibold">{tag.name}</span> has been deleted.
+          Tag <span className="font-semibold">{tag.name}</span> has been deleted.
         </div>
       ),
     })
-    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY] })
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
   }
 
@@ -43,7 +43,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" type="button" variant="ghost">
-          <span className="sr-only">Open folders actions</span>
+          <span className="sr-only">Open tag actions</span>
           <IconDots className="size-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -64,7 +64,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
           className="text-destructive focus:text-destructive"
           onSelect={() => {
             void NiceModal.show(AlertActionDialog, {
-              message: 'This action will also delete all bookmarks related to this folder.',
+              message: 'It will also unlik all bookmarks related to this tag. This action cannot be undone.',
               action: async () => {
                 await handleDeleteFolder(tag.id)
               },

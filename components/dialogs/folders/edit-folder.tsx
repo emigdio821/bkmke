@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 import type { Tables } from '@/types/database.types'
-import { FOLDERS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDERS_QUERY } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -39,6 +39,7 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
       description: 'Folder has been updated.',
     })
     await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
     await modal.hide()
   }
 

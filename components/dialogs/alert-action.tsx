@@ -30,7 +30,7 @@ export const AlertActionDialog = NiceModal.create(<T,>({ action, message }: Aler
       await modal.hide()
     } catch (err) {
       console.log('Alert action dialog error', err)
-      toast.error('Error', { description: 'Unable to perform this action, try again' })
+      toast.error('Error', { description: 'Unable to perform this action, try again.' })
     } finally {
       setLoading(false)
     }
