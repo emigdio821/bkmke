@@ -1,4 +1,5 @@
 import { usePathname } from 'next/navigation'
+import NiceModal from '@ebay/nice-modal-react'
 import { FolderPlusIcon, HashIcon, MoreHorizontal, RefreshCwIcon, SearchCheckIcon, TagIcon } from 'lucide-react'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
@@ -10,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { CreateFolderDialog } from '@/components/create-folder-dialog'
+import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
 import { NavItemsSkeleton } from '@/components/skeletons'
 import { NavItem } from './nav-item'
 
@@ -38,14 +39,17 @@ export function TagsNavItems() {
   return (
     <>
       {!tags?.length ? (
-        <CreateFolderDialog
-          trigger={
-            <Button variant="ghost" className="w-full justify-start">
-              <FolderPlusIcon className="mr-2 size-4" />
-              Create folder
-            </Button>
-          }
-        />
+        <Button
+          type="button"
+          variant="ghost"
+          className="w-full justify-start"
+          onClick={() => {
+            void NiceModal.show(CreateFolderDialog)
+          }}
+        >
+          <FolderPlusIcon className="mr-2 size-4" />
+          Create folder
+        </Button>
       ) : (
         <NavItem
           menus={[
@@ -65,18 +69,15 @@ export function TagsNavItems() {
                   <DropdownMenuContent>
                     <DropdownMenuLabel>Tags</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <CreateFolderDialog
-                      trigger={
-                        <DropdownMenuItem
-                          onSelect={(e) => {
-                            e.preventDefault()
-                          }}
-                        >
-                          <FolderPlusIcon className="mr-2 size-4" />
-                          Create folder
-                        </DropdownMenuItem>
-                      }
-                    />
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        void NiceModal.show(CreateFolderDialog)
+                      }}
+                    >
+                      <FolderPlusIcon className="mr-2 size-4" />
+                      Create folder
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem
                       onSelect={() => {
                         void refetch()

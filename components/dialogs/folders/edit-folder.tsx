@@ -1,66 +1,67 @@
 'use client'
 
-import { useState } from 'react'
+import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
+import type { Tables } from '@/types/database.types'
 import { FOLDERS_QUERY } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Spinner } from './spinner'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
+import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/spinner'
 
-interface CreateFolderDialogProps {
-  trigger?: React.ReactNode
-}
-
-export function CreateFolderDialog({ trigger }: CreateFolderDialogProps) {
+export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'folders'> }) => {
+  const modal = useModal()
   const queryClient = useQueryClient()
   const supabase = createClient()
-  const [openDialog, setOpenDialog] = useState(false)
   const form = useForm<z.infer<typeof createFolderSchema>>({
     resolver: zodResolver(createFolderSchema),
     defaultValues: {
-      name: '',
+      name: folder.name,
     },
   })
 
   async function onSubmit(values: z.infer<typeof createFolderSchema>) {
-    const { error } = await supabase.from('folders').insert(values)
+    const { error } = await supabase.from('folders').update(values).eq('id', folder.id)
 
     if (error) {
       toast.error('Error', { description: error.message })
       return
     }
 
+    toast.success('Success', {
+      description: 'Folder has been updated.',
+    })
     await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
-    setOpenDialog(false)
-    toast.success('Success', { description: 'Folder created' })
+    await modal.hide()
   }
 
   return (
     <Dialog
-      open={openDialog}
+      open={modal.visible}
       onOpenChange={(isOpen) => {
-        if (form.formState.isSubmitting) {
-          setOpenDialog(true)
+        if (form.formState.isSubmitting) return
+        if (isOpen) {
+          void modal.show()
+        } else {
+          void modal.hide()
         }
-        if (isOpen) form.reset()
-        setOpenDialog(isOpen)
       }}
     >
-      <DialogTrigger asChild>{trigger || <Button variant="outline">Create folder</Button>}</DialogTrigger>
-
       <DialogContent
         className="max-w-xs"
         aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault()
+        }}
+        onCloseAutoFocus={() => {
+          modal.remove()
         }}
       >
         <DialogHeader>
@@ -99,4 +100,4 @@ export function CreateFolderDialog({ trigger }: CreateFolderDialogProps) {
       </DialogContent>
     </Dialog>
   )
-}
+})

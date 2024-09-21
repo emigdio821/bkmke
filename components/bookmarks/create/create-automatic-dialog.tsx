@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import type { OGInfo } from '@/types'
+import NiceModal from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
@@ -27,7 +28,7 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { CreateFolderDialog } from '@/components/create-folder-dialog'
+import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 import { CreateTagDialog } from '@/components/tags/create-tag-dialog'
@@ -228,13 +229,15 @@ export function CreateAutomaticBookmarkDialog({ trigger }: CreateAutomaticBookma
                   )
                 }}
               />
-              <CreateFolderDialog
-                trigger={
-                  <Button size="icon">
-                    <PlusIcon className="size-4" />
-                  </Button>
-                }
-              />
+              <Button
+                size="icon"
+                type="button"
+                onClick={() => {
+                  void NiceModal.show(CreateFolderDialog)
+                }}
+              >
+                <PlusIcon className="size-4" />
+              </Button>
             </div>
             <div className="flex items-center space-x-2">
               <FormField

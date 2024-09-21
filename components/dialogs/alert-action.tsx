@@ -11,13 +11,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { Spinner } from './spinner'
+import { Spinner } from '@/components/spinner'
 
 interface AlertActionDialogProps<T = unknown> {
+  message?: string
   action: (...args: never[]) => T | Promise<T>
 }
 
-export const AlertActionDialog = NiceModal.create(({ action }: AlertActionDialogProps) => {
+export const AlertActionDialog = NiceModal.create(({ action, message }: AlertActionDialogProps) => {
   const modal = useModal()
   const [isLoading, setLoading] = useState(false)
 
@@ -38,6 +39,7 @@ export const AlertActionDialog = NiceModal.create(({ action }: AlertActionDialog
     <AlertDialog
       open={modal.visible}
       onOpenChange={(isOpen) => {
+        if (isLoading) return
         if (isOpen) {
           void modal.show()
         } else {
@@ -52,7 +54,7 @@ export const AlertActionDialog = NiceModal.create(({ action }: AlertActionDialog
       >
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-          <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+          <AlertDialogDescription>{message || 'This action cannot be undone.'}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>

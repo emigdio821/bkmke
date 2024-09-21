@@ -24,8 +24,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { AlertActionDialog } from '@/components/alert-action-dialog'
 import { MoveToFolderDialog } from '@/components/bookmarks/move-to-folder-dialog'
+import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { EditBookmarkDialog } from './edit-dialog'
 
 export function RowActions({ row }: { row: Row<Bookmark> }) {
