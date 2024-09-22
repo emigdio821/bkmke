@@ -6,10 +6,10 @@ import { LoginForm } from '@/components/login/login-form'
 
 export default async function LoginPage() {
   const supabase = createClient()
-  const { data } = await supabase.auth.getUser()
+  const { data } = await supabase.auth.getSession()
 
-  if (data.user) {
-    redirect('/my-bookmarks')
+  if (data.session) {
+    redirect('/')
   }
 
   return (

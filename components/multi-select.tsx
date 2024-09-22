@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { IconCheck, IconCirclePlus } from '@tabler/icons-react'
 import type { Column } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
@@ -35,12 +35,6 @@ export function MultiSelect<TData, TValue>({
   value,
 }: DataTableFacetedFilterProps<TData, TValue>) {
   const [selectedValues, setSelectedValues] = useState<string[]>(value || [])
-
-  useEffect(() => {
-    if (value) {
-      setSelectedValues(value)
-    }
-  }, [value])
 
   function updateSelectedValues(newValues: string[]) {
     setSelectedValues(newValues)

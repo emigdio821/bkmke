@@ -6,13 +6,13 @@ export function useProfile() {
   const supabase = createClient()
 
   async function getProfile() {
-    const { data, error } = await supabase.auth.getUser()
+    const { data, error } = await supabase.auth.getSession()
 
     if (error) {
       console.log('Unable to fetch your profile', error.message)
     }
 
-    return data.user
+    return data.session?.user
   }
 
   return useQuery({ queryKey: [PROFILE_QUERY], queryFn: getProfile })

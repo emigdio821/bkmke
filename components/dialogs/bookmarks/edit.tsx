@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import type { OGInfo } from '@/types'
+import type { Bookmark, OGInfo } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
@@ -9,12 +9,10 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import type { Tables } from '@/types/database.types'
 import { BOOKMARKS_QUERY } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
-import { useTagItems } from '@/hooks/use-tag-items'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
@@ -32,20 +30,23 @@ import { Textarea } from '@/components/ui/textarea'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
-export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Tables<'bookmarks'> }) => {
+export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bookmark }) => {
   const modal = useModal()
   const { data: tags } = useTags()
-  const { data: tagItems } = useTagItems(bookmark.id)
   const { data: folders } = useFolders()
   const queryClient = useQueryClient()
   const supabase = createClient()
+  const tagItems = bookmark.tag_items
+    .map((item) => item.tags?.id)
+    .filter((id) => id !== undefined)
+    .map((id) => id.toString())
   const form = useForm<z.infer<typeof editBookmarkSchema>>({
     resolver: zodResolver(editBookmarkSchema),
     defaultValues: {
       url: bookmark.url,
       name: bookmark.name,
       description: bookmark.description || '',
-      tags: [],
+      tags: tagItems,
       folderId: bookmark.folder_id?.toString() || '',
     },
   })
@@ -63,17 +64,6 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Ta
 
     return data
   }, [tags])
-
-  const getTagItemsData = useMemo(() => {
-    const data = []
-    if (tagItems) {
-      for (const tagItem of tagItems) {
-        data.push(tagItem.tag_id.toString())
-      }
-    }
-
-    return data
-  }, [tagItems])
 
   const getFoldersData = useMemo(() => {
     const data = []
@@ -133,15 +123,15 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Ta
     }
 
     if (tagIds.length > 0) {
-      const tagItemsPromises = []
+      const bookmarkId = bookmarkData[0].id
+      const tagItemsPayload = tagIds.map((tagId) => ({
+        bookmark_id: bookmarkId,
+        tag_id: Number(tagId),
+      }))
 
-      for (const tagId of tagIds) {
-        const tagItemsPayload = { bookmark_id: bookmarkData[0].id, tag_id: Number(tagId) }
-
-        tagItemsPromises.push(supabase.from('tag_items').insert(tagItemsPayload).eq('bookmark_id', bookmark.id))
-      }
-
-      await Promise.all(tagItemsPromises)
+      await supabase.from('tag_items').upsert(tagItemsPayload, { onConflict: 'bookmark_id, tag_id' })
+      const remainingTags = tagIds.map((tagId) => Number(tagId)).join(',')
+      await supabase.from('tag_items').delete().eq('bookmark_id', bookmarkId).not('tag_id', 'in', `(${remainingTags})`)
     } else {
       await supabase.from('tag_items').delete().eq('bookmark_id', bookmark.id)
     }
@@ -277,8 +267,8 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Ta
                       <FormControl>
                         <MultiSelect
                           title="Tags"
-                          value={getTagItemsData}
                           options={getTagsData}
+                          value={tagItems}
                           onChange={(options) => {
                             form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
                           }}
@@ -290,7 +280,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Ta
                 />
               </div>
               <DialogFooter>
-                <Button type="submit" disabled={form.formState.isSubmitting || true}>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
                   Save {form.formState.isSubmitting && <Spinner className="ml-2" />}
                 </Button>
               </DialogFooter>
