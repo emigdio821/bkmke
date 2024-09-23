@@ -1,8 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import type { Bookmark } from '@/types'
-import NiceModal from '@ebay/nice-modal-react'
 import {
   flexRender,
   getCoreRowModel,
@@ -15,14 +14,9 @@ import {
   type SortingState,
   type VisibilityState,
 } from '@tanstack/react-table'
-import { useTags } from '@/hooks/use-tags'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { DataTableColumnFilter } from '@/components/data-table/column-filter'
-import { DataTableFacetedFilter } from '@/components/data-table/faceted-filter'
 import { DataTablePagination } from '@/components/data-table/pagination'
-import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
+import { DataTableHeaders } from './data-table-header'
 
 interface DataTableProps {
   columns: Array<ColumnDef<Bookmark>>
@@ -34,22 +28,6 @@ export function DataTable({ columns, data }: DataTableProps) {
   const [rowSelection, setRowSelection] = useState({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-
-  const { data: tags } = useTags()
-
-  const getTagsFilterData = useMemo(() => {
-    const data = []
-    if (tags) {
-      for (const tag of tags) {
-        data.push({
-          label: tag.name,
-          value: tag.id.toString(),
-        })
-      }
-    }
-
-    return data
-  }, [tags])
 
   const table = useReactTable({
     data,
@@ -72,26 +50,7 @@ export function DataTable({ columns, data }: DataTableProps) {
 
   return (
     <>
-      <div className="mb-4 flex flex-col-reverse items-center gap-2 md:flex-row">
-        <Input
-          className="max-w-sm"
-          placeholder="Filter by name"
-          value={(table.getColumn('name')?.getFilterValue() as string) || ''}
-          onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
-        />
-        <div className="flex items-center space-x-2">
-          <DataTableFacetedFilter column={table.getColumn('tags')} title="Tags" options={getTagsFilterData} />
-          <DataTableColumnFilter table={table} />
-          <Button
-            type="button"
-            onClick={() => {
-              void NiceModal.show(CreateBookmarkDialog)
-            }}
-          >
-            Create bookmark
-          </Button>
-        </div>
-      </div>
+      <DataTableHeaders table={table} />
       <div className="mb-2 overflow-y-hidden rounded-md border">
         <Table>
           <TableHeader>

@@ -15,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/spinner'
@@ -27,17 +28,13 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
   const queryClient = useQueryClient()
   const supabase = createClient()
   const modal = useModal()
+  const folderId = bookmark.folder_id?.toString() || ''
   const [isLoading, setLoading] = useState(false)
-  const [selectValue, setSelectValue] = useState(`${bookmark.folder_id}`)
+  const [selectValue, setSelectValue] = useState(folderId)
   const { data: folders, isLoading: foldersLoading } = useFolders()
 
   const handleMoveToFolder = useCallback(async () => {
-    if (!selectValue) {
-      toast.warning('Please, select a folder.')
-      return
-    }
-
-    if (selectValue === `${bookmark.folder_id}`) {
+    if (selectValue === folderId) {
       await modal.hide()
       return
     }
@@ -45,7 +42,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
     setLoading(true)
     const { error } = await supabase
       .from('bookmarks')
-      .update({ folder_id: Number(selectValue) })
+      .update({ folder_id: selectValue ? Number(selectValue) : null })
       .eq('id', bookmark.id)
 
     if (error) {
@@ -58,7 +55,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
     toast.success('Success', { description: 'Bookmark has been moved to selected folder.' })
     await modal.hide()
     setLoading(false)
-  }, [bookmark.folder_id, bookmark.id, modal, queryClient, selectValue, supabase])
+  }, [bookmark.id, folderId, modal, queryClient, selectValue, supabase])
 
   return (
     <Dialog
@@ -91,18 +88,36 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
         ) : (
           folders &&
           folders.length > 0 && (
-            <Select value={selectValue} onValueChange={setSelectValue}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select folder" />
-              </SelectTrigger>
-              <SelectContent>
-                {folders.map((folder) => (
-                  <SelectItem key={`${folder.id}-folder-select`} value={`${folder.id}`}>
-                    {folder.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="space-y-2">
+              <Label>
+                Move to folder
+                {selectValue && (
+                  <>
+                    <span className="text-muted-foreground"> · </span>
+                    <Button
+                      variant="link"
+                      onClick={() => {
+                        setSelectValue('')
+                      }}
+                    >
+                      Clear selection
+                    </Button>
+                  </>
+                )}
+              </Label>
+              <Select value={selectValue} onValueChange={setSelectValue}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select folder" />
+                </SelectTrigger>
+                <SelectContent>
+                  {folders.map((folder) => (
+                    <SelectItem key={`${folder.id}-folder-select`} value={`${folder.id}`}>
+                      {folder.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           )
         )}
 

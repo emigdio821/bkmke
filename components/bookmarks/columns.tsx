@@ -59,18 +59,20 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     },
     cell: ({ row }) => {
       const bookmark = row.original
-      const ogInfo = row.original.og_info as unknown as OGInfo
+      const ogInfo = row.original.og_info as unknown as OGInfo | undefined
 
       return (
         <div className="flex max-w-48 flex-col items-start">
-          <Button variant="link" type="button" className="text-foreground">
-            <Avatar className="mr-2 size-4 rounded-[4px]">
-              <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
-              <AvatarFallback className="rounded-[inherit]">
-                <IconWorld className="size-4 text-muted-foreground" />
-              </AvatarFallback>
-            </Avatar>
-            <span className="max-w-44 truncate">{bookmark.name}</span>
+          <Button asChild variant="link" type="button" className="text-foreground">
+            <Link href={`/bookmarks/${bookmark.id}`}>
+              <Avatar className="mr-2 size-4 rounded-[4px]">
+                <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
+                <AvatarFallback className="rounded-[inherit]">
+                  <IconWorld className="size-4 text-muted-foreground" />
+                </AvatarFallback>
+              </Avatar>
+              <span className="max-w-44 truncate">{bookmark.name}</span>
+            </Link>
           </Button>
           {bookmark.description && (
             <p className="line-clamp-2 text-muted-foreground" title={bookmark.description}>

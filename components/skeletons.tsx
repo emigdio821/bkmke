@@ -127,3 +127,36 @@ export function BookmarksPageSkeleton() {
     </div>
   )
 }
+
+export function BookmarkDetailsSkeleton() {
+  return (
+    <Card>
+      <CardHeader className="mb-2">
+        <CardTitle className="mb-3 mt-1 flex items-center">
+          <Skeleton className="mr-2 size-4 rounded-[4px]" />
+          <Skeleton className="h-2 w-36" />
+        </CardTitle>
+        <Skeleton className="h-2 w-40" />
+      </CardHeader>
+      <CardContent className="text-sm">
+        <Skeleton className="h-36 w-full rounded-lg md:h-64" />
+        <div className="my-2 flex flex-col space-y-2">
+          <Skeleton className="h-2 w-full" />
+          <Skeleton className="h-2 w-2/4" />
+        </div>
+        <div className="flex items-center space-x-2">
+          <Skeleton className="size-4" />
+          <Skeleton className="h-2 w-28" />
+          <Skeleton className="size-9" />
+        </div>
+        <div className="mt-2 flex items-center space-x-2">
+          <Skeleton className="size-4" />
+          <Skeleton className="h-2 w-10" />
+          <Skeleton className="h-2 w-14" />
+          <Skeleton className="h-2 w-16" />
+          <Skeleton className="size-9" />
+        </div>
+      </CardContent>
+    </Card>
+  )
+}

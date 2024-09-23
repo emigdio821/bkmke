@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { Bookmark } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import {
@@ -7,6 +8,7 @@ import {
   IconFolderShare,
   IconId,
   IconPencil,
+  IconTags,
   IconTrash,
 } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -24,9 +26,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoveToFolderDialog } from '@/components/bookmarks/move-to-folder-dialog'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
+import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
+import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 
 export function RowActions({ row }: { row: Row<Bookmark> }) {
   const bookmark = row.original
@@ -47,7 +50,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="size-6 hover:bg-muted-foreground/10">
+        <Button variant="ghost" size="icon" className="hover:bg-muted-foreground/10">
           <span className="sr-only">Open row actions</span>
           <IconDots className="size-4" />
         </Button>
@@ -63,9 +66,11 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
           <IconPencil className="mr-2 size-4" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem disabled>
-          <IconId className="mr-2 size-4" />
-          Details
+        <DropdownMenuItem asChild>
+          <Link href={`/bookmarks/${bookmark.id}`}>
+            <IconId className="mr-2 size-4" />
+            Details
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
@@ -77,13 +82,22 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => {
+            void NiceModal.show(UpdateTagsDialog, {
+              bookmark,
+            })
+          }}
+        >
+          <IconTags className="mr-2 size-4" />
+          Update tags
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => {
             void NiceModal.show(MoveToFolderDialog, { bookmark })
           }}
         >
           <IconFolderShare className="mr-2 size-4" />
           Move to folder
         </DropdownMenuItem>
-
         <DropdownMenuItem asChild>
           <a href={urlWithUTMSource(bookmark.url)} target="_blank">
             <IconExternalLink className="mr-2 size-4" />

@@ -161,7 +161,7 @@ export function CreateAutomaticForm() {
                 return (
                   <FormItem className="flex-grow">
                     <FormLabel>
-                      Add to folder
+                      Move to folder
                       {field.value && (
                         <>
                           <span className="text-muted-foreground"> · </span>

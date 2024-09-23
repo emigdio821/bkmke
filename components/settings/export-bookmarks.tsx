@@ -29,11 +29,11 @@ export function ExportBookmarks() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Export as</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem disabled>
               <IconFileDownload className="mr-2 size-4" />
               <span className="font-mono">.html</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem disabled>
               <IconFileDownload className="mr-2 size-4" />
               <span className="font-mono">.csv</span>
             </DropdownMenuItem>

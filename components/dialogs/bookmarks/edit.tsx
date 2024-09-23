@@ -195,7 +195,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea className="max-h-40 min-h-32" {...field} />
+                      <Textarea className="max-h-40" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -223,7 +223,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                     return (
                       <FormItem className="flex-grow">
                         <FormLabel>
-                          Add to folder
+                          Move to folder
                           {field.value && (
                             <>
                               <span className="text-muted-foreground"> · </span>

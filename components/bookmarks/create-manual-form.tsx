@@ -158,7 +158,7 @@ export function CreateManualForm() {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea className="max-h-40 min-h-32" {...field} />
+                  <Textarea className="max-h-40" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -186,7 +186,7 @@ export function CreateManualForm() {
                 return (
                   <FormItem className="flex-grow">
                     <FormLabel>
-                      Add to folder
+                      Move to folder
                       {field.value && (
                         <>
                           <span className="text-muted-foreground"> · </span>
