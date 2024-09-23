@@ -210,7 +210,7 @@ export function CreateAutomaticForm() {
               name="tags"
               control={form.control}
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex-1">
                   <FormControl>
                     <MultiSelect
                       title="Tags"

@@ -34,10 +34,12 @@ export const CreateBookmarkDialog = NiceModal.create(() => {
           <DialogTitle>Create bookmark</DialogTitle>
         </DialogHeader>
         <Tabs defaultValue="automatic-bookmark">
-          <TabsList>
-            <TabsTrigger value="automatic-bookmark">Automatic</TabsTrigger>
-            <TabsTrigger value="manual-bookmark">Manual</TabsTrigger>
-          </TabsList>
+          <div className="flex w-full items-center justify-center sm:justify-start">
+            <TabsList>
+              <TabsTrigger value="automatic-bookmark">Automatic</TabsTrigger>
+              <TabsTrigger value="manual-bookmark">Manual</TabsTrigger>
+            </TabsList>
+          </div>
           <TabsContent value="automatic-bookmark">
             <CreateAutomaticForm />
           </TabsContent>

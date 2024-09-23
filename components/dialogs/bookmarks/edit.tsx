@@ -263,7 +263,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   name="tags"
                   control={form.control}
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex-1">
                       <FormControl>
                         <MultiSelect
                           title="Tags"

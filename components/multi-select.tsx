@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconCheck, IconCirclePlus } from '@tabler/icons-react'
+import { IconCheck, IconChevronDown } from '@tabler/icons-react'
 import type { Column } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
@@ -52,8 +52,7 @@ export function MultiSelect<TData, TValue>({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button type="button" variant="outline" className="border-dashed">
-          <IconCirclePlus className="mr-2 size-4" />
+        <Button type="button" variant="outline" className="w-full justify-start px-3">
           {title}
           {selectedValues.length > 0 && (
             <>
@@ -63,6 +62,7 @@ export function MultiSelect<TData, TValue>({
               </Badge>
             </>
           )}
+          <IconChevronDown className="ml-auto size-4 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">

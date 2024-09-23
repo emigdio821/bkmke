@@ -59,7 +59,9 @@ export function EditDialog({ user }: { user: User }) {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="outline">Edit</Button>
+        <Button variant="outline" className="w-full sm:w-auto">
+          Edit
+        </Button>
       </DialogTrigger>
       <DialogContent
         className="max-w-sm"

@@ -23,9 +23,10 @@ export function AppearanceSettings() {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline">
+            <Button variant="outline" className="sm:size-9 sm:p-0">
               <IconMoon className="hidden size-4 dark:block" />
               <IconSun className="size-4 dark:hidden" />
+              <span className="ml-2 sm:hidden">Toggle appearance</span>
               <span className="sr-only">Toggle app appearance</span>
             </Button>
           </DropdownMenuTrigger>
