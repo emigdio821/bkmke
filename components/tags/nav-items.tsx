@@ -53,18 +53,14 @@ export function TagsNavItems() {
               active: pathname.startsWith('/tags'),
               icon: IconTags,
               actions: <SidebarTagsActions tags={tags} refetch={refetch} />,
-
-              submenus:
-                (tags.length > 0 &&
-                  tags.map((tag) => ({
-                    href: `/tags/${tag.id}`,
-                    label: tag.name,
-                    actions: <SidebarItemActions tag={tag} />,
-                    active: pathname === `/tags/${tag.id}`,
-                    icon: IconHash,
-                    submenus: [],
-                  }))) ||
-                [],
+              submenus: tags.map((tag) => ({
+                href: `/tags/${tag.id}`,
+                label: tag.name,
+                actions: <SidebarItemActions tag={tag} />,
+                active: pathname === `/tags/${tag.id}`,
+                icon: IconHash,
+                submenus: [],
+              })),
             },
           ]}
         />

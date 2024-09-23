@@ -39,7 +39,7 @@ export function DataTableFacetedFilter<TData, TValue>({
         <Button type="button" variant="outline" className="border-dashed">
           <IconCirclePlus className="mr-2 size-4" />
           {title}
-          {selectedValues?.size > 0 && (
+          {selectedValues.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
               <Badge variant="secondary" className="rounded-sm">

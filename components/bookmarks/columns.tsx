@@ -110,7 +110,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     },
     cell: ({ row }) => {
       const tags = row.original.tag_items
-      const tagLinks = tags?.map((tag, index) => (
+      const tagLinks = tags.map((tag, index) => (
         <Fragment key={`${tag.id}-tag-table-item`}>
           <Button variant="link" asChild>
             <Link href={`/tags/${tag.tags?.id}`}>{tag.tags?.name}</Link>

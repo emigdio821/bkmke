@@ -12,6 +12,7 @@ export default [
       '.next',
       'build',
       'components/ui',
+      'next.config.mjs',
       'eslint.config.mjs',
       'postcss.config.mjs',
       'types/database.*.*',

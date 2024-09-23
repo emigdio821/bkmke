@@ -1,6 +1,8 @@
 'use client'
 
+import { IconBrandGithub } from '@tabler/icons-react'
 import { siteConfig } from '@/config/site'
+import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
 export function Footer() {
@@ -10,6 +12,13 @@ export function Footer() {
         <span>{new Date().getFullYear()}</span>
         <Separator orientation="vertical" />
         <span className="font-semibold">{siteConfig.name}</span>
+        <Separator orientation="vertical" />
+        <Button asChild variant="link" className="text-foreground">
+          <a href={siteConfig.links.github} target="_blank">
+            Source
+            <IconBrandGithub className="ml-2 size-4" />
+          </a>
+        </Button>
       </span>
     </footer>
   )

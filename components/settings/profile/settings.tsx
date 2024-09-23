@@ -30,7 +30,7 @@ export function ProfileSettings() {
                 </AvatarFallback>
               </Avatar>
               <div className="text-sm">
-                {profile?.user_metadata.name && <p className="font-medium">{profile.user_metadata.name}</p>}
+                {profile.user_metadata.name && <p className="font-medium">{profile.user_metadata.name}</p>}
                 <p className="text-muted-foreground">{profile.email}</p>
                 {profile.updated_at && (
                   <p>

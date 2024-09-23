@@ -53,18 +53,14 @@ export function FoldersNavItems() {
               active: pathname.startsWith('/folders'),
               icon: IconFolders,
               actions: <SidebarFoldersActions folders={folders} refetch={refetch} />,
-
-              submenus:
-                (folders.length > 0 &&
-                  folders.map((folder) => ({
-                    href: `/folders/${folder.id}`,
-                    label: folder.name,
-                    actions: <SidebarItemActions folder={folder} />,
-                    active: pathname === `/folders/${folder.id}`,
-                    icon: IconFolder,
-                    submenus: [],
-                  }))) ||
-                [],
+              submenus: folders.map((folder) => ({
+                href: `/folders/${folder.id}`,
+                label: folder.name,
+                actions: <SidebarItemActions folder={folder} />,
+                active: pathname === `/folders/${folder.id}`,
+                icon: IconFolder,
+                submenus: [],
+              })),
             },
           ]}
         />
