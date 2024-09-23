@@ -14,7 +14,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query'
 import type { Row } from '@tanstack/react-table'
 import { toast } from 'sonner'
-import { BOOKMARKS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { handleCopyToClipboard, urlWithUTMSource } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -35,9 +35,9 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
   const bookmark = row.original
   const queryClient = useQueryClient()
 
-  async function handleDeleteBookmark(id: number) {
+  async function handleDeleteBookmark(bookmark: Bookmark) {
     const supabase = createClient()
-    const { error } = await supabase.from('bookmarks').delete().eq('id', id)
+    const { error } = await supabase.from('bookmarks').delete().eq('id', bookmark.id)
 
     if (error) {
       throw new Error(error.message)
@@ -45,6 +45,10 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
 
     toast.success('Success', { description: 'Bookmark has been deleted.' })
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
+    const folderItemsQueryState = queryClient.getQueryState([FOLDER_ITEMS_QUERY])
+    if (folderItemsQueryState && bookmark.folder_id) {
+      await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY, bookmark.folder_id] })
+    }
   }
 
   return (
@@ -109,7 +113,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
           onSelect={() => {
             void NiceModal.show(AlertActionDialog, {
               action: async () => {
-                await handleDeleteBookmark(bookmark.id)
+                await handleDeleteBookmark(bookmark)
               },
             })
           }}

@@ -1,10 +1,10 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import type { PostgrestError } from '@supabase/postgrest-js'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { BOOKMARKS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
@@ -55,7 +55,7 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark }: UpdateTagsDialog
     toast.error('Error', { description: error.message })
   }
 
-  const handleUpdateTags = useCallback(async () => {
+  async function handleUpdateTags() {
     setLoading(true)
 
     if (selectValue.length > 0) {
@@ -90,10 +90,14 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark }: UpdateTagsDialog
     }
 
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
+    const folderItemsQueryState = queryClient.getQueryState([FOLDER_ITEMS_QUERY])
+    if (folderItemsQueryState && bookmark.folder_id) {
+      await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY, bookmark.folder_id] })
+    }
     toast.success('Success', { description: 'Tags has been upodated.' })
     await modal.hide()
     setLoading(false)
-  }, [bookmark.id, modal, queryClient, selectValue, supabase])
+  }
 
   return (
     <Dialog

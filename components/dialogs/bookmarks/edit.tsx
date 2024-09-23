@@ -9,7 +9,7 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { BOOKMARKS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
@@ -137,6 +137,10 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
     }
 
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
+    const folderItemsQueryState = queryClient.getQueryState([FOLDER_ITEMS_QUERY])
+    if (folderItemsQueryState && bookmark.folder_id) {
+      await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY, bookmark.folder_id] })
+    }
     toast.success('Success', { description: 'Bookmark has been updated.' })
     await modal.hide()
     modal.remove()

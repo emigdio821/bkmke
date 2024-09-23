@@ -71,11 +71,11 @@ export const columns: Array<ColumnDef<Bookmark>> = [
                   <IconWorld className="size-4 text-muted-foreground" />
                 </AvatarFallback>
               </Avatar>
-              <span className="max-w-44 truncate">{bookmark.name}</span>
+              <span className="max-w-48 truncate">{bookmark.name}</span>
             </Link>
           </Button>
           {bookmark.description && (
-            <p className="line-clamp-2 text-muted-foreground" title={bookmark.description}>
+            <p className="line-clamp-2 w-full text-muted-foreground" title={bookmark.description}>
               {bookmark.description}
             </p>
           )}

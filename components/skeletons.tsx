@@ -48,7 +48,7 @@ export function BookmarksPageSkeleton() {
         <div className="flex items-center space-x-2">
           <Skeleton className="h-9 w-[87px]" />
           <Skeleton className="h-9 w-[90px]" />
-          <Skeleton className="h-9 w-[141px]" />
+          <Skeleton className="size-9" />
         </div>
       </div>
       <div className="mb-2 overflow-y-hidden rounded-md border">
