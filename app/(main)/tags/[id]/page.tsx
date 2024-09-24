@@ -12,22 +12,12 @@ import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
-import { BookmarksPageSkeleton } from '@/components/skeletons'
+import { Loader } from '@/components/loader'
 
 export default function TagitemsPage({ params }: { params: { id: string } }) {
   const tagId = params.id
   const { data: tagItems, isLoading, error } = useTagItems(Number(tagId))
   const { data: tag, isLoading: tagLoading } = useTags(Number(tagId))
-
-  if (isLoading)
-    return (
-      <>
-        <div className="mb-4 flex h-7 items-center">
-          <Skeleton className="h-2 w-28" />
-        </div>
-        <BookmarksPageSkeleton />
-      </>
-    )
 
   if (error)
     return (
@@ -51,33 +41,39 @@ export default function TagitemsPage({ params }: { params: { id: string } }) {
         <TypographyH4>{tag?.[0].name || 'Tag items'}</TypographyH4>
       )}
       <div className="mt-4">
-        {tagItems && (
+        {isLoading ? (
+          <Loader />
+        ) : (
           <>
-            {tagItems.length > 0 ? (
-              <DataTable columns={columns} data={tagItems} />
-            ) : (
-              <Card>
-                <CardContent className="p-6">
-                  <CardDescription>
-                    This tag is empty. <br />
-                    Start creating one bookmark{' '}
-                    <Button
-                      variant="underlineLink"
-                      onClick={() => {
-                        void NiceModal.show(CreateBookmarkDialog)
-                      }}
-                    >
-                      here
-                    </Button>{' '}
-                    and assign the tags you want. <br />
-                    Or go to{' '}
-                    <Button variant="underlineLink">
-                      <Link href="/">bookmarks</Link>
-                    </Button>{' '}
-                    and manage them there.
-                  </CardDescription>
-                </CardContent>
-              </Card>
+            {tagItems && (
+              <>
+                {tagItems.length > 0 ? (
+                  <DataTable columns={columns} data={tagItems} />
+                ) : (
+                  <Card>
+                    <CardContent className="p-6">
+                      <CardDescription>
+                        This tag is empty. <br />
+                        Start creating one bookmark{' '}
+                        <Button
+                          variant="underlineLink"
+                          onClick={() => {
+                            void NiceModal.show(CreateBookmarkDialog)
+                          }}
+                        >
+                          here
+                        </Button>{' '}
+                        and assign the tags you want. <br />
+                        Or go to{' '}
+                        <Button variant="underlineLink">
+                          <Link href="/">bookmarks</Link>
+                        </Button>{' '}
+                        and manage them there.
+                      </CardDescription>
+                    </CardContent>
+                  </Card>
+                )}
+              </>
             )}
           </>
         )}

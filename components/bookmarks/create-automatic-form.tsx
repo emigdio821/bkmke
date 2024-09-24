@@ -131,7 +131,7 @@ export function CreateAutomaticForm() {
   }
 
   return (
-    <div>
+    <>
       <p className="my-4 text-sm text-muted-foreground">
         Add the URL and everything will be filled automatically, except for the tags and/or folder.
       </p>
@@ -207,15 +207,16 @@ export function CreateAutomaticForm() {
               <IconPlus className="size-4" />
             </Button>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-end space-x-2">
             <FormField
               name="tags"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex-1">
+                  <FormLabel>Tags</FormLabel>
                   <FormControl>
                     <MultiSelect
-                      title="Tags"
+                      placeholder="Select tags"
                       options={getTagsData}
                       onChange={(options) => {
                         form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
@@ -243,6 +244,6 @@ export function CreateAutomaticForm() {
           </DialogFooter>
         </form>
       </Form>
-    </div>
+    </>
   )
 }

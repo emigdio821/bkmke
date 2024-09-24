@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
@@ -128,9 +129,10 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark }: UpdateTagsDialog
         ) : (
           tags &&
           tags.length > 0 && (
-            <div>
+            <div className="space-y-2">
+              <Label>Tags</Label>
               <MultiSelect
-                title="Tags"
+                placeholder="Select tags"
                 value={tagItems}
                 options={getTagsData}
                 onChange={(options) => {

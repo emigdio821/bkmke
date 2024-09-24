@@ -260,15 +260,16 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   }}
                 />
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-end space-x-2">
                 <FormField
                   name="tags"
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="flex-1">
+                      <FormLabel>Tags</FormLabel>
                       <FormControl>
                         <MultiSelect
-                          title="Tags"
+                          placeholder="Select tags"
                           options={getTagsData}
                           value={tagItems}
                           onChange={(options) => {

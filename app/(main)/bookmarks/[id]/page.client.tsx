@@ -21,12 +21,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
-import { BookmarkDetailsSkeleton } from '@/components/skeletons'
+import { Loader } from '@/components/loader'
 
 export function BookmarkDetailsClientPage({ id }: { id: number }) {
   const { data, error, isLoading } = useBookmarks(id)
   const bookmark = data?.[0]
   const ogInfo = bookmark?.og_info as unknown as OGInfo | undefined
+
+  if (isLoading) return <Loader />
 
   if (error) {
     return (
@@ -41,8 +43,6 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
       </div>
     )
   }
-
-  if (isLoading) return <BookmarkDetailsSkeleton />
 
   return (
     <>
@@ -68,15 +68,15 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
             </CardDescription>
           </CardHeader>
           <CardContent className="text-sm">
+            {bookmark.description && <p>{bookmark.description}</p>}
+
             {ogInfo?.imageUrl && (
               <img
-                className="h-36 w-full rounded-lg bg-muted object-cover md:h-64"
+                className="my-2 h-36 w-full rounded-lg bg-muted object-cover md:h-64"
                 src={ogInfo.imageUrl}
                 alt="Bookmark"
               />
             )}
-
-            {bookmark.description && <p className="my-2">{bookmark.description}</p>}
 
             {bookmark.folders ? (
               <div className="flex items-center space-x-2">

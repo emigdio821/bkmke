@@ -40,10 +40,10 @@ export const CreateBookmarkDialog = NiceModal.create(() => {
               <TabsTrigger value="manual-bookmark">Manual</TabsTrigger>
             </TabsList>
           </div>
-          <TabsContent value="automatic-bookmark">
+          <TabsContent value="automatic-bookmark" className="rounded-lg">
             <CreateAutomaticForm />
           </TabsContent>
-          <TabsContent value="manual-bookmark">
+          <TabsContent value="manual-bookmark" className="rounded-lg">
             <CreateManualForm />
           </TabsContent>
         </Tabs>

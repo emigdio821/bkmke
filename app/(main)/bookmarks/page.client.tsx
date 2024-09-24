@@ -8,12 +8,12 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
-import { BookmarksPageSkeleton } from '@/components/skeletons'
+import { Loader } from '@/components/loader'
 
 export function BookmarksClientPage() {
   const { data: bookmarks, isLoading, error } = useBookmarks()
 
-  if (isLoading) return <BookmarksPageSkeleton />
+  if (isLoading) return <Loader />
 
   if (error)
     return (
