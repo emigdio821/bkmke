@@ -43,7 +43,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
   const form = useForm<z.infer<typeof importBookmarksSchema>>({
     resolver: zodResolver(importBookmarksSchema),
     defaultValues: {
-      bookmarks: [],
+      bookmarks: '',
       tags: [],
       folderId: '',
     },
@@ -87,7 +87,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         reader.readAsText(file, 'UTF-8')
         reader.onload = () => {
           const result = reader.result?.toString() || ''
-          form.setValue('bookmarks', result.split('\n'), {
+          form.setValue('bookmarks', result, {
             shouldValidate: true,
           })
         }
@@ -119,19 +119,25 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
 
   function handleRemoveFile() {
     setDndFiles([])
+    form.setValue('bookmarks', '', { shouldValidate: true })
     if (inputRef.current) {
       inputRef.current.value = ''
     }
   }
 
   async function onSubmit(values: z.infer<typeof importBookmarksSchema>) {
-    if (values.bookmarks.length === 0) {
+    const bookmarkUrls = values.bookmarks
+      .split('\n')
+      .filter((url) => url.trim() !== '')
+      .map((url) => url.trim())
+
+    if (bookmarkUrls.length === 0) {
       toast.info('Info', { description: 'There are no URLs, try again.' })
       return
     }
     const bookmarkPromises = []
 
-    for (const bookmarkUrl of values.bookmarks) {
+    for (const bookmarkUrl of bookmarkUrls) {
       const payload = {
         folderId: values.folderId,
         tags: values.tags,
