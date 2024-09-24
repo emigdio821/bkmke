@@ -14,7 +14,7 @@ import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { BookmarksPageSkeleton } from '@/components/skeletons'
 
-export default function FoldersPage({ params }: { params: { id: string } }) {
+export default function FolderItemsPage({ params }: { params: { id: string } }) {
   const folderId = params.id
   const { data: folderItems, isLoading, error } = useFolderItems(Number(folderId))
   const { data: folder, isLoading: folderLoading } = useFolders(Number(folderId))

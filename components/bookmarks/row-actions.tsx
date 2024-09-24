@@ -14,7 +14,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query'
 import type { Row } from '@tanstack/react-table'
 import { toast } from 'sonner'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { handleCopyToClipboard, urlWithUTMSource } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -45,10 +45,8 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
 
     toast.success('Success', { description: 'Bookmark has been deleted.' })
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    const folderItemsQueryState = queryClient.getQueryState([FOLDER_ITEMS_QUERY])
-    if (folderItemsQueryState && bookmark.folder_id) {
-      await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY, bookmark.folder_id] })
-    }
+    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
   }
 
   return (

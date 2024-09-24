@@ -4,7 +4,7 @@ import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import type { PostgrestError } from '@supabase/postgrest-js'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
@@ -90,11 +90,9 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark }: UpdateTagsDialog
     }
 
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    const folderItemsQueryState = queryClient.getQueryState([FOLDER_ITEMS_QUERY])
-    if (folderItemsQueryState && bookmark.folder_id) {
-      await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY, bookmark.folder_id] })
-    }
-    toast.success('Success', { description: 'Tags has been upodated.' })
+    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
+    toast.success('Success', { description: 'Tags has been updated.' })
     await modal.hide()
     setLoading(false)
   }

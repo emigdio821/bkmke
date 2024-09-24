@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { BOOKMARKS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 
-export function useBookmarks(bookmarkId?: number) {
+export function useBookmarks(bookmarkId?: number, tagId?: number) {
   const supabase = createClient()
 
   async function getBookmarks() {
@@ -14,6 +14,7 @@ export function useBookmarks(bookmarkId?: number) {
         .from('bookmarks')
         .select('*, tag_items(id, tags(id,name)), folders(name)')
         .eq('id', bookmarkId)
+        .order('name')
 
       data = filteredBookmarks
       error = filteredBookmarksErr

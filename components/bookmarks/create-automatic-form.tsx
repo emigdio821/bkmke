@@ -10,7 +10,7 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { BOOKMARKS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
@@ -123,6 +123,8 @@ export function CreateAutomaticForm() {
     }
 
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
     toast.success('Success', { description: 'Bookmark has been created.' })
     await NiceModal.hide(CreateBookmarkDialog)
     NiceModal.remove(CreateBookmarkDialog)

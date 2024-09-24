@@ -2,18 +2,34 @@ import { useQuery } from '@tanstack/react-query'
 import { TAGS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 
-export function useTags() {
+export function useTags(tagId?: number) {
   const supabase = createClient()
 
   async function getTags() {
-    const { data, error } = await supabase.from('tags').select().order('name')
+    let data = null
+    let error = null
+
+    if (tagId) {
+      const { data: filteredFolder, error: filteredFolderErr } = await supabase
+        .from('tags')
+        .select()
+        .eq('id', tagId)
+        .order('name')
+
+      data = filteredFolder
+      error = filteredFolderErr
+    } else {
+      const { data: rawData, error: rawError } = await supabase.from('tags').select().order('name')
+      data = rawData
+      error = rawError
+    }
 
     if (error) {
-      console.log('Unable to fetch tags', error.message)
+      console.log('Unable to fetch bookmarks', error.message)
     }
 
     return data || []
   }
 
-  return useQuery({ queryKey: [TAGS_QUERY], queryFn: getTags })
+  return useQuery({ queryKey: tagId ? [TAGS_QUERY, tagId] : [TAGS_QUERY], queryFn: getTags })
 }

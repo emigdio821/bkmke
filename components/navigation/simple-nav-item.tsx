@@ -14,7 +14,9 @@ export function SimpleNavItem({ ...props }: NavMenu) {
             </span>
           )}
           <span className="truncate">{label}</span>
-          {withItemCount && <span className="ml-1 text-xs text-muted-foreground">({submenus.length})</span>}
+          {withItemCount && submenus.length > 0 && (
+            <span className="ml-1 text-xs text-muted-foreground">({submenus.length})</span>
+          )}
         </div>
       </NavItemContent>
       {actions && <span>{actions}</span>}

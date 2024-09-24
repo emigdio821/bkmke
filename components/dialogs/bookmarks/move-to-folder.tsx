@@ -3,7 +3,7 @@ import type { Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
 import { Button } from '@/components/ui/button'
@@ -52,10 +52,8 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
     }
 
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    const folderItemsQueryState = queryClient.getQueryState([FOLDER_ITEMS_QUERY])
-    if (folderItemsQueryState && bookmark.folder_id) {
-      await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY, bookmark.folder_id] })
-    }
+    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
     toast.success('Success', { description: 'Bookmark has been moved to selected folder.' })
     await modal.hide()
     setLoading(false)

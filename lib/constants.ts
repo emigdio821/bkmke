@@ -1,6 +1,6 @@
 export const BOOKMARKS_QUERY = 'bookmarks'
 export const FOLDERS_QUERY = 'folders'
 export const TAGS_QUERY = 'tags'
-export const TAG_ITEMS_QUERY = 'tag-items'
 export const PROFILE_QUERY = 'profile'
 export const FOLDER_ITEMS_QUERY = 'folder-items'
+export const TAG_ITEMS_QUERY = 'tag-items'

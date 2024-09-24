@@ -69,7 +69,11 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
           </CardHeader>
           <CardContent className="text-sm">
             {ogInfo?.imageUrl && (
-              <img className="h-36 w-full rounded-lg object-cover md:h-64" src={ogInfo.imageUrl} alt="Bookmark" />
+              <img
+                className="h-36 w-full rounded-lg bg-muted object-cover md:h-64"
+                src={ogInfo.imageUrl}
+                alt="Bookmark"
+              />
             )}
 
             {bookmark.description && <p className="my-2">{bookmark.description}</p>}
