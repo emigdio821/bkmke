@@ -1,18 +1,16 @@
 'use client'
 
 import { useMemo } from 'react'
-import type { OGInfo } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconPlus } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
+import { createBookmark } from '@/lib/api'
 import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
@@ -28,7 +26,6 @@ import { Spinner } from '@/components/spinner'
 
 export function CreateAutomaticForm() {
   const queryClient = useQueryClient()
-  const supabase = createClient()
   const { data: tags } = useTags()
   const { data: folders } = useFolders()
   const form = useForm<z.infer<typeof createAutomaticBookmarkSchema>>({
@@ -69,56 +66,10 @@ export function CreateAutomaticForm() {
   }, [folders])
 
   async function onSubmit(values: z.infer<typeof createAutomaticBookmarkSchema>) {
-    const { folderId, tags: tagIds, url } = values
-    let bookmarkPayload = null
+    const response = await createBookmark(values)
 
-    try {
-      const { data: ogInfo } = await axios.get<OGInfo>('/api/og-info', { params: { url } })
-
-      bookmarkPayload = {
-        url,
-        name: ogInfo.title,
-        description: ogInfo.description,
-        folder_id: folderId ? Number(folderId) : null,
-        og_info: {
-          title: ogInfo.title,
-          imageUrl: ogInfo.imageUrl,
-          faviconUrl: ogInfo.faviconUrl,
-          description: ogInfo.description,
-        } satisfies OGInfo,
-      }
-    } catch (err) {
-      bookmarkPayload = {
-        url,
-        name: url,
-        description: '',
-        folder_id: folderId ? Number(folderId) : null,
-        og_info: {
-          title: url,
-          imageUrl: '',
-          faviconUrl: '',
-          description: '',
-        } satisfies OGInfo,
-      }
-      console.log('Get og info error:', err)
-    }
-
-    const { data: bookmark, error } = await supabase.from('bookmarks').insert(bookmarkPayload).select()
-
-    if (bookmark && bookmark.length > 0 && tagIds.length > 0) {
-      const tagItemsPromises = []
-
-      for (const tagId of tagIds) {
-        const tagItemsPayload = { bookmark_id: bookmark[0].id, tag_id: Number(tagId) }
-
-        tagItemsPromises.push(supabase.from('tag_items').insert(tagItemsPayload))
-      }
-
-      await Promise.all(tagItemsPromises)
-    }
-
-    if (error) {
-      toast.error('Error', { description: error.message })
+    if (response?.error) {
+      toast.error('Error', { description: response.error })
       return
     }
 

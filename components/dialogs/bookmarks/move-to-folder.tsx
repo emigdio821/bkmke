@@ -71,7 +71,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
       }}
     >
       <DialogContent
-        className="max-w-sm"
+        className="max-w-md"
         aria-describedby={undefined}
         onCloseAutoFocus={() => {
           modal.remove()

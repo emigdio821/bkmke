@@ -3,6 +3,7 @@ import { Figtree } from 'next/font/google'
 import { siteConfig } from '@/config/site'
 import { cn } from '@/lib/utils'
 import { Providers } from '@/components/providers'
+import { TailwindIndicator } from '@/components/tailwind-indicator'
 import '@/styles/globals.css'
 
 interface RootLayoutProps {
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <Providers>
           <main className="relative m-auto flex min-h-dvh w-full max-w-5xl flex-col">{children}</main>
         </Providers>
+        <TailwindIndicator />
       </body>
     </html>
   )

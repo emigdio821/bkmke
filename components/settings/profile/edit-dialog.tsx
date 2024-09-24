@@ -64,7 +64,7 @@ export function EditDialog({ user }: { user: User }) {
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="max-w-sm"
+        className="max-w-md"
         aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault()

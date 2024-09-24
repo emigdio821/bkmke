@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from '@/components/ui/input'
 import { DataTableColumnFilter } from '@/components/data-table/column-filter'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
+import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 
 export function DataTableHeaders<T>({ table }: { table: Table<T> }) {
   return (
@@ -34,7 +35,11 @@ export function DataTableHeaders<T>({ table }: { table: Table<T> }) {
               <IconBookmarkPlus className="mr-2 size-4" />
               Create bookmark
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem
+              onSelect={() => {
+                void NiceModal.show(ImportBookmarksDialog)
+              }}
+            >
               <IconFileImport className="mr-2 size-4" />
               Import bookmarks
             </DropdownMenuItem>

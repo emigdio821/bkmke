@@ -21,7 +21,6 @@ export const CreateBookmarkDialog = NiceModal.create(() => {
       }}
     >
       <DialogContent
-        className="max-w-sm"
         aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault()

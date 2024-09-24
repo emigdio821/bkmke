@@ -42,3 +42,14 @@ export const editBookmarkSchema = z.object({
   tags: z.string().array(),
   folderId: z.string(),
 })
+
+export const importBookmarksSchema = z.object({
+  bookmarks: requiredString.transform((value) => {
+    return value
+      .split('\n')
+      .filter((url) => url.trim() !== '')
+      .map((url) => url.trim())
+  }),
+  tags: z.string().array(),
+  folderId: z.string(),
+})

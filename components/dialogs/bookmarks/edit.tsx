@@ -156,7 +156,6 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       }}
     >
       <DialogContent
-        className="max-w-sm"
         aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault()
