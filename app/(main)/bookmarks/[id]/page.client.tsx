@@ -117,7 +117,7 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
                 <IconTag className="size-4" />
                 <div className="flex flex-1 flex-wrap items-center gap-x-1">
                   {bookmark.tag_items.map((tagItem) => (
-                    <Button key={`${tagItem.id}-tag-table-item`} variant="link" asChild>
+                    <Button key={`${tagItem.id}-bk-details-tag`} variant="link" asChild>
                       <Link href={`/tags/${tagItem.tags?.id}`}>
                         <IconHash className="size-4" />
                         {tagItem.tags?.name || ''}

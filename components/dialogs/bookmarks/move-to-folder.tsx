@@ -82,7 +82,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
       >
         <DialogHeader>
           <DialogTitle>Move to folder</DialogTitle>
-          <DialogDescription>{bookmark.name}</DialogDescription>
+          <DialogDescription className="break-all">{bookmark.name}</DialogDescription>
         </DialogHeader>
 
         {foldersLoading ? (

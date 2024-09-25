@@ -1,9 +1,8 @@
 'use client'
 
-import { Fragment } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import { IconArrowUp, IconWorld } from '@tabler/icons-react'
+import { IconArrowUp, IconHash, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { cn, formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -104,16 +103,19 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     header: 'Tags',
     cell: ({ row }) => {
       const tags = row.original.tag_items
-      const tagLinks = tags.map((tag, index) => (
-        <Fragment key={`${tag.id}-tag-table-item`}>
-          <Button variant="link" asChild>
-            <Link href={`/tags/${tag.tags?.id}`}>{tag.tags?.name || ''}</Link>
-          </Button>
-          {index < tags.length - 1 && <span key={`${tag.tags?.id}-separator`}>, </span>}
-        </Fragment>
-      ))
 
-      return tagLinks
+      return (
+        <div className="flex max-w-40 flex-1 flex-wrap items-center gap-x-1">
+          {tags.map((tagItem) => (
+            <Button key={`${tagItem.id}-tag-table-item`} variant="link" asChild>
+              <Link href={`/tags/${tagItem.tags?.id}`}>
+                <IconHash className="size-4" />
+                {tagItem.tags?.name || ''}
+              </Link>
+            </Button>
+          ))}
+        </div>
+      )
     },
   },
   {
