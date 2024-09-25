@@ -3,7 +3,7 @@ import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
-import { BOOKMARKS_QUERY, TAGS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import {
@@ -37,6 +37,8 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
     })
     await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY] })
     await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
   }
 
   return (

@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
+import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
 export function BookmarksClientPage() {
@@ -43,6 +44,15 @@ export function BookmarksClientPage() {
                     variant="underlineLink"
                     onClick={() => {
                       void NiceModal.show(CreateBookmarkDialog)
+                    }}
+                  >
+                    here
+                  </Button>
+                  . Or import them{' '}
+                  <Button
+                    variant="underlineLink"
+                    onClick={() => {
+                      void NiceModal.show(ImportBookmarksDialog)
                     }}
                   >
                     here

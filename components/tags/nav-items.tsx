@@ -3,7 +3,7 @@ import NiceModal from '@ebay/nice-modal-react'
 import { IconHash, IconReload, IconTag, IconTags } from '@tabler/icons-react'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
-import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
+import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
 import { NavItem } from '@/components/navigation/nav-item'
 import { NavItemsSkeleton } from '@/components/skeletons'
 import { SidebarTagsActions } from './sidebar-actions'
@@ -38,7 +38,7 @@ export function TagsNavItems() {
           variant="ghost"
           className="w-full justify-start"
           onClick={() => {
-            void NiceModal.show(CreateFolderDialog)
+            void NiceModal.show(CreateTagDialog)
           }}
         >
           <IconTag className="mr-2 size-4" />

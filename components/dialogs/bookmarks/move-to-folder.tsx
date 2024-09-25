@@ -123,7 +123,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
           )
         )}
 
-        <DialogFooter>
+        <DialogFooter className="pt-6">
           <Button
             type="button"
             onClick={() => {

@@ -135,6 +135,7 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark }: UpdateTagsDialog
                 placeholder="Select tags"
                 value={tagItems}
                 options={getTagsData}
+                emptyText="No tags yet"
                 onChange={(options) => {
                   setSelectValue(options)
                 }}
@@ -143,7 +144,7 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark }: UpdateTagsDialog
           )
         )}
 
-        <DialogFooter>
+        <DialogFooter className="pt-6">
           <Button
             type="button"
             onClick={() => {

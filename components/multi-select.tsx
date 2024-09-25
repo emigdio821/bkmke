@@ -20,6 +20,7 @@ interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
   placeholder?: string
   value?: string[]
+  emptyText?: string
   options: Array<{
     label: string
     value: string
@@ -33,6 +34,7 @@ export function MultiSelect<TData, TValue>({
   options,
   onChange,
   value,
+  emptyText,
 }: DataTableFacetedFilterProps<TData, TValue>) {
   const [selectedValues, setSelectedValues] = useState<string[]>(value || [])
 
@@ -52,16 +54,28 @@ export function MultiSelect<TData, TValue>({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button type="button" variant="outline" className="w-full justify-start px-3 font-normal">
-          {selectedValues.length > 0 ? 'Selected' : placeholder}
-          {selectedValues.length > 0 && (
+        <Button
+          type="button"
+          variant="outline"
+          disabled={options.length === 0}
+          className="w-full justify-start px-3 font-normal"
+        >
+          {options.length === 0 ? (
+            emptyText || 'Empty data'
+          ) : (
             <>
-              <Separator orientation="vertical" className="mx-2 h-4" />
-              <Badge variant="secondary" className="rounded-sm">
-                {selectedValues.length}
-              </Badge>
+              {selectedValues.length > 0 ? 'Selected' : placeholder}
+              {selectedValues.length > 0 && (
+                <>
+                  <Separator orientation="vertical" className="mx-2 h-4" />
+                  <Badge variant="secondary" className="rounded-sm">
+                    {selectedValues.length}
+                  </Badge>
+                </>
+              )}
             </>
           )}
+
           <IconChevronDown className="ml-auto size-4 text-muted-foreground" />
         </Button>
       </PopoverTrigger>

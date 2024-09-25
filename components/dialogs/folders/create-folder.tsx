@@ -93,7 +93,7 @@ export const CreateFolderDialog = NiceModal.create(() => {
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="pt-6">
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 Save {form.formState.isSubmitting && <Spinner className="ml-2" />}
               </Button>

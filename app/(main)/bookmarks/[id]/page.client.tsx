@@ -19,6 +19,7 @@ import { useBookmarks } from '@/hooks/use-bookmarks'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 import { Loader } from '@/components/loader'
@@ -119,7 +120,7 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
                     <Button key={`${tagItem.id}-tag-table-item`} variant="link" asChild>
                       <Link href={`/tags/${tagItem.tags?.id}`}>
                         <IconHash className="size-4" />
-                        {tagItem.tags?.name}
+                        {tagItem.tags?.name || ''}
                       </Link>
                     </Button>
                   ))}
@@ -154,6 +155,16 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
                 </Button>
               </div>
             )}
+            <Button
+              className="mt-6"
+              onClick={() => {
+                void NiceModal.show(EditBookmarkDialog, {
+                  bookmark,
+                })
+              }}
+            >
+              Edit
+            </Button>
           </CardContent>
         </Card>
       ) : (

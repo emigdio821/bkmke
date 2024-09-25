@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 import type { Tables } from '@/types/database.types'
-import { TAGS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -39,6 +39,9 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
       description: 'Tag has been updated.',
     })
     await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
     await modal.hide()
   }
 
@@ -90,7 +93,7 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="pt-6">
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 Save {form.formState.isSubmitting && <Spinner className="ml-2" />}
               </Button>

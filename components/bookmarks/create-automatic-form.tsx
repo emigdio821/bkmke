@@ -130,9 +130,9 @@ export function CreateAutomaticForm() {
                       )}
                     </FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value} disabled={!getFoldersData.length}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select folder" />
+                          <SelectValue placeholder={getFoldersData.length > 0 ? 'Select folder' : 'No folders yet'} />
                         </SelectTrigger>
                         <SelectContent>
                           {getFoldersData.map((folder) => (
@@ -169,6 +169,7 @@ export function CreateAutomaticForm() {
                     <MultiSelect
                       placeholder="Select tags"
                       options={getTagsData}
+                      emptyText="No tags yet"
                       onChange={(options) => {
                         form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
                       }}
@@ -188,7 +189,7 @@ export function CreateAutomaticForm() {
               <IconPlus className="size-4" />
             </Button>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pt-6">
             <Button type="submit" disabled={form.formState.isSubmitting}>
               Create {form.formState.isSubmitting && <Spinner className="ml-2" />}
             </Button>

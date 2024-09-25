@@ -107,7 +107,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       const tagLinks = tags.map((tag, index) => (
         <Fragment key={`${tag.id}-tag-table-item`}>
           <Button variant="link" asChild>
-            <Link href={`/tags/${tag.tags?.id}`}>{tag.tags?.name}</Link>
+            <Link href={`/tags/${tag.tags?.id}`}>{tag.tags?.name || ''}</Link>
           </Button>
           {index < tags.length - 1 && <span key={`${tag.tags?.id}-separator`}>, </span>}
         </Fragment>
