@@ -36,6 +36,9 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     accessorKey: 'name',
+    sortingFn: () => {
+      return 1
+    },
     header: ({ column }) => {
       const sortDirection = column.getIsSorted()
 
