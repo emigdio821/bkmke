@@ -9,6 +9,7 @@ import type { z } from 'zod'
 import { loginSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
+import { DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
@@ -73,11 +74,11 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+        <DialogFooter className="pt-6">
           <Button type="submit" disabled={isLoading}>
             Log in {isLoading && <Spinner className="ml-2" />}
           </Button>
-        </div>
+        </DialogFooter>
       </form>
     </Form>
   )

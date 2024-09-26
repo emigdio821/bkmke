@@ -90,8 +90,9 @@ export async function GET(req: NextRequest) {
       },
     )
   } catch (e) {
-    console.log(e)
-    return new Response('Failed to generate the image', {
+    const errorMsg = 'Failed to generate OG image'
+    console.error(errorMsg, e)
+    return new Response(errorMsg, {
       status: 500,
     })
   }
