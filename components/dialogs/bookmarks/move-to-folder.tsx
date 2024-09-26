@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -17,53 +17,110 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
+import { Progress } from '@/components/ui/progress'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/spinner'
 
-interface MoveToFolderDialogProps {
+interface SingleBookmark {
   bookmark: Bookmark
+  bookmarks?: never
 }
 
-export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDialogProps) => {
+interface MultipleBookmarks {
+  bookmark?: never
+  bookmarks: Bookmark[]
+}
+
+type MoveToFolderDialogProps = SingleBookmark | MultipleBookmarks
+
+const singleSuccessMessage = 'Bookmark has been moved to the selected folder.'
+const multipleSuccessMessage = 'Bookmarks have been moved to the selected folder.'
+const singleFailureMessage = 'Unable to move bookmark to folder at this time, try again.'
+const multipleFailureMessage = 'Some bookmarks failed to move, try again.'
+
+export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: MoveToFolderDialogProps) => {
   const queryClient = useQueryClient()
   const supabase = createClient()
   const modal = useModal()
-  const folderId = bookmark.folder_id?.toString() || ''
+  const folderId =
+    bookmark?.folder_id?.toString() || (bookmarks?.length === 1 ? bookmarks[0].folder_id?.toString() : '')
   const [isLoading, setLoading] = useState(false)
   const [selectValue, setSelectValue] = useState(folderId)
   const { data: folders, isLoading: foldersLoading } = useFolders()
+  const bookmarkName = bookmark?.name || (bookmarks?.length === 1 ? bookmarks[0].name : 'Multiple bookmarks')
+  const [progress, setProgress] = useState(0)
 
-  async function handleMoveToFolder() {
-    if (selectValue === folderId) {
+  const handleRefreshData = useCallback(async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] }),
+      queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] }),
+      queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] }),
+    ])
+  }, [queryClient])
+
+  async function handleMoveToFolder(bookmarksToMove: Bookmark[]) {
+    if (selectValue === folderId && bookmarksToMove.length === 1) {
       await modal.hide()
       return
     }
 
     setLoading(true)
-    const { error } = await supabase
-      .from('bookmarks')
-      .update({ folder_id: selectValue ? Number(selectValue) : null })
-      .eq('id', bookmark.id)
+    setProgress(0)
+    const areMultipleBks = bookmarksToMove.length > 1
+    let completedCount = 0
 
-    if (error) {
-      setLoading(false)
-      toast.error('Error', { description: error.message })
-      return
+    const movePromises = bookmarksToMove.map((bk) =>
+      supabase
+        .from('bookmarks')
+        .update({ folder_id: selectValue ? Number(selectValue) : null })
+        .eq('id', bk.id)
+        .then((result) => {
+          completedCount++
+          setProgress((completedCount / totalOperations) * 100)
+          if (result.error) {
+            throw new Error(result.error.message)
+          }
+        }),
+    )
+
+    const totalOperations = movePromises.length
+    const settledPromises = await Promise.allSettled(movePromises)
+
+    setProgress((completedCount / totalOperations) * 100)
+
+    const resultsArray = []
+    const errorsArray = []
+
+    settledPromises.forEach((result) => {
+      if (result.status === 'fulfilled') {
+        resultsArray.push(result.value)
+      } else {
+        errorsArray.push(result.reason)
+      }
+    })
+
+    if (errorsArray.length > 0) {
+      toast.error('Error', {
+        description: movePromises.length > 1 ? multipleFailureMessage : singleFailureMessage,
+      })
+    } else {
+      await handleRefreshData()
+      toast.success('Success', {
+        description: areMultipleBks ? multipleSuccessMessage : singleSuccessMessage,
+      })
     }
 
-    await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
-    toast.success('Success', { description: 'Bookmark has been moved to selected folder.' })
     await modal.hide()
     setLoading(false)
+    modal.remove()
   }
 
   return (
     <Dialog
       open={modal.visible}
       onOpenChange={(isOpen) => {
+        if (isLoading) return
         if (isOpen) {
           void modal.show()
         } else {
@@ -83,7 +140,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
       >
         <DialogHeader>
           <DialogTitle>Move to folder</DialogTitle>
-          <DialogDescription className="break-all">{bookmark.name}</DialogDescription>
+          <DialogDescription className="break-all">{bookmarkName}</DialogDescription>
         </DialogHeader>
 
         {foldersLoading ? (
@@ -123,7 +180,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
             </div>
           )
         )}
-
+        {progress > 0 && <Progress value={progress} />}
         <DialogFooter className="pt-6">
           <DialogClose asChild>
             <Button type="button" variant="outline">
@@ -133,7 +190,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
           <Button
             type="button"
             onClick={() => {
-              void handleMoveToFolder()
+              void handleMoveToFolder(bookmark ? [bookmark] : bookmarks)
             }}
             disabled={isLoading}
           >
