@@ -73,9 +73,6 @@ export function DataTable({ columns, data }: DataTableProps) {
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      onClick={() => {
-                        row.toggleSelected()
-                      }}
                       key={cell.id}
                       className={cn({
                         'align-baseline': cell.id.includes('select'),

@@ -66,6 +66,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
           className="text-destructive focus:text-destructive"
           onSelect={() => {
             void NiceModal.show(AlertActionDialog, {
+              title: 'Delete tag?',
               message: 'It will also unlik all bookmarks related to this tag. This action cannot be undone.',
               action: async () => {
                 await handleDeleteFolder(tag.id)

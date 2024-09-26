@@ -117,6 +117,8 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
               action: async () => {
                 await handleDeleteBookmark(bookmark)
               },
+              title: 'Remove bookmark?',
+              message: 'You are about to remove this bookmark. This action cannot be undone.',
             })
           }}
           className="text-destructive focus:text-destructive"

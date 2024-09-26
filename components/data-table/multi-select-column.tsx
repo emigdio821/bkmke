@@ -19,7 +19,9 @@ export function createMultiSelectColumn<T>(): ColumnDef<T> {
       <Checkbox
         id={`select-row-${row.id}`}
         checked={row.getIsSelected()}
-        onChange={row.getToggleSelectedHandler()}
+        onCheckedChange={(value) => {
+          row.toggleSelected(!!value)
+        }}
         onClick={(e) => {
           if (e.shiftKey) {
             const { rows, rowsById } = table.getRowModel()
