@@ -19,7 +19,6 @@ export async function GET(req: NextRequest) {
       (
         <div
           style={{
-            gap: '20px',
             width: '100%',
             height: '100%',
             display: 'flex',
@@ -33,12 +32,12 @@ export async function GET(req: NextRequest) {
           }}
         >
           <img
-            alt="em"
-            width={240}
-            height={240}
-            src="https://bkmke.vercel.app/images/android-chrome-512x512.png"
+            alt="bkmke"
+            width={90}
+            height={90}
+            src="https://bkmke.vercel.app/images/android-chrome-192x192.png"
             style={{
-              borderRadius: 128,
+              borderRadius: '100%',
               objectFit: 'cover',
             }}
           />
@@ -51,15 +50,23 @@ export async function GET(req: NextRequest) {
           >
             <span
               style={{
-                fontSize: 54,
+                fontSize: 44,
               }}
             >
               {siteConfig.name}
             </span>
+            <span
+              style={{
+                fontSize: 24,
+                opacity: 0.8,
+              }}
+            >
+              Bookmark manager
+            </span>
             {title && (
               <span
                 style={{
-                  fontSize: 34,
+                  fontSize: 24,
                   opacity: 0.8,
                 }}
               >
