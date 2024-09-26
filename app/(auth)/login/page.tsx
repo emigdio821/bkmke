@@ -1,5 +1,4 @@
 import { redirect } from 'next/navigation'
-import { siteConfig } from '@/config/site'
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoginForm } from '@/components/login/login-form'
@@ -15,7 +14,7 @@ export default async function LoginPage() {
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-lg">{siteConfig.name}</CardTitle>
+        <CardTitle className="text-lg">Log in</CardTitle>
         <CardDescription>Welcome back.</CardDescription>
       </CardHeader>
       <CardContent>

@@ -24,12 +24,14 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   creator: 'Emigdio Torres',
   icons: siteConfig.icons,
+  openGraph: siteConfig.og,
+  twitter: siteConfig.ogTwitter,
 }
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#09090b' },
   ],
 }
 

@@ -8,6 +8,10 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
+  if (request.nextUrl.pathname === '/api/og') {
+    return supabaseResponse
+  }
+
   const supabase = createServerClient<Database>(
     envClientSchema.NEXT_PUBLIC_SUPABASE_URL,
     envClientSchema.NEXT_PUBLIC_SUPABASE_ANON_KEY,

@@ -1,8 +1,14 @@
+const appName = 'bkmke'
+const appDesc = 'bkmke is a simple bookmark manager.'
+const appUrl = 'https://bkmke.vercel.app'
+export const appOgUrl = 'https://bkmke.vercel.app/api/og'
+
 export const siteConfig = {
-  name: 'bkmke',
-  url: 'bkmke.vercel.app',
-  ogImage: 'tbd',
-  description: 'bkmke is a simple bookmark manager.',
+  name: appName,
+  url: appUrl,
+  ogUrl: appOgUrl,
+  ogImage: appOgUrl,
+  description: appDesc,
   links: {
     github: 'https://github.com/emigdio821/bkmk',
   },
@@ -32,6 +38,22 @@ export const siteConfig = {
         type: 'image/png',
       },
     ],
+  },
+  og: {
+    title: appName,
+    description: appDesc,
+    url: appUrl,
+    siteName: appName,
+    locale: 'en-US',
+    type: 'website',
+    images: appOgUrl,
+  },
+  ogTwitter: {
+    card: 'summary_large_image',
+    title: appName,
+    description: appDesc,
+    images: [appOgUrl],
+    creator: '@emigdio821',
   },
 }
 

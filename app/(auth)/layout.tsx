@@ -1,11 +1,15 @@
 import type { Metadata } from 'next'
-import { siteConfig } from '@/config/site'
+import { appOgUrl, siteConfig } from '@/config/site'
 import { Footer } from '@/components/footer'
 
 export const metadata: Metadata = {
   title: {
     default: 'Log in',
     template: `%s · ${siteConfig.name}`,
+  },
+  openGraph: {
+    title: `Log in · ${siteConfig.name}`,
+    images: `${appOgUrl}?title=Log in`,
   },
 }
 
