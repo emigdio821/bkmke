@@ -70,8 +70,8 @@ export async function GET(req: NextRequest) {
         </div>
       ),
       {
-        width: 1920,
-        height: 1080,
+        width: 1000,
+        height: 600,
         fonts: [
           {
             name: 'Figtree',
