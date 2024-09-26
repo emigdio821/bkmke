@@ -11,7 +11,15 @@ import { PROFILE_QUERY } from '@/lib/constants'
 import { editUserSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
@@ -122,7 +130,12 @@ export function EditDialog({ user }: { user: User }) {
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="pt-6">
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  Cancel
+                </Button>
+              </DialogClose>
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 Save {form.formState.isSubmitting && <Spinner className="ml-2" />}
               </Button>

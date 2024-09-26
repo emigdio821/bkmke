@@ -42,7 +42,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" type="button" variant="ghost">
+        <Button size="icon" type="button" variant="ghost" className="data-[state=open]:bg-accent">
           <span className="sr-only">Open folders actions</span>
           <IconDots className="size-4" />
         </Button>
@@ -57,7 +57,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
             })
           }}
         >
-          <IconPencil className="mr-2 size-4" />
+          <IconPencil className="mr-2 size-4 text-muted-foreground" />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -71,7 +71,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
             })
           }}
         >
-          <IconTrash className="mr-2 size-4" />
+          <IconTrash className="mr-2 size-4 text-destructive/70" />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

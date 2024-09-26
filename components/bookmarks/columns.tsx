@@ -2,82 +2,45 @@
 
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import { IconArrowUp, IconHash, IconWorld } from '@tabler/icons-react'
+import { IconHash, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
-import { cn, formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
+import { formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { createMultiSelectColumn } from '@/components/data-table/multi-select-column'
+import { DataTableColumnHeader } from '../data-table/column-header'
 import { RowActions } from './row-actions'
 
 export const columns: Array<ColumnDef<Bookmark>> = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-        onCheckedChange={(value) => {
-          table.toggleAllPageRowsSelected(!!value)
-        }}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => {
-          row.toggleSelected(!!value)
-        }}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  createMultiSelectColumn(),
   {
     accessorKey: 'name',
     sortingFn: () => {
       return 1
     },
-    header: ({ column }) => {
-      const sortDirection = column.getIsSorted()
-
-      return (
-        <Button
-          variant="link"
-          className="text-muted-foreground"
-          onClick={() => {
-            column.toggleSorting(sortDirection === 'asc')
-          }}
-        >
-          Name
-          <IconArrowUp
-            className={cn('ml-2 size-4', {
-              'rotate-180': sortDirection === 'asc',
-            })}
-          />
-        </Button>
-      )
-    },
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
     cell: ({ row }) => {
       const bookmark = row.original
       const ogInfo = row.original.og_info as unknown as OGInfo | undefined
 
       return (
-        <div className="flex max-w-48 flex-col items-start">
-          <Button asChild variant="link" type="button" className="text-foreground">
+        <div className="flex max-w-64 flex-col items-start">
+          <Button asChild variant="link" className="block w-full flex-auto overflow-hidden text-foreground">
             <Link href={`/bookmarks/${bookmark.id}`}>
-              <Avatar className="mr-2 size-4 rounded-[4px]">
-                <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
-                <AvatarFallback className="rounded-[inherit]">
-                  <IconWorld className="size-4 text-muted-foreground" />
-                </AvatarFallback>
-              </Avatar>
-              <span className="max-w-48 truncate">{bookmark.name}</span>
+              <div className="flex items-center">
+                <Avatar className="mr-2 size-4 rounded-[4px]">
+                  <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
+                  <AvatarFallback className="rounded-[inherit]">
+                    <IconWorld className="size-4 text-muted-foreground" />
+                  </AvatarFallback>
+                </Avatar>
+                <span className="truncate">{bookmark.name}</span>
+              </div>
             </Link>
           </Button>
+
           {bookmark.description && (
-            <p className="line-clamp-2 w-full text-muted-foreground" title={bookmark.description}>
+            <p className="line-clamp-2 w-full break-all text-muted-foreground" title={bookmark.description}>
               {bookmark.description}
             </p>
           )}
@@ -88,7 +51,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     accessorKey: 'url',
-    header: 'URL',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="URL" />,
     cell: ({ row }) => {
       const url = row.original.url
 
@@ -103,7 +66,16 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     accessorKey: 'tags',
-    header: 'Tags',
+    sortingFn: (rowA, rowB) => {
+      const tagsA = rowA.original.tag_items.map((tag) => tag.tags?.name).filter(Boolean)
+      const tagsB = rowB.original.tag_items.map((tag) => tag.tags?.name).filter(Boolean)
+
+      const nameA = tagsA[0] || ''
+      const nameB = tagsB[0] || ''
+
+      return nameA.localeCompare(nameB)
+    },
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Tags" />,
     cell: ({ row }) => {
       const tags = row.original.tag_items
 
@@ -123,7 +95,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     accessorKey: 'folder_id',
-    header: 'Folder',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Folder" />,
     cell: ({ row }) => {
       const bookmark = row.original
       const folderName = bookmark.folders?.name

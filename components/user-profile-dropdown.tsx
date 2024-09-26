@@ -51,7 +51,7 @@ export function UserProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="justify-between gap-2">
+        <Button variant="outline" className="justify-between gap-2 data-[state=open]:bg-accent">
           <span title={profileNameOrEmail} className="max-w-40 truncate">
             {profileNameOrEmail}
           </span>
@@ -70,7 +70,7 @@ export function UserProfileDropdown() {
             void NiceModal.show(CreateTagDialog)
           }}
         >
-          <IconPlus className="mr-2 size-4" />
+          <IconPlus className="mr-2 size-4 text-muted-foreground" />
           Create tag
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -78,13 +78,13 @@ export function UserProfileDropdown() {
             void NiceModal.show(CreateBookmarkDialog)
           }}
         >
-          <IconBookmarkPlus className="mr-2 size-4" />
+          <IconBookmarkPlus className="mr-2 size-4 text-muted-foreground" />
           Create bookmark
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/settings">
-            <IconSettings className="mr-2 size-4" />
+            <IconSettings className="mr-2 size-4 text-muted-foreground" />
             Settings
           </Link>
         </DropdownMenuItem>
@@ -93,7 +93,7 @@ export function UserProfileDropdown() {
             void handleLogOut()
           }}
         >
-          <IconLogout className="mr-2 size-4" />
+          <IconLogout className="mr-2 size-4 text-muted-foreground" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

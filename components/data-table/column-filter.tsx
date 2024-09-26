@@ -15,7 +15,7 @@ export function DataTableColumnFilter<T>({ table }: DataTableColumnFilterProps<T
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="ml-auto border-dashed">
+        <Button variant="outline" className="ml-auto border-dashed data-[state=open]:bg-accent">
           Columns
         </Button>
       </DropdownMenuTrigger>

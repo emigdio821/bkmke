@@ -2,10 +2,12 @@
 
 import NiceModal from '@ebay/nice-modal-react'
 import { toast } from 'sonner'
+import { siteConfig } from '@/config/site'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
+import { TypographyInlineCode } from '../ui/typography'
 
 export function ExportBookmarks() {
   const supabase = createClient()
@@ -23,7 +25,7 @@ export function ExportBookmarks() {
     const blob = new Blob([fileData], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
-    link.download = 'bkmk-bookmarks.txt'
+    link.download = `${siteConfig.name}-bookmarks.txt`
     link.href = url
     link.click()
   }
@@ -43,7 +45,13 @@ export function ExportBookmarks() {
               action: async () => {
                 await handleExportBookmarks()
               },
-              message: 'This action will export all your bookmarks.',
+              title: 'Export bookmarks?',
+              message: (
+                <>
+                  This action will export all your bookmarks in a <TypographyInlineCode>.txt</TypographyInlineCode>{' '}
+                  file.
+                </>
+              ),
             })
           }}
         >

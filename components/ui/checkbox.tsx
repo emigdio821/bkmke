@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
-import { IconCheck } from '@tabler/icons-react'
+import { IconCheck, IconMinus } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 
 const Checkbox = React.forwardRef<
@@ -16,7 +16,7 @@ const Checkbox = React.forwardRef<
     {...props}
   >
     <CheckboxPrimitive.Indicator className={cn('flex items-center justify-center text-current')}>
-      <IconCheck className="size-3.5" />
+      {props.checked === 'indeterminate' ? <IconMinus className="size-3.5" /> : <IconCheck className="size-3.5" />}
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ))

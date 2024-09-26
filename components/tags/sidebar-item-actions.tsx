@@ -44,7 +44,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" type="button" variant="ghost">
+        <Button size="icon" type="button" variant="ghost" className="data-[state=open]:bg-accent">
           <span className="sr-only">Open tag actions</span>
           <IconDots className="size-4" />
         </Button>
@@ -59,7 +59,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
             })
           }}
         >
-          <IconPencil className="mr-2 size-4" />
+          <IconPencil className="mr-2 size-4 text-muted-foreground" />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -73,7 +73,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
             })
           }}
         >
-          <IconTrash className="mr-2 size-4" />
+          <IconTrash className="mr-2 size-4 text-destructive/70" />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

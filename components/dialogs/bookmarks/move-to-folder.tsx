@@ -9,6 +9,7 @@ import { useFolders } from '@/hooks/use-folders'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -124,6 +125,11 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark }: MoveToFolderDi
         )}
 
         <DialogFooter className="pt-6">
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
           <Button
             type="button"
             onClick={() => {

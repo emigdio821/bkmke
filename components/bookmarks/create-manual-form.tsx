@@ -16,7 +16,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
-import { DialogFooter } from '@/components/ui/dialog'
+import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -264,6 +264,11 @@ export function CreateManualForm() {
             </Button>
           </div>
           <DialogFooter className="pt-6">
+            <DialogClose asChild>
+              <Button type="button" variant="outline">
+                Cancel
+              </Button>
+            </DialogClose>
             <Button type="submit" disabled={form.formState.isSubmitting}>
               Create {form.formState.isSubmitting && <Spinner className="ml-2" />}
             </Button>

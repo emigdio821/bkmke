@@ -52,7 +52,11 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="hover:bg-muted-foreground/10">
+        <Button
+          size="icon"
+          variant="ghost"
+          className="hover:bg-muted-foreground/10 data-[state=open]:bg-muted-foreground/10"
+        >
           <span className="sr-only">Open row actions</span>
           <IconDots className="size-4" />
         </Button>
@@ -65,12 +69,18 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
             void NiceModal.show(EditBookmarkDialog, { bookmark })
           }}
         >
-          <IconPencil className="mr-2 size-4" />
+          <IconPencil className="mr-2 size-4 text-muted-foreground" />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
+          <a href={urlWithUTMSource(bookmark.url)} target="_blank">
+            <IconExternalLink className="mr-2 size-4 text-muted-foreground" />
+            Open
+          </a>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
           <Link href={`/bookmarks/${bookmark.id}`}>
-            <IconId className="mr-2 size-4" />
+            <IconId className="mr-2 size-4 text-muted-foreground" />
             Details
           </Link>
         </DropdownMenuItem>
@@ -79,7 +89,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
             void handleCopyToClipboard(urlWithUTMSource(bookmark.url), 'URL copied')
           }}
         >
-          <IconCopy className="mr-2 size-4" />
+          <IconCopy className="mr-2 size-4 text-muted-foreground" />
           Copy URL
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -89,7 +99,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
             })
           }}
         >
-          <IconTags className="mr-2 size-4" />
+          <IconTags className="mr-2 size-4 text-muted-foreground" />
           Update tags
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -97,14 +107,8 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
             void NiceModal.show(MoveToFolderDialog, { bookmark })
           }}
         >
-          <IconFolderShare className="mr-2 size-4" />
+          <IconFolderShare className="mr-2 size-4 text-muted-foreground" />
           Move to folder
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <a href={urlWithUTMSource(bookmark.url)} target="_blank">
-            <IconExternalLink className="mr-2 size-4" />
-            Open in new tab
-          </a>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -117,7 +121,7 @@ export function RowActions({ row }: { row: Row<Bookmark> }) {
           }}
           className="text-destructive focus:text-destructive"
         >
-          <IconTrash className="mr-2 size-4" />
+          <IconTrash className="mr-2 size-4 text-destructive/70" />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

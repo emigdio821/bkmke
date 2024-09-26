@@ -16,9 +16,11 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   }
 
   return (
-    <div className="relative flex">
-      <Sidebar />
-      <main className="flex h-full w-full flex-col">
+    <div className="relative flex justify-center">
+      <div className="w-3/12">
+        <Sidebar />
+      </div>
+      <main className="flex h-full w-full flex-col md:w-9/12">
         <Navbar />
         <section className="p-4">{children}</section>
       </main>

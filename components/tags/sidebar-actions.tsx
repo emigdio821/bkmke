@@ -22,7 +22,7 @@ export function SidebarTagsActions<T>({ tags, refetch }: SidebarFoldersActionsPr
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" type="button" variant="ghost">
+        <Button size="icon" type="button" variant="ghost" className="data-[state=open]:bg-accent">
           <span className="sr-only">Open tags actions</span>
           <IconDots className="size-4" />
         </Button>
@@ -35,7 +35,7 @@ export function SidebarTagsActions<T>({ tags, refetch }: SidebarFoldersActionsPr
             void NiceModal.show(CreateTagDialog)
           }}
         >
-          <IconTag className="mr-2 size-4" />
+          <IconTag className="mr-2 size-4 text-muted-foreground" />
           Create tag
         </DropdownMenuItem>
 
@@ -44,12 +44,12 @@ export function SidebarTagsActions<T>({ tags, refetch }: SidebarFoldersActionsPr
             void refetch()
           }}
         >
-          <IconReload className="mr-2 size-4" />
+          <IconReload className="mr-2 size-4 text-muted-foreground" />
           Reload data
         </DropdownMenuItem>
         {tags.length > 10 && (
           <DropdownMenuItem disabled>
-            <IconInputSearch className="mr-2 size-4" />
+            <IconInputSearch className="mr-2 size-4 text-muted-foreground" />
             Toggle search
           </DropdownMenuItem>
         )}

@@ -21,7 +21,7 @@ export function DataTableHeaders<T>({ table }: { table: Table<T> }) {
         <DataTableColumnFilter table={table} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" type="button">
+            <Button size="icon" type="button" className="data-[state=open]:bg-primary/90">
               <IconPlus className="size-4" />
               <span className="sr-only">Bookmarks actions</span>
             </Button>
@@ -32,7 +32,7 @@ export function DataTableHeaders<T>({ table }: { table: Table<T> }) {
                 void NiceModal.show(CreateBookmarkDialog)
               }}
             >
-              <IconBookmarkPlus className="mr-2 size-4" />
+              <IconBookmarkPlus className="mr-2 size-4 text-muted-foreground" />
               Create bookmark
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -40,7 +40,7 @@ export function DataTableHeaders<T>({ table }: { table: Table<T> }) {
                 void NiceModal.show(ImportBookmarksDialog)
               }}
             >
-              <IconFileImport className="mr-2 size-4" />
+              <IconFileImport className="mr-2 size-4 text-muted-foreground" />
               Import bookmarks
             </DropdownMenuItem>
           </DropdownMenuContent>

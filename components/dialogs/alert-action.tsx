@@ -15,11 +15,12 @@ import {
 import { Spinner } from '@/components/spinner'
 
 interface AlertActionDialogProps<T> {
-  message?: string
+  title?: React.ReactNode
+  message?: React.ReactNode
   action: GenericFn<T>
 }
 
-export const AlertActionDialog = NiceModal.create(<T,>({ action, message }: AlertActionDialogProps<T>) => {
+export const AlertActionDialog = NiceModal.create(<T,>({ action, message, title }: AlertActionDialogProps<T>) => {
   const modal = useModal()
   const [isLoading, setLoading] = useState(false)
 
@@ -54,10 +55,10 @@ export const AlertActionDialog = NiceModal.create(<T,>({ action, message }: Aler
         }}
       >
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogTitle>{title || 'Are you sure?'}</AlertDialogTitle>
           <AlertDialogDescription>{message || 'This action cannot be undone.'}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="pt-6">
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             disabled={isLoading}

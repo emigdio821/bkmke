@@ -18,6 +18,7 @@ import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -344,6 +345,11 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
               </Button>
             </div>
             <DialogFooter className="pt-6">
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  Cancel
+                </Button>
+              </DialogClose>
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 Import {form.formState.isSubmitting && <Spinner className="ml-2" />}
               </Button>

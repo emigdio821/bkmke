@@ -10,6 +10,7 @@ import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -145,6 +146,11 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark }: UpdateTagsDialog
         )}
 
         <DialogFooter className="pt-6">
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
           <Button
             type="button"
             onClick={() => {
