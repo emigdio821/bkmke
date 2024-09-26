@@ -21,10 +21,18 @@ export const metadata: Metadata = {
     default: siteConfig.name,
     template: `%s · ${siteConfig.name}`,
   },
+  authors: [
+    {
+      name: 'Emigdio Torres',
+      url: siteConfig.url,
+    },
+  ],
+  keywords: siteConfig.keywords,
   description: siteConfig.description,
   creator: 'Emigdio Torres',
   icons: siteConfig.icons,
   openGraph: siteConfig.og,
+  metadataBase: new URL(siteConfig.url),
   twitter: siteConfig.ogTwitter,
 }
 

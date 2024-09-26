@@ -8,6 +8,18 @@ export const siteConfig = {
   url: appUrl,
   ogUrl: appOgUrl,
   ogImage: appOgUrl,
+  keywords: [
+    'Emigdio Torres',
+    'Emigdio',
+    'Torres',
+    'bkmke',
+    'Bookmark manager',
+    'bookmarks',
+    'Next.js',
+    'Tailwind',
+    'Mexico',
+    'opensource',
+  ],
   description: appDesc,
   links: {
     github: 'https://github.com/emigdio821/bkmk',
