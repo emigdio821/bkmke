@@ -55,7 +55,7 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
                 </Avatar>
                 {bookmark.name}
               </p>
-              <RowActions bookmark={bookmark} />
+              <RowActions bookmark={bookmark} hideDetails />
             </CardTitle>
             <CardDescription>
               <Button asChild variant="link">

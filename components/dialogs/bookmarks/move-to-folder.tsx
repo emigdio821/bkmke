@@ -34,9 +34,9 @@ interface MultipleBookmarks {
 
 type MoveToFolderDialogProps = SingleBookmark | MultipleBookmarks
 
-const singleSuccessMessage = 'Bookmark has been moved to the selected folder.'
-const multipleSuccessMessage = 'Bookmarks have been moved to the selected folder.'
-const singleFailureMessage = 'Unable to move bookmark to folder at this time, try again.'
+const singleSuccessMessage = 'Bookmark has been moved.'
+const multipleSuccessMessage = 'Bookmarks have been moved.'
+const singleFailureMessage = 'Unable to move bookmark at this time, try again.'
 const multipleFailureMessage = 'Some bookmarks failed to move, try again.'
 
 export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: MoveToFolderDialogProps) => {

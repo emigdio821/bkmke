@@ -30,7 +30,12 @@ import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 
-export function RowActions({ bookmark }: { bookmark: Bookmark }) {
+interface RowActionsProps {
+  bookmark: Bookmark
+  hideDetails?: boolean
+}
+
+export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
   const queryClient = useQueryClient()
 
   async function handleDeleteBookmark(bookmark: Bookmark) {
@@ -76,12 +81,14 @@ export function RowActions({ bookmark }: { bookmark: Bookmark }) {
             Open
           </a>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href={`/bookmarks/${bookmark.id}`}>
-            <IconId className="mr-2 size-4 text-muted-foreground" />
-            Details
-          </Link>
-        </DropdownMenuItem>
+        {!hideDetails && (
+          <DropdownMenuItem asChild>
+            <Link href={`/bookmarks/${bookmark.id}`}>
+              <IconId className="mr-2 size-4 text-muted-foreground" />
+              Details
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem
           onClick={() => {
             void handleCopyToClipboard(urlWithUTMSource(bookmark.url), 'URL copied')
