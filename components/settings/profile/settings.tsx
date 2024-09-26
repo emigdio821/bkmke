@@ -1,6 +1,6 @@
 'use client'
 
-import { IconReload } from '@tabler/icons-react'
+import { IconReload, IconUser } from '@tabler/icons-react'
 import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -23,19 +23,21 @@ export function ProfileSettings() {
         {profile ? (
           <>
             <div className="flex items-center space-x-2">
-              <Avatar className="size-16 rounded-md">
+              <Avatar className="size-16">
                 <AvatarImage src={profile.user_metadata.avatar} alt="User avatar" />
                 <AvatarFallback asChild>
-                  <div className="size-16 rounded-md bg-gradient-to-r from-emerald-500 to-indigo-400" />
+                  <div className="size-16 rounded-md">
+                    <IconUser className="size-4" />
+                  </div>
                 </AvatarFallback>
               </Avatar>
               <div className="text-sm">
                 {profile.user_metadata.name && <p className="font-medium">{profile.user_metadata.name}</p>}
                 <p className="text-muted-foreground">{profile.email}</p>
-                {profile.updated_at && (
+                {profile.user_metadata.profile_updated_at && (
                   <p>
                     <span className="text-muted-foreground">Last update: </span>
-                    <span>{new Date(profile.updated_at).toLocaleDateString()}</span>
+                    <span>{new Date(profile.user_metadata.profile_updated_at as string).toLocaleDateString()}</span>
                   </p>
                 )}
               </div>

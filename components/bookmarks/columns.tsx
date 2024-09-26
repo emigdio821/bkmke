@@ -7,12 +7,32 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { createMultiSelectColumn } from '@/components/data-table/multi-select-column'
-import { DataTableColumnHeader } from '../data-table/column-header'
+import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnHeader } from '@/components/data-table/column-header'
 import { RowActions } from './row-actions'
 
 export const columns: Array<ColumnDef<Bookmark>> = [
-  createMultiSelectColumn(),
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        aria-label="Select all"
+        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+        onCheckedChange={(value) => {
+          table.toggleAllPageRowsSelected(!!value)
+        }}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        aria-label="Select row"
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => {
+          row.toggleSelected(!!value)
+        }}
+      />
+    ),
+  },
   {
     accessorKey: 'name',
     sortingFn: () => {
@@ -109,6 +129,6 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => <RowActions row={row} />,
+    cell: ({ row }) => <RowActions bookmark={row.original} />,
   },
 ]

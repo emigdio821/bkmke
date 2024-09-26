@@ -1,4 +1,4 @@
-import { IconArrowDown, IconArrowUp, IconChevronDown, IconEyeOff } from '@tabler/icons-react'
+import { IconArrowDown, IconArrowUp, IconEyeOff, IconSelector } from '@tabler/icons-react'
 import type { Column } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -37,7 +37,7 @@ export function DataTableColumnHeader<TData, TValue>({
             ) : column.getIsSorted() === 'asc' ? (
               <IconArrowUp className="ml-2 size-4" />
             ) : (
-              <IconChevronDown className="ml-2 size-4" />
+              <IconSelector className="ml-2 size-4" />
             )}
           </Button>
         </DropdownMenuTrigger>

@@ -43,6 +43,7 @@ export function EditDialog({ user }: { user: User }) {
       data: {
         avatar: values.avatar,
         name: values.name,
+        profile_updated_at: new Date(),
       },
     })
 

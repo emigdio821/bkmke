@@ -29,12 +29,13 @@ export async function GET(req: NextRequest) {
             flexDirection: 'column',
             justifyContent: 'center',
             backgroundColor: '#09090b',
+            backgroundImage: 'url("https://bkmke.vercel.app/images/og-bg.png")',
           }}
         >
           <img
             alt="bkmke"
-            width={90}
-            height={90}
+            width={120}
+            height={120}
             src="https://bkmke.vercel.app/images/android-chrome-192x192.png"
             style={{
               borderRadius: '100%',
@@ -50,14 +51,14 @@ export async function GET(req: NextRequest) {
           >
             <span
               style={{
-                fontSize: 44,
+                fontSize: 50,
               }}
             >
               {siteConfig.name}
             </span>
             <span
               style={{
-                fontSize: 24,
+                fontSize: 30,
                 opacity: 0.8,
               }}
             >

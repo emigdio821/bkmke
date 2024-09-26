@@ -12,7 +12,6 @@ import {
   IconTrash,
 } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
-import type { Row } from '@tanstack/react-table'
 import { toast } from 'sonner'
 import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
@@ -31,8 +30,7 @@ import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 
-export function RowActions({ row }: { row: Row<Bookmark> }) {
-  const bookmark = row.original
+export function RowActions({ bookmark }: { bookmark: Bookmark }) {
   const queryClient = useQueryClient()
 
   async function handleDeleteBookmark(bookmark: Bookmark) {

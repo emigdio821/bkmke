@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconCheck, IconChevronDown } from '@tabler/icons-react'
+import { IconCheck, IconSelector } from '@tabler/icons-react'
 import type { Column } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
@@ -76,7 +76,7 @@ export function MultiSelect<TData, TValue>({
             </>
           )}
 
-          <IconChevronDown className="ml-auto size-4 text-muted-foreground" />
+          <IconSelector className="ml-auto size-4 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">

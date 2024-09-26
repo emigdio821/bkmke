@@ -2,26 +2,21 @@
 
 import Link from 'next/link'
 import type { OGInfo } from '@/types'
-import NiceModal from '@ebay/nice-modal-react'
 import {
   IconChevronLeft,
   IconExternalLink,
   IconFolder,
-  IconFolderShare,
   IconHash,
-  IconPencil,
   IconReload,
   IconTag,
   IconWorld,
 } from '@tabler/icons-react'
-import { simplifiedURL, urlWithUTMSource } from '@/lib/utils'
+import { formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
 import { useBookmarks } from '@/hooks/use-bookmarks'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
-import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
-import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { RowActions } from '@/components/bookmarks/row-actions'
 import { Loader } from '@/components/loader'
 
 export function BookmarkDetailsClientPage({ id }: { id: number }) {
@@ -50,14 +45,17 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
       {bookmark ? (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center text-lg">
-              <Avatar className="mr-2 size-4 rounded-[4px]">
-                <AvatarImage src={ogInfo?.faviconUrl} />
-                <AvatarFallback className="rounded-[inherit]">
-                  <IconWorld className="size-4 text-muted-foreground" />
-                </AvatarFallback>
-              </Avatar>
-              {bookmark.name}
+            <CardTitle className="flex items-center justify-between space-x-2 text-lg">
+              <p className="flex flex-col sm:flex-row sm:items-center">
+                <Avatar className="mr-2 size-4 rounded-[4px]">
+                  <AvatarImage src={ogInfo?.faviconUrl} />
+                  <AvatarFallback className="rounded-[inherit]">
+                    <IconWorld className="size-4 text-muted-foreground" />
+                  </AvatarFallback>
+                </Avatar>
+                {bookmark.name}
+              </p>
+              <RowActions bookmark={bookmark} />
             </CardTitle>
             <CardDescription>
               <Button asChild variant="link">
@@ -69,50 +67,18 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
             </CardDescription>
           </CardHeader>
           <CardContent className="text-sm">
-            {bookmark.description && <p>{bookmark.description}</p>}
+            {bookmark.description && <p className="mb-2">{bookmark.description}</p>}
 
-            {ogInfo?.imageUrl && (
-              <img
-                className="my-2 h-36 w-full rounded-lg bg-muted object-cover md:h-64"
-                src={ogInfo.imageUrl}
-                alt="Bookmark"
-              />
-            )}
-
-            {bookmark.folders ? (
+            {bookmark.folders && (
               <div className="flex items-center space-x-2">
                 <IconFolder className="size-4" />
                 <Button asChild variant="link">
                   <Link href={`/folders/${bookmark.folder_id}`}>{bookmark.folders.name}</Link>
                 </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  type="button"
-                  onClick={() => {
-                    void NiceModal.show(MoveToFolderDialog, { bookmark })
-                  }}
-                >
-                  <IconPencil className="size-4" />
-                  <span className="sr-only">Move to folder</span>
-                </Button>
-              </div>
-            ) : (
-              <div className="flex h-9 items-center space-x-2">
-                <IconFolderShare className="size-4" />
-                <Button
-                  variant="link"
-                  type="button"
-                  onClick={() => {
-                    void NiceModal.show(MoveToFolderDialog, { bookmark })
-                  }}
-                >
-                  Move to folder
-                </Button>
               </div>
             )}
 
-            {bookmark.tag_items.length > 0 ? (
+            {bookmark.tag_items.length > 0 && (
               <div className="flex items-center space-x-2">
                 <IconTag className="size-4" />
                 <div className="flex flex-1 flex-wrap items-center gap-x-1">
@@ -124,48 +90,20 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
                       </Link>
                     </Button>
                   ))}
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    type="button"
-                    onClick={() => {
-                      void NiceModal.show(UpdateTagsDialog, {
-                        bookmark,
-                      })
-                    }}
-                  >
-                    <IconPencil className="size-4" />
-                    <span className="sr-only">Update tags</span>
-                  </Button>
                 </div>
               </div>
-            ) : (
-              <div className="flex h-9 items-center space-x-2">
-                <IconTag className="size-4" />
-                <Button
-                  type="button"
-                  variant="link"
-                  onClick={() => {
-                    void NiceModal.show(UpdateTagsDialog, {
-                      bookmark,
-                    })
-                  }}
-                >
-                  Update tags
-                </Button>
-              </div>
             )}
-            <Button
-              className="mt-6"
-              onClick={() => {
-                void NiceModal.show(EditBookmarkDialog, {
-                  bookmark,
-                })
-              }}
-            >
-              Edit
-            </Button>
+            <small className="text-muted-foreground/80">{formatDateFromString(bookmark.created_at)}</small>
           </CardContent>
+          <CardFooter>
+            {ogInfo?.imageUrl && (
+              <img
+                className="h-36 w-full rounded-xxs bg-muted object-cover md:h-64"
+                src={ogInfo.imageUrl}
+                alt="Bookmark"
+              />
+            )}
+          </CardFooter>
         </Card>
       ) : (
         <div className="rounded-lg border p-6 text-sm text-muted-foreground">
