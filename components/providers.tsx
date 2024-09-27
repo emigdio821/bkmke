@@ -4,6 +4,7 @@ import NiceModal from '@ebay/nice-modal-react'
 import { IconAlertTriangle, IconCircleCheck, IconExclamationCircle, IconInfoCircle } from '@tabler/icons-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { AppProgressBar } from 'next-nprogress-bar'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -28,6 +29,7 @@ export function Providers({ children }: ProvidersProps) {
         <TooltipProvider delayDuration={300}>
           <NiceModal.Provider>
             {children}
+            <AppProgressBar height="2px" color="#6c6ea7" options={{ showSpinner: false }} shallowRouting />
             <Toaster
               expand
               icons={{

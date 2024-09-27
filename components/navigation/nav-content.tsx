@@ -11,9 +11,9 @@ export function NavContent() {
   const pathname = usePathname()
 
   return (
-    <nav className="my-2 h-full w-full overflow-auto px-4 py-2">
+    <nav className="h-full w-full overflow-auto">
       <ul className="flex h-full flex-col items-start space-y-1">
-        <li className="w-full space-y-2">
+        <li className="w-full space-y-2 px-4 pt-4">
           <NavItem
             menus={[
               {
@@ -26,9 +26,13 @@ export function NavContent() {
             ]}
           />
         </li>
-        <FoldersNavItems />
-        <TagsNavItems />
-        <li className="flex w-full grow flex-col justify-end pt-4">
+        <li className="w-full px-4">
+          <FoldersNavItems />
+        </li>
+        <li className="w-full px-4">
+          <TagsNavItems />
+        </li>
+        <li className="flex w-full grow flex-col justify-end px-4 pb-4 pt-8">
           <UserProfileDropdown />
         </li>
       </ul>

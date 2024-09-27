@@ -58,7 +58,7 @@ export function MultiSelect<TData, TValue>({
           type="button"
           variant="outline"
           disabled={options.length === 0}
-          className="w-full justify-start px-3 font-normal"
+          className="w-full justify-start px-3 font-normal data-[state=open]:bg-accent"
         >
           {options.length === 0 ? (
             emptyText || 'Empty data'
