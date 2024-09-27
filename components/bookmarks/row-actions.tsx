@@ -11,10 +11,6 @@ import {
   IconTags,
   IconTrash,
 } from '@tabler/icons-react'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
-import { createClient } from '@/lib/supabase/client'
 import { handleCopyToClipboard, urlWithUTMSource } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,7 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { AlertActionDialog } from '@/components/dialogs/alert-action'
+import { DeleteBookmarksDialog } from '@/components/dialogs/bookmarks/delete'
 import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
@@ -36,22 +32,6 @@ interface RowActionsProps {
 }
 
 export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
-  const queryClient = useQueryClient()
-
-  async function handleDeleteBookmark(bookmark: Bookmark) {
-    const supabase = createClient()
-    const { error } = await supabase.from('bookmarks').delete().eq('id', bookmark.id)
-
-    if (error) {
-      throw new Error(error.message)
-    }
-
-    toast.success('Success', { description: 'Bookmark has been deleted.' })
-    await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -118,12 +98,8 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {
-            void NiceModal.show(AlertActionDialog, {
-              action: async () => {
-                await handleDeleteBookmark(bookmark)
-              },
-              title: 'Remove bookmark?',
-              message: 'You are about to remove this bookmark. This action cannot be undone.',
+            void NiceModal.show(DeleteBookmarksDialog, {
+              bookmark,
             })
           }}
           className="text-destructive focus:text-destructive"

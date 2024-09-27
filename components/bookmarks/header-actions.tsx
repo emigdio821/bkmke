@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { DeleteBookmarksDialog } from '@/components/dialogs/bookmarks/delete'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
 
 export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
@@ -33,7 +34,16 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
         <>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" type="button" variant="outline">
+              <Button
+                size="icon"
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  void NiceModal.show(DeleteBookmarksDialog, {
+                    bookmarks: selectedRows.map((row) => row.original),
+                  })
+                }}
+              >
                 <IconTrash className="size-4" />
                 <span className="sr-only">Delete selected rows</span>
               </Button>

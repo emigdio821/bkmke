@@ -12,6 +12,7 @@ import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
+import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
 export function FolderItemsClientPage({ id }: { id: string }) {
@@ -53,22 +54,31 @@ export function FolderItemsClientPage({ id }: { id: string }) {
                   <Card>
                     <CardContent className="p-6">
                       <CardDescription>
-                        This folder is empty. <br />
-                        Start creating one bookmark{' '}
+                        <span className="font-semibold">This folder is empty.</span>
+                        <br />
                         <Button
                           variant="underlineLink"
                           onClick={() => {
                             void NiceModal.show(CreateBookmarkDialog)
                           }}
                         >
-                          here
+                          Create
                         </Button>{' '}
-                        and move it to this folder. <br />
+                        or{' '}
+                        <Button
+                          variant="underlineLink"
+                          onClick={() => {
+                            void NiceModal.show(ImportBookmarksDialog)
+                          }}
+                        >
+                          import
+                        </Button>{' '}
+                        your bookmarks and move them to this folder. <br />
                         Or go to{' '}
                         <Button variant="underlineLink">
                           <Link href="/">bookmarks</Link>
                         </Button>{' '}
-                        and move existing ones here.
+                        and manage them there.
                       </CardDescription>
                     </CardContent>
                   </Card>

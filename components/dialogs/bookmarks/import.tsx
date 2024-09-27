@@ -26,6 +26,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Progress } from '@/components/ui/progress'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
@@ -35,11 +36,15 @@ import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
+const singleFailureMessage = 'Unable to import bookmark at this time, try again.'
+const multipleFailureMessage = 'Some bookmarks failed to import, try again.'
+
 export const ImportBookmarksDialog = NiceModal.create(() => {
   const modal = useModal()
   const queryClient = useQueryClient()
   const { data: tags } = useTags()
   const { data: folders } = useFolders()
+  const [progress, setProgress] = useState(0)
   const [dndFiles, setDndFiles] = useState<File[]>([])
   const form = useForm<z.infer<typeof importBookmarksSchema>>({
     resolver: zodResolver(importBookmarksSchema),
@@ -49,6 +54,12 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       folderId: '',
     },
   })
+
+  async function handleRefreshData() {
+    await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
+  }
 
   const getTagsData = useMemo(() => {
     const data = []
@@ -136,20 +147,61 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       toast.info('Info', { description: 'There are no URLs, try again.' })
       return
     }
-    const bookmarkPromises = []
 
-    for (const bookmarkUrl of bookmarkUrls) {
-      const payload = {
-        folderId: values.folderId,
+    let completedCount = 0
+    const importPromises = bookmarkUrls.map(async (url) => {
+      await createBookmark({
+        url,
         tags: values.tags,
-        url: bookmarkUrl,
-      }
+        folderId: values.folderId,
+      }).then((result) => {
+        completedCount++
+        setProgress((completedCount / totalOperations) * 100)
+        if (result?.error) {
+          throw new Error(result.error)
+        }
+      })
+    })
 
-      bookmarkPromises.push(createBookmark(payload))
+    const areMultipleBks = importPromises.length > 1
+    const totalOperations = importPromises.length
+    const settledPromises = await Promise.allSettled(importPromises)
+
+    setProgress((completedCount / totalOperations) * 100)
+
+    const resultsArray = []
+    const errorsArray = []
+
+    for (const promise of settledPromises) {
+      if (promise.status === 'fulfilled') {
+        resultsArray.push(promise.value)
+      } else {
+        errorsArray.push(promise.reason)
+      }
     }
 
+    if (errorsArray.length > 0) {
+      toast.error('Error', {
+        description: areMultipleBks ? multipleFailureMessage : singleFailureMessage,
+      })
+    } else {
+      await handleRefreshData()
+      toast.success('Success', {
+        description: areMultipleBks ? (
+          <>
+            <span className="font-semibold">{resultsArray.length}</span> bookmarks has been imported.
+          </>
+        ) : (
+          'Bookmark has been imported.'
+        ),
+      })
+    }
+
+    await modal.hide()
+    modal.remove()
+
     try {
-      await Promise.all(bookmarkPromises)
+      await Promise.all(importPromises)
       await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
       await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
       await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
@@ -344,6 +396,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                 <IconPlus className="size-4" />
               </Button>
             </div>
+            {progress > 0 && <Progress value={progress} />}
             <DialogFooter className="pt-6">
               <DialogClose asChild>
                 <Button type="button" variant="outline">

@@ -35,7 +35,6 @@ interface MultipleBookmarks {
 type MoveToFolderDialogProps = SingleBookmark | MultipleBookmarks
 
 const singleSuccessMessage = 'Bookmark has been moved.'
-const multipleSuccessMessage = 'Bookmarks have been moved.'
 const singleFailureMessage = 'Unable to move bookmark at this time, try again.'
 const multipleFailureMessage = 'Some bookmarks failed to move, try again.'
 
@@ -92,22 +91,28 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
     const resultsArray = []
     const errorsArray = []
 
-    settledPromises.forEach((result) => {
-      if (result.status === 'fulfilled') {
-        resultsArray.push(result.value)
+    for (const promise of settledPromises) {
+      if (promise.status === 'fulfilled') {
+        resultsArray.push(promise.value)
       } else {
-        errorsArray.push(result.reason)
+        errorsArray.push(promise.reason)
       }
-    })
+    }
 
     if (errorsArray.length > 0) {
       toast.error('Error', {
-        description: movePromises.length > 1 ? multipleFailureMessage : singleFailureMessage,
+        description: areMultipleBks ? multipleFailureMessage : singleFailureMessage,
       })
     } else {
       await handleRefreshData()
       toast.success('Success', {
-        description: areMultipleBks ? multipleSuccessMessage : singleSuccessMessage,
+        description: areMultipleBks ? (
+          <>
+            <span className="font-semibold">{resultsArray.length}</span> bookmarks has been moved.
+          </>
+        ) : (
+          singleSuccessMessage
+        ),
       })
     }
 

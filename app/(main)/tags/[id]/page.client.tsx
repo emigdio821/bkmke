@@ -12,6 +12,7 @@ import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
+import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
 export function TagitemsClientPage({ id }: { id: string }) {
@@ -53,17 +54,26 @@ export function TagitemsClientPage({ id }: { id: string }) {
                   <Card>
                     <CardContent className="p-6">
                       <CardDescription>
-                        This tag is empty. <br />
-                        Start creating one bookmark{' '}
+                        <span className="font-semibold">This tag is empty.</span>
+                        <br />
                         <Button
                           variant="underlineLink"
                           onClick={() => {
                             void NiceModal.show(CreateBookmarkDialog)
                           }}
                         >
-                          here
+                          Create
                         </Button>{' '}
-                        and assign the tags you want. <br />
+                        or{' '}
+                        <Button
+                          variant="underlineLink"
+                          onClick={() => {
+                            void NiceModal.show(ImportBookmarksDialog)
+                          }}
+                        >
+                          import
+                        </Button>{' '}
+                        your bookmarks and assign the tags you want. <br />
                         Or go to{' '}
                         <Button variant="underlineLink">
                           <Link href="/">bookmarks</Link>
