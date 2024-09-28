@@ -69,11 +69,11 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
           <CardContent className="text-sm">
             {bookmark.description && <p className="mb-2">{bookmark.description}</p>}
 
-            {bookmark.folders && (
+            {bookmark.folder && (
               <div className="flex items-center space-x-2">
                 <IconFolder className="size-4" />
                 <Button asChild variant="link">
-                  <Link href={`/folders/${bookmark.folder_id}`}>{bookmark.folders.name}</Link>
+                  <Link href={`/folders/${bookmark.folder_id}`}>{bookmark.folder.name}</Link>
                 </Button>
               </div>
             )}
@@ -84,9 +84,9 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
                 <div className="flex flex-1 flex-wrap items-center gap-x-1">
                   {bookmark.tag_items.map((tagItem) => (
                     <Button key={`${tagItem.id}-bk-details-tag`} variant="link" asChild>
-                      <Link href={`/tags/${tagItem.tags?.id}`}>
+                      <Link href={`/tags/${tagItem.id}`}>
                         <IconHash className="size-4" />
-                        {tagItem.tags?.name || ''}
+                        {tagItem.tag?.name || ''}
                       </Link>
                     </Button>
                   ))}

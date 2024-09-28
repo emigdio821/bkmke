@@ -13,7 +13,7 @@ export interface NavMenu {
 
 export interface TagItem {
   id: number
-  tags: {
+  tag: {
     id: number
     name: string
   } | null
@@ -25,7 +25,7 @@ type FolderItem = {
 
 export type Bookmark = Tables<'bookmarks'> & {
   tag_items: TagItem[]
-  folders: FolderItem
+  folder: FolderItem
 }
 
 export interface OGInfo {

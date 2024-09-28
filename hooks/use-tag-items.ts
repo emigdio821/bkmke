@@ -7,19 +7,24 @@ export function useTagItems(tagId: number) {
 
   async function getTagItems() {
     const { data, error } = await supabase
-      .from('bookmarks')
-      .select('*, tag_items(id, tags(id,name)), folders(name)')
-      .order('name')
+      .from('tag_items')
+      .select(
+        `
+          bookmark:bookmarks!bookmark_id (
+            *,
+            tag_items!bookmark_id(id, tag:tags(id,name)),
+            folder:folders(name)
+          )
+        `,
+      )
+      .eq('tag_id', tagId)
 
     if (error) {
       console.log('Unable to fetch tag items', error.message)
     }
 
-    const filteredData = data?.filter((item) => {
-      return item.tag_items.some((tag) => tag.tags?.id === tagId)
-    })
-
-    return filteredData || []
+    const formattedData = data?.map((item) => (Array.isArray(item.bookmark) ? item.bookmark[0] : item.bookmark)) || null
+    return formattedData
   }
 
   return useQuery({ queryKey: [TAG_ITEMS_QUERY, tagId], queryFn: getTagItems })

@@ -87,8 +87,8 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   {
     accessorKey: 'tags',
     sortingFn: (rowA, rowB) => {
-      const tagsA = rowA.original.tag_items.map((tag) => tag.tags?.name).filter(Boolean)
-      const tagsB = rowB.original.tag_items.map((tag) => tag.tags?.name).filter(Boolean)
+      const tagsA = rowA.original.tag_items.map((tag) => tag.tag?.name).filter(Boolean)
+      const tagsB = rowB.original.tag_items.map((tag) => tag.tag?.name).filter(Boolean)
 
       const nameA = tagsA[0] || ''
       const nameB = tagsB[0] || ''
@@ -103,9 +103,9 @@ export const columns: Array<ColumnDef<Bookmark>> = [
         <div className="flex max-w-40 flex-1 flex-wrap items-center gap-x-1">
           {tags.map((tagItem) => (
             <Button key={`${tagItem.id}-tag-table-item`} variant="link" asChild>
-              <Link href={`/tags/${tagItem.tags?.id}`}>
+              <Link href={`/tags/${tagItem.tag?.id}`}>
                 <IconHash className="size-4" />
-                {tagItem.tags?.name || ''}
+                {tagItem.tag?.name || ''}
               </Link>
             </Button>
           ))}
@@ -118,7 +118,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="Folder" />,
     cell: ({ row }) => {
       const bookmark = row.original
-      const folderName = bookmark.folders?.name
+      const folderName = bookmark.folder?.name
 
       return (
         <Button variant="link" asChild>

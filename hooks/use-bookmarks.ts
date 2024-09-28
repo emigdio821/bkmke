@@ -12,7 +12,13 @@ export function useBookmarks(bookmarkId?: number, tagId?: number) {
     if (bookmarkId) {
       const { data: filteredBookmarks, error: filteredBookmarksErr } = await supabase
         .from('bookmarks')
-        .select('*, tag_items(id, tags(id,name)), folders(name)')
+        .select(
+          `
+            *,
+            tag_items!bookmark_id(id, tag:tags(id,name)),
+            folder:folders(name)
+          `,
+        )
         .eq('id', bookmarkId)
         .order('name')
 
@@ -21,7 +27,13 @@ export function useBookmarks(bookmarkId?: number, tagId?: number) {
     } else {
       const { data: rawData, error: rawError } = await supabase
         .from('bookmarks')
-        .select('*, tag_items(id, tags(id,name)), folders(name)')
+        .select(
+          `
+            *,
+            tag_items!bookmark_id(id, tag:tags(id,name)),
+            folder:folders(name)
+          `,
+        )
         .order('name')
 
       data = rawData
