@@ -8,7 +8,13 @@ export function useFolderItems(folderId: number) {
   async function getFolderItems() {
     const { data, error } = await supabase
       .from('bookmarks')
-      .select('*, tag_items(id, tags(id,name)), folders(name)')
+      .select(
+        `
+          *,
+          tag_items!bookmark_id(id, tag:tags(id,name)),
+          folder:folders(name)
+        `,
+      )
       .eq('folder_id', folderId)
       .order('name')
 
