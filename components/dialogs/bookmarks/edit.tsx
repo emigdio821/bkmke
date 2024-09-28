@@ -38,7 +38,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
   const queryClient = useQueryClient()
   const supabase = createClient()
   const tagItems = bookmark.tag_items
-    .map((item) => item.tags?.id)
+    .map((item) => item.tag?.id)
     .filter((id) => id !== undefined)
     .map((id) => id.toString())
   const form = useForm<z.infer<typeof editBookmarkSchema>>({

@@ -31,7 +31,7 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark }: UpdateTagsDialog
   const supabase = createClient()
   const modal = useModal()
   const tagItems = bookmark.tag_items
-    .map((item) => item.tags?.id)
+    .map((item) => item.tag?.id)
     .filter((id) => id !== undefined)
     .map((id) => id.toString())
   const [isLoading, setLoading] = useState(false)
