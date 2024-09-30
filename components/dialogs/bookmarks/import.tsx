@@ -189,7 +189,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       toast.success('Success', {
         description: areMultipleBks ? (
           <>
-            <span className="font-semibold">{resultsArray.length}</span> bookmarks has been imported.
+            <span className="font-semibold">{resultsArray.length}</span> bookmarks have been imported.
           </>
         ) : (
           'Bookmark has been imported.'
@@ -342,7 +342,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                           </SelectTrigger>
                           <SelectContent>
                             {getFoldersData.map((folder) => (
-                              <SelectItem key={`${folder.value}-folder-select`} value={`${folder.value}`}>
+                              <SelectItem key={`${folder.value}-folder-select`} value={folder.value}>
                                 {folder.label}
                               </SelectItem>
                             ))}

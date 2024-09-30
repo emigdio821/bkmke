@@ -34,18 +34,21 @@ interface MultipleBookmarks {
 
 type MoveToFolderDialogProps = SingleBookmark | MultipleBookmarks
 
-const singleSuccessMessage = 'Bookmark has been moved.'
-const singleFailureMessage = 'Unable to move bookmark at this time, try again.'
-const multipleFailureMessage = 'Some bookmarks failed to move, try again.'
+const messages = {
+  singleSuccess: 'Bookmark has been moved.',
+  singleFailure: 'Unable to move bookmark at this time, try again.',
+  multipleFailure: 'Some bookmarks failed to move, try again.',
+}
 
 export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: MoveToFolderDialogProps) => {
   const queryClient = useQueryClient()
   const supabase = createClient()
   const modal = useModal()
-  const folderId =
+  const initialFolderId =
     bookmark?.folder_id?.toString() || (bookmarks?.length === 1 ? bookmarks[0].folder_id?.toString() : '')
+
   const [isLoading, setLoading] = useState(false)
-  const [selectValue, setSelectValue] = useState(folderId)
+  const [selectValue, setSelectValue] = useState(initialFolderId)
   const { data: folders, isLoading: foldersLoading } = useFolders()
   const bookmarkName = bookmark?.name || (bookmarks?.length === 1 ? bookmarks[0].name : 'Multiple bookmarks')
   const [progress, setProgress] = useState(0)
@@ -59,15 +62,14 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
   }, [queryClient])
 
   async function handleMoveToFolder(bookmarksToMove: Bookmark[]) {
-    if (selectValue === folderId && bookmarksToMove.length === 1) {
+    if (selectValue === initialFolderId && bookmarksToMove.length === 1) {
       await modal.hide()
       return
     }
 
+    const completedCount = { count: 0 }
     setLoading(true)
     setProgress(0)
-    const areMultipleBks = bookmarksToMove.length > 1
-    let completedCount = 0
 
     const movePromises = bookmarksToMove.map((bk) =>
       supabase
@@ -75,44 +77,25 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
         .update({ folder_id: selectValue ? Number(selectValue) : null })
         .eq('id', bk.id)
         .then((result) => {
-          completedCount++
-          setProgress((completedCount / totalOperations) * 100)
-          if (result.error) {
-            throw new Error(result.error.message)
-          }
+          if (result.error) throw new Error(result.error.message)
+          completedCount.count++
+          setProgress((completedCount.count / totalOperations) * 100)
         }),
     )
 
     const totalOperations = movePromises.length
     const settledPromises = await Promise.allSettled(movePromises)
+    const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    setProgress((completedCount / totalOperations) * 100)
-
-    const resultsArray = []
-    const errorsArray = []
-
-    for (const promise of settledPromises) {
-      if (promise.status === 'fulfilled') {
-        resultsArray.push(promise.value)
-      } else {
-        errorsArray.push(promise.reason)
-      }
-    }
-
-    if (errorsArray.length > 0) {
+    if (errors.length > 0) {
       toast.error('Error', {
-        description: areMultipleBks ? multipleFailureMessage : singleFailureMessage,
+        description: bookmarksToMove.length > 1 ? messages.multipleFailure : messages.singleFailure,
       })
     } else {
       await handleRefreshData()
       toast.success('Success', {
-        description: areMultipleBks ? (
-          <>
-            <span className="font-semibold">{resultsArray.length}</span> bookmarks has been moved.
-          </>
-        ) : (
-          singleSuccessMessage
-        ),
+        description:
+          bookmarksToMove.length > 1 ? `${completedCount.count} bookmarks have been moved.` : messages.singleSuccess,
       })
     }
 
@@ -176,7 +159,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
                 </SelectTrigger>
                 <SelectContent>
                   {folders.map((folder) => (
-                    <SelectItem key={`${folder.id}-folder-select`} value={`${folder.id}`}>
+                    <SelectItem key={folder.id} value={`${folder.id}`}>
                       {folder.name}
                     </SelectItem>
                   ))}
@@ -185,6 +168,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
             </div>
           )
         )}
+
         {progress > 0 && <Progress value={progress} />}
         <DialogFooter className="pt-6">
           <DialogClose asChild>

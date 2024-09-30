@@ -1,24 +1,9 @@
 import type { NextRequest } from 'next/server'
 import type { OGInfo } from '@/types'
 import ogs from 'open-graph-scraper'
-import { originURL } from '@/lib/utils'
-
-interface FaviconStatus {
-  ok: boolean
-  url: string
-}
 
 function getFaviconFromGoogle(url: string) {
   return `https://www.google.com/s2/favicons?domain=${url}&sz=128`
-}
-
-function normalizeFaviconUrl(url: string) {
-  try {
-    const newUrl = new URL(url)
-    return { ok: true, url: newUrl.href }
-  } catch {
-    return { ok: false, url: url.startsWith('/') ? url.slice(1) : url }
-  }
 }
 
 async function fetchOgData(url: string) {
@@ -26,10 +11,7 @@ async function fetchOgData(url: string) {
 
   if (error) throw new Error('Failed to get URL info')
 
-  const origin = originURL(url)
-  const faviconStatus = normalizeFaviconUrl(result.favicon || '')
-
-  const faviconUrl = constructFavicon(faviconStatus, origin, url)
+  const faviconUrl = getFaviconFromGoogle(url)
   const imageUrl = result.ogImage?.[0]?.url || result.twitterImage?.[0]?.url || ''
 
   return {
@@ -38,19 +20,6 @@ async function fetchOgData(url: string) {
     title: result.ogTitle || '',
     description: result.ogDescription || '',
   } satisfies OGInfo
-}
-
-function constructFavicon(faviconStatus: FaviconStatus, origin: string | null, url: string) {
-  if (faviconStatus.ok) {
-    return faviconStatus.url
-  }
-
-  if (origin) {
-    const hostname = new URL(origin).hostname
-    return `${origin}/${faviconStatus.url.replace(hostname, '')}`
-  }
-
-  return getFaviconFromGoogle(url)
 }
 
 export async function GET(request: NextRequest) {
@@ -64,12 +33,12 @@ export async function GET(request: NextRequest) {
     const response = await fetchOgData(encodedUrl)
     return Response.json(response, { status: 200 })
   } catch {
-    const imageUrl = getFaviconFromGoogle(encodedUrl)
+    const faviconUrl = getFaviconFromGoogle(encodedUrl)
     const response: OGInfo = {
       imageUrl: '',
       title: url,
       description: '',
-      faviconUrl: imageUrl,
+      faviconUrl,
     }
 
     return Response.json(response, { status: 200 })

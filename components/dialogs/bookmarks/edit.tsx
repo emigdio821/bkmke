@@ -1,11 +1,11 @@
 'use client'
 
 import { useMemo } from 'react'
-import type { BkOGInfo, Bookmark, OGInfo } from '@/types'
+import type { BkOGInfo, Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
+// import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -96,20 +96,24 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
         faviconUrl,
       } satisfies BkOGInfo
     } else {
-      try {
-        const { data: ogInfo } = await axios.get<OGInfo>('/api/og-info', { params: { url } })
-
-        ogInfoPayload = {
-          imageUrl: ogInfo.imageUrl,
-          faviconUrl: ogInfo.faviconUrl,
-        } satisfies BkOGInfo
-      } catch (err) {
-        ogInfoPayload = {
-          imageUrl: '',
-          faviconUrl: '',
-        } satisfies BkOGInfo
-        console.log('Get og info error:', err)
+      ogInfoPayload = {
+        imageUrl: '',
+        faviconUrl: '',
       }
+      // try {
+      //   const { data: ogInfo } = await axios.get<OGInfo>('/api/og-info', { params: { url } })
+
+      //   ogInfoPayload = {
+      //     imageUrl: ogInfo.imageUrl,
+      //     faviconUrl: ogInfo.faviconUrl,
+      //   } satisfies BkOGInfo
+      // } catch (err) {
+      //   ogInfoPayload = {
+      //     imageUrl: '',
+      //     faviconUrl: '',
+      //   } satisfies BkOGInfo
+      //   console.log('Get og info error:', err)
+      // }
     }
 
     const bookmarkPayload = {
@@ -257,7 +261,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                             </SelectTrigger>
                             <SelectContent>
                               {getFoldersData.map((folder) => (
-                                <SelectItem key={`${folder.value}-folder-select`} value={`${folder.value}`}>
+                                <SelectItem key={`${folder.value}-folder-select`} value={folder.value}>
                                   {folder.label}
                                 </SelectItem>
                               ))}
