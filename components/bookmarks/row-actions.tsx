@@ -11,7 +11,7 @@ import {
   IconTags,
   IconTrash,
 } from '@tabler/icons-react'
-import { handleCopyToClipboard, urlWithUTMSource } from '@/lib/utils'
+import { handleCopyToClipboard } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -56,7 +56,7 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <a href={urlWithUTMSource(bookmark.url)} target="_blank">
+          <a href={bookmark.url} target="_blank">
             <IconExternalLink className="mr-2 size-4 text-muted-foreground" />
             Open
           </a>
@@ -71,7 +71,7 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
         )}
         <DropdownMenuItem
           onClick={() => {
-            void handleCopyToClipboard(urlWithUTMSource(bookmark.url), 'URL copied')
+            void handleCopyToClipboard(bookmark.url, 'URL copied')
           }}
         >
           <IconCopy className="mr-2 size-4 text-muted-foreground" />

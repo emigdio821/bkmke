@@ -4,7 +4,7 @@ import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
 import { IconHash, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
-import { formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
+import { formatDateFromString, simplifiedURL } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -37,6 +37,13 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     accessorKey: 'name',
     sortingFn: () => {
       return 1
+    },
+    filterFn: (row, _, value: string) => {
+      return (
+        row.original.name.toLowerCase().includes(value) ||
+        row.original.description?.toLowerCase().includes(value) ||
+        false
+      )
     },
     header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
     cell: ({ row }) => {
@@ -80,7 +87,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
 
       return (
         <Button asChild variant="link">
-          <a href={urlWithUTMSource(url)} target="_blank">
+          <a href={url} target="_blank">
             {simplifiedURL(url)}
           </a>
         </Button>

@@ -80,3 +80,17 @@ export function formatBytes(
     sizeType === 'accurate' ? accurateSizes[i] || 'Bytest' : sizes[i] || 'Bytes'
   }`
 }
+
+export function debounce<T extends (...args: never[]) => unknown>(fn: T, delay = 300) {
+  let timeoutId: NodeJS.Timeout | null = null
+
+  return function (...args: Parameters<T>) {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+
+    timeoutId = setTimeout(() => {
+      fn(...args)
+    }, delay)
+  }
+}

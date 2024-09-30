@@ -11,7 +11,7 @@ import {
   IconTag,
   IconWorld,
 } from '@tabler/icons-react'
-import { formatDateFromString, simplifiedURL, urlWithUTMSource } from '@/lib/utils'
+import { formatDateFromString, simplifiedURL } from '@/lib/utils'
 import { useBookmarks } from '@/hooks/use-bookmarks'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -59,7 +59,7 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
             </CardTitle>
             <CardDescription>
               <Button asChild variant="link">
-                <a href={urlWithUTMSource(bookmark.url)} target="_blank">
+                <a href={bookmark.url} target="_blank">
                   {simplifiedURL(bookmark.url)}
                   <IconExternalLink className="ml-2 size-4" />
                 </a>

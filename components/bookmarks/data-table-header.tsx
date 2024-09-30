@@ -2,6 +2,7 @@ import type { Bookmark } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { IconBookmarkPlus, IconFileImport, IconPlus } from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
+import { debounce } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
@@ -11,13 +12,19 @@ import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { DataTableHeaderActions } from './header-actions'
 
 export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
+  const debouncedSetFilterValue = debounce((value: string) => {
+    table.getColumn('name')?.setFilterValue(value)
+  })
+
   return (
     <div className="mb-4 flex flex-col-reverse items-center gap-2 md:flex-row">
       <Input
         className="max-w-sm"
-        placeholder="Filter by name"
-        value={(table.getColumn('name')?.getFilterValue() as string) || ''}
-        onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
+        placeholder="Filter by name or description"
+        onChange={(event) => {
+          const value = event.target.value
+          debouncedSetFilterValue(value)
+        }}
       />
       <div className="flex w-full flex-wrap items-center justify-center gap-2 md:flex-nowrap md:justify-between">
         <div className="flex items-center gap-2">
