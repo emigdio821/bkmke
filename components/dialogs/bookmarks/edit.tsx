@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import type { Bookmark, OGInfo } from '@/types'
+import type { BkOGInfo, Bookmark, OGInfo } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
@@ -15,6 +15,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
   DialogClose,
@@ -24,7 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
@@ -33,6 +34,7 @@ import { Spinner } from '@/components/spinner'
 
 export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bookmark }) => {
   const modal = useModal()
+  const ogInfo = bookmark.og_info as unknown as BkOGInfo
   const { data: tags } = useTags()
   const { data: folders } = useFolders()
   const queryClient = useQueryClient()
@@ -49,6 +51,9 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       description: bookmark.description || '',
       tags: tagItems,
       folderId: bookmark.folder_id?.toString() || '',
+      imageUrl: ogInfo.imageUrl,
+      faviconUrl: ogInfo.faviconUrl,
+      updateOG: false,
     },
   })
 
@@ -81,27 +86,30 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
   }, [folders])
 
   async function onSubmit(values: z.infer<typeof editBookmarkSchema>) {
-    const { name, description, url, tags: tagIds, folderId } = values
+    const { name, description, url, tags: tagIds, folderId, updateOG, faviconUrl, imageUrl } = values
 
     let ogInfoPayload = null
 
-    try {
-      const { data: ogInfo } = await axios.get<OGInfo>('/api/og-info', { params: { url } })
+    if (updateOG) {
+      ogInfoPayload = {
+        imageUrl,
+        faviconUrl,
+      } satisfies BkOGInfo
+    } else {
+      try {
+        const { data: ogInfo } = await axios.get<OGInfo>('/api/og-info', { params: { url } })
 
-      ogInfoPayload = {
-        title: ogInfo.title,
-        imageUrl: ogInfo.imageUrl,
-        faviconUrl: ogInfo.faviconUrl,
-        description: ogInfo.description,
-      } satisfies OGInfo
-    } catch (err) {
-      ogInfoPayload = {
-        title: name,
-        description,
-        imageUrl: '',
-        faviconUrl: '',
-      } satisfies OGInfo
-      console.log('Get og info error:', err)
+        ogInfoPayload = {
+          imageUrl: ogInfo.imageUrl,
+          faviconUrl: ogInfo.faviconUrl,
+        } satisfies BkOGInfo
+      } catch (err) {
+        ogInfoPayload = {
+          imageUrl: '',
+          faviconUrl: '',
+        } satisfies BkOGInfo
+        console.log('Get og info error:', err)
+      }
     }
 
     const bookmarkPayload = {
@@ -167,7 +175,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       >
         <DialogHeader>
           <DialogTitle>Edit bookmark</DialogTitle>
-          <DialogDescription>{bookmark.name}</DialogDescription>
+          <DialogDescription className="break-all">{bookmark.name}</DialogDescription>
         </DialogHeader>
         <div>
           <Form {...form}>
@@ -285,6 +293,60 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   )}
                 />
               </div>
+
+              <FormField
+                name="updateOG"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center space-x-2">
+                      <FormControl>
+                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                      </FormControl>
+                      <FormLabel>Update images</FormLabel>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {form.getValues('updateOG') && (
+                <>
+                  <FormField
+                    name="faviconUrl"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <div>
+                          <FormLabel>Favicon URL</FormLabel>
+                          <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                        </div>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    name="imageUrl"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <div>
+                          <FormLabel>Image URL</FormLabel>
+                          <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                        </div>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+
               <DialogFooter className="pt-6">
                 <DialogClose asChild>
                   <Button type="button" variant="outline">

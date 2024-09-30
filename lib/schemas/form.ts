@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-const requiredString = z.string().min(1, 'Required field')
+const requiredString = z.string().trim().min(1, 'Required field')
+const optionalString = z.string().trim()
 
 export const loginSchema = z.object({
   email: requiredString.email(),
@@ -8,9 +9,9 @@ export const loginSchema = z.object({
 })
 
 export const editUserSchema = z.object({
-  name: z.string(),
-  avatar: z.string(),
-  password: z.string(),
+  name: optionalString,
+  avatar: optionalString,
+  password: optionalString,
 })
 
 export const createTagSchema = z.object({
@@ -23,28 +24,32 @@ export const createFolderSchema = z.object({
 
 export const createManualBookmarkSchema = z.object({
   name: requiredString,
-  description: z.string(),
-  url: z.string().url(),
-  tags: z.string().array(),
-  folderId: z.string(),
+  description: optionalString,
+  url: optionalString.url(),
+  tags: optionalString.array(),
+  folderId: optionalString,
 })
 
 export const createAutomaticBookmarkSchema = z.object({
-  folderId: z.string(),
+  folderId: optionalString,
   url: requiredString.url(),
-  tags: z.string().array(),
+  tags: optionalString.array(),
 })
 
 export const editBookmarkSchema = z.object({
   name: requiredString,
-  description: z.string(),
+  description: optionalString,
   url: requiredString.url(),
-  tags: z.string().array(),
-  folderId: z.string(),
+  tags: optionalString.array(),
+  folderId: optionalString,
+
+  updateOG: z.boolean(),
+  imageUrl: optionalString,
+  faviconUrl: optionalString,
 })
 
 export const importBookmarksSchema = z.object({
   bookmarks: requiredString,
-  tags: z.string().array(),
-  folderId: z.string(),
+  tags: optionalString.array(),
+  folderId: optionalString,
 })

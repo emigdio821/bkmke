@@ -22,9 +22,9 @@ export function DataTableColumnFilter<T>({ table }: DataTableColumnFilterProps<T
       <DropdownMenuContent align="end">
         {table
           .getAllColumns()
-          .filter((column) => column.getCanHide())
+          .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
           .map((column) => {
-            const header = column.columnDef.header
+            const meta = column.columnDef.meta as { title?: string } | undefined
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
@@ -37,7 +37,7 @@ export function DataTableColumnFilter<T>({ table }: DataTableColumnFilterProps<T
                   column.toggleVisibility(!!value)
                 }}
               >
-                {typeof header === 'string' ? header : column.id}
+                {meta?.title || column.id}
               </DropdownMenuCheckboxItem>
             )
           })}

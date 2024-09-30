@@ -35,4 +35,6 @@ export interface OGInfo {
   description: string
 }
 
+export type BkOGInfo = Omit<OGInfo, 'title' | 'description'>
+
 export type GenericFn<T> = (...args: never[]) => T | Promise<T>

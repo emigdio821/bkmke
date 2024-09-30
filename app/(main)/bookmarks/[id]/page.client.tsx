@@ -95,25 +95,26 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
             )}
             <small className="text-muted-foreground/80">{formatDateFromString(bookmark.created_at)}</small>
           </CardContent>
-          <CardFooter>
-            {ogInfo?.imageUrl && (
+          {ogInfo?.imageUrl && (
+            <CardFooter>
               <img
                 className="h-36 w-full rounded-xxs bg-muted object-cover md:h-64"
                 src={ogInfo.imageUrl}
                 alt="Bookmark"
               />
-            )}
-          </CardFooter>
+            </CardFooter>
+          )}
         </Card>
       ) : (
         <div className="rounded-lg border p-6 text-sm text-muted-foreground">
-          <p>Bookmark not found.</p>
-          <p className="flex items-center">
-            <Button variant="link">
+          <Button variant="link" asChild className="mb-4">
+            <Link href="/">
               <IconChevronLeft className="mr-2 size-4" />
-              Go to bookmarks
-            </Button>
-          </p>
+              All bookmarks
+            </Link>
+          </Button>
+          <p className="font-semibold">Bookmark not found.</p>
+          <p>Thee bookmark you're trying to see does not exist.</p>
         </div>
       )}
     </>

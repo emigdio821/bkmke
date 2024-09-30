@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
   } catch {
     const imageUrl = getFaviconFromGoogle(encodedUrl)
     const response: OGInfo = {
-      imageUrl,
+      imageUrl: '',
       title: url,
       description: '',
       faviconUrl: imageUrl,

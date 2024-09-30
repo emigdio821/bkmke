@@ -45,10 +45,10 @@ export const columns: Array<ColumnDef<Bookmark>> = [
 
       return (
         <div className="flex max-w-64 flex-col items-start">
-          <Button asChild variant="link" className="block w-full flex-auto overflow-hidden text-foreground">
+          <Button asChild variant="link" className="block max-w-64 flex-auto overflow-hidden text-foreground">
             <Link href={`/bookmarks/${bookmark.id}`}>
               <div className="flex items-center">
-                <Avatar className="mr-2 size-4 rounded-[4px]">
+                <Avatar className="mr-2 size-4 rounded-full">
                   <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
                   <AvatarFallback className="rounded-[inherit]">
                     <IconWorld className="size-4 text-muted-foreground" />
@@ -71,6 +71,9 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     accessorKey: 'url',
+    meta: {
+      title: 'URL',
+    },
     header: ({ column }) => <DataTableColumnHeader column={column} title="URL" />,
     cell: ({ row }) => {
       const url = row.original.url
@@ -115,6 +118,9 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     accessorKey: 'folder_id',
+    meta: {
+      title: 'Folder',
+    },
     header: ({ column }) => <DataTableColumnHeader column={column} title="Folder" />,
     cell: ({ row }) => {
       const bookmark = row.original

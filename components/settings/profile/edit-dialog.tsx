@@ -95,8 +95,10 @@ export function EditDialog({ user }: { user: User }) {
               name="avatar"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Avatar URL</FormLabel>
-                  <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                  <div>
+                    <FormLabel>Avatar URL</FormLabel>
+                    <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                  </div>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

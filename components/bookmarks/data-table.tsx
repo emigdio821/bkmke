@@ -14,7 +14,6 @@ import {
   type SortingState,
   type VisibilityState,
 } from '@tanstack/react-table'
-import { cn } from '@/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { DataTablePagination } from '@/components/data-table/pagination'
 import { DataTableHeaders } from './data-table-header'
@@ -72,14 +71,7 @@ export function DataTable({ columns, data }: DataTableProps) {
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cn({
-                        'align-baseline': cell.id.includes('select'),
-                      })}
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
               ))
