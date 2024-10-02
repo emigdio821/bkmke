@@ -23,9 +23,13 @@ type FolderItem = {
   name: string
 } | null
 
-export type Bookmark = Tables<'bookmarks'> & {
+export interface Bookmark extends Tables<'bookmarks'> {
   tag_items: TagItem[]
   folder: FolderItem
+}
+
+export interface Folder extends Tables<'folders'> {
+  children: Folder[]
 }
 
 export interface OGInfo {

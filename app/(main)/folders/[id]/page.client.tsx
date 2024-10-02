@@ -3,8 +3,8 @@
 import Link from 'next/link'
 import NiceModal from '@ebay/nice-modal-react'
 import { IconReload } from '@tabler/icons-react'
+import { useFolder } from '@/hooks/use-folder'
 import { useFolderItems } from '@/hooks/use-folder-items'
-import { useFolders } from '@/hooks/use-folders'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -18,7 +18,7 @@ import { Loader } from '@/components/loader'
 export function FolderItemsClientPage({ id }: { id: string }) {
   const folderId = id
   const { data: folderItems, isLoading, error } = useFolderItems(Number(folderId))
-  const { data: folder, isLoading: folderLoading } = useFolders(Number(folderId))
+  const { data: folder, isLoading: folderLoading } = useFolder(Number(folderId))
 
   if (error)
     return (
@@ -39,7 +39,10 @@ export function FolderItemsClientPage({ id }: { id: string }) {
           <Skeleton className="h-2 w-28" />
         </div>
       ) : (
-        <TypographyH4>{folder?.[0]?.name || 'Folder items'}</TypographyH4>
+        <>
+          <TypographyH4>{folder?.[0]?.name || 'Folder items'}</TypographyH4>
+          {folder?.[0]?.description && <p className="text-sm text-muted-foreground">{folder[0].description}</p>}
+        </>
       )}
       <div className="mt-4">
         {isLoading ? (

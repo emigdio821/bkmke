@@ -1,36 +1,38 @@
+import type { Folder } from '@/types'
 import { useQuery } from '@tanstack/react-query'
 import { FOLDERS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 
-export function useFolders(folderId?: number) {
+export function useFolders() {
   const supabase = createClient()
 
   async function getFolders() {
-    let data = null
-    let error = null
-
-    if (folderId) {
-      const { data: filteredFolder, error: filteredFolderErr } = await supabase
-        .from('folders')
-        .select()
-        .eq('id', folderId)
-        .order('name')
-
-      data = filteredFolder
-      error = filteredFolderErr
-    } else {
-      const { data: rawData, error: rawError } = await supabase.from('folders').select().order('name')
-
-      data = rawData
-      error = rawError
-    }
+    const { data, error } = await supabase.from('folders').select().order('name')
 
     if (error) {
-      console.log('Unable to fetch bookmarks', error.message)
+      console.log('Unable to fetch folders', error.message)
+      return []
     }
 
-    return data || []
+    const folderMap: Record<number, Folder> = {}
+    const tree: Folder[] = []
+
+    data.forEach((folder) => {
+      folderMap[folder.id] = { ...folder, children: [] }
+    })
+
+    data.forEach((folder) => {
+      if (folder.parent_id) {
+        folderMap[folder.parent_id]?.children.push(folderMap[folder.id])
+      } else {
+        tree.push(folderMap[folder.id])
+      }
+    })
+
+    console.log(tree)
+
+    return tree
   }
 
-  return useQuery({ queryKey: folderId ? [FOLDERS_QUERY, folderId] : [FOLDERS_QUERY], queryFn: getFolders })
+  return useQuery({ queryKey: [FOLDERS_QUERY], queryFn: getFolders })
 }

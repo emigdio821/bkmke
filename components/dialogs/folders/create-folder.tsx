@@ -13,9 +13,14 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Spinner } from '@/components/spinner'
 
-export const CreateFolderDialog = NiceModal.create(() => {
+interface CreateFolderDialogProps {
+  parentFolderId?: number
+}
+
+export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFolderDialogProps) => {
   const modal = useModal()
   const queryClient = useQueryClient()
   const supabase = createClient()
@@ -23,11 +28,15 @@ export const CreateFolderDialog = NiceModal.create(() => {
     resolver: zodResolver(createFolderSchema),
     defaultValues: {
       name: '',
+      description: '',
     },
   })
 
   async function onSubmit(values: z.infer<typeof createFolderSchema>) {
-    const { error } = await supabase.from('folders').insert(values)
+    const { error } = await supabase.from('folders').insert({
+      ...values,
+      parent_id: parentFolderId || null,
+    })
 
     if (error) {
       toast.error('Error', { description: error.message })
@@ -84,9 +93,22 @@ export const CreateFolderDialog = NiceModal.create(() => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Folder name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="description"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea className="max-h-40" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

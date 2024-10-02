@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
+import { IconChevronRight } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
@@ -159,9 +160,20 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
                 </SelectTrigger>
                 <SelectContent>
                   {folders.map((folder) => (
-                    <SelectItem key={folder.id} value={`${folder.id}`}>
-                      {folder.name}
-                    </SelectItem>
+                    <>
+                      <SelectItem key={`parent-folder-${folder.id}`} value={`${folder.id}`}>
+                        {folder.name}
+                      </SelectItem>
+                      {folder.children.map((subfolder) => (
+                        <SelectItem key={`subfolder-${subfolder.id}`} value={`${subfolder.id}`}>
+                          <span className="flex items-center">
+                            <span className="text-xs text-muted-foreground">{folder.name}</span>
+                            <IconChevronRight className="size-3.5" />
+                            {subfolder.name}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </>
                   ))}
                 </SelectContent>
               </Select>

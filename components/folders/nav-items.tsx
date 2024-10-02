@@ -1,4 +1,5 @@
 import { usePathname } from 'next/navigation'
+import type { Folder, NavMenu } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { IconFolder, IconFolderPlus, IconFolders, IconReload } from '@tabler/icons-react'
 import { useFolders } from '@/hooks/use-folders'
@@ -30,6 +31,17 @@ export function FoldersNavItems() {
     )
   }
 
+  function buildSubmenus(folders: Folder[]): NavMenu[] {
+    return folders.map((folder) => ({
+      href: `/folders/${folder.id}`,
+      label: folder.name,
+      actions: <SidebarItemActions folder={folder} />,
+      active: pathname === `/folders/${folder.id}`,
+      icon: IconFolder,
+      submenus: folder.children.length > 0 ? buildSubmenus(folder.children) : [],
+    }))
+  }
+
   return (
     <>
       {!folders?.length ? (
@@ -53,14 +65,7 @@ export function FoldersNavItems() {
               active: pathname.startsWith('/folders'),
               icon: IconFolders,
               actions: <SidebarFoldersActions folders={folders} refetch={refetch} />,
-              submenus: folders.map((folder) => ({
-                href: `/folders/${folder.id}`,
-                label: folder.name,
-                actions: <SidebarItemActions folder={folder} />,
-                active: pathname === `/folders/${folder.id}`,
-                icon: IconFolder,
-                submenus: [],
-              })),
+              submenus: buildSubmenus(folders),
             },
           ]}
         />

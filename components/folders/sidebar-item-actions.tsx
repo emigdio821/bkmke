@@ -1,5 +1,5 @@
 import NiceModal from '@ebay/nice-modal-react'
-import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
+import { IconDots, IconFolderPlus, IconPencil, IconTrash } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
+import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
 import { EditFolderDialog } from '@/components/dialogs/folders/edit-folder'
 
 export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
@@ -61,11 +62,23 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem
+          onSelect={() => {
+            void NiceModal.show(CreateFolderDialog, {
+              parentFolderId: folder.id,
+            })
+          }}
+        >
+          <IconFolderPlus className="mr-2 size-4 text-muted-foreground" />
+          Create folder
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
           className="text-destructive focus:text-destructive"
           onSelect={() => {
             void NiceModal.show(AlertActionDialog, {
               title: 'Delete folder?',
-              message: 'It will also delete all bookmarks related to this folder. This action cannot be undone.',
+              message:
+                'It will also delete all bookmarks/folders related to this folder. This action cannot be undone.',
               action: async () => {
                 await handleDeleteFolder(folder.id)
               },

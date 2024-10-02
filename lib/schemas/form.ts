@@ -20,6 +20,7 @@ export const createTagSchema = z.object({
 
 export const createFolderSchema = z.object({
   name: requiredString,
+  description: optionalString,
 })
 
 export const createManualBookmarkSchema = z.object({
