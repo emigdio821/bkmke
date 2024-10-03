@@ -27,7 +27,7 @@ export const siteConfig = {
   icons: {
     icon: ['/images/favicon.ico'],
     shortcut: '/images/favicon-16x16.png',
-    apple: '/images/apple-touch-icon.png',
+    apple: '/images/favicon-apple.png',
     other: [
       {
         url: '/images/favicon-16x16.png',
@@ -40,12 +40,12 @@ export const siteConfig = {
         type: 'image/png',
       },
       {
-        url: '/images/android-chrome-192x192.png',
+        url: '/images/favicon-192x192.png',
         sizes: '192x192',
         type: 'image/png',
       },
       {
-        url: '/images/android-chrome-512x512.png',
+        url: '/images/favicon-512x512.png',
         sizes: '512x512',
         type: 'image/png',
       },
