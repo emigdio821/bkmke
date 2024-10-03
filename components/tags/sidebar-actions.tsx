@@ -1,6 +1,6 @@
 import type { GenericFn } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
-import { IconDots, IconInputSearch, IconReload, IconTag } from '@tabler/icons-react'
+import { IconDots, IconReload, IconTag } from '@tabler/icons-react'
 import type { Tables } from '@/types/database.types'
 import { Button } from '@/components/ui/button'
 import {
@@ -47,12 +47,12 @@ export function SidebarTagsActions<T>({ tags, refetch }: SidebarFoldersActionsPr
           <IconReload className="mr-2 size-4 text-muted-foreground" />
           Reload data
         </DropdownMenuItem>
-        {tags.length > 10 && (
+        {/* {tags.length > 10 && (
           <DropdownMenuItem disabled>
             <IconInputSearch className="mr-2 size-4 text-muted-foreground" />
             Toggle search
           </DropdownMenuItem>
-        )}
+        )} */}
       </DropdownMenuContent>
     </DropdownMenu>
   )

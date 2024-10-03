@@ -59,33 +59,50 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
           </>
         ) : (
           <>
-            <CollapsibleTrigger className="[&[data-state=open]>svg]:rotate-90" asChild>
-              <Button variant="ghost" size="icon">
-                <IconChevronRight className="size-4" />
-                <span className="sr-only">Toggle collapsible item</span>
-              </Button>
-            </CollapsibleTrigger>
-            <Button
+            <CollapsibleTrigger
+              className="[&[data-state=open]>div>span.chevron>svg]:rotate-90"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setIsCollapsed((prev) => !prev)
+              }}
               asChild
-              variant="ghost"
-              className={cn('block flex-auto overflow-hidden', {
-                'bg-accent': active,
-              })}
             >
-              <Link href={href}>
+              <Button
+                variant="ghost"
+                className={cn('block flex-auto overflow-hidden', {
+                  'bg-accent': active,
+                })}
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+              >
                 <div className="flex items-center">
+                  <span className="chevron mr-2">
+                    <IconChevronRight className="size-4" />
+                  </span>
                   {Icon && (
                     <span className="mr-2">
                       <Icon className="size-4" />
                     </span>
                   )}
-                  <span className="truncate">{label}</span>
+
+                  <Button asChild variant="link" className="block truncate text-foreground">
+                    <Link
+                      href={href}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      {label}
+                    </Link>
+                  </Button>
                   {typeof itemCount === 'number' && itemCount > 0 && (
                     <span className="ml-1 text-xs text-muted-foreground">({itemCount})</span>
                   )}
                 </div>
-              </Link>
-            </Button>
+              </Button>
+            </CollapsibleTrigger>
             {actions && <span>{actions}</span>}
           </>
         )}
