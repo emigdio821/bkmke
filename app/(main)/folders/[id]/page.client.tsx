@@ -50,7 +50,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
           </Link>
         </Button>
         <p className="font-semibold">Folder not found.</p>
-        <p>Thee folder you're trying to see does not exist.</p>
+        <p>The folder you're trying to see does not exist.</p>
       </div>
     )
   }

@@ -114,7 +114,7 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
             </Link>
           </Button>
           <p className="font-semibold">Bookmark not found.</p>
-          <p>Thee bookmark you're trying to see does not exist.</p>
+          <p>The bookmark you're trying to see does not exist.</p>
         </div>
       )}
     </>
