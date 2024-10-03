@@ -49,7 +49,7 @@ export function TagsNavItems() {
           menus={[
             {
               label: 'Tags',
-              withItemCount: true,
+              itemCount: tags.length,
               active: pathname.startsWith('/tags'),
               icon: IconTags,
               actions: <SidebarTagsActions tags={tags} refetch={refetch} />,

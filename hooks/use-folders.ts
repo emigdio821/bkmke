@@ -23,13 +23,11 @@ export function useFolders() {
 
     data.forEach((folder) => {
       if (folder.parent_id) {
-        folderMap[folder.parent_id]?.children.push(folderMap[folder.id])
+        folderMap[folder.parent_id].children.push(folderMap[folder.id])
       } else {
         tree.push(folderMap[folder.id])
       }
     })
-
-    console.log(tree)
 
     return tree
   }

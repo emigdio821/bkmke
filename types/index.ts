@@ -7,7 +7,7 @@ export interface NavMenu {
   active: boolean
   icon?: TablerIcon
   submenus: NavMenu[]
-  withItemCount?: boolean
+  itemCount?: number
   actions?: React.ReactNode
 }
 

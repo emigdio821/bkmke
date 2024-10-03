@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { IconChevronRight } from '@tabler/icons-react'
@@ -160,10 +160,8 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
                 </SelectTrigger>
                 <SelectContent>
                   {folders.map((folder) => (
-                    <>
-                      <SelectItem key={`parent-folder-${folder.id}`} value={`${folder.id}`}>
-                        {folder.name}
-                      </SelectItem>
+                    <Fragment key={`parent-folder-${folder.id}`}>
+                      <SelectItem value={`${folder.id}`}>{folder.name}</SelectItem>
                       {folder.children.map((subfolder) => (
                         <SelectItem key={`subfolder-${subfolder.id}`} value={`${subfolder.id}`}>
                           <span className="flex items-center">
@@ -173,7 +171,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
                           </span>
                         </SelectItem>
                       ))}
-                    </>
+                    </Fragment>
                   ))}
                 </SelectContent>
               </Select>

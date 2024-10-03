@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import NiceModal from '@ebay/nice-modal-react'
-import { IconReload } from '@tabler/icons-react'
+import { IconChevronLeft, IconReload } from '@tabler/icons-react'
 import { useFolder } from '@/hooks/use-folder'
 import { useFolderItems } from '@/hooks/use-folder-items'
 import { Button } from '@/components/ui/button'
@@ -12,7 +12,7 @@ import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
-import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
+// import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
 export function FolderItemsClientPage({ id }: { id: string }) {
@@ -32,18 +32,33 @@ export function FolderItemsClientPage({ id }: { id: string }) {
       </div>
     )
 
+  if (folderLoading) {
+    return (
+      <div className="flex h-7 items-center">
+        <Skeleton className="h-2 w-28" />
+      </div>
+    )
+  }
+
+  if (!folder?.length) {
+    return (
+      <div className="rounded-lg border p-6 text-sm text-muted-foreground">
+        <Button variant="link" asChild className="mb-4">
+          <Link href="/">
+            <IconChevronLeft className="mr-2 size-4" />
+            All bookmarks
+          </Link>
+        </Button>
+        <p className="font-semibold">Folder not found.</p>
+        <p>Thee folder you're trying to see does not exist.</p>
+      </div>
+    )
+  }
+
   return (
     <>
-      {folderLoading ? (
-        <div className="flex h-7 items-center">
-          <Skeleton className="h-2 w-28" />
-        </div>
-      ) : (
-        <>
-          <TypographyH4>{folder?.[0]?.name || 'Folder items'}</TypographyH4>
-          {folder?.[0]?.description && <p className="text-sm text-muted-foreground">{folder[0].description}</p>}
-        </>
-      )}
+      <TypographyH4>{folder[0]?.name || 'Folder items'}</TypographyH4>
+      {folder[0]?.description && <p className="text-sm text-muted-foreground">{folder[0].description}</p>}
       <div className="mt-4">
         {isLoading ? (
           <Loader />
@@ -68,14 +83,14 @@ export function FolderItemsClientPage({ id }: { id: string }) {
                           Create
                         </Button>{' '}
                         or{' '}
-                        <Button
+                        {/* <Button
                           variant="underlineLink"
                           onClick={() => {
                             void NiceModal.show(ImportBookmarksDialog)
                           }}
                         >
                           import
-                        </Button>{' '}
+                        </Button>{' '} */}
                         your bookmarks and move them to this folder. <br />
                         Or go to{' '}
                         <Button variant="underlineLink">

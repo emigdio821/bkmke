@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import Link from 'next/link'
 import type { NavMenu } from '@/types'
 import { IconChevronRight } from '@tabler/icons-react'
@@ -10,9 +10,22 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { NavItem } from './nav-item'
 
 export function CollapsibleNavItem({ ...props }: NavMenu) {
-  const { withItemCount, icon: Icon, label, href, active, submenus, actions } = props
-  const isSubmenuActive = submenus.some((submenu) => submenu.active)
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(isSubmenuActive)
+  const { icon: Icon, label, href, active, submenus, actions, itemCount } = props
+  const isSubmenuActive = useCallback((subs: NavMenu[]) => {
+    const isActive = subs.some((sub) => {
+      if (sub.active) return true
+
+      if (sub.submenus.length > 0) {
+        return isSubmenuActive(sub.submenus)
+      }
+
+      return false
+    })
+
+    return isActive
+  }, [])
+
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(isSubmenuActive(submenus))
 
   return (
     <Collapsible open={isCollapsed} onOpenChange={setIsCollapsed} className="w-full">
@@ -36,8 +49,8 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
                     </span>
                   )}
                   <span className="truncate">{label}</span>
-                  {withItemCount && submenus.length > 0 && (
-                    <span className="ml-1 text-xs text-muted-foreground">({submenus.length})</span>
+                  {typeof itemCount === 'number' && itemCount > 0 && (
+                    <span className="ml-1 text-xs text-muted-foreground">({itemCount})</span>
                   )}
                 </div>
               </Button>
@@ -67,8 +80,8 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
                     </span>
                   )}
                   <span className="truncate">{label}</span>
-                  {withItemCount && submenus.length > 0 && (
-                    <span className="ml-1 text-xs text-muted-foreground">({submenus.length})</span>
+                  {typeof itemCount === 'number' && itemCount > 0 && (
+                    <span className="ml-1 text-xs text-muted-foreground">({itemCount})</span>
                   )}
                 </div>
               </Link>
