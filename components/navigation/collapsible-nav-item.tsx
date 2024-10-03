@@ -60,7 +60,14 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
 
               {href ? (
                 <Button asChild variant="link" className="block truncate text-foreground">
-                  <Link href={href}>{label}</Link>
+                  <Link
+                    href={href}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    {label}
+                  </Link>
                 </Button>
               ) : (
                 <span className="truncate">{label}</span>
