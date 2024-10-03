@@ -87,7 +87,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
 
       return (
         <Button asChild variant="link">
-          <a href={url} target="_blank">
+          <a href={url} target="_blank" rel="noreferrer">
             {simplifiedURL(url)}
           </a>
         </Button>

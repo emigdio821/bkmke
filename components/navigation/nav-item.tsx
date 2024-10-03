@@ -7,9 +7,9 @@ export function NavItem({ menus }: { menus: NavMenu[] }) {
     <>
       {menus.map(({ ...props }) =>
         props.submenus.length === 0 ? (
-          <SimpleNavItem {...props} key={`${props.href}-${props.label}`} />
+          <SimpleNavItem key={`${props.href}-${props.label}`} {...props} />
         ) : (
-          <CollapsibleNavItem {...props} key={`${props.href}-${props.label}`} />
+          <CollapsibleNavItem key={`${props.href}-${props.label}`} {...props} />
         ),
       )}
     </>

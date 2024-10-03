@@ -1,5 +1,6 @@
 'use client'
 
+import type { UserMetadata } from '@/types'
 import { IconReload, IconUser } from '@tabler/icons-react'
 import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -10,6 +11,7 @@ import { SettingsProfileSkeleton } from '@/components/skeletons'
 
 export function ProfileSettings() {
   const { data: profile, isLoading, refetch } = useProfile()
+  const userMetadata = profile?.user_metadata as UserMetadata
 
   if (isLoading) return <SettingsProfileSkeleton />
 
@@ -24,7 +26,7 @@ export function ProfileSettings() {
           <>
             <div className="flex items-center space-x-2">
               <Avatar className="size-16">
-                <AvatarImage src={profile.user_metadata.avatar} alt="User avatar" />
+                <AvatarImage src={userMetadata?.avatar || ''} alt="User avatar" />
                 <AvatarFallback asChild>
                   <div className="size-16 rounded-md">
                     <IconUser className="size-4" />
@@ -32,12 +34,12 @@ export function ProfileSettings() {
                 </AvatarFallback>
               </Avatar>
               <div className="text-sm">
-                {profile.user_metadata.name && <p className="font-medium">{profile.user_metadata.name}</p>}
+                {profile.user_metadata.name && <p className="font-medium">{userMetadata?.name}</p>}
                 <p className="text-muted-foreground">{profile.email}</p>
-                {profile.user_metadata.profile_updated_at && (
+                {userMetadata?.profile_updated_at && (
                   <p>
                     <span className="text-muted-foreground">Last update: </span>
-                    <span>{new Date(profile.user_metadata.profile_updated_at as string).toLocaleDateString()}</span>
+                    <span>{new Date(userMetadata.profile_updated_at).toLocaleDateString()}</span>
                   </p>
                 )}
               </div>

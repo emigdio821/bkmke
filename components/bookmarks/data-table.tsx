@@ -51,7 +51,7 @@ export function DataTable({ columns, data }: DataTableProps) {
   return (
     <>
       <DataTableHeaders table={table} />
-      <div className="mb-2 w-full overflow-auto rounded-md border">
+      <div className="mb-2 w-full overflow-auto rounded-md border bg-card shadow-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

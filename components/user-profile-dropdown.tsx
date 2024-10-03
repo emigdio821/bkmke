@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import type { UserMetadata } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { IconBookmarkPlus, IconLogout, IconPlus, IconSettings } from '@tabler/icons-react'
 import { toast } from 'sonner'
@@ -22,6 +23,7 @@ export function UserProfileDropdown() {
   const { data: profile, isLoading, error, refetch } = useProfile()
   const supabase = createClient()
   const router = useRouter()
+  const userMetadata = profile?.user_metadata as UserMetadata
 
   async function handleLogOut() {
     const { error } = await supabase.auth.signOut()
@@ -46,7 +48,7 @@ export function UserProfileDropdown() {
       </Button>
     )
 
-  const profileNameOrEmail = profile.user_metadata.name || profile.email
+  const profileNameOrEmail = userMetadata?.name || profile.email
 
   return (
     <DropdownMenu>
@@ -57,7 +59,7 @@ export function UserProfileDropdown() {
           </span>
 
           <Avatar className="size-5">
-            <AvatarImage src={profile.user_metadata.avatar || ''} />
+            <AvatarImage src={userMetadata?.avatar || ''} />
             <AvatarFallback asChild>
               <div className="size-5 bg-gradient-to-r from-emerald-500 to-indigo-400" />
             </AvatarFallback>

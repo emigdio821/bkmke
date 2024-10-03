@@ -98,7 +98,7 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
           {ogInfo?.imageUrl && (
             <CardFooter>
               <img
-                className="h-36 w-full rounded-xxs bg-muted object-cover md:h-64"
+                className="h-36 w-full rounded-sm bg-muted object-cover md:h-64"
                 src={ogInfo.imageUrl}
                 alt="Bookmark"
               />

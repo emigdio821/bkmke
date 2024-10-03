@@ -30,82 +30,48 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
   return (
     <Collapsible open={isCollapsed} onOpenChange={setIsCollapsed} className="w-full">
       <div className="flex items-center justify-between space-x-1">
-        {!href ? (
-          <>
-            <CollapsibleTrigger className="[&[data-state=open]>div>span.chevron>svg]:rotate-90" asChild>
-              <Button
-                variant="ghost"
-                className={cn('block flex-auto overflow-hidden', {
-                  'bg-accent': active,
-                })}
-              >
-                <div className="flex items-center">
-                  <span className="chevron mr-2">
-                    <IconChevronRight className="size-4" />
-                  </span>
-                  {Icon && (
-                    <span className="mr-2">
-                      <Icon className="size-4" />
-                    </span>
-                  )}
-                  <span className="truncate">{label}</span>
-                  {typeof itemCount === 'number' && itemCount > 0 && (
-                    <span className="ml-1 text-xs text-muted-foreground">({itemCount})</span>
-                  )}
-                </div>
-              </Button>
-            </CollapsibleTrigger>
-            {actions && <span>{actions}</span>}
-          </>
-        ) : (
-          <>
-            <CollapsibleTrigger
-              className="[&[data-state=open]>div>span.chevron>svg]:rotate-90"
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                setIsCollapsed((prev) => !prev)
-              }}
-              asChild
-            >
-              <Button
-                variant="ghost"
-                className={cn('block flex-auto overflow-hidden', {
-                  'bg-accent': active,
-                })}
-                onClick={(e) => {
-                  e.stopPropagation()
-                }}
-              >
-                <div className="flex items-center">
-                  <span className="chevron mr-2">
-                    <IconChevronRight className="size-4" />
-                  </span>
-                  {Icon && (
-                    <span className="mr-2">
-                      <Icon className="size-4" />
-                    </span>
-                  )}
+        <CollapsibleTrigger
+          className="[&[data-state=open]>div>span.chevron>svg]:rotate-90"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            setIsCollapsed((prev) => !prev)
+          }}
+          asChild
+        >
+          <Button
+            variant="ghost"
+            className={cn('block flex-auto overflow-hidden', {
+              'bg-accent': active,
+            })}
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+          >
+            <div className="flex items-center">
+              <span className="chevron mr-2">
+                <IconChevronRight className="size-4" />
+              </span>
+              {Icon && (
+                <span className="mr-2">
+                  <Icon className="size-4" />
+                </span>
+              )}
 
-                  <Button asChild variant="link" className="block truncate text-foreground">
-                    <Link
-                      href={href}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                      }}
-                    >
-                      {label}
-                    </Link>
-                  </Button>
-                  {typeof itemCount === 'number' && itemCount > 0 && (
-                    <span className="ml-1 text-xs text-muted-foreground">({itemCount})</span>
-                  )}
-                </div>
-              </Button>
-            </CollapsibleTrigger>
-            {actions && <span>{actions}</span>}
-          </>
-        )}
+              {href ? (
+                <Button asChild variant="link" className="block truncate text-foreground">
+                  <Link href={href}>{label}</Link>
+                </Button>
+              ) : (
+                <span className="truncate">{label}</span>
+              )}
+              {typeof itemCount === 'number' && itemCount > 0 && (
+                <span className="ml-1 text-xs text-muted-foreground">({itemCount})</span>
+              )}
+            </div>
+          </Button>
+        </CollapsibleTrigger>
+        {actions && <span>{actions}</span>}
       </div>
       <CollapsibleContent className="space-y-1 py-1 pl-4">
         <NavItem menus={submenus} />

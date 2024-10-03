@@ -19,7 +19,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
   return (
     <div className="mb-4 flex flex-col-reverse items-center gap-2 md:flex-row">
       <Input
-        className="max-w-sm"
+        className="max-w-sm bg-card"
         placeholder="Filter by name or description"
         onChange={(event) => {
           const value = event.target.value

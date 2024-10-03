@@ -7,7 +7,7 @@ import { TypographyH4 } from './ui/typography'
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-10 block w-full bg-background md:hidden">
+    <header className="sticky top-0 z-10 block w-full bg-card md:hidden">
       <div className="flex h-14 items-center border-b px-4 md:px-6">
         <div className="flex items-center space-x-2">
           <Sheet>

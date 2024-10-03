@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import type { UserMetadata } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { User } from '@supabase/auth-js'
 import { useQueryClient } from '@tanstack/react-query'
@@ -28,11 +29,12 @@ export function EditDialog({ user }: { user: User }) {
   const supabase = createClient()
   const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
+  const userMetadata = user.user_metadata as UserMetadata
   const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
     defaultValues: {
-      name: user.user_metadata.name || '',
-      avatar: user.user_metadata.avatar || '',
+      name: userMetadata?.name || '',
+      avatar: userMetadata?.avatar || '',
       password: '',
     },
   })

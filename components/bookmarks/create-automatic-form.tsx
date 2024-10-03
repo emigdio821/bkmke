@@ -136,7 +136,7 @@ export function CreateAutomaticForm() {
                         </SelectTrigger>
                         <SelectContent>
                           {getFoldersData.map((folder) => (
-                            <SelectItem key={`${folder.value}-folder-select`} value={`${folder.value}`}>
+                            <SelectItem key={`${folder.value}-folder-select`} value={folder.value}>
                               {folder.label}
                             </SelectItem>
                           ))}
