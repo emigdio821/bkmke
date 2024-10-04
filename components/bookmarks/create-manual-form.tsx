@@ -1,11 +1,10 @@
 'use client'
 
-import { useMemo } from 'react'
+import { Fragment } from 'react'
 import type { OGInfo } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconPlus } from '@tabler/icons-react'
-import { useQueryClient } from '@tanstack/react-query'
+import { IconChevronRight, IconPlus } from '@tabler/icons-react'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -14,12 +13,15 @@ import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/cons
 import { createManualBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
@@ -28,10 +30,10 @@ import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
 export function CreateManualForm() {
-  const queryClient = useQueryClient()
   const supabase = createClient()
-  const { data: tags } = useTags()
-  const { data: folders } = useFolders()
+  const { invalidateQueries } = useInvalidateQueries()
+  const { data: tags, isLoading: tagsLoading } = useTags()
+  const { data: folders, isLoading: foldersLoading } = useFolders()
   const form = useForm<z.infer<typeof createManualBookmarkSchema>>({
     resolver: zodResolver(createManualBookmarkSchema),
     defaultValues: {
@@ -40,36 +42,9 @@ export function CreateManualForm() {
       description: '',
       tags: [],
       folderId: '',
+      isFavorite: false,
     },
   })
-
-  const getTagsData = useMemo(() => {
-    const data = []
-    if (tags) {
-      for (const tag of tags) {
-        data.push({
-          label: tag.name,
-          value: tag.id.toString(),
-        })
-      }
-    }
-
-    return data
-  }, [tags])
-
-  const getFoldersData = useMemo(() => {
-    const data = []
-    if (folders) {
-      for (const folder of folders) {
-        data.push({
-          label: folder.name,
-          value: folder.id.toString(),
-        })
-      }
-    }
-
-    return data
-  }, [folders])
 
   async function onSubmit(values: z.infer<typeof createManualBookmarkSchema>) {
     const { name, description, url, tags: tagIds, folderId } = values
@@ -122,9 +97,7 @@ export function CreateManualForm() {
       return
     }
 
-    await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
+    await invalidateQueries([BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY])
     toast.success('Success', { description: 'Bookmark has been created.' })
     await NiceModal.hide(CreateBookmarkDialog)
     NiceModal.remove(CreateBookmarkDialog)
@@ -160,7 +133,7 @@ export function CreateManualForm() {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea className="max-h-40" {...field} />
+                  <Textarea className="h-28 max-h-40" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -203,20 +176,37 @@ export function CreateManualForm() {
                         </>
                       )}
                     </FormLabel>
-                    <FormControl>
-                      <Select onValueChange={field.onChange} value={field.value} disabled={!getFoldersData.length}>
-                        <SelectTrigger>
-                          <SelectValue placeholder={getFoldersData.length > 0 ? 'Select folder' : 'No folders yet'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {getFoldersData.map((folder) => (
-                            <SelectItem key={`${folder.value}-folder-select`} value={folder.value}>
-                              {folder.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
+                    {foldersLoading ? (
+                      <Skeleton className="h-9" />
+                    ) : (
+                      <>
+                        {folders && (
+                          <FormControl>
+                            <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                              <SelectTrigger>
+                                <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {folders.map((folder) => (
+                                  <Fragment key={`parent-folder-${folder.id}`}>
+                                    <SelectItem value={`${folder.id}`}>{folder.name}</SelectItem>
+                                    {folder.children.map((subfolder) => (
+                                      <SelectItem key={`subfolder-${subfolder.id}`} value={`${subfolder.id}`}>
+                                        <span className="flex items-center">
+                                          <span className="text-xs text-muted-foreground">{folder.name}</span>
+                                          <IconChevronRight className="size-3.5 text-muted-foreground" />
+                                          {subfolder.name}
+                                        </span>
+                                      </SelectItem>
+                                    ))}
+                                  </Fragment>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                        )}
+                      </>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )
@@ -240,14 +230,22 @@ export function CreateManualForm() {
                 <FormItem className="flex-1">
                   <FormLabel>Tags</FormLabel>
                   <FormControl>
-                    <MultiSelect
-                      placeholder="Select tags"
-                      options={getTagsData}
-                      emptyText="No tags yet"
-                      onChange={(options) => {
-                        form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
-                      }}
-                    />
+                    {tagsLoading ? (
+                      <Skeleton className="h-9" />
+                    ) : (
+                      <>
+                        {tags && (
+                          <MultiSelect
+                            placeholder="Select tags"
+                            options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+                            emptyText="No tags yet"
+                            onChange={(options) => {
+                              form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
+                            }}
+                          />
+                        )}
+                      </>
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -263,6 +261,23 @@ export function CreateManualForm() {
               <IconPlus className="size-4" />
             </Button>
           </div>
+
+          <FormField
+            name="isFavorite"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center space-x-2">
+                  <FormControl>
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <FormLabel>Add to favorites</FormLabel>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <DialogFooter className="pt-6">
             <DialogClose asChild>
               <Button type="button" variant="outline">

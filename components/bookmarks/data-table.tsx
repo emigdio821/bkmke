@@ -40,6 +40,7 @@ export function DataTable({ columns, data }: DataTableProps) {
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    autoResetPageIndex: false,
     state: {
       sorting,
       rowSelection,

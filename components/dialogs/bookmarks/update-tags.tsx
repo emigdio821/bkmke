@@ -1,10 +1,16 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useState } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
-import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import {
+  BOOKMARKS_QUERY,
+  FAV_BOOKMARKS_QUERY,
+  FOLDER_ITEMS_QUERY,
+  FOLDERS_QUERY,
+  TAG_ITEMS_QUERY,
+} from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
@@ -35,10 +41,10 @@ interface MultipleBookmarks {
 type UpdateTagsDialogProps = SingleBookmark | MultipleBookmarks
 
 export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: UpdateTagsDialogProps) => {
-  const queryClient = useQueryClient()
-  const supabase = createClient()
   const modal = useModal()
+  const supabase = createClient()
   const [isLoading, setLoading] = useState(false)
+  const { invalidateQueries } = useInvalidateQueries()
   const [selectValue, setSelectValue] = useState<string[]>(getInitialItems())
   const { data: tags, isLoading: tagsLoading } = useTags()
   const [progress, setProgress] = useState(0)
@@ -52,19 +58,6 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
       .filter((id) => id !== undefined)
       .map((id) => id.toString())
   }
-
-  const getTagsData = useMemo(
-    () => (tags ? tags.map((tag) => ({ label: tag.name, value: tag.id.toString() })) : []),
-    [tags],
-  )
-
-  const handleRefreshData = useCallback(async () => {
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] }),
-      queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] }),
-      queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] }),
-    ])
-  }, [queryClient])
 
   async function handleTagUpdate(bookmarksToUpdate: Bookmark[], isDelete: boolean) {
     const completedCount = { count: 0 }
@@ -99,7 +92,13 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
     if (errors.length > 0) {
       toast.error('Error', { description: 'Unable to update tags at this time, try again.' })
     } else {
-      await handleRefreshData()
+      await invalidateQueries([
+        FOLDERS_QUERY,
+        BOOKMARKS_QUERY,
+        FOLDER_ITEMS_QUERY,
+        TAG_ITEMS_QUERY,
+        FAV_BOOKMARKS_QUERY,
+      ])
       toast.success('Success', { description: 'Tags have been updated.' })
     }
   }
@@ -150,19 +149,20 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
         {tagsLoading ? (
           <Skeleton className="h-9 w-full" />
         ) : (
-          tags &&
-          tags.length > 0 && (
-            <div className="space-y-2">
-              <Label>Tags</Label>
-              <MultiSelect
-                placeholder="Select tags"
-                value={selectValue}
-                options={getTagsData}
-                emptyText="No tags yet"
-                onChange={setSelectValue}
-              />
-            </div>
-          )
+          <div className="space-y-2">
+            <Label>Tags</Label>
+            <>
+              {tags && (
+                <MultiSelect
+                  value={selectValue}
+                  emptyText="No tags yet"
+                  placeholder="Select tags"
+                  onChange={setSelectValue}
+                  options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+                />
+              )}
+            </>
+          </div>
         )}
 
         {progress > 0 && <Progress value={progress} />}

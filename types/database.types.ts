@@ -9,6 +9,7 @@ export type Database = {
           description: string | null
           folder_id: number | null
           id: number
+          is_favorite: boolean
           name: string
           og_info: Json | null
           updated_at: string | null
@@ -19,6 +20,7 @@ export type Database = {
           description?: string | null
           folder_id?: number | null
           id?: number
+          is_favorite?: boolean
           name: string
           og_info?: Json | null
           updated_at?: string | null
@@ -29,6 +31,7 @@ export type Database = {
           description?: string | null
           folder_id?: number | null
           id?: number
+          is_favorite?: boolean
           name?: string
           og_info?: Json | null
           updated_at?: string | null

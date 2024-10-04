@@ -29,12 +29,14 @@ export const createManualBookmarkSchema = z.object({
   url: optionalString.url(),
   tags: optionalString.array(),
   folderId: optionalString,
+  isFavorite: z.boolean(),
 })
 
 export const createAutomaticBookmarkSchema = z.object({
   folderId: optionalString,
   url: requiredString.url(),
   tags: optionalString.array(),
+  isFavorite: z.boolean(),
 })
 
 export const editBookmarkSchema = z.object({
@@ -43,7 +45,7 @@ export const editBookmarkSchema = z.object({
   url: requiredString.url(),
   tags: optionalString.array(),
   folderId: optionalString,
-
+  isFavorite: z.boolean(),
   updateOG: z.boolean(),
   imageUrl: optionalString,
   faviconUrl: optionalString,

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import { IconHash, IconWorld } from '@tabler/icons-react'
+import { IconHash, IconHeart, IconHeartFilled, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { formatDateFromString, simplifiedURL } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -71,7 +71,15 @@ export const columns: Array<ColumnDef<Bookmark>> = [
               {bookmark.description}
             </p>
           )}
-          <small className="text-muted-foreground/80">{formatDateFromString(bookmark.created_at)}</small>
+          <div className="flex items-center space-x-1 text-muted-foreground/80">
+            {bookmark.is_favorite && (
+              <>
+                <IconHeartFilled className="size-3" />
+                <small>·</small>
+              </>
+            )}
+            <small>{formatDateFromString(bookmark.created_at)}</small>
+          </div>
         </div>
       )
     },

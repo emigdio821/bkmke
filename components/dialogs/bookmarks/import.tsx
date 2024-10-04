@@ -1,19 +1,25 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconPlus, IconTrash, IconUpload } from '@tabler/icons-react'
-import { useQueryClient } from '@tanstack/react-query'
+import { IconChevronRight, IconPlus, IconTrash, IconUpload } from '@tabler/icons-react'
 import { useDropzone } from 'react-dropzone'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 import { createBookmark } from '@/lib/api'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import {
+  BOOKMARKS_QUERY,
+  FAV_BOOKMARKS_QUERY,
+  FOLDER_ITEMS_QUERY,
+  FOLDERS_QUERY,
+  TAG_ITEMS_QUERY,
+} from '@/lib/constants'
 import { importBookmarksSchema } from '@/lib/schemas/form'
 import { cn, formatBytes } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
@@ -28,6 +34,7 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Progress } from '@/components/ui/progress'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { TypographyInlineCode } from '@/components/ui/typography'
@@ -41,10 +48,10 @@ const multipleFailureMessage = 'Some bookmarks failed to import, try again.'
 
 export const ImportBookmarksDialog = NiceModal.create(() => {
   const modal = useModal()
-  const queryClient = useQueryClient()
-  const { data: tags } = useTags()
-  const { data: folders } = useFolders()
+  const { data: tags, isLoading: tagsLoading } = useTags()
+  const { data: folders, isLoading: foldersLoading } = useFolders()
   const [progress, setProgress] = useState(0)
+  const { invalidateQueries } = useInvalidateQueries()
   const [dndFiles, setDndFiles] = useState<File[]>([])
   const form = useForm<z.infer<typeof importBookmarksSchema>>({
     resolver: zodResolver(importBookmarksSchema),
@@ -54,40 +61,6 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       folderId: '',
     },
   })
-
-  async function handleRefreshData() {
-    await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
-  }
-
-  const getTagsData = useMemo(() => {
-    const data = []
-    if (tags) {
-      for (const tag of tags) {
-        data.push({
-          label: tag.name,
-          value: tag.id.toString(),
-        })
-      }
-    }
-
-    return data
-  }, [tags])
-
-  const getFoldersData = useMemo(() => {
-    const data = []
-    if (folders) {
-      for (const folder of folders) {
-        data.push({
-          label: folder.name,
-          value: folder.id.toString(),
-        })
-      }
-    }
-
-    return data
-  }, [folders])
 
   const onDrop = useCallback(
     (files: File[]) => {
@@ -185,7 +158,13 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         description: areMultipleBks ? multipleFailureMessage : singleFailureMessage,
       })
     } else {
-      await handleRefreshData()
+      await invalidateQueries([
+        FOLDERS_QUERY,
+        BOOKMARKS_QUERY,
+        FOLDER_ITEMS_QUERY,
+        TAG_ITEMS_QUERY,
+        FAV_BOOKMARKS_QUERY,
+      ])
       toast.success('Success', {
         description: areMultipleBks ? (
           <>
@@ -199,18 +178,6 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
 
     await modal.hide()
     modal.remove()
-
-    try {
-      await Promise.all(importPromises)
-      await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-      await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
-      await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
-      toast.success('Success', { description: 'Bookmarks has been imported.' })
-      await modal.hide()
-      modal.remove()
-    } catch {
-      toast.error('Error', { description: 'Unable to import bookmarks at this time, try again.' })
-    }
   }
 
   return (
@@ -335,20 +302,37 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                           </>
                         )}
                       </FormLabel>
-                      <FormControl>
-                        <Select onValueChange={field.onChange} value={field.value} disabled={!getFoldersData.length}>
-                          <SelectTrigger>
-                            <SelectValue placeholder={getFoldersData.length > 0 ? 'Select folder' : 'No folders yet'} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {getFoldersData.map((folder) => (
-                              <SelectItem key={`${folder.value}-folder-select`} value={folder.value}>
-                                {folder.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
+                      {foldersLoading ? (
+                        <Skeleton className="h-9" />
+                      ) : (
+                        <>
+                          {folders && (
+                            <FormControl>
+                              <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {folders.map((folder) => (
+                                    <Fragment key={`parent-folder-${folder.id}`}>
+                                      <SelectItem value={`${folder.id}`}>{folder.name}</SelectItem>
+                                      {folder.children.map((subfolder) => (
+                                        <SelectItem key={`subfolder-${subfolder.id}`} value={`${subfolder.id}`}>
+                                          <span className="flex items-center">
+                                            <span className="text-xs text-muted-foreground">{folder.name}</span>
+                                            <IconChevronRight className="size-3.5 text-muted-foreground" />
+                                            {subfolder.name}
+                                          </span>
+                                        </SelectItem>
+                                      ))}
+                                    </Fragment>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                          )}
+                        </>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )
@@ -373,14 +357,22 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                   <FormItem className="flex-1">
                     <FormLabel>Tags</FormLabel>
                     <FormControl>
-                      <MultiSelect
-                        placeholder="Select tags"
-                        options={getTagsData}
-                        emptyText="No tags yet"
-                        onChange={(options) => {
-                          form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
-                        }}
-                      />
+                      {tagsLoading ? (
+                        <Skeleton className="h-9" />
+                      ) : (
+                        <>
+                          {tags && (
+                            <MultiSelect
+                              placeholder="Select tags"
+                              options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+                              emptyText="No tags yet"
+                              onChange={(options) => {
+                                form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
+                              }}
+                            />
+                          )}
+                        </>
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>

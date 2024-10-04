@@ -6,12 +6,24 @@ import {
   IconDots,
   IconExternalLink,
   IconFolderShare,
+  IconHeart,
+  IconHeartOff,
   IconId,
   IconPencil,
   IconTags,
   IconTrash,
 } from '@tabler/icons-react'
+import { toast } from 'sonner'
+import {
+  BOOKMARKS_QUERY,
+  FAV_BOOKMARKS_QUERY,
+  FOLDER_ITEMS_QUERY,
+  FOLDERS_QUERY,
+  TAG_ITEMS_QUERY,
+} from '@/lib/constants'
+import { createClient } from '@/lib/supabase/client'
 import { handleCopyToClipboard } from '@/lib/utils'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -32,6 +44,48 @@ interface RowActionsProps {
 }
 
 export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
+  const supabase = createClient()
+  const { invalidateQueries } = useInvalidateQueries()
+
+  async function handleToggleFavorite() {
+    const updatePromise = new Promise((resolve, reject) => {
+      supabase
+        .from('bookmarks')
+        .update({
+          url: bookmark.url,
+          name: bookmark.name,
+          description: bookmark.description,
+          folder_id: bookmark.folder_id,
+          og_info: bookmark.og_info,
+          is_favorite: !bookmark.is_favorite,
+        })
+        .eq('id', bookmark.id)
+        .then(({ error }) => {
+          if (error) {
+            reject(error.message)
+          }
+
+          resolve('ok')
+        })
+    })
+
+    toast.promise(updatePromise, {
+      loading: 'Updating favorite status...',
+      success: async () => {
+        await invalidateQueries([
+          FOLDERS_QUERY,
+          BOOKMARKS_QUERY,
+          FOLDER_ITEMS_QUERY,
+          TAG_ITEMS_QUERY,
+          FAV_BOOKMARKS_QUERY,
+        ])
+
+        return 'Favorite status has been updated.'
+      },
+      error: 'Unable to toggle favorite at this time, try again.',
+    })
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -94,6 +148,23 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
         >
           <IconFolderShare className="mr-2 size-4 text-muted-foreground" />
           Move to folder
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            void handleToggleFavorite()
+          }}
+        >
+          {bookmark.is_favorite ? (
+            <>
+              <IconHeartOff className="mr-2 size-4 text-muted-foreground" />
+              Remove from favorites
+            </>
+          ) : (
+            <>
+              <IconHeart className="mr-2 size-4 text-muted-foreground" />
+              Add to favorites
+            </>
+          )}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem

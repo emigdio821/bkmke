@@ -1,4 +1,5 @@
 export const BOOKMARKS_QUERY = 'bookmarks'
+export const FAV_BOOKMARKS_QUERY = 'favorite-bookmarks'
 export const FOLDERS_QUERY = 'folders'
 export const TAGS_QUERY = 'tags'
 export const PROFILE_QUERY = 'profile'

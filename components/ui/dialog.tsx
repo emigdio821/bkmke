@@ -4,6 +4,7 @@ import * as React from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { IconX } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
+import { Button } from './button'
 
 const Dialog = DialogPrimitive.Root
 
@@ -43,9 +44,11 @@ const DialogContent = React.forwardRef<
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-          <IconX className="size-4" />
-          <span className="sr-only">Close</span>
+        <DialogPrimitive.Close asChild>
+          <Button size="icon" variant="ghost" className="absolute right-4 top-4 size-6">
+            <IconX className="size-4" />
+            <span className="sr-only">Close</span>
+          </Button>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogOverlay>
@@ -54,7 +57,7 @@ const DialogContent = React.forwardRef<
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)} {...props} />
+  <div className={cn('flex flex-col space-y-1.5 pr-6 text-center sm:text-left', className)} {...props} />
 )
 DialogHeader.displayName = 'DialogHeader'
 

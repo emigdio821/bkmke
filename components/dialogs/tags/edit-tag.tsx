@@ -2,14 +2,14 @@
 
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 import type { Tables } from '@/types/database.types'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -18,8 +18,8 @@ import { Spinner } from '@/components/spinner'
 
 export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> }) => {
   const modal = useModal()
-  const queryClient = useQueryClient()
   const supabase = createClient()
+  const { invalidateQueries } = useInvalidateQueries()
   const form = useForm<z.infer<typeof createTagSchema>>({
     resolver: zodResolver(createTagSchema),
     defaultValues: {
@@ -38,10 +38,8 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
     toast.success('Success', {
       description: 'Tag has been updated.',
     })
-    await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
+
+    await invalidateQueries([TAGS_QUERY, BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
     await modal.hide()
   }
 

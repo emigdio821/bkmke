@@ -108,7 +108,7 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea className="max-h-40" {...field} />
+                    <Textarea className="h-28 max-h-40" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

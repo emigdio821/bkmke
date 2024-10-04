@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { IconBookmarks } from '@tabler/icons-react'
+import { IconBookmarks, IconHeart } from '@tabler/icons-react'
 import { FoldersNavItems } from '@/components/folders/nav-items'
 import { TagsNavItems } from '@/components/tags/nav-items'
 import { UserProfileDropdown } from '@/components/user-profile-dropdown'
@@ -14,6 +14,19 @@ export function NavContent() {
     <nav className="h-full w-full overflow-auto">
       <ul className="flex h-full flex-col items-start space-y-1">
         <li className="w-full space-y-2 px-4 pt-4">
+          <NavItem
+            menus={[
+              {
+                href: '/favorites',
+                label: 'Favorites',
+                active: pathname === '/favorites',
+                icon: IconHeart,
+                submenus: [],
+              },
+            ]}
+          />
+        </li>
+        <li className="w-full space-y-2 px-4">
           <NavItem
             menus={[
               {

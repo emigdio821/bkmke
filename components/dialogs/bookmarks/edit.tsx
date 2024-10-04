@@ -1,18 +1,18 @@
 'use client'
 
-import { useMemo } from 'react'
+import { Fragment } from 'react'
 import type { BkOGInfo, Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
-// import axios from 'axios'
+import { IconChevronRight } from '@tabler/icons-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -28,16 +28,17 @@ import {
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
 export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bookmark }) => {
   const modal = useModal()
+  const { invalidateQueries } = useInvalidateQueries()
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
-  const { data: tags } = useTags()
-  const { data: folders } = useFolders()
-  const queryClient = useQueryClient()
+  const { data: tags, isLoading: tagsLoading } = useTags()
+  const { data: folders, isLoading: foldersLoading } = useFolders()
   const supabase = createClient()
   const tagItems = bookmark.tag_items
     .map((item) => item.tag?.id)
@@ -54,39 +55,12 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       imageUrl: ogInfo.imageUrl,
       faviconUrl: ogInfo.faviconUrl,
       updateOG: false,
+      isFavorite: bookmark.is_favorite,
     },
   })
 
-  const getTagsData = useMemo(() => {
-    const data = []
-    if (tags) {
-      for (const tag of tags) {
-        data.push({
-          label: tag.name,
-          value: tag.id.toString(),
-        })
-      }
-    }
-
-    return data
-  }, [tags])
-
-  const getFoldersData = useMemo(() => {
-    const data = []
-    if (folders) {
-      for (const folder of folders) {
-        data.push({
-          label: folder.name,
-          value: folder.id.toString(),
-        })
-      }
-    }
-
-    return data
-  }, [folders])
-
   async function onSubmit(values: z.infer<typeof editBookmarkSchema>) {
-    const { name, description, url, tags: tagIds, folderId, updateOG, faviconUrl, imageUrl } = values
+    const { name, description, isFavorite, url, tags: tagIds, folderId, updateOG, faviconUrl, imageUrl } = values
 
     let ogInfoPayload = null
 
@@ -97,29 +71,16 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       } satisfies BkOGInfo
     } else {
       ogInfoPayload = {
-        imageUrl: '',
-        faviconUrl: '',
+        imageUrl: ogInfo.imageUrl,
+        faviconUrl: ogInfo.faviconUrl,
       }
-      // try {
-      //   const { data: ogInfo } = await axios.get<OGInfo>('/api/og-info', { params: { url } })
-
-      //   ogInfoPayload = {
-      //     imageUrl: ogInfo.imageUrl,
-      //     faviconUrl: ogInfo.faviconUrl,
-      //   } satisfies BkOGInfo
-      // } catch (err) {
-      //   ogInfoPayload = {
-      //     imageUrl: '',
-      //     faviconUrl: '',
-      //   } satisfies BkOGInfo
-      //   console.log('Get og info error:', err)
-      // }
     }
 
     const bookmarkPayload = {
       url,
       name,
       description,
+      is_favorite: isFavorite,
       folder_id: folderId ? Number(folderId) : null,
       og_info: ogInfoPayload,
     }
@@ -149,9 +110,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       await supabase.from('tag_items').delete().eq('bookmark_id', bookmark.id)
     }
 
-    await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] })
+    await invalidateQueries([BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
     toast.success('Success', { description: 'Bookmark has been updated.' })
     await modal.hide()
     modal.remove()
@@ -209,7 +168,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea className="max-h-40" {...field} />
+                      <Textarea className="h-28 max-h-40" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -252,22 +211,39 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                             </>
                           )}
                         </FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} value={field.value} disabled={!getFoldersData.length}>
-                            <SelectTrigger>
-                              <SelectValue
-                                placeholder={getFoldersData.length > 0 ? 'Select folder' : 'No folders yet'}
-                              />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {getFoldersData.map((folder) => (
-                                <SelectItem key={`${folder.value}-folder-select`} value={folder.value}>
-                                  {folder.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
+                        {foldersLoading ? (
+                          <Skeleton className="h-9" />
+                        ) : (
+                          <>
+                            {folders && (
+                              <FormControl>
+                                <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                                  <SelectTrigger>
+                                    <SelectValue
+                                      placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'}
+                                    />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {folders.map((folder) => (
+                                      <Fragment key={`parent-folder-${folder.id}`}>
+                                        <SelectItem value={`${folder.id}`}>{folder.name}</SelectItem>
+                                        {folder.children.map((subfolder) => (
+                                          <SelectItem key={`subfolder-${subfolder.id}`} value={`${subfolder.id}`}>
+                                            <span className="flex items-center">
+                                              <span className="text-xs text-muted-foreground">{folder.name}</span>
+                                              <IconChevronRight className="size-3.5 text-muted-foreground" />
+                                              {subfolder.name}
+                                            </span>
+                                          </SelectItem>
+                                        ))}
+                                      </Fragment>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                            )}
+                          </>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )
@@ -282,21 +258,44 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                     <FormItem className="flex-1">
                       <FormLabel>Tags</FormLabel>
                       <FormControl>
-                        <MultiSelect
-                          placeholder="Select tags"
-                          options={getTagsData}
-                          value={tagItems}
-                          emptyText="No tags yet"
-                          onChange={(options) => {
-                            form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
-                          }}
-                        />
+                        {tagsLoading ? (
+                          <Skeleton className="h-9" />
+                        ) : (
+                          <>
+                            {tags && (
+                              <MultiSelect
+                                placeholder="Select tags"
+                                options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+                                emptyText="No tags yet"
+                                onChange={(options) => {
+                                  form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
+                                }}
+                              />
+                            )}
+                          </>
+                        )}
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
+
+              <FormField
+                name="isFavorite"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center space-x-2">
+                      <FormControl>
+                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                      </FormControl>
+                      <FormLabel>Add to favorites</FormLabel>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 name="updateOG"
@@ -313,7 +312,6 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   </FormItem>
                 )}
               />
-
               {form.getValues('updateOG') && (
                 <>
                   <FormField

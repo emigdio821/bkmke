@@ -1,10 +1,16 @@
 import NiceModal from '@ebay/nice-modal-react'
 import { IconDots, IconFolderPlus, IconPencil, IconTrash } from '@tabler/icons-react'
-import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
-import { BOOKMARKS_QUERY, FOLDERS_QUERY } from '@/lib/constants'
+import {
+  BOOKMARKS_QUERY,
+  FAV_BOOKMARKS_QUERY,
+  FOLDER_ITEMS_QUERY,
+  FOLDERS_QUERY,
+  TAG_ITEMS_QUERY,
+} from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -19,10 +25,10 @@ import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
 import { EditFolderDialog } from '@/components/dialogs/folders/edit-folder'
 
 export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
-  const queryClient = useQueryClient()
+  const supabase = createClient()
+  const { invalidateQueries } = useInvalidateQueries()
 
   async function handleDeleteFolder(id: number) {
-    const supabase = createClient()
     const { error } = await supabase.from('folders').delete().eq('id', id)
 
     if (error) {
@@ -36,8 +42,8 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
         </div>
       ),
     })
-    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
-    await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] })
+
+    await invalidateQueries([FOLDERS_QUERY, BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
   }
 
   return (

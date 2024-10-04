@@ -1,10 +1,10 @@
 import type { Bookmark } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { IconFolderShare, IconReload, IconTags, IconTrash } from '@tabler/icons-react'
-import { useQueryClient } from '@tanstack/react-query'
 import type { Table } from '@tanstack/react-table'
 import { toast } from 'sonner'
 import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { DeleteBookmarksDialog } from '@/components/dialogs/bookmarks/delete'
@@ -12,17 +12,13 @@ import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folde
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 
 export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
-  const queryClient = useQueryClient()
+  const { invalidateQueries } = useInvalidateQueries()
   const selectedRows = table.getSelectedRowModel().rows
 
   async function handleReloadTableData() {
-    const promises = [
-      queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] }),
-      queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] }),
-      queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] }),
-    ]
+    const promise = invalidateQueries([BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY])
 
-    toast.promise(Promise.all(promises), {
+    toast.promise(promise, {
       loading: 'Reloading table data...',
       success: 'Table data reloaded.',
       error: 'Unable to reload data at this time, try again.',

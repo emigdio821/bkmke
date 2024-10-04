@@ -1,10 +1,16 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
-import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import {
+  BOOKMARKS_QUERY,
+  FAV_BOOKMARKS_QUERY,
+  FOLDER_ITEMS_QUERY,
+  FOLDERS_QUERY,
+  TAG_ITEMS_QUERY,
+} from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -35,19 +41,11 @@ const singleFailureMessage = 'Unable to delete bookmark at this time, try again.
 const multipleFailureMessage = 'Some bookmarks failed to be deleted, try again.'
 
 export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: DeleteBookmarksDialogProps) => {
-  const queryClient = useQueryClient()
-  const supabase = createClient()
   const modal = useModal()
+  const supabase = createClient()
+  const { invalidateQueries } = useInvalidateQueries()
   const [isLoading, setLoading] = useState(false)
   const [progress, setProgress] = useState(0)
-
-  const handleRefreshData = useCallback(async () => {
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] }),
-      queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] }),
-      queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] }),
-    ])
-  }, [queryClient])
 
   async function handleDeleteBookmarks(bookmarksToMove: Bookmark[]) {
     setLoading(true)
@@ -90,7 +88,13 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
         description: movePromises.length > 1 ? multipleFailureMessage : singleFailureMessage,
       })
     } else {
-      await handleRefreshData()
+      await invalidateQueries([
+        FOLDERS_QUERY,
+        BOOKMARKS_QUERY,
+        FOLDER_ITEMS_QUERY,
+        TAG_ITEMS_QUERY,
+        FAV_BOOKMARKS_QUERY,
+      ])
       toast.success('Success', {
         description: areMultipleBks ? (
           <>

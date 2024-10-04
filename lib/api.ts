@@ -5,7 +5,7 @@ import type { createAutomaticBookmarkSchema } from './schemas/form'
 import { createClient } from './supabase/client'
 
 export async function createBookmark(values: z.infer<typeof createAutomaticBookmarkSchema>) {
-  const { folderId, tags: tagIds, url } = values
+  const { folderId, tags: tagIds, url, isFavorite } = values
   if (!url) {
     return { error: 'Missing URL value' }
   }
@@ -19,6 +19,7 @@ export async function createBookmark(values: z.infer<typeof createAutomaticBookm
     bookmarkPayload = {
       url,
       name: ogInfo.title,
+      is_favorite: isFavorite,
       description: ogInfo.description,
       folder_id: folderId ? Number(folderId) : null,
       og_info: {
@@ -33,6 +34,7 @@ export async function createBookmark(values: z.infer<typeof createAutomaticBookm
       url,
       name: url,
       description: '',
+      is_favorite: isFavorite,
       folder_id: folderId ? Number(folderId) : null,
       og_info: {
         title: url,

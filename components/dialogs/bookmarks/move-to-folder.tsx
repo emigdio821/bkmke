@@ -1,12 +1,18 @@
-import { Fragment, useCallback, useState } from 'react'
+import { Fragment, useState } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { IconChevronRight } from '@tabler/icons-react'
-import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import {
+  BOOKMARKS_QUERY,
+  FAV_BOOKMARKS_QUERY,
+  FOLDER_ITEMS_QUERY,
+  FOLDERS_QUERY,
+  TAG_ITEMS_QUERY,
+} from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -42,25 +48,17 @@ const messages = {
 }
 
 export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: MoveToFolderDialogProps) => {
-  const queryClient = useQueryClient()
   const supabase = createClient()
   const modal = useModal()
   const initialFolderId =
     bookmark?.folder_id?.toString() || (bookmarks?.length === 1 ? bookmarks[0].folder_id?.toString() : '')
 
   const [isLoading, setLoading] = useState(false)
+  const { invalidateQueries } = useInvalidateQueries()
   const [selectValue, setSelectValue] = useState(initialFolderId)
   const { data: folders, isLoading: foldersLoading } = useFolders()
   const bookmarkName = bookmark?.name || (bookmarks?.length === 1 ? bookmarks[0].name : 'Multiple bookmarks')
   const [progress, setProgress] = useState(0)
-
-  const handleRefreshData = useCallback(async () => {
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY] }),
-      queryClient.invalidateQueries({ queryKey: [FOLDER_ITEMS_QUERY] }),
-      queryClient.invalidateQueries({ queryKey: [TAG_ITEMS_QUERY] }),
-    ])
-  }, [queryClient])
 
   async function handleMoveToFolder(bookmarksToMove: Bookmark[]) {
     if (selectValue === initialFolderId && bookmarksToMove.length === 1) {
@@ -93,7 +91,13 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
         description: bookmarksToMove.length > 1 ? messages.multipleFailure : messages.singleFailure,
       })
     } else {
-      await handleRefreshData()
+      await invalidateQueries([
+        FOLDERS_QUERY,
+        BOOKMARKS_QUERY,
+        FOLDER_ITEMS_QUERY,
+        TAG_ITEMS_QUERY,
+        FAV_BOOKMARKS_QUERY,
+      ])
       toast.success('Success', {
         description:
           bookmarksToMove.length > 1 ? `${completedCount.count} bookmarks have been moved.` : messages.singleSuccess,
@@ -166,7 +170,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
                         <SelectItem key={`subfolder-${subfolder.id}`} value={`${subfolder.id}`}>
                           <span className="flex items-center">
                             <span className="text-xs text-muted-foreground">{folder.name}</span>
-                            <IconChevronRight className="size-3.5" />
+                            <IconChevronRight className="size-3.5 text-muted-foreground" />
                             {subfolder.name}
                           </span>
                         </SelectItem>
