@@ -127,6 +127,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         url,
         tags: values.tags,
         folderId: values.folderId,
+        isFavorite: false,
       }).then((result) => {
         completedCount++
         setProgress((completedCount / totalOperations) * 100)
