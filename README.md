@@ -1,6 +1,4 @@
-<kbd>
-  <img src="./public/images/favicon-512x512.png" alt="bkmke - a simple bookmark manager." width="76px" height="76px" />
-</kbd>
+<img src="./public/images/favicon-512x512.png" alt="bkmke - a simple bookmark manager." width="76px" height="76px" />
 
 [bkmke](https://bkmke.vercel.app/) is an open-source simple bookmark manager.
 
@@ -12,6 +10,5 @@
 - [Supabase](https://supabase.com/) - Auth and database.
 - [Vercel](https://vercel.com/) - Hosting.
 
-<kbd>
-  <img src="./public/images/bkmke-preview.jpg" alt="bkmke - preview" width="1000px" height="auto" />
-</kbd>
+#### Preview
+<img src="./public/images/bkmke-preview.jpg" alt="bkmke - preview" width="1000px" height="auto" />
