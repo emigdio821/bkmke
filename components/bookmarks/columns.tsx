@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import { IconHash, IconHeart, IconHeartFilled, IconWorld } from '@tabler/icons-react'
+import { IconHash, IconHeartFilled, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { formatDateFromString, simplifiedURL } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
