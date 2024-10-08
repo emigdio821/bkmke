@@ -14,13 +14,7 @@ interface ProvidersProps {
   children: React.ReactNode
 }
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-})
+const queryClient = new QueryClient()
 
 export function Providers({ children }: ProvidersProps) {
   return (
