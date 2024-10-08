@@ -14,6 +14,7 @@ export type Database = {
           og_info: Json | null
           updated_at: string | null
           url: string
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -25,6 +26,7 @@ export type Database = {
           og_info?: Json | null
           updated_at?: string | null
           url: string
+          user_id?: string
         }
         Update: {
           created_at?: string
@@ -36,6 +38,7 @@ export type Database = {
           og_info?: Json | null
           updated_at?: string | null
           url?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -43,6 +46,13 @@ export type Database = {
             columns: ['folder_id']
             isOneToOne: false
             referencedRelation: 'folders'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'bookmarks_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
             referencedColumns: ['id']
           },
         ]
@@ -55,6 +65,7 @@ export type Database = {
           name: string
           parent_id: number | null
           updated_at: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -63,6 +74,7 @@ export type Database = {
           name: string
           parent_id?: number | null
           updated_at?: string | null
+          user_id?: string
         }
         Update: {
           created_at?: string
@@ -71,6 +83,7 @@ export type Database = {
           name?: string
           parent_id?: number | null
           updated_at?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -78,6 +91,13 @@ export type Database = {
             columns: ['parent_id']
             isOneToOne: false
             referencedRelation: 'folders'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'folders_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
             referencedColumns: ['id']
           },
         ]
@@ -88,18 +108,21 @@ export type Database = {
           created_at: string
           id: number
           tag_id: number
+          user_id: string
         }
         Insert: {
           bookmark_id: number
           created_at?: string
           id?: number
           tag_id: number
+          user_id?: string
         }
         Update: {
           bookmark_id?: number
           created_at?: string
           id?: number
           tag_id?: number
+          user_id?: string
         }
         Relationships: [
           {
@@ -116,6 +139,13 @@ export type Database = {
             referencedRelation: 'tags'
             referencedColumns: ['id']
           },
+          {
+            foreignKeyName: 'tag_items_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       tags: {
@@ -123,18 +153,29 @@ export type Database = {
           created_at: string
           id: number
           name: string
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
           name: string
+          user_id?: string
         }
         Update: {
           created_at?: string
           id?: number
           name?: string
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'tags_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
       }
     }
     Views: {
