@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
             alt="bkmke"
             width={120}
             height={120}
-            src="https://bkmke.vercel.app/images/android-chrome-192x192.png"
+            src="https://bkmke.vercel.app/images/favicon-192x192.png"
             style={{
               borderRadius: '100%',
               objectFit: 'cover',

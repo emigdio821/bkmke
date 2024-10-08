@@ -25,7 +25,7 @@ export const siteConfig = {
     github: 'https://github.com/emigdio821/bkmk',
   },
   icons: {
-    icon: ['/images/favicon.ico'],
+    icon: ['/favicon.ico'],
     shortcut: '/images/favicon-16x16.png',
     apple: '/images/favicon-apple.png',
     other: [

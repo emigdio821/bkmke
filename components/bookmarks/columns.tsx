@@ -40,8 +40,8 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     },
     filterFn: (row, _, value: string) => {
       return (
-        row.original.name.toLowerCase().includes(value) ||
-        row.original.description?.toLowerCase().includes(value) ||
+        row.original.name.toLowerCase().includes(value.toLowerCase()) ||
+        row.original.description?.toLowerCase().includes(value.toLowerCase()) ||
         false
       )
     },

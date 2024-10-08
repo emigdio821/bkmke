@@ -16,6 +16,7 @@ import { useBookmarks } from '@/hooks/use-bookmarks'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { BlurImage } from '@/components/blur-image'
 import { RowActions } from '@/components/bookmarks/row-actions'
 import { Loader } from '@/components/loader'
 
@@ -97,11 +98,9 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
           </CardContent>
           {ogInfo?.imageUrl && (
             <CardFooter>
-              <img
-                className="h-36 w-full rounded-sm bg-muted object-cover md:h-64"
-                src={ogInfo.imageUrl}
-                alt="Bookmark"
-              />
+              <div className="h-36 w-full rounded-sm bg-muted object-cover md:h-64">
+                <BlurImage src={ogInfo.imageUrl} alt={bookmark.name} />
+              </div>
             </CardFooter>
           )}
         </Card>
