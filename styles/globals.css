@@ -28,7 +28,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 0 0% 85%;
+    --ring: 238 25% 54%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -55,7 +55,7 @@
     --destructive-foreground: 240 5.9% 10%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 0 0% 20%;
+    --ring: 238 14% 59%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -68,6 +68,6 @@
   }
 
   body {
-    @apply bg-muted/50 text-foreground;
+    @apply bg-background text-foreground;
   }
 }

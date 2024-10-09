@@ -89,11 +89,7 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="hover:bg-muted-foreground/10 data-[state=open]:bg-muted-foreground/10"
-        >
+        <Button size="icon" variant="ghost" className="hover:bg-muted-foreground/10">
           <span className="sr-only">Open row actions</span>
           <IconDots className="size-4" />
         </Button>

@@ -42,7 +42,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" type="button" variant="ghost" className="data-[state=open]:bg-accent">
+        <Button size="icon" type="button" variant="ghost">
           <span className="sr-only">Open tag actions</span>
           <IconDots className="size-4" />
         </Button>

@@ -56,7 +56,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
                       <span className="font-semibold">This tag is empty.</span>
                       <br />
                       <Button
-                        variant="underlineLink"
+                        variant="underline"
                         onClick={() => {
                           void NiceModal.show(CreateBookmarkDialog)
                         }}
@@ -65,7 +65,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
                       </Button>{' '}
                       or{' '}
                       <Button
-                        variant="underlineLink"
+                        variant="underline"
                         onClick={() => {
                           void NiceModal.show(ImportBookmarksDialog)
                         }}
@@ -74,7 +74,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
                       </Button>{' '}
                       your bookmarks and assign the tags you want. <br />
                       Or go to{' '}
-                      <Button variant="underlineLink">
+                      <Button variant="underline">
                         <Link href="/">bookmarks</Link>
                       </Button>{' '}
                       and manage them there.

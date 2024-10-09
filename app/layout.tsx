@@ -43,7 +43,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body className={cn('antialiased', fontSans.className)}>
         <Providers>
-          <main className="relative m-auto flex min-h-dvh w-full max-w-6xl flex-col">{children}</main>
+          <main className="relative m-auto flex min-h-dvh w-full max-w-7xl flex-col">{children}</main>
         </Providers>
         <TailwindIndicator />
       </body>

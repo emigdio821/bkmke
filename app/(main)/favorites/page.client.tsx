@@ -37,7 +37,7 @@ export function FavoritesClientPage() {
               <CardDescription>
                 You have no favorite bookmarks yet. <br />
                 Go to{' '}
-                <Button variant="underlineLink" asChild>
+                <Button variant="underline" asChild>
                   <Link href="/">bookmarks</Link>
                 </Button>
                 , and start adding them there.

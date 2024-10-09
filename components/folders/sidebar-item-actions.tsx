@@ -49,7 +49,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" type="button" variant="ghost" className="data-[state=open]:bg-accent">
+        <Button size="icon" type="button" variant="ghost">
           <span className="sr-only">Open folders actions</span>
           <IconDots className="size-4" />
         </Button>

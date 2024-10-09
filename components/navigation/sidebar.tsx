@@ -4,8 +4,8 @@ import { NavContent } from './nav-content'
 
 export async function Sidebar() {
   return (
-    <aside className="sticky top-0 hidden h-dvh w-full bg-card md:block">
-      <div className="relative flex h-full flex-col border-x">
+    <aside className="sticky top-0 hidden h-dvh w-full md:block">
+      <div className="relative flex h-full flex-col border-r">
         <span className="flex max-h-14 items-center p-4 pb-0">
           <TypographyH4>{siteConfig.name}</TypographyH4>
         </span>

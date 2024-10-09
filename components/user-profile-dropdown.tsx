@@ -53,7 +53,7 @@ export function UserProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="justify-between gap-2 data-[state=open]:bg-accent">
+        <Button variant="outline" className="justify-between gap-2">
           <span title={profileNameOrEmail} className="max-w-40 truncate">
             {profileNameOrEmail}
           </span>

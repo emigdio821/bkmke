@@ -40,7 +40,7 @@ export function BookmarksClientPage() {
                 You have no bookmarks yet. <br />
                 Start creating one{' '}
                 <Button
-                  variant="underlineLink"
+                  variant="underline"
                   onClick={() => {
                     void NiceModal.show(CreateBookmarkDialog)
                   }}
@@ -49,7 +49,7 @@ export function BookmarksClientPage() {
                 </Button>
                 . Or import them{' '}
                 <Button
-                  variant="underlineLink"
+                  variant="underline"
                   onClick={() => {
                     void NiceModal.show(ImportBookmarksDialog)
                   }}

@@ -141,6 +141,8 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       const bookmark = row.original
       const folderName = bookmark.folder?.name
 
+      if (!folderName) return null
+
       return (
         <Button variant="link" asChild>
           <Link href={`/folders/${bookmark.folder_id}`}>{folderName}</Link>
