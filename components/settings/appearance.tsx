@@ -1,6 +1,6 @@
 'use client'
 
-import { IconMoon, IconSun } from '@tabler/icons-react'
+import { IconMoonStars, IconSun } from '@tabler/icons-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,7 +24,7 @@ export function AppearanceSettings() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="sm:size-9 sm:p-0">
-              <IconMoon className="hidden size-4 dark:block" />
+              <IconMoonStars className="hidden size-4 dark:block" />
               <IconSun className="size-4 dark:hidden" />
               <span className="ml-2 sm:hidden">Toggle appearance</span>
               <span className="sr-only">Toggle app appearance</span>

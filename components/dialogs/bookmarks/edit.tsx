@@ -264,6 +264,10 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                           <>
                             {tags && (
                               <MultiSelect
+                                value={bookmark.tag_items
+                                  .map((item) => item.tag?.id)
+                                  .filter((id) => id !== undefined)
+                                  .map((id) => id.toString())}
                                 placeholder="Select tags"
                                 options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
                                 emptyText="No tags yet"

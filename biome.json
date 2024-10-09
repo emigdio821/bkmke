@@ -7,6 +7,6 @@
     "rules": {
       "recommended": true
     },
-    "ignore": [".next", "build", "components/ui", "next.config.mjs"]
+    "ignore": [".next", "build", "components/ui", "next.config.mjs", "node_modules"]
   }
 }
