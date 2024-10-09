@@ -60,7 +60,7 @@ export function BookmarkDetailsClientPage({ id }: { id: number }) {
             </CardTitle>
             <CardDescription>
               <Button asChild variant="link">
-                <a href={bookmark.url} target="_blank">
+                <a href={bookmark.url} target="_blank" rel="noreferrer">
                   {simplifiedURL(bookmark.url)}
                   <IconExternalLink className="ml-2 size-4" />
                 </a>

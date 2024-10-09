@@ -46,45 +46,42 @@ export function TagitemsClientPage({ id }: { id: string }) {
           <Loader />
         ) : (
           <>
-            {tagItems && (
-              <>
-                {tagItems.length > 0 ? (
-                  <DataTable columns={columns} data={tagItems} />
-                ) : (
-                  <Card>
-                    <CardContent className="p-6">
-                      <CardDescription>
-                        <span className="font-semibold">This tag is empty.</span>
-                        <br />
-                        <Button
-                          variant="underlineLink"
-                          onClick={() => {
-                            void NiceModal.show(CreateBookmarkDialog)
-                          }}
-                        >
-                          Create
-                        </Button>{' '}
-                        or{' '}
-                        <Button
-                          variant="underlineLink"
-                          onClick={() => {
-                            void NiceModal.show(ImportBookmarksDialog)
-                          }}
-                        >
-                          import
-                        </Button>{' '}
-                        your bookmarks and assign the tags you want. <br />
-                        Or go to{' '}
-                        <Button variant="underlineLink">
-                          <Link href="/">bookmarks</Link>
-                        </Button>{' '}
-                        and manage them there.
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                )}
-              </>
-            )}
+            {tagItems &&
+              (tagItems.length > 0 ? (
+                <DataTable columns={columns} data={tagItems} />
+              ) : (
+                <Card>
+                  <CardContent className="p-6">
+                    <CardDescription>
+                      <span className="font-semibold">This tag is empty.</span>
+                      <br />
+                      <Button
+                        variant="underlineLink"
+                        onClick={() => {
+                          void NiceModal.show(CreateBookmarkDialog)
+                        }}
+                      >
+                        Create
+                      </Button>{' '}
+                      or{' '}
+                      <Button
+                        variant="underlineLink"
+                        onClick={() => {
+                          void NiceModal.show(ImportBookmarksDialog)
+                        }}
+                      >
+                        import
+                      </Button>{' '}
+                      your bookmarks and assign the tags you want. <br />
+                      Or go to{' '}
+                      <Button variant="underlineLink">
+                        <Link href="/">bookmarks</Link>
+                      </Button>{' '}
+                      and manage them there.
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
           </>
         )}
       </div>

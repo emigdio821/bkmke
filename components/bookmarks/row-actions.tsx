@@ -110,7 +110,7 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <a href={bookmark.url} target="_blank">
+          <a href={bookmark.url} target="_blank" rel="noreferrer">
             <IconExternalLink className="mr-2 size-4 text-muted-foreground" />
             Open
           </a>

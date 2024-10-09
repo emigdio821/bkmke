@@ -17,17 +17,17 @@ export function useFolders() {
     const folderMap: Record<number, Folder> = {}
     const tree: Folder[] = []
 
-    data.forEach((folder) => {
+    for (const folder of data) {
       folderMap[folder.id] = { ...folder, children: [] }
-    })
+    }
 
-    data.forEach((folder) => {
+    for (const folder of data) {
       if (folder.parent_id) {
         folderMap[folder.parent_id].children.push(folderMap[folder.id])
       } else {
         tree.push(folderMap[folder.id])
       }
-    })
+    }
 
     return tree
   }

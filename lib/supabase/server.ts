@@ -15,8 +15,9 @@ export function createClient() {
         },
         setAll(cookiesToSet) {
           try {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
+            for (const { name, value, options } of cookiesToSet) {
+              cookieStore.set(name, value, options)
+            }
           } catch (err) {
             console.log('Create server supabase error', err)
           }

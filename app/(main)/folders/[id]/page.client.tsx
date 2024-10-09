@@ -12,7 +12,7 @@ import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
-// import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
+import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
 export function FolderItemsClientPage({ id }: { id: string }) {
@@ -64,45 +64,42 @@ export function FolderItemsClientPage({ id }: { id: string }) {
           <Loader />
         ) : (
           <>
-            {folderItems && (
-              <>
-                {folderItems.length > 0 ? (
-                  <DataTable columns={columns} data={folderItems} />
-                ) : (
-                  <Card>
-                    <CardContent className="p-6">
-                      <CardDescription>
-                        <span className="font-semibold">This folder is empty.</span>
-                        <br />
-                        <Button
-                          variant="underlineLink"
-                          onClick={() => {
-                            void NiceModal.show(CreateBookmarkDialog)
-                          }}
-                        >
-                          Create
-                        </Button>{' '}
-                        or{' '}
-                        {/* <Button
-                          variant="underlineLink"
-                          onClick={() => {
-                            void NiceModal.show(ImportBookmarksDialog)
-                          }}
-                        >
-                          import
-                        </Button>{' '} */}
-                        your bookmarks and move them to this folder. <br />
-                        Or go to{' '}
-                        <Button variant="underlineLink">
-                          <Link href="/">bookmarks</Link>
-                        </Button>{' '}
-                        and manage them there.
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                )}
-              </>
-            )}
+            {folderItems &&
+              (folderItems.length > 0 ? (
+                <DataTable columns={columns} data={folderItems} />
+              ) : (
+                <Card>
+                  <CardContent className="p-6">
+                    <CardDescription>
+                      <span className="font-semibold">This folder is empty.</span>
+                      <br />
+                      <Button
+                        variant="underlineLink"
+                        onClick={() => {
+                          void NiceModal.show(CreateBookmarkDialog)
+                        }}
+                      >
+                        Create
+                      </Button>{' '}
+                      or{' '}
+                      <Button
+                        variant="underlineLink"
+                        onClick={() => {
+                          void NiceModal.show(ImportBookmarksDialog)
+                        }}
+                      >
+                        import
+                      </Button>{' '}
+                      your bookmarks and move them to this folder. <br />
+                      Or go to{' '}
+                      <Button variant="underlineLink">
+                        <Link href="/">bookmarks</Link>
+                      </Button>{' '}
+                      and manage them there.
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
           </>
         )}
       </div>

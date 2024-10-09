@@ -30,40 +30,37 @@ export function BookmarksClientPage() {
 
   return (
     <>
-      {bookmarks && (
-        <>
-          {bookmarks.length > 0 ? (
-            <DataTable columns={columns} data={bookmarks} />
-          ) : (
-            <Card>
-              <CardContent className="p-6">
-                <CardDescription>
-                  You have no bookmarks yet. <br />
-                  Start creating one{' '}
-                  <Button
-                    variant="underlineLink"
-                    onClick={() => {
-                      void NiceModal.show(CreateBookmarkDialog)
-                    }}
-                  >
-                    here
-                  </Button>
-                  . Or import them{' '}
-                  <Button
-                    variant="underlineLink"
-                    onClick={() => {
-                      void NiceModal.show(ImportBookmarksDialog)
-                    }}
-                  >
-                    here
-                  </Button>
-                  .
-                </CardDescription>
-              </CardContent>
-            </Card>
-          )}
-        </>
-      )}
+      {bookmarks &&
+        (bookmarks.length > 0 ? (
+          <DataTable columns={columns} data={bookmarks} />
+        ) : (
+          <Card>
+            <CardContent className="p-6">
+              <CardDescription>
+                You have no bookmarks yet. <br />
+                Start creating one{' '}
+                <Button
+                  variant="underlineLink"
+                  onClick={() => {
+                    void NiceModal.show(CreateBookmarkDialog)
+                  }}
+                >
+                  here
+                </Button>
+                . Or import them{' '}
+                <Button
+                  variant="underlineLink"
+                  onClick={() => {
+                    void NiceModal.show(ImportBookmarksDialog)
+                  }}
+                >
+                  here
+                </Button>
+                .
+              </CardDescription>
+            </CardContent>
+          </Card>
+        ))}
     </>
   )
 }

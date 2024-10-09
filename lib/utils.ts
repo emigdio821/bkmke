@@ -76,7 +76,7 @@ export function formatBytes(
   if (bytes === 0) return '0 Byte'
   const i = Math.floor(Math.log(bytes) / Math.log(1024))
 
-  return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${
+  return `${(bytes / 1024 ** i).toFixed(decimals)} ${
     sizeType === 'accurate' ? accurateSizes[i] || 'Bytest' : sizes[i] || 'Bytes'
   }`
 }
@@ -84,7 +84,7 @@ export function formatBytes(
 export function debounce<T extends (...args: never[]) => unknown>(fn: T, delay = 300) {
   let timeoutId: NodeJS.Timeout | null = null
 
-  return function (...args: Parameters<T>) {
+  return (...args: Parameters<T>) => {
     if (timeoutId) {
       clearTimeout(timeoutId)
     }

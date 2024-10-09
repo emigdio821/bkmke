@@ -151,17 +151,15 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
         ) : (
           <div className="space-y-2">
             <Label>Tags</Label>
-            <>
-              {tags && (
-                <MultiSelect
-                  value={selectValue}
-                  emptyText="No tags yet"
-                  placeholder="Select tags"
-                  onChange={setSelectValue}
-                  options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
-                />
-              )}
-            </>
+            {tags && (
+              <MultiSelect
+                value={selectValue}
+                emptyText="No tags yet"
+                placeholder="Select tags"
+                onChange={setSelectValue}
+                options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+              />
+            )}
           </div>
         )}
 

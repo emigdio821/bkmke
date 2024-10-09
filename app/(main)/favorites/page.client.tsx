@@ -28,26 +28,23 @@ export function FavoritesClientPage() {
 
   return (
     <>
-      {bookmarks && (
-        <>
-          {bookmarks.length > 0 ? (
-            <DataTable columns={columns} data={bookmarks} />
-          ) : (
-            <Card>
-              <CardContent className="p-6">
-                <CardDescription>
-                  You have no favorite bookmarks yet. <br />
-                  Go to{' '}
-                  <Button variant="underlineLink" asChild>
-                    <Link href="/">bookmarks</Link>
-                  </Button>
-                  , and start adding them there.
-                </CardDescription>
-              </CardContent>
-            </Card>
-          )}
-        </>
-      )}
+      {bookmarks &&
+        (bookmarks.length > 0 ? (
+          <DataTable columns={columns} data={bookmarks} />
+        ) : (
+          <Card>
+            <CardContent className="p-6">
+              <CardDescription>
+                You have no favorite bookmarks yet. <br />
+                Go to{' '}
+                <Button variant="underlineLink" asChild>
+                  <Link href="/">bookmarks</Link>
+                </Button>
+                , and start adding them there.
+              </CardDescription>
+            </CardContent>
+          </Card>
+        ))}
     </>
   )
 }

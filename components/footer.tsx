@@ -14,7 +14,7 @@ export function Footer() {
         <span className="font-semibold">{siteConfig.name}</span>
         <Separator orientation="vertical" />
         <Button asChild variant="link" className="text-foreground">
-          <a href={siteConfig.links.github} target="_blank">
+          <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer">
             Source
             <IconBrandGithub className="ml-2 size-4" />
           </a>
