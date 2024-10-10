@@ -102,19 +102,19 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
             void NiceModal.show(EditBookmarkDialog, { bookmark })
           }}
         >
-          <IconPencil className="mr-2 size-4 text-muted-foreground" />
+          <IconPencil className="mr-2 size-4" />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <a href={bookmark.url} target="_blank" rel="noreferrer">
-            <IconExternalLink className="mr-2 size-4 text-muted-foreground" />
+            <IconExternalLink className="mr-2 size-4" />
             Open
           </a>
         </DropdownMenuItem>
         {!hideDetails && (
           <DropdownMenuItem asChild>
             <Link href={`/bookmarks/${bookmark.id}`}>
-              <IconId className="mr-2 size-4 text-muted-foreground" />
+              <IconId className="mr-2 size-4" />
               Details
             </Link>
           </DropdownMenuItem>
@@ -124,7 +124,7 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
             void handleCopyToClipboard(bookmark.url, 'URL copied')
           }}
         >
-          <IconCopy className="mr-2 size-4 text-muted-foreground" />
+          <IconCopy className="mr-2 size-4" />
           Copy URL
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -134,7 +134,7 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
             })
           }}
         >
-          <IconTags className="mr-2 size-4 text-muted-foreground" />
+          <IconTags className="mr-2 size-4" />
           Update tags
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -142,7 +142,7 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
             void NiceModal.show(MoveToFolderDialog, { bookmark })
           }}
         >
-          <IconFolderShare className="mr-2 size-4 text-muted-foreground" />
+          <IconFolderShare className="mr-2 size-4" />
           Move to folder
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -152,12 +152,12 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
         >
           {bookmark.is_favorite ? (
             <>
-              <IconHeartOff className="mr-2 size-4 text-muted-foreground" />
+              <IconHeartOff className="mr-2 size-4" />
               Remove from favorites
             </>
           ) : (
             <>
-              <IconHeart className="mr-2 size-4 text-muted-foreground" />
+              <IconHeart className="mr-2 size-4" />
               Add to favorites
             </>
           )}
@@ -171,7 +171,7 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
           }}
           className="text-destructive focus:text-destructive"
         >
-          <IconTrash className="mr-2 size-4 text-destructive/70" />
+          <IconTrash className="mr-2 size-4" />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

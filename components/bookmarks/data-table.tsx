@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import type { Bookmark } from '@/types'
 import {
-  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -14,9 +13,11 @@ import {
   type SortingState,
   type VisibilityState,
 } from '@tanstack/react-table'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { DataTablePagination } from '@/components/data-table/pagination'
 import { DataTableHeaders } from './data-table-header'
+import { MansoryLayout } from './masonry-layout'
+import { TableLayout } from './table-layout'
 
 interface DataTableProps {
   columns: Array<ColumnDef<Bookmark>>
@@ -24,10 +25,11 @@ interface DataTableProps {
 }
 
 export function DataTable({ columns, data }: DataTableProps) {
-  const [sorting, setSorting] = useState<SortingState>([{ id: 'name', desc: false }])
+  const [sorting, setSorting] = useState<SortingState>([])
   const [rowSelection, setRowSelection] = useState({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const layout = useTableLayoutStore((state) => state.layout)
 
   const table = useReactTable({
     data,
@@ -41,6 +43,11 @@ export function DataTable({ columns, data }: DataTableProps) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     autoResetPageIndex: false,
+    initialState: {
+      pagination: {
+        pageSize: 12,
+      },
+    },
     state: {
       sorting,
       rowSelection,
@@ -52,39 +59,8 @@ export function DataTable({ columns, data }: DataTableProps) {
   return (
     <>
       <DataTableHeaders table={table} />
-      <div className="mb-2 w-full overflow-auto rounded-md border shadow-sm">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+      <div className="mb-2">
+        {layout === 'mansory' ? <MansoryLayout table={table} /> : <TableLayout table={table} />}
       </div>
       <DataTablePagination table={table} />
     </>

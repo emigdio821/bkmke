@@ -41,7 +41,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={cn('antialiased', fontSans.className)}>
+      <body className={cn('antialiased', fontSans.className, fontSans.variable)}>
         <Providers>
           <main className="relative m-auto flex min-h-dvh w-full max-w-7xl flex-col">{children}</main>
         </Providers>

@@ -45,7 +45,7 @@ export function DataTableColumnHeader<TData, TValue>({
               column.toggleSorting(false)
             }}
           >
-            <IconArrowUp className="mr-2 size-4 text-muted-foreground" />
+            <IconArrowUp className="mr-2 size-4" />
             Asc
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -53,7 +53,7 @@ export function DataTableColumnHeader<TData, TValue>({
               column.toggleSorting(true)
             }}
           >
-            <IconArrowDown className="mr-2 size-4 text-muted-foreground" />
+            <IconArrowDown className="mr-2 size-4" />
             Desc
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -62,7 +62,7 @@ export function DataTableColumnHeader<TData, TValue>({
               column.toggleVisibility(false)
             }}
           >
-            <IconEyeOff className="mr-2 size-4 text-muted-foreground" />
+            <IconEyeOff className="mr-2 size-4" />
             Hide
           </DropdownMenuItem>
         </DropdownMenuContent>

@@ -64,7 +64,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
             })
           }}
         >
-          <IconPencil className="mr-2 size-4 text-muted-foreground" />
+          <IconPencil className="mr-2 size-4" />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -74,7 +74,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
             })
           }}
         >
-          <IconFolderPlus className="mr-2 size-4 text-muted-foreground" />
+          <IconFolderPlus className="mr-2 size-4" />
           Create folder
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -91,7 +91,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
             })
           }}
         >
-          <IconTrash className="mr-2 size-4 text-destructive/70" />
+          <IconTrash className="mr-2 size-4" />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

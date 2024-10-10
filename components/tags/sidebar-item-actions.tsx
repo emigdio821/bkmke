@@ -57,7 +57,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
             })
           }}
         >
-          <IconPencil className="mr-2 size-4 text-muted-foreground" />
+          <IconPencil className="mr-2 size-4" />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -72,7 +72,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
             })
           }}
         >
-          <IconTrash className="mr-2 size-4 text-destructive/70" />
+          <IconTrash className="mr-2 size-4" />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

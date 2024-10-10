@@ -35,7 +35,7 @@ export function SidebarFoldersActions<T>({ folders, refetch }: SidebarFoldersAct
             void NiceModal.show(CreateFolderDialog)
           }}
         >
-          <IconFolderPlus className="mr-2 size-4 text-muted-foreground" />
+          <IconFolderPlus className="mr-2 size-4" />
           Create folder
         </DropdownMenuItem>
 
@@ -44,7 +44,7 @@ export function SidebarFoldersActions<T>({ folders, refetch }: SidebarFoldersAct
             void refetch()
           }}
         >
-          <IconReload className="mr-2 size-4 text-muted-foreground" />
+          <IconReload className="mr-2 size-4" />
           Reload data
         </DropdownMenuItem>
         {/* {folders.length > 10 && (

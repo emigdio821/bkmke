@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import { IconHash, IconHeartFilled, IconWorld } from '@tabler/icons-react'
+import { IconHash, IconHeart, IconHeartFilled, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { formatDateFromString, simplifiedURL } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -35,6 +35,9 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     accessorKey: 'name',
+    meta: {
+      title: 'Name',
+    },
     sortingFn: () => {
       return 1
     },
@@ -71,15 +74,6 @@ export const columns: Array<ColumnDef<Bookmark>> = [
               {bookmark.description}
             </p>
           )}
-          <div className="flex items-center space-x-1 text-muted-foreground/80">
-            {bookmark.is_favorite && (
-              <>
-                <IconHeartFilled className="size-3" />
-                <small>·</small>
-              </>
-            )}
-            <small>{formatDateFromString(bookmark.created_at)}</small>
-          </div>
         </div>
       )
     },
@@ -104,6 +98,9 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     accessorKey: 'tags',
+    meta: {
+      title: 'Tags',
+    },
     sortingFn: (rowA, rowB) => {
       const tagsA = rowA.original.tag_items.map((tag) => tag.tag?.name).filter(Boolean)
       const tagsB = rowB.original.tag_items.map((tag) => tag.tag?.name).filter(Boolean)
@@ -152,6 +149,11 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => <RowActions bookmark={row.original} />,
+    cell: ({ row }) => (
+      <div className="flex items-center justify-end space-x-2">
+        {row.original.is_favorite && <IconHeart className="size-4" />}
+        <RowActions bookmark={row.original} />
+      </div>
+    ),
   },
 ]

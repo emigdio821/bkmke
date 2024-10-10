@@ -48,5 +48,5 @@ export type UserMetadata =
   | undefined
 
 export type BkOGInfo = Omit<OGInfo, 'title' | 'description'>
-
 export type GenericFn<T> = (...args: never[]) => T | Promise<T>
+export type TableLayout = 'table' | 'mansory'

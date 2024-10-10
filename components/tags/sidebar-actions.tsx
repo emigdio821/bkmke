@@ -35,7 +35,7 @@ export function SidebarTagsActions<T>({ tags, refetch }: SidebarFoldersActionsPr
             void NiceModal.show(CreateTagDialog)
           }}
         >
-          <IconTag className="mr-2 size-4 text-muted-foreground" />
+          <IconTag className="mr-2 size-4" />
           Create tag
         </DropdownMenuItem>
 
@@ -44,7 +44,7 @@ export function SidebarTagsActions<T>({ tags, refetch }: SidebarFoldersActionsPr
             void refetch()
           }}
         >
-          <IconReload className="mr-2 size-4 text-muted-foreground" />
+          <IconReload className="mr-2 size-4" />
           Reload data
         </DropdownMenuItem>
         {/* {tags.length > 10 && (

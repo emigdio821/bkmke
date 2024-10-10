@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import type { Folder, NavMenu } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
@@ -14,12 +13,6 @@ import { NavItemsSkeleton } from '@/components/skeletons'
 export function FoldersNavItems() {
   const pathname = usePathname()
   const { data: folders, isLoading, error, refetch } = useFolders()
-
-  useEffect(() => {
-    if (pathname === '/') {
-      console.log('holi')
-    }
-  }, [pathname])
 
   if (isLoading) return <NavItemsSkeleton />
 

@@ -1,9 +1,12 @@
+import { IconColumns } from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
@@ -15,11 +18,13 @@ export function DataTableColumnFilter<T>({ table }: DataTableColumnFilterProps<T
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="ml-auto border-dashed">
+        <Button variant="outline" className="ml-auto">
           Columns
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Toggle visibility</DropdownMenuLabel>
+        <DropdownMenuSeparator />
         {table
           .getAllColumns()
           .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
