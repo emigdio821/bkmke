@@ -59,6 +59,7 @@ export function TagsNavItems() {
                 actions: <SidebarItemActions tag={tag} />,
                 active: pathname === `/tags/${tag.id}`,
                 icon: IconHash,
+                itemCount: tag.items[0].count,
                 submenus: [],
               })),
             },

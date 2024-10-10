@@ -68,7 +68,7 @@ export function MultiSelect<TData, TValue>({
               {selectedValues.length > 0 && (
                 <>
                   <Separator orientation="vertical" className="mx-2 h-4" />
-                  <Badge variant="secondary" className="rounded-sm">
+                  <Badge variant="outline" className="rounded-sm">
                     {selectedValues.length}
                   </Badge>
                 </>

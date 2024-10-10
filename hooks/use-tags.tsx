@@ -12,14 +12,18 @@ export function useTags(tagId?: number) {
     if (tagId) {
       const { data: filteredFolder, error: filteredFolderErr } = await supabase
         .from('tags')
-        .select()
+        .select('*, items:tag_items!inner(count)')
         .eq('id', tagId)
         .order('name')
 
       data = filteredFolder
       error = filteredFolderErr
     } else {
-      const { data: rawData, error: rawError } = await supabase.from('tags').select().order('name')
+      const { data: rawData, error: rawError } = await supabase
+        .from('tags')
+        .select('*, items:tag_items!inner(count)')
+        .order('name')
+
       data = rawData
       error = rawError
     }

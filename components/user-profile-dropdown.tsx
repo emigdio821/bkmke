@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { UserMetadata } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
-import { IconBookmarkPlus, IconLogout, IconSettings, IconTag } from '@tabler/icons-react'
+import { IconBookmarkPlus, IconBookmarks, IconFileImport, IconLogout, IconSettings, IconTag } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
@@ -83,7 +83,10 @@ export function UserProfileDropdown() {
         </DropdownMenuItem>
         <DropdownMenuGroup>
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Bookmarks</DropdownMenuSubTrigger>
+            <DropdownMenuSubTrigger>
+              <IconBookmarks className="mr-2 size-4" />
+              Bookmarks
+            </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
@@ -100,7 +103,7 @@ export function UserProfileDropdown() {
                     void NiceModal.show(ImportBookmarksDialog)
                   }}
                 >
-                  <IconBookmarkPlus className="mr-2 size-4" />
+                  <IconFileImport className="mr-2 size-4" />
                   Import
                 </DropdownMenuItem>
               </DropdownMenuSubContent>

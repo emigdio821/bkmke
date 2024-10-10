@@ -4,7 +4,7 @@ import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
 import { IconHash, IconHeart, IconHeartFilled, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
-import { formatDateFromString, simplifiedURL } from '@/lib/utils'
+import { simplifiedURL } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -17,6 +17,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     header: ({ table }) => (
       <Checkbox
         aria-label="Select all"
+        className="bg-background"
         checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
         onCheckedChange={(value) => {
           table.toggleAllPageRowsSelected(!!value)

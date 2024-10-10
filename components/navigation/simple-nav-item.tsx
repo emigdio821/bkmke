@@ -1,4 +1,6 @@
 import type { NavMenu } from '@/types'
+import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 import { NavItemContent } from './nav-item-content'
 
 export function SimpleNavItem({ ...props }: NavMenu) {
@@ -15,7 +17,14 @@ export function SimpleNavItem({ ...props }: NavMenu) {
           )}
           <span className="truncate">{label}</span>
           {typeof itemCount === 'number' && itemCount > 0 && (
-            <span className="ml-1 text-xs text-muted-foreground">({itemCount})</span>
+            <Badge
+              variant="outline"
+              className={cn('ml-2 bg-background px-1.5 py-px', {
+                'border-background shadow-sm': active,
+              })}
+            >
+              {itemCount}
+            </Badge>
           )}
         </div>
       </NavItemContent>

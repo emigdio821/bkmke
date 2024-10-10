@@ -11,10 +11,10 @@ interface NavItemContentProps {
 export function NavItemContent({ children, active, href }: NavItemContentProps) {
   return (
     <Button
-      variant="ghost"
+      variant="nav"
       asChild={!!href}
       className={cn('block flex-auto overflow-hidden', {
-        'bg-accent': active,
+        'bg-primary text-primary-foreground shadow-sm hover:bg-primary': active,
       })}
     >
       {href ? <Link href={href}>{children}</Link> : children}

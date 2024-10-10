@@ -7,6 +7,7 @@ import { IconChevronRight } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { Badge } from '../ui/badge'
 import { NavItem } from './nav-item'
 
 export function CollapsibleNavItem({ ...props }: NavMenu) {
@@ -40,9 +41,9 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
           asChild
         >
           <Button
-            variant="ghost"
+            variant="nav"
             className={cn('block flex-auto overflow-hidden', {
-              'bg-accent': active,
+              'bg-primary text-primary-foreground shadow-sm hover:bg-primary': active,
             })}
             onClick={(e) => {
               e.stopPropagation()
@@ -73,7 +74,14 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
                 <span className="truncate">{label}</span>
               )}
               {typeof itemCount === 'number' && itemCount > 0 && (
-                <span className="ml-1 text-xs text-muted-foreground">({itemCount})</span>
+                <Badge
+                  variant="outline"
+                  className={cn('ml-2 bg-background px-1.5 py-px', {
+                    'border-background shadow-sm': active,
+                  })}
+                >
+                  {itemCount}
+                </Badge>
               )}
             </div>
           </Button>
