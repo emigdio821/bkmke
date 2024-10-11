@@ -8,6 +8,7 @@ import {
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
   TAG_ITEMS_QUERY,
+  TAGS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
@@ -97,6 +98,7 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
         BOOKMARKS_QUERY,
         FOLDER_ITEMS_QUERY,
         TAG_ITEMS_QUERY,
+        TAGS_QUERY,
         FAV_BOOKMARKS_QUERY,
       ])
       toast.success('Success', { description: 'Tags have been updated.' })
