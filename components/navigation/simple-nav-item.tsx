@@ -1,5 +1,4 @@
 import type { NavMenu } from '@/types'
-import { cn } from '@/lib/utils'
 import { NavItemContent } from './nav-item-content'
 
 export function SimpleNavItem({ ...props }: NavMenu) {
