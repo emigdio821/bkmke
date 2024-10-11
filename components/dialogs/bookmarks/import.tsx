@@ -14,6 +14,7 @@ import {
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
+  NAV_ITEMS_COUNT_QUERY,
   TAG_ITEMS_QUERY,
 } from '@/lib/constants'
 import { importBookmarksSchema } from '@/lib/schemas/form'
@@ -165,6 +166,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         FOLDER_ITEMS_QUERY,
         TAG_ITEMS_QUERY,
         FAV_BOOKMARKS_QUERY,
+        NAV_ITEMS_COUNT_QUERY,
       ])
       toast.success('Success', {
         description: areMultipleBks ? (

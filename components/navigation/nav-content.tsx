@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { IconBookmarks, IconHeart } from '@tabler/icons-react'
+import { useNavItemsCount } from '@/hooks/use-nav-items-count'
 import { FoldersNavItems } from '@/components/folders/nav-items'
 import { TagsNavItems } from '@/components/tags/nav-items'
 import { UserProfileDropdown } from '@/components/user-profile-dropdown'
@@ -9,6 +10,7 @@ import { NavItem } from './nav-item'
 
 export function NavContent() {
   const pathname = usePathname()
+  const { data: navItemsCount } = useNavItemsCount()
 
   return (
     <nav className="h-full w-full overflow-auto">
@@ -21,6 +23,7 @@ export function NavContent() {
                 label: 'Favorites',
                 active: pathname === '/favorites',
                 icon: IconHeart,
+                itemCount: navItemsCount?.favoritesCount,
                 submenus: [],
               },
             ]}
@@ -34,6 +37,7 @@ export function NavContent() {
                 label: 'Bookmarks',
                 active: pathname === '/',
                 icon: IconBookmarks,
+                itemCount: navItemsCount?.bookmarksCount,
                 submenus: [],
               },
             ]}

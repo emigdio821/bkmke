@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 import { createBookmark } from '@/lib/api'
-import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, NAV_ITEMS_COUNT_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
@@ -48,7 +48,7 @@ export function CreateAutomaticForm() {
       return
     }
 
-    await invalidateQueries([BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY])
+    await invalidateQueries([BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, NAV_ITEMS_COUNT_QUERY])
     toast.success('Success', { description: 'Bookmark has been created.' })
     await NiceModal.hide(CreateBookmarkDialog)
     NiceModal.remove(CreateBookmarkDialog)
