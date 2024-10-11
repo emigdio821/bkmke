@@ -24,6 +24,15 @@ export function useTagItems(tagId: number) {
     }
 
     const formattedData = data?.map((item) => (Array.isArray(item.bookmark) ? item.bookmark[0] : item.bookmark)) || null
+
+    if (formattedData) {
+      formattedData.sort((a, b) => {
+        if (a.name < b.name) return -1
+        if (a.name > b.name) return 1
+        return 0
+      })
+    }
+
     return formattedData
   }
 

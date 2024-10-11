@@ -13,8 +13,10 @@ import {
   BOOKMARKS_QUERY,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
+  FOLDERS_QUERY,
   NAV_ITEMS_COUNT_QUERY,
   TAG_ITEMS_QUERY,
+  TAGS_QUERY,
 } from '@/lib/constants'
 import { createManualBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
@@ -105,9 +107,11 @@ export function CreateManualForm() {
 
     await invalidateQueries([
       BOOKMARKS_QUERY,
+      FOLDERS_QUERY,
       FOLDER_ITEMS_QUERY,
       FAV_BOOKMARKS_QUERY,
       TAG_ITEMS_QUERY,
+      TAGS_QUERY,
       NAV_ITEMS_COUNT_QUERY,
     ])
     toast.success('Success', { description: 'Bookmark has been created.' })

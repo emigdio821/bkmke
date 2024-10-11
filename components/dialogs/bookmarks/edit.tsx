@@ -8,7 +8,7 @@ import { IconChevronRight } from '@tabler/icons-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { useFolders } from '@/hooks/use-folders'
@@ -110,7 +110,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       await supabase.from('tag_items').delete().eq('bookmark_id', bookmark.id)
     }
 
-    await invalidateQueries([BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
+    await invalidateQueries([BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY, FAV_BOOKMARKS_QUERY])
     toast.success('Success', { description: 'Bookmark has been updated.' })
     await modal.hide()
     modal.remove()

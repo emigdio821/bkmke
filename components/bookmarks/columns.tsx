@@ -39,8 +39,13 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     meta: {
       title: 'Name',
     },
-    sortingFn: () => {
-      return 1
+    sortingFn: (rowA, rowB) => {
+      const nameA = rowA.original.name
+      const nameB = rowB.original.name
+
+      if (nameA < nameB) return -1
+      if (nameA > nameB) return 1
+      return 0
     },
     filterFn: (row, _, value: string) => {
       return (

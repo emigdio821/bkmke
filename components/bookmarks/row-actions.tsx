@@ -19,6 +19,7 @@ import {
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
+  NAV_ITEMS_COUNT_QUERY,
   TAG_ITEMS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
@@ -77,6 +78,7 @@ export function RowActions({ bookmark, hideDetails }: RowActionsProps) {
           BOOKMARKS_QUERY,
           FOLDER_ITEMS_QUERY,
           TAG_ITEMS_QUERY,
+          NAV_ITEMS_COUNT_QUERY,
           FAV_BOOKMARKS_QUERY,
         ])
 

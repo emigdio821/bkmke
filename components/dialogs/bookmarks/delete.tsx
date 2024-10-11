@@ -9,6 +9,7 @@ import {
   FOLDERS_QUERY,
   NAV_ITEMS_COUNT_QUERY,
   TAG_ITEMS_QUERY,
+  TAGS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
@@ -94,6 +95,7 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
         BOOKMARKS_QUERY,
         FOLDER_ITEMS_QUERY,
         TAG_ITEMS_QUERY,
+        TAGS_QUERY,
         FAV_BOOKMARKS_QUERY,
         NAV_ITEMS_COUNT_QUERY,
       ])

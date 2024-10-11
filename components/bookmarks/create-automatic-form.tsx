@@ -12,8 +12,10 @@ import {
   BOOKMARKS_QUERY,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
+  FOLDERS_QUERY,
   NAV_ITEMS_COUNT_QUERY,
   TAG_ITEMS_QUERY,
+  TAGS_QUERY,
 } from '@/lib/constants'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
 import { useFolders } from '@/hooks/use-folders'
@@ -56,8 +58,10 @@ export function CreateAutomaticForm() {
 
     await invalidateQueries([
       BOOKMARKS_QUERY,
+      FOLDERS_QUERY,
       FOLDER_ITEMS_QUERY,
       FAV_BOOKMARKS_QUERY,
+      TAGS_QUERY,
       TAG_ITEMS_QUERY,
       NAV_ITEMS_COUNT_QUERY,
     ])

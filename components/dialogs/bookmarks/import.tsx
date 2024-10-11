@@ -16,6 +16,7 @@ import {
   FOLDERS_QUERY,
   NAV_ITEMS_COUNT_QUERY,
   TAG_ITEMS_QUERY,
+  TAGS_QUERY,
 } from '@/lib/constants'
 import { importBookmarksSchema } from '@/lib/schemas/form'
 import { cn, formatBytes } from '@/lib/utils'
@@ -164,6 +165,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         FOLDERS_QUERY,
         BOOKMARKS_QUERY,
         FOLDER_ITEMS_QUERY,
+        TAGS_QUERY,
         TAG_ITEMS_QUERY,
         FAV_BOOKMARKS_QUERY,
         NAV_ITEMS_COUNT_QUERY,

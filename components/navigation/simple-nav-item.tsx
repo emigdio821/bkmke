@@ -1,4 +1,5 @@
 import type { NavMenu } from '@/types'
+import { ItemCount } from './item-count'
 import { NavItemContent } from './nav-item-content'
 
 export function SimpleNavItem({ ...props }: NavMenu) {
@@ -14,9 +15,7 @@ export function SimpleNavItem({ ...props }: NavMenu) {
             </span>
           )}
           <span className="truncate">{label}</span>
-          {typeof itemCount === 'number' && itemCount > 0 && (
-            <span className="ml-auto pl-1 text-xs text-muted-foreground">{itemCount}</span>
-          )}
+          {typeof itemCount === 'number' && itemCount > 0 && <ItemCount count={itemCount} />}
         </div>
       </NavItemContent>
       {actions && <span>{actions}</span>}

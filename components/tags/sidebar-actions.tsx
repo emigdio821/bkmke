@@ -36,16 +36,7 @@ export function SidebarTagsActions<T>({ tags, refetch }: SidebarFoldersActionsPr
           }}
         >
           <IconTag className="mr-2 size-4" />
-          Create tag
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          onSelect={() => {
-            void refetch()
-          }}
-        >
-          <IconReload className="mr-2 size-4" />
-          Reload data
+          Create
         </DropdownMenuItem>
         {/* {tags.length > 10 && (
           <DropdownMenuItem disabled>

@@ -7,6 +7,7 @@ import { IconChevronRight } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { ItemCount } from './item-count'
 import { NavItem } from './nav-item'
 
 export function CollapsibleNavItem({ ...props }: NavMenu) {
@@ -59,7 +60,13 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
               )}
 
               {href ? (
-                <Button asChild variant="link" className="block truncate text-foreground">
+                <Button
+                  asChild
+                  variant="link"
+                  className={cn('block truncate text-foreground', {
+                    'font-semibold': active,
+                  })}
+                >
                   <Link
                     href={href}
                     onClick={(e) => {
@@ -72,9 +79,7 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
               ) : (
                 <span className="truncate">{label}</span>
               )}
-              {typeof itemCount === 'number' && itemCount > 0 && (
-                <span className="ml-auto pl-1 text-xs text-muted-foreground">{itemCount}</span>
-              )}
+              {typeof itemCount === 'number' && itemCount > 0 && <ItemCount count={itemCount} />}
             </div>
           </Button>
         </CollapsibleTrigger>
