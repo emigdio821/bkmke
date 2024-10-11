@@ -38,6 +38,7 @@ export function FoldersNavItems() {
       actions: <SidebarItemActions folder={folder} />,
       active: pathname === `/folders/${folder.id}`,
       icon: IconFolder,
+      itemCount: folder.items[0].count,
       submenus: folder.children.length > 0 ? buildSubmenus(folder.children) : [],
     }))
   }

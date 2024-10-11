@@ -30,6 +30,7 @@ export interface Bookmark extends Tables<'bookmarks'> {
 
 export interface Folder extends Tables<'folders'> {
   children: Folder[]
+  items: { count: number }[]
 }
 
 export interface OGInfo {

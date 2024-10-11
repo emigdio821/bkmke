@@ -7,7 +7,7 @@ export function useFolders() {
   const supabase = createClient()
 
   async function getFolders() {
-    const { data, error } = await supabase.from('folders').select().order('name')
+    const { data, error } = await supabase.from('folders').select('*, items:bookmarks!inner(count)').order('name')
 
     if (error) {
       console.log('Unable to fetch folders', error.message)
