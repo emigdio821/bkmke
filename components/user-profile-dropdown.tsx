@@ -85,7 +85,7 @@ export function UserProfileDropdown() {
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <IconBookmarks className="mr-2 size-4" />
-              Bookmarks
+              <span className="mr-2">Bookmarks</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>

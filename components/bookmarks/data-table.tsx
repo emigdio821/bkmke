@@ -16,7 +16,7 @@ import {
 import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { DataTablePagination } from '@/components/data-table/pagination'
 import { DataTableHeaders } from './data-table-header'
-import { MansoryLayout } from './masonry-layout'
+import { MasonryLayout } from './masonry-layout'
 import { TableLayout } from './table-layout'
 
 interface DataTableProps {
@@ -60,7 +60,7 @@ export function DataTable({ columns, data }: DataTableProps) {
     <>
       <DataTableHeaders table={table} />
       <div className="mb-2">
-        {layout === 'mansory' ? <MansoryLayout table={table} /> : <TableLayout table={table} />}
+        {layout === 'masonry' ? <MasonryLayout table={table} /> : <TableLayout table={table} />}
       </div>
       <DataTablePagination table={table} />
     </>

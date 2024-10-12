@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { DataTableColumnFilter } from '@/components/data-table/column-filter'
-import { MansoryFilter } from '@/components/data-table/mansory-filter'
+import { MasonryFilter } from '@/components/data-table/masonry-filter'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { DataTableHeaderActions } from './header-actions'
@@ -28,7 +28,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
 
   const layout = useTableLayoutStore((state) => state.layout)
   const updateLayout = useTableLayoutStore((state) => state.update)
-  const isMansoryLayout = layout === 'mansory'
+  const isMasonryLayout = layout === 'masonry'
 
   return (
     <div className="mb-4 flex flex-col-reverse items-center gap-2 md:flex-row">
@@ -42,11 +42,11 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
       />
       <div className="flex w-full flex-wrap items-center justify-center gap-2 md:flex-nowrap md:justify-between">
         <div className="flex items-center gap-2">
-          {isMansoryLayout ? <MansoryFilter table={table} /> : <DataTableColumnFilter table={table} />}
+          {isMasonryLayout ? <MasonryFilter table={table} /> : <DataTableColumnFilter table={table} />}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="outline" type="button">
-                {isMansoryLayout ? <IconLayoutDashboard className="size-4" /> : <IconList className="size-4" />}
+                {isMasonryLayout ? <IconLayoutDashboard className="size-4" /> : <IconList className="size-4" />}
                 <span className="sr-only">Layout</span>
               </Button>
             </DropdownMenuTrigger>
@@ -57,9 +57,9 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
                 <IconList className="mr-2 size-4" />
                 Table
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem onSelect={() => updateLayout('mansory')} checked={isMansoryLayout}>
+              <DropdownMenuCheckboxItem onSelect={() => updateLayout('masonry')} checked={isMasonryLayout}>
                 <IconLayoutDashboard className="mr-2 size-4" />
-                Mansory
+                Masonry
               </DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>

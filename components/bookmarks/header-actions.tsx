@@ -28,10 +28,10 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
                 }}
               >
                 <IconTrash className="size-4" />
-                <span className="sr-only">Delete selected rows</span>
+                <span className="sr-only">Delete selected items</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Delete selected rows</TooltipContent>
+            <TooltipContent>Delete selected items</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -47,10 +47,10 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
                 }}
               >
                 <IconTags className="size-4" />
-                <span className="sr-only">Update selected rows tags</span>
+                <span className="sr-only">Update selected items tags</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Update selected rows tags</TooltipContent>
+            <TooltipContent>Update selected items tags</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -66,10 +66,10 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
                 }}
               >
                 <IconFolderShare className="size-4" />
-                <span className="sr-only">Move selected rows to folder</span>
+                <span className="sr-only">Move selected items to folder</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Move selected rows to folder</TooltipContent>
+            <TooltipContent>Move selected items to folder</TooltipContent>
           </Tooltip>
         </>
       )}

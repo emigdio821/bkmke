@@ -13,11 +13,16 @@ export function ExportBookmarks() {
   const supabase = createClient()
 
   async function handleExportBookmarks() {
-    const { data, error } = await supabase.from('bookmarks').select('url')
-
+    let { data, error } = await supabase.from('bookmarks').select('url')
+    data = []
     if (error) {
       console.error(error.message)
       toast.error('Error', { description: 'Unable to export bookmarks at this time, try again.' })
+      return
+    }
+
+    if (!data || data.length === 0) {
+      toast.warning('There are no bookmarks to export.')
       return
     }
 

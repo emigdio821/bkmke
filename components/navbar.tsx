@@ -12,8 +12,8 @@ export function Navbar() {
         <div className="flex items-center space-x-2">
           <Sheet>
             <SheetTrigger className="md:hidden" asChild>
-              <Button className="h-8" variant="outline" size="icon">
-                <IconMenu className="size-5" />
+              <Button variant="outline" size="icon">
+                <IconMenu className="size-4" />
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex h-full max-w-72 flex-col justify-between p-0 sm:w-72">

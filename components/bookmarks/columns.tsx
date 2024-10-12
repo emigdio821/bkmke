@@ -1,14 +1,17 @@
 'use client'
 
+import { startTransition, useState } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import { IconHash, IconHeart, IconHeartFilled, IconWorld } from '@tabler/icons-react'
+import { IconHash, IconHeart, IconHeartOff, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { simplifiedURL } from '@/lib/utils'
+import { useToggleFavorite } from '@/hooks/use-toggle-favorite'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table/column-header'
+import { BookmarkDetailsDialog } from '@/components/dialogs/bookmarks/details'
 import { RowActions } from './row-actions'
 
 export const columns: Array<ColumnDef<Bookmark>> = [
@@ -58,11 +61,17 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     cell: ({ row }) => {
       const bookmark = row.original
       const ogInfo = row.original.og_info as unknown as OGInfo | undefined
+      const [openBookmarkDetails, setOpenBookmarkDetails] = useState(false)
 
       return (
-        <div className="flex max-w-64 flex-col items-start">
-          <Button asChild variant="link" className="block max-w-64 flex-auto overflow-hidden text-foreground">
-            <Link href={`/bookmarks/${bookmark.id}`}>
+        <>
+          <BookmarkDetailsDialog open={openBookmarkDetails} setOpen={setOpenBookmarkDetails} bookmark={bookmark} />
+          <div className="flex max-w-64 flex-col items-start">
+            <Button
+              variant="link"
+              onClick={() => setOpenBookmarkDetails((prev) => !prev)}
+              className="block max-w-64 flex-auto overflow-hidden text-foreground"
+            >
               <div className="flex items-center">
                 <Avatar className="mr-2 size-4 rounded-full">
                   <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
@@ -72,15 +81,15 @@ export const columns: Array<ColumnDef<Bookmark>> = [
                 </Avatar>
                 <span className="truncate">{bookmark.name}</span>
               </div>
-            </Link>
-          </Button>
+            </Button>
 
-          {bookmark.description && (
-            <p className="line-clamp-1 w-full break-all text-xs text-muted-foreground" title={bookmark.description}>
-              {bookmark.description}
-            </p>
-          )}
-        </div>
+            {bookmark.description && (
+              <p className="line-clamp-1 w-full break-all text-xs text-muted-foreground" title={bookmark.description}>
+                {bookmark.description}
+              </p>
+            )}
+          </div>
+        </>
       )
     },
   },
@@ -155,11 +164,23 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => (
-      <div className="flex items-center justify-end space-x-2">
-        {row.original.is_favorite && <IconHeart className="size-4" />}
-        <RowActions bookmark={row.original} />
-      </div>
-    ),
+    cell: ({ row }) => {
+      const { handleToggleFavorite, optimisticBk } = useToggleFavorite(row.original)
+
+      return (
+        <div className="flex items-center justify-end space-x-2">
+          <Button
+            size="icon"
+            variant="ghost"
+            className="hover:bg-muted-foreground/10"
+            onClick={() => startTransition(handleToggleFavorite)}
+          >
+            {optimisticBk.is_favorite ? <IconHeartOff className="size-4" /> : <IconHeart className="size-4" />}
+            <span className="sr-only">Toggle favorite status</span>
+          </Button>
+          <RowActions bookmark={row.original} />
+        </div>
+      )
+    },
   },
 ]
