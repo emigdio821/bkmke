@@ -1,5 +1,5 @@
 import type { Bookmark } from '@/types'
-import { IconArrowDown, IconArrowsSort, IconArrowUp, IconSelector } from '@tabler/icons-react'
+import { IconArrowDown, IconArrowsSort, IconArrowUp } from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import {
@@ -8,19 +8,22 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuPortal,
+  DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-export function MansoryFilter({ table }: { table: Table<Bookmark> }) {
+export function MasonryFilter({ table }: { table: Table<Bookmark> }) {
+  const isAllSelected = table.getIsAllPageRowsSelected()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="outline">
           <IconArrowsSort className="size-4" />
-          <span className="sr-only">Mansory filters</span>
+          <span className="sr-only">Masonry filters</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -56,6 +59,10 @@ export function MansoryFilter({ table }: { table: Table<Bookmark> }) {
             </DropdownMenuGroup>
           )
         })}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="justify-center" onSelect={() => table.toggleAllPageRowsSelected(!isAllSelected)}>
+          {isAllSelected ? 'Clear selected' : 'Select all'}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
