@@ -9,6 +9,7 @@ import type { z } from 'zod'
 import { FOLDERS_QUERY } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -69,9 +70,6 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
       <DialogContent
         className="max-w-xs"
         aria-describedby={undefined}
-        onInteractOutside={(e) => {
-          e.preventDefault()
-        }}
         onCloseAutoFocus={() => {
           modal.remove()
         }}
@@ -122,7 +120,8 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
                 </Button>
               </DialogClose>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                Save {form.formState.isSubmitting && <Spinner className="ml-2" />}
+                <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
+                {form.formState.isSubmitting && <Spinner className="absolute" />}
               </Button>
             </DialogFooter>
           </form>

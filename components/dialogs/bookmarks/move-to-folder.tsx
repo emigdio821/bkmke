@@ -11,6 +11,7 @@ import {
   TAG_ITEMS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { Button } from '@/components/ui/button'
@@ -127,9 +128,6 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
         onCloseAutoFocus={() => {
           modal.remove()
         }}
-        onInteractOutside={(e) => {
-          e.preventDefault()
-        }}
       >
         <DialogHeader>
           <DialogTitle>Move to folder</DialogTitle>
@@ -190,14 +188,9 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
               Cancel
             </Button>
           </DialogClose>
-          <Button
-            type="button"
-            onClick={() => {
-              void handleMoveToFolder(bookmark ? [bookmark] : bookmarks)
-            }}
-            disabled={isLoading}
-          >
-            Move {isLoading && <Spinner className="ml-2" />}
+          <Button type="submit" disabled={isLoading}>
+            <span className={cn(isLoading && 'invisible')}>Move</span>
+            {isLoading && <Spinner className="absolute" />}
           </Button>
         </DialogFooter>
       </DialogContent>

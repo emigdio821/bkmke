@@ -12,6 +12,7 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import {
   AlertDialog,
@@ -164,7 +165,8 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
             }}
             disabled={isLoading}
           >
-            Proceed {isLoading && <Spinner className="ml-2" />}
+            <span className={cn(isLoading && 'invisible')}>Proceed</span>
+            {isLoading && <Spinner className="absolute" />}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

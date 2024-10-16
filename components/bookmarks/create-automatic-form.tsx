@@ -18,6 +18,7 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
+import { cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useTags } from '@/hooks/use-tags'
@@ -228,7 +229,8 @@ export function CreateAutomaticForm() {
               </Button>
             </DialogClose>
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              Create {form.formState.isSubmitting && <Spinner className="ml-2" />}
+              <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
+              {form.formState.isSubmitting && <Spinner className="absolute" />}
             </Button>
           </DialogFooter>
         </form>

@@ -199,9 +199,6 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
     >
       <DialogContent
         aria-describedby={undefined}
-        onInteractOutside={(e) => {
-          e.preventDefault()
-        }}
         onCloseAutoFocus={() => {
           modal.remove()
         }}
@@ -401,7 +398,8 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                 </Button>
               </DialogClose>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                Import {form.formState.isSubmitting && <Spinner className="ml-2" />}
+                <span className={cn(form.formState.isSubmitting && 'invisible')}>Import</span>
+                {form.formState.isSubmitting && <Spinner className="absolute" />}
               </Button>
             </DialogFooter>
           </form>

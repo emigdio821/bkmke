@@ -39,12 +39,7 @@ export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetai
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent
-        aria-describedby={undefined}
-        onInteractOutside={(e) => {
-          e.preventDefault()
-        }}
-      >
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{bookmark.name}</DialogTitle>
           {bookmark.description && (

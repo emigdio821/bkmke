@@ -11,6 +11,7 @@ import type { z } from 'zod'
 import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useTags } from '@/hooks/use-tags'
@@ -129,9 +130,6 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
     >
       <DialogContent
         aria-describedby={undefined}
-        onInteractOutside={(e) => {
-          e.preventDefault()
-        }}
         onCloseAutoFocus={() => {
           modal.remove()
         }}
@@ -360,7 +358,8 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   </Button>
                 </DialogClose>
                 <Button type="submit" disabled={form.formState.isSubmitting}>
-                  Save {form.formState.isSubmitting && <Spinner className="ml-2" />}
+                  <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
+                  {form.formState.isSubmitting && <Spinner className="absolute" />}
                 </Button>
               </DialogFooter>
             </form>

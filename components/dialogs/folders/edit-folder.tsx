@@ -9,6 +9,7 @@ import type { Tables } from '@/types/database.types'
 import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDERS_QUERY } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -58,9 +59,6 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
       <DialogContent
         className="max-w-xs"
         aria-describedby={undefined}
-        onInteractOutside={(e) => {
-          e.preventDefault()
-        }}
         onCloseAutoFocus={() => {
           modal.remove()
         }}
@@ -98,7 +96,8 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
                 </Button>
               </DialogClose>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                Save {form.formState.isSubmitting && <Spinner className="ml-2" />}
+                <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
+                {form.formState.isSubmitting && <Spinner className="absolute" />}
               </Button>
             </DialogFooter>
           </form>

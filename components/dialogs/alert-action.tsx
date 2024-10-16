@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { GenericFn } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -67,8 +68,8 @@ export const AlertActionDialog = NiceModal.create(<T,>({ action, message, title 
               void handleAction()
             }}
           >
-            Proceed
-            {isLoading && <Spinner className="ml-2" />}
+            <span className={cn(isLoading && 'invisible')}>Proceed</span>
+            {isLoading && <Spinner className="absolute" />}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

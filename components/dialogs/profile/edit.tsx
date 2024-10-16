@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import type { UserMetadata } from '@/types'
+import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { User } from '@supabase/auth-js'
 import { useQueryClient } from '@tanstack/react-query'
@@ -11,24 +11,17 @@ import type { z } from 'zod'
 import { PROFILE_QUERY } from '@/lib/constants'
 import { editUserSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { Input, PasswordInput } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
-export function EditDialog({ user }: { user: User }) {
+export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
+  const modal = useModal()
   const supabase = createClient()
   const queryClient = useQueryClient()
-  const [openDialog, setOpenDialog] = useState(false)
   const userMetadata = user.user_metadata as UserMetadata
   const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
@@ -55,30 +48,23 @@ export function EditDialog({ user }: { user: User }) {
     }
 
     await queryClient.invalidateQueries({ queryKey: [PROFILE_QUERY] })
-    setOpenDialog(false)
+    await modal.hide()
     toast.success('Success', { description: 'Profile has been updated.' })
   }
 
   return (
     <Dialog
-      open={openDialog}
+      open={modal.visible}
       onOpenChange={(isOpen) => {
-        if (form.formState.isSubmitting) {
-          setOpenDialog(true)
-        }
-        setOpenDialog(isOpen)
+        if (form.formState.isSubmitting) return
+        isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogTrigger asChild>
-        <Button variant="outline" className="w-full sm:w-auto">
-          Edit
-        </Button>
-      </DialogTrigger>
       <DialogContent
         className="max-w-md"
         aria-describedby={undefined}
-        onInteractOutside={(e) => {
-          e.preventDefault()
+        onCloseAutoFocus={() => {
+          modal.remove()
         }}
       >
         <DialogHeader>
@@ -128,7 +114,7 @@ export function EditDialog({ user }: { user: User }) {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <PasswordInput {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -142,7 +128,8 @@ export function EditDialog({ user }: { user: User }) {
                 </Button>
               </DialogClose>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                Save {form.formState.isSubmitting && <Spinner className="ml-2" />}
+                <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
+                {form.formState.isSubmitting && <Spinner className="absolute" />}
               </Button>
             </DialogFooter>
           </form>
@@ -150,4 +137,4 @@ export function EditDialog({ user }: { user: User }) {
       </DialogContent>
     </Dialog>
   )
-}
+})

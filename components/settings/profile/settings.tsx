@@ -1,12 +1,13 @@
 'use client'
 
 import type { UserMetadata } from '@/types'
+import NiceModal from '@ebay/nice-modal-react'
 import { IconReload, IconUser } from '@tabler/icons-react'
 import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { EditDialog } from '@/components/settings/profile/edit-dialog'
+import { EditDialog } from '@/components/dialogs/profile/edit'
 import { SettingsProfileSkeleton } from '@/components/skeletons'
 
 export function ProfileSettings() {
@@ -44,7 +45,14 @@ export function ProfileSettings() {
                 )}
               </div>
             </div>
-            <EditDialog user={profile} />
+
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto"
+              onClick={() => NiceModal.show(EditDialog, { user: profile })}
+            >
+              Edit
+            </Button>
           </>
         ) : (
           <div className="flex items-center space-x-2">

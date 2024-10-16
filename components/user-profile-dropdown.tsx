@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import type { UserMetadata } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { IconBookmarkPlus, IconBookmarks, IconFileImport, IconLogout, IconSettings, IconTag } from '@tabler/icons-react'
+import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
@@ -26,9 +27,10 @@ import {
 import { Skeleton } from './ui/skeleton'
 
 export function UserProfileDropdown() {
-  const { data: profile, isLoading, error, refetch } = useProfile()
-  const supabase = createClient()
   const router = useRouter()
+  const supabase = createClient()
+  const queryClient = useQueryClient()
+  const { data: profile, isLoading, error, refetch } = useProfile()
   const userMetadata = profile?.user_metadata as UserMetadata
 
   async function handleLogOut() {
@@ -38,6 +40,7 @@ export function UserProfileDropdown() {
       return
     }
 
+    queryClient.clear()
     router.push('/login')
   }
 

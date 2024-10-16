@@ -6,15 +6,15 @@ import { siteConfig } from '@/config/site'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { TypographyInlineCode } from '@/components/ui/typography'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
-import { TypographyInlineCode } from '../ui/typography'
 
 export function ExportBookmarks() {
   const supabase = createClient()
 
   async function handleExportBookmarks() {
-    let { data, error } = await supabase.from('bookmarks').select('url')
-    data = []
+    const { data, error } = await supabase.from('bookmarks').select('url')
+
     if (error) {
       console.error(error.message)
       toast.error('Error', { description: 'Unable to export bookmarks at this time, try again.' })

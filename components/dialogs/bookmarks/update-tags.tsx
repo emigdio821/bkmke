@@ -11,6 +11,7 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
@@ -139,9 +140,6 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
         onCloseAutoFocus={() => {
           modal.remove()
         }}
-        onInteractOutside={(e) => {
-          e.preventDefault()
-        }}
       >
         <DialogHeader>
           <DialogTitle>Update tags</DialogTitle>
@@ -172,14 +170,9 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
               Cancel
             </Button>
           </DialogClose>
-          <Button
-            type="button"
-            onClick={() => {
-              void handleUpdateTags(bookmark ? [bookmark] : bookmarks)
-            }}
-            disabled={isLoading}
-          >
-            Update {isLoading && <Spinner className="ml-2" />}
+          <Button type="submit" disabled={isLoading}>
+            <span className={cn(isLoading && 'invisible')}>Update</span>
+            {isLoading && <Spinner className="absolute" />}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -22,9 +22,6 @@ export const CreateBookmarkDialog = NiceModal.create(() => {
     >
       <DialogContent
         aria-describedby={undefined}
-        onInteractOutside={(e) => {
-          e.preventDefault()
-        }}
         onCloseAutoFocus={() => {
           modal.remove()
         }}

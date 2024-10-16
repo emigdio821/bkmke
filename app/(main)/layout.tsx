@@ -9,9 +9,9 @@ interface MainLayoutProps {
 
 export default async function MainLayout({ children }: MainLayoutProps) {
   const supabase = createClient()
-  const { data } = await supabase.auth.getSession()
+  const { data } = await supabase.auth.getUser()
 
-  if (!data.session) {
+  if (!data.user) {
     redirect('/login')
   }
 

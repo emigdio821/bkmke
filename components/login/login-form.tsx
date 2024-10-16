@@ -8,10 +8,11 @@ import { toast } from 'sonner'
 import type { z } from 'zod'
 import { loginSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { Input, PasswordInput } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
 export function LoginForm() {
@@ -68,7 +69,7 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <PasswordInput {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,7 +77,8 @@ export function LoginForm() {
         />
         <DialogFooter className="pt-6">
           <Button type="submit" disabled={isLoading}>
-            Log in {isLoading && <Spinner className="ml-2" />}
+            <span className={cn(isLoading && 'invisible')}>Log in</span>
+            {isLoading && <Spinner className="absolute" />}
           </Button>
         </DialogFooter>
       </form>
