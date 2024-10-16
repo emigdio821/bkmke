@@ -141,7 +141,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
           folders.length > 0 && (
             <div className="space-y-2">
               <Label>
-                Move to folder
+                Folder
                 {selectValue && (
                   <>
                     <span className="text-muted-foreground"> · </span>

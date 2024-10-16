@@ -178,7 +178,7 @@ export function CreateManualForm() {
                 return (
                   <FormItem className="flex-grow">
                     <FormLabel>
-                      Move to folder
+                      Folder
                       {field.value && (
                         <>
                           <span className="text-muted-foreground"> · </span>

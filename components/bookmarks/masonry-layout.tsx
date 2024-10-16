@@ -28,11 +28,23 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
   const ogInfo = bookmark.og_info as unknown as OGInfo | undefined
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
   const [openBookmarkDetails, setOpenBookmarkDetails] = useState(false)
+  const toggleSelectedItem = () => row.toggleSelected(!row.getIsSelected())
 
   return (
     <>
       <BookmarkDetailsDialog open={openBookmarkDetails} setOpen={setOpenBookmarkDetails} bookmark={bookmark} />
-      <Card>
+      <Card
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === ' ' || e.key === 'Enter' || e.key === 'Spacebar') {
+            e.preventDefault()
+            toggleSelectedItem()
+          }
+        }}
+        data-selected={row.getIsSelected()}
+        onClick={() => toggleSelectedItem()}
+        className="outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring data-[selected=true]:border-ring"
+      >
         <CardHeader>
           <CardTitle className="flex items-center justify-between space-x-2 break-words text-sm">
             <p className="flex flex-1 flex-col gap-1 overflow-hidden leading-none sm:flex-row sm:items-center">
@@ -47,7 +59,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
                 onClick={() => {
                   setOpenBookmarkDetails((prev) => !prev)
                 }}
-                className="line-clamp-2 whitespace-normal text-left text-foreground"
+                className="line-clamp-2 whitespace-normal text-left text-foreground focus-visible:underline focus-visible:outline-0"
               >
                 {bookmark.name}
               </Button>

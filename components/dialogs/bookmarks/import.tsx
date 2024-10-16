@@ -289,7 +289,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                   return (
                     <FormItem className="flex-grow">
                       <FormLabel>
-                        Move to folder
+                        Folder
                         {field.value && (
                           <>
                             <span className="text-muted-foreground"> · </span>

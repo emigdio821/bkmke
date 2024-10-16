@@ -194,7 +194,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                     return (
                       <FormItem className="flex-grow">
                         <FormLabel>
-                          Move to folder
+                          Folder
                           {field.value && (
                             <>
                               <span className="text-muted-foreground"> · </span>
