@@ -42,7 +42,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
           }
         }}
         data-selected={row.getIsSelected()}
-        className="outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring data-[selected=true]:border-ring"
+        className="outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring data-[selected=true]:bg-muted/50"
       >
         <CardHeader>
           <CardTitle className="flex items-center justify-between space-x-2 break-words text-sm">
@@ -119,7 +119,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
               {optimisticBk.is_favorite ? <IconHeartOff className="size-4" /> : <IconHeart className="size-4" />}
             </Button>
 
-            <RowActions bookmark={bookmark} triggerProps={{ variant: 'outline' }} />
+            <RowActions bookmark={bookmark} triggerProps={{ variant: 'outline', className: 'hover:bg-accent' }} />
           </div>
         </CardFooter>
       </Card>
