@@ -168,7 +168,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       const { handleToggleFavorite, optimisticBk } = useToggleFavorite(row.original)
 
       return (
-        <div className="flex items-center justify-end space-x-2">
+        <div className="flex items-center justify-end space-x-1">
           <Button
             size="icon"
             variant="ghost"

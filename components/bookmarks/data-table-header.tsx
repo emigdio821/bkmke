@@ -1,6 +1,13 @@
 import type { Bookmark } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
-import { IconBookmarkPlus, IconFileImport, IconLayoutDashboard, IconList, IconPlus } from '@tabler/icons-react'
+import {
+  IconBookmarkPlus,
+  IconFileImport,
+  IconLayoutDashboard,
+  IconList,
+  IconPlus,
+  IconSearch,
+} from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
 import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { debounce } from '@/lib/utils'
@@ -32,14 +39,20 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
 
   return (
     <div className="mb-4 flex flex-col-reverse items-center gap-2 md:flex-row">
-      <Input
-        className="max-w-sm"
-        placeholder="Filter by name or description"
-        onChange={(event) => {
-          const value = event.target.value
-          debouncedSetFilterValue(value)
-        }}
-      />
+      <div className="relative w-full max-w-sm">
+        <Input
+          type="search"
+          className="peer pl-9"
+          placeholder="Search by name or description"
+          onChange={(event) => {
+            const value = event.target.value
+            debouncedSetFilterValue(value)
+          }}
+        />
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 text-muted-foreground peer-disabled:opacity-50">
+          <IconSearch size={16} aria-hidden="true" role="presentation" />
+        </div>
+      </div>
       <div className="flex w-full flex-wrap items-center justify-center gap-2 md:flex-nowrap md:justify-between">
         <div className="flex items-center gap-2">
           {isMasonryLayout ? <MasonryFilter table={table} /> : <DataTableColumnFilter table={table} />}

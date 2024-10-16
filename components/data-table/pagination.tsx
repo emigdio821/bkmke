@@ -10,12 +10,16 @@ interface DataTablePaginationProps<TData> {
 const PAGINATION = [12, 24, 36, 48, 60]
 
 export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
+  const rowLength = table.getFilteredRowModel().rows.length
+  const filteredRowLength = table.getFilteredSelectedRowModel().rows.length
+
+  if (rowLength === 0) return null
+
   return (
     <div className="flex flex-col items-end gap-2">
       <div className="flex items-center space-x-2">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} item(s)
-          selected.
+          {filteredRowLength} of {rowLength} item(s) selected.
         </div>
         <div className="flex items-center space-x-2">
           <Button
