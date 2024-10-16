@@ -18,7 +18,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(({ classNam
         onClick={toggleVisibility}
         aria-label={isVisible ? 'Hide password' : 'Show password'}
         className={cn(
-          'absolute inset-y-px right-px flex h-full w-9 items-center justify-center rounded-r-lg text-muted-foreground hover:text-foreground focus-visible:border focus-visible:border-input focus-visible:text-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+          'absolute inset-y-px right-px flex h-full w-9 items-center justify-center rounded-r-md text-muted-foreground hover:text-foreground focus-visible:border focus-visible:border-input focus-visible:text-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
           className,
         )}
       >

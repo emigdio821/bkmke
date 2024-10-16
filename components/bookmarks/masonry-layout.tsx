@@ -42,7 +42,6 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
           }
         }}
         data-selected={row.getIsSelected()}
-        onClick={() => toggleSelectedItem()}
         className="outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring data-[selected=true]:border-ring"
       >
         <CardHeader>
@@ -74,7 +73,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
           <div className="flex items-center space-x-2">
             <IconExternalLink className="size-4" />
             <Button asChild variant="link" className="block truncate">
-              <a href={bookmark.url} target="_blank" onClick={(e) => e.stopPropagation()} rel="noreferrer">
+              <a href={bookmark.url} target="_blank" rel="noreferrer">
                 {simplifiedURL(bookmark.url)}
               </a>
             </Button>
@@ -86,7 +85,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
               <div className="flex flex-1 flex-wrap items-center gap-x-1">
                 {bookmark.tag_items.map((tagItem) => (
                   <Button key={`${tagItem.id}-bk-details-tag`} variant="link" asChild>
-                    <Link href={`/tags/${tagItem.id}`} onClick={(e) => e.stopPropagation()}>
+                    <Link href={`/tags/${tagItem.id}`}>
                       <IconHash className="size-4" />
                       {tagItem.tag?.name || ''}
                     </Link>
@@ -100,9 +99,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
             <div className="flex items-center space-x-2">
               <IconFolder className="size-4" />
               <Button asChild variant="link">
-                <Link href={`/folders/${bookmark.folder_id}`} onClick={(e) => e.stopPropagation()}>
-                  {bookmark.folder.name}
-                </Link>
+                <Link href={`/folders/${bookmark.folder_id}`}>{bookmark.folder.name}</Link>
               </Button>
             </div>
           )}

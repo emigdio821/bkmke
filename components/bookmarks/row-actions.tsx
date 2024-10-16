@@ -1,4 +1,4 @@
-import { startTransition, useOptimistic } from 'react'
+import { startTransition } from 'react'
 import Link from 'next/link'
 import type { Bookmark } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
@@ -50,11 +50,7 @@ export function RowActions({ bookmark, hideDetails, triggerProps }: RowActionsPr
       <DropdownMenuContent align="end" className="max-w-52">
         <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-all p-0">{bookmark.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={() => {
-            void NiceModal.show(EditBookmarkDialog, { bookmark })
-          }}
-        >
+        <DropdownMenuItem onClick={() => NiceModal.show(EditBookmarkDialog, { bookmark })}>
           <IconPencil className="mr-2 size-4" />
           Edit
         </DropdownMenuItem>
@@ -72,16 +68,12 @@ export function RowActions({ bookmark, hideDetails, triggerProps }: RowActionsPr
             </Link>
           </DropdownMenuItem>
         )}
-        <DropdownMenuItem
-          onClick={() => {
-            void handleCopyToClipboard(bookmark.url, 'URL copied')
-          }}
-        >
+        <DropdownMenuItem onClick={() => handleCopyToClipboard(bookmark.url, 'URL copied')}>
           <IconCopy className="mr-2 size-4" />
           Copy URL
         </DropdownMenuItem>
         <DropdownMenuItem
-          onSelect={() => {
+          onClick={() => {
             void NiceModal.show(UpdateTagsDialog, {
               bookmark,
             })
@@ -91,14 +83,14 @@ export function RowActions({ bookmark, hideDetails, triggerProps }: RowActionsPr
           Update tags
         </DropdownMenuItem>
         <DropdownMenuItem
-          onSelect={() => {
+          onClick={() => {
             void NiceModal.show(MoveToFolderDialog, { bookmark })
           }}
         >
           <IconFolderShare className="mr-2 size-4" />
           Move to folder
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => startTransition(handleToggleFavorite)}>
+        <DropdownMenuItem onClick={() => startTransition(handleToggleFavorite)}>
           {optimisticBk.is_favorite ? (
             <>
               <IconHeartOff className="mr-2 size-4" />
@@ -113,11 +105,11 @@ export function RowActions({ bookmark, hideDetails, triggerProps }: RowActionsPr
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onSelect={() => {
-            void NiceModal.show(DeleteBookmarksDialog, {
+          onClick={() =>
+            NiceModal.show(DeleteBookmarksDialog, {
               bookmark,
             })
-          }}
+          }
           className="text-destructive focus:text-destructive"
         >
           <IconTrash className="mr-2 size-4" />

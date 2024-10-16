@@ -30,6 +30,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
@@ -287,14 +288,14 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                 name="isFavorite"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center space-x-2">
-                      <FormControl>
-                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                      </FormControl>
-                      <FormLabel>Add to favorites</FormLabel>
+                  <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-sm">
+                    <div>
+                      <FormLabel>Favorite</FormLabel>
+                      <FormDescription>Add this bookmark to the favorites list.</FormDescription>
                     </div>
-                    <FormMessage />
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
                   </FormItem>
                 )}
               />
@@ -303,53 +304,56 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                 name="updateOG"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center space-x-2">
+                  <div className="space-y-2 rounded-md border p-3 shadow-sm">
+                    <FormItem className="flex items-center justify-between">
+                      <div>
+                        <FormLabel>Images</FormLabel>
+                        <FormDescription>Update bookmark images manually.</FormDescription>
+                      </div>
                       <FormControl>
-                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
-                      <FormLabel>Update images</FormLabel>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
+                    </FormItem>
+
+                    {form.getValues('updateOG') && (
+                      <div className="space-y-2 border-t border-dashed pt-2">
+                        <FormField
+                          name="faviconUrl"
+                          control={form.control}
+                          render={({ field }) => (
+                            <FormItem>
+                              <div>
+                                <FormLabel>Favicon URL</FormLabel>
+                                <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                              </div>
+                              <FormControl>
+                                <Input {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          name="imageUrl"
+                          control={form.control}
+                          render={({ field }) => (
+                            <FormItem>
+                              <div>
+                                <FormLabel>Image URL</FormLabel>
+                                <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                              </div>
+                              <FormControl>
+                                <Input {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    )}
+                  </div>
                 )}
               />
-              {form.getValues('updateOG') && (
-                <>
-                  <FormField
-                    name="faviconUrl"
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem>
-                        <div>
-                          <FormLabel>Favicon URL</FormLabel>
-                          <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
-                        </div>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    name="imageUrl"
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem>
-                        <div>
-                          <FormLabel>Image URL</FormLabel>
-                          <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
-                        </div>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </>
-              )}
 
               <DialogFooter className="pt-6">
                 <DialogClose asChild>
