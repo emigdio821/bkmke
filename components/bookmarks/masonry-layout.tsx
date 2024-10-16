@@ -56,7 +56,8 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
               </Avatar>
               <Button
                 variant="link"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation()
                   setOpenBookmarkDetails((prev) => !prev)
                 }}
                 className="line-clamp-2 whitespace-normal text-left text-foreground focus-visible:underline focus-visible:outline-0"
@@ -73,7 +74,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
           <div className="flex items-center space-x-2">
             <IconExternalLink className="size-4" />
             <Button asChild variant="link" className="block truncate">
-              <a href={bookmark.url} target="_blank" rel="noreferrer">
+              <a href={bookmark.url} target="_blank" onClick={(e) => e.stopPropagation()} rel="noreferrer">
                 {simplifiedURL(bookmark.url)}
               </a>
             </Button>
@@ -85,7 +86,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
               <div className="flex flex-1 flex-wrap items-center gap-x-1">
                 {bookmark.tag_items.map((tagItem) => (
                   <Button key={`${tagItem.id}-bk-details-tag`} variant="link" asChild>
-                    <Link href={`/tags/${tagItem.id}`}>
+                    <Link href={`/tags/${tagItem.id}`} onClick={(e) => e.stopPropagation()}>
                       <IconHash className="size-4" />
                       {tagItem.tag?.name || ''}
                     </Link>
@@ -99,7 +100,9 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
             <div className="flex items-center space-x-2">
               <IconFolder className="size-4" />
               <Button asChild variant="link">
-                <Link href={`/folders/${bookmark.folder_id}`}>{bookmark.folder.name}</Link>
+                <Link href={`/folders/${bookmark.folder_id}`} onClick={(e) => e.stopPropagation()}>
+                  {bookmark.folder.name}
+                </Link>
               </Button>
             </div>
           )}
