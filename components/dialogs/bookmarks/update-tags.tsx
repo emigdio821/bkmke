@@ -170,7 +170,11 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
               Cancel
             </Button>
           </DialogClose>
-          <Button type="submit" disabled={isLoading}>
+          <Button
+            type="button"
+            disabled={isLoading}
+            onClick={() => handleUpdateTags(bookmarks ? bookmarks : [bookmark])}
+          >
             <span className={cn(isLoading && 'invisible')}>Update</span>
             {isLoading && <Spinner className="absolute" />}
           </Button>

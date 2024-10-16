@@ -1,6 +1,5 @@
-import type { GenericFn } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
-import { IconDots, IconFolderPlus } from '@tabler/icons-react'
+import { IconDots, IconFolderPlus, IconInputSearch } from '@tabler/icons-react'
 import type { Tables } from '@/types/database.types'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,12 +12,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
 
-interface SidebarFoldersActionsProps<T> {
+interface SidebarFoldersActionsProps {
   folders: Array<Tables<'folders'>>
-  refetch: GenericFn<T>
 }
 
-export function SidebarFoldersActions<T>({ folders, refetch }: SidebarFoldersActionsProps<T>) {
+export function SidebarFoldersActions({ folders }: SidebarFoldersActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,12 +37,12 @@ export function SidebarFoldersActions<T>({ folders, refetch }: SidebarFoldersAct
           Create
         </DropdownMenuItem>
 
-        {/* {folders.length > 10 && (
+        {folders.length > 100 && (
           <DropdownMenuItem disabled>
             <IconInputSearch className="mr-2 size-4" />
             Toggle search
           </DropdownMenuItem>
-        )} */}
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )

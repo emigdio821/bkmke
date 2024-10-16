@@ -65,7 +65,7 @@ export function FoldersNavItems() {
               active: pathname.startsWith('/folders'),
               icon: IconFolders,
               itemCount: folders.length,
-              actions: <SidebarFoldersActions folders={folders} refetch={refetch} />,
+              actions: <SidebarFoldersActions folders={folders} />,
               submenus: buildSubmenus(folders),
             },
           ]}

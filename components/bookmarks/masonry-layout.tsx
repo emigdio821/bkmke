@@ -1,4 +1,4 @@
-import { startTransition, useCallback, useState } from 'react'
+import { startTransition, useState } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
 import {

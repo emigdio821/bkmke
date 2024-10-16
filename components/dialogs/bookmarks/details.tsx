@@ -1,6 +1,6 @@
 'use client'
 
-import { startTransition, useOptimistic } from 'react'
+import { startTransition } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
 import {

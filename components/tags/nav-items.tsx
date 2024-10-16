@@ -52,7 +52,7 @@ export function TagsNavItems() {
               itemCount: tags.length,
               active: pathname.startsWith('/tags'),
               icon: IconTags,
-              actions: <SidebarTagsActions tags={tags} refetch={refetch} />,
+              actions: <SidebarTagsActions tags={tags} />,
               submenus: tags.map((tag) => ({
                 href: `/tags/${tag.id}`,
                 label: tag.name,

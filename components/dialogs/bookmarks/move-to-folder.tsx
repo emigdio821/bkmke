@@ -188,7 +188,11 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
               Cancel
             </Button>
           </DialogClose>
-          <Button type="submit" disabled={isLoading}>
+          <Button
+            onClick={() => handleMoveToFolder(bookmarks ? bookmarks : [bookmark])}
+            type="button"
+            disabled={isLoading}
+          >
             <span className={cn(isLoading && 'invisible')}>Move</span>
             {isLoading && <Spinner className="absolute" />}
           </Button>
