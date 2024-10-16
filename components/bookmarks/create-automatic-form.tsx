@@ -73,7 +73,7 @@ export function CreateAutomaticForm() {
 
   return (
     <>
-      <p className="my-4 text-sm text-muted-foreground">
+      <p className="my-4 text-center text-sm text-muted-foreground sm:text-left">
         Add the URL and everything will be filled automatically, except for the tags and/or folder.
       </p>
       <Form {...form}>

@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Spinner } from '@/components/spinner'
 
 export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'folders'> }) => {
@@ -25,6 +26,7 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
     resolver: zodResolver(createFolderSchema),
     defaultValues: {
       name: folder.name,
+      description: folder.description || '',
     },
   })
 
@@ -57,7 +59,7 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
       }}
     >
       <DialogContent
-        className="max-w-xs"
+        className="max-w-sm"
         aria-describedby={undefined}
         onCloseAutoFocus={() => {
           modal.remove()
@@ -80,9 +82,23 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Folder name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder={folder.name} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="description"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder={folder.description || ''} className="h-28 max-h-40" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

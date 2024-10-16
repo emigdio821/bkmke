@@ -63,7 +63,6 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
 
   async function handleTagUpdate(bookmarksToUpdate: Bookmark[], isDelete: boolean) {
     const completedCount = { count: 0 }
-    const totalOperations = bookmarksToUpdate.length
 
     const updatePromises = bookmarksToUpdate.map(async (bk) => {
       return await Promise.allSettled(
@@ -83,11 +82,12 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
 
           if (error) throw new Error(error.message)
           completedCount.count++
-          setProgress((completedCount.count / totalOperations) * 100)
+          bookmarksToUpdate.length > 1 && setProgress((completedCount.count / totalOperations) * 100)
         }),
       )
     })
 
+    const totalOperations = bookmarksToUpdate.length
     const settledPromises = await Promise.allSettled(updatePromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 

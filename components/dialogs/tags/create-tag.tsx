@@ -83,7 +83,7 @@ export const CreateTagDialog = NiceModal.create(() => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tag name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

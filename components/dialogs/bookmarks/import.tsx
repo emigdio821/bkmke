@@ -123,7 +123,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       return
     }
 
-    let completedCount = 0
+    const completedCount = { count: 0 }
     const importPromises = bookmarkUrls.map(async (url) => {
       await createBookmark({
         url,
@@ -131,49 +131,26 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         folderId: values.folderId,
         isFavorite: false,
       }).then((result) => {
-        completedCount++
-        setProgress((completedCount / totalOperations) * 100)
-        if (result?.error) {
-          throw new Error(result.error)
-        }
+        if (result?.error) throw new Error(result.error)
+        completedCount.count++
+        bookmarkUrls.length > 1 && setProgress((completedCount.count / totalOperations) * 100)
       })
     })
 
-    const areMultipleBks = importPromises.length > 1
+    const areMultipleBks = completedCount.count > 1
     const totalOperations = importPromises.length
     const settledPromises = await Promise.allSettled(importPromises)
+    const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    setProgress((completedCount / totalOperations) * 100)
-
-    const resultsArray = []
-    const errorsArray = []
-
-    for (const promise of settledPromises) {
-      if (promise.status === 'fulfilled') {
-        resultsArray.push(promise.value)
-      } else {
-        errorsArray.push(promise.reason)
-      }
-    }
-
-    if (errorsArray.length > 0) {
+    if (errors.length > 0) {
       toast.error('Error', {
         description: areMultipleBks ? multipleFailureMessage : singleFailureMessage,
       })
     } else {
-      await invalidateQueries([
-        FOLDERS_QUERY,
-        BOOKMARKS_QUERY,
-        FOLDER_ITEMS_QUERY,
-        TAGS_QUERY,
-        TAG_ITEMS_QUERY,
-        FAV_BOOKMARKS_QUERY,
-        NAV_ITEMS_COUNT_QUERY,
-      ])
       toast.success('Success', {
         description: areMultipleBks ? (
           <>
-            <span className="font-semibold">{resultsArray.length}</span> bookmarks have been imported.
+            <span className="font-semibold">{completedCount.count}</span> bookmarks have been imported.
           </>
         ) : (
           'Bookmark has been imported.'
@@ -181,6 +158,15 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       })
     }
 
+    await invalidateQueries([
+      FOLDERS_QUERY,
+      BOOKMARKS_QUERY,
+      FOLDER_ITEMS_QUERY,
+      TAGS_QUERY,
+      TAG_ITEMS_QUERY,
+      FAV_BOOKMARKS_QUERY,
+      NAV_ITEMS_COUNT_QUERY,
+    ])
     await modal.hide()
     modal.remove()
   }
@@ -221,7 +207,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                 </TabsList>
               </div>
               <TabsContent value="drag-and-drop-import" className="space-y-2 rounded-lg">
-                <DialogDescription>
+                <DialogDescription className="text-center sm:text-left">
                   It must be a plaint text file <TypographyInlineCode>.txt</TypographyInlineCode> with all the
                   bookamarks URLs separated by a new line.
                 </DialogDescription>
@@ -262,7 +248,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                 )}
               </TabsContent>
               <TabsContent value="copy-paste-import" className="rounded-lg">
-                <DialogDescription>
+                <DialogDescription className="text-center sm:text-left">
                   Copy and paste your bookmarks here, each URL must be separated by a new line.
                 </DialogDescription>
                 <FormField

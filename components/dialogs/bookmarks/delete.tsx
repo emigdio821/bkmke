@@ -39,9 +39,11 @@ interface MultipleBookmarks {
 
 type DeleteBookmarksDialogProps = SingleBookmark | MultipleBookmarks
 
-const singleSuccessMessage = 'Bookmark has been deleted.'
-const singleFailureMessage = 'Unable to delete bookmark at this time, try again.'
-const multipleFailureMessage = 'Some bookmarks failed to be deleted, try again.'
+const messages = {
+  singleSuccess: 'Bookmark has been deleted.',
+  singleFailure: 'Unable to delete bookmark at this time, try again.',
+  multipleFailure: 'Some bookmarks failed to be deleted, try again.',
+}
 
 export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: DeleteBookmarksDialogProps) => {
   const modal = useModal()
@@ -53,8 +55,7 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
   async function handleDeleteBookmarks(bookmarksToMove: Bookmark[]) {
     setLoading(true)
     setProgress(0)
-    const areMultipleBks = bookmarksToMove.length > 1
-    let completedCount = 0
+    const completedCount = { count: 0 }
 
     const movePromises = bookmarksToMove.map((bk) =>
       supabase
@@ -62,55 +63,42 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
         .delete()
         .eq('id', bk.id)
         .then((result) => {
-          completedCount++
-          setProgress((completedCount / totalOperations) * 100)
-          if (result.error) {
-            throw new Error(result.error.message)
-          }
+          if (result.error) throw new Error(result.error.message)
+          completedCount.count++
+          bookmarksToMove.length > 1 && setProgress((completedCount.count / totalOperations) * 100)
         }),
     )
 
+    const areMultipleBks = completedCount.count > 1
     const totalOperations = movePromises.length
     const settledPromises = await Promise.allSettled(movePromises)
+    const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    setProgress((completedCount / totalOperations) * 100)
-
-    const resultsArray = []
-    const errorsArray = []
-
-    for (const promise of settledPromises) {
-      if (promise.status === 'fulfilled') {
-        resultsArray.push(promise.value)
-      } else {
-        errorsArray.push(promise.reason)
-      }
-    }
-
-    if (errorsArray.length > 0) {
+    if (errors.length > 0) {
       toast.error('Error', {
-        description: movePromises.length > 1 ? multipleFailureMessage : singleFailureMessage,
+        description: movePromises.length > 1 ? messages.multipleFailure : messages.singleFailure,
       })
     } else {
-      await invalidateQueries([
-        FOLDERS_QUERY,
-        BOOKMARKS_QUERY,
-        FOLDER_ITEMS_QUERY,
-        TAG_ITEMS_QUERY,
-        TAGS_QUERY,
-        FAV_BOOKMARKS_QUERY,
-        NAV_ITEMS_COUNT_QUERY,
-      ])
       toast.success('Success', {
         description: areMultipleBks ? (
           <>
-            <span className="font-semibold">{resultsArray.length}</span> bookmarks has been deleted.
+            <span className="font-semibold">{completedCount.count}</span> bookmarks has been deleted.
           </>
         ) : (
-          singleSuccessMessage
+          messages.singleSuccess
         ),
       })
     }
 
+    await invalidateQueries([
+      FOLDERS_QUERY,
+      BOOKMARKS_QUERY,
+      FOLDER_ITEMS_QUERY,
+      TAG_ITEMS_QUERY,
+      TAGS_QUERY,
+      FAV_BOOKMARKS_QUERY,
+      NAV_ITEMS_COUNT_QUERY,
+    ])
     await modal.hide()
     setLoading(false)
     modal.remove()

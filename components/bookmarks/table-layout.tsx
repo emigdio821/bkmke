@@ -34,7 +34,7 @@ export function TableLayout({ table }: TableLayoutProps) {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
+              <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center text-muted-foreground">
                 No results.
               </TableCell>
             </TableRow>

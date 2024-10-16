@@ -147,7 +147,9 @@ export function MasonryLayout({ table }: TableLayoutProps) {
           ))}
         </div>
       ) : (
-        <div className="rounded-md border p-4 text-sm">No results.</div>
+        <div className="flex h-24 items-center justify-center rounded-md border p-4 text-center text-sm text-muted-foreground">
+          No results.
+        </div>
       )}
     </>
   )

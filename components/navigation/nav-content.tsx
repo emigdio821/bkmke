@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { IconBookmarks, IconHeart } from '@tabler/icons-react'
 import { useNavItemsCount } from '@/hooks/use-nav-items-count'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FoldersNavItems } from '@/components/folders/nav-items'
 import { TagsNavItems } from '@/components/tags/nav-items'
 import { UserProfileDropdown } from '@/components/user-profile-dropdown'
@@ -49,7 +50,13 @@ export function NavContent() {
         <li className="w-full px-4">
           <TagsNavItems />
         </li>
-        <li className="flex w-full grow flex-col justify-end px-4 pb-4 pt-8">
+        <li className="flex w-full grow flex-col justify-end gap-2 px-4 pb-4 pt-8">
+          <Card className="bg-muted/50">
+            <CardHeader>
+              <CardTitle>Demo mode</CardTitle>
+              <CardDescription>Some features may not work.</CardDescription>
+            </CardHeader>
+          </Card>
           <UserProfileDropdown />
         </li>
       </ul>

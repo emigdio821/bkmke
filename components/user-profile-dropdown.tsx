@@ -2,13 +2,22 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { UserMetadata } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
-import { IconBookmarkPlus, IconBookmarks, IconFileImport, IconLogout, IconSettings, IconTag } from '@tabler/icons-react'
+import {
+  IconBookmarkPlus,
+  IconBookmarks,
+  IconFileImport,
+  IconFolderPlus,
+  IconLogout,
+  IconSettings,
+  IconTag,
+} from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
 import { CreateBookmarkDialog } from './dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from './dialogs/bookmarks/import'
+import { CreateFolderDialog } from './dialogs/folders/create-folder'
 import { CreateTagDialog } from './dialogs/tags/create-tag'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
@@ -76,6 +85,14 @@ export function UserProfileDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
+        <DropdownMenuItem
+          onSelect={() => {
+            void NiceModal.show(CreateFolderDialog)
+          }}
+        >
+          <IconFolderPlus size={16} className="mr-2" />
+          Create folder
+        </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => {
             void NiceModal.show(CreateTagDialog)

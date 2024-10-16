@@ -46,13 +46,15 @@ export function ProfileSettings() {
               </div>
             </div>
 
-            <Button
-              variant="outline"
-              className="w-full sm:w-auto"
-              onClick={() => NiceModal.show(EditDialog, { user: profile })}
-            >
-              Edit
-            </Button>
+            {!userMetadata?.demoUser && (
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto"
+                onClick={() => NiceModal.show(EditDialog, { user: profile })}
+              >
+                Edit
+              </Button>
+            )}
           </>
         ) : (
           <div className="flex items-center space-x-2">

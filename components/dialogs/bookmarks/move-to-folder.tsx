@@ -79,32 +79,26 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
         .then((result) => {
           if (result.error) throw new Error(result.error.message)
           completedCount.count++
-          setProgress((completedCount.count / totalOperations) * 100)
+          bookmarksToMove.length > 1 && setProgress((completedCount.count / totalOperations) * 100)
         }),
     )
 
     const totalOperations = movePromises.length
+    const areMultipleBks = completedCount.count > 1
     const settledPromises = await Promise.allSettled(movePromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
     if (errors.length > 0) {
       toast.error('Error', {
-        description: bookmarksToMove.length > 1 ? messages.multipleFailure : messages.singleFailure,
+        description: areMultipleBks ? messages.multipleFailure : messages.singleFailure,
       })
     } else {
-      await invalidateQueries([
-        FOLDERS_QUERY,
-        BOOKMARKS_QUERY,
-        FOLDER_ITEMS_QUERY,
-        TAG_ITEMS_QUERY,
-        FAV_BOOKMARKS_QUERY,
-      ])
       toast.success('Success', {
-        description:
-          bookmarksToMove.length > 1 ? `${completedCount.count} bookmarks have been moved.` : messages.singleSuccess,
+        description: areMultipleBks ? `${completedCount.count} bookmarks have been moved.` : messages.singleSuccess,
       })
     }
 
+    await invalidateQueries([FOLDERS_QUERY, BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
     await modal.hide()
     setLoading(false)
     modal.remove()

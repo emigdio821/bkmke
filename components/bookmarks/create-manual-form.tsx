@@ -122,7 +122,9 @@ export function CreateManualForm() {
 
   return (
     <>
-      <p className="my-4 text-sm text-muted-foreground">Create your bookmark by adding the details by yourself.</p>
+      <p className="my-4 text-center text-sm text-muted-foreground sm:text-left">
+        Create your bookmark by adding the details by yourself.
+      </p>
       <Form {...form}>
         <form
           onSubmit={(e) => {

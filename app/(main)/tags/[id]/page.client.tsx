@@ -2,11 +2,10 @@
 
 import Link from 'next/link'
 import NiceModal from '@ebay/nice-modal-react'
-import { IconReload } from '@tabler/icons-react'
+import { IconBookmarkPlus, IconBookmarks, IconFileImport, IconReload, IconTagOff } from '@tabler/icons-react'
 import { useTagItems } from '@/hooks/use-tag-items'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
@@ -50,37 +49,33 @@ export function TagitemsClientPage({ id }: { id: string }) {
               (tagItems.length > 0 ? (
                 <DataTable columns={columns} data={tagItems} />
               ) : (
-                <Card>
-                  <CardContent className="p-6">
-                    <CardDescription>
-                      <span className="font-semibold">This tag is empty.</span>
-                      <br />
-                      <Button
-                        variant="underline"
-                        onClick={() => {
-                          void NiceModal.show(CreateBookmarkDialog)
-                        }}
-                      >
-                        Create
-                      </Button>{' '}
-                      or{' '}
-                      <Button
-                        variant="underline"
-                        onClick={() => {
-                          void NiceModal.show(ImportBookmarksDialog)
-                        }}
-                      >
-                        import
-                      </Button>{' '}
-                      your bookmarks and assign the tags you want. <br />
-                      Or go to{' '}
-                      <Button variant="underline">
-                        <Link href="/">bookmarks</Link>
-                      </Button>{' '}
-                      and manage them there.
-                    </CardDescription>
-                  </CardContent>
-                </Card>
+                <div className="space-y-6 rounded-lg border p-6 text-center text-sm">
+                  <div>
+                    <div className="flex items-center justify-center space-x-2">
+                      <IconTagOff size={24} />
+                      <TypographyH4>Empty</TypographyH4>
+                    </div>
+                    <p className="text-muted-foreground">This tag does not contain items yet.</p>
+                  </div>
+                  <div className="flex flex-col justify-center gap-2 sm:flex-row">
+                    <Button variant="outline" asChild>
+                      <Link href="/">
+                        <IconBookmarks size={16} className="mr-2" />
+                        Bookmarks
+                      </Link>
+                    </Button>
+
+                    <Button variant="outline" onClick={() => NiceModal.show(CreateBookmarkDialog)}>
+                      <IconBookmarkPlus size={16} className="mr-2" />
+                      Create bookmark
+                    </Button>
+
+                    <Button variant="outline" onClick={() => NiceModal.show(ImportBookmarksDialog)}>
+                      <IconFileImport size={16} className="mr-2" />
+                      Import bookmarks
+                    </Button>
+                  </div>
+                </div>
               ))}
           </>
         )}

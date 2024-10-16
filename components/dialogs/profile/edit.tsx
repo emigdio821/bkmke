@@ -33,13 +33,15 @@ export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
   })
 
   async function onSubmit(values: z.infer<typeof editUserSchema>) {
+    const metadata = {
+      name: values.name,
+      avatar: values.avatar,
+      profile_updated_at: new Date().toString(),
+    } satisfies UserMetadata
+
     const { error } = await supabase.auth.updateUser({
       password: values.password || undefined,
-      data: {
-        avatar: values.avatar,
-        name: values.name,
-        profile_updated_at: new Date(),
-      },
+      data: metadata,
     })
 
     if (error) {

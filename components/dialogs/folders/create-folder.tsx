@@ -68,7 +68,7 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
       }}
     >
       <DialogContent
-        className="max-w-xs"
+        className="max-w-sm"
         aria-describedby={undefined}
         onCloseAutoFocus={() => {
           modal.remove()

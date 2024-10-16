@@ -80,7 +80,7 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tag name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
