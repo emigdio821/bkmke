@@ -45,7 +45,6 @@ export type UserMetadata =
       name?: string
       avatar?: string
       profile_updated_at?: string
-      demoUser?: boolean
     }
   | undefined
 

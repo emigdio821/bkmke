@@ -13,6 +13,7 @@ import { SettingsProfileSkeleton } from '@/components/skeletons'
 export function ProfileSettings() {
   const { data: profile, isLoading, refetch } = useProfile()
   const userMetadata = profile?.user_metadata as UserMetadata
+  const appMetadata = profile?.app_metadata
 
   if (isLoading) return <SettingsProfileSkeleton />
 
@@ -46,7 +47,7 @@ export function ProfileSettings() {
               </div>
             </div>
 
-            {!userMetadata?.demoUser && (
+            {appMetadata?.userrole !== 'demo' && (
               <Button
                 variant="outline"
                 className="w-full sm:w-auto"
