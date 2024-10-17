@@ -15,6 +15,7 @@ import {
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
+  MAX_INPUT_LENGTH,
   NAV_ITEMS_COUNT_QUERY,
   TAG_ITEMS_QUERY,
   TAGS_QUERY,
@@ -141,10 +142,15 @@ export function CreateManualForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Bookmark name</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input maxLength={MAX_INPUT_LENGTH} {...field} />
                 </FormControl>
+                {field.value.length >= MAX_INPUT_LENGTH - 20 && (
+                  <span className="text-xs text-muted-foreground">
+                    {field.value.length}/{MAX_INPUT_LENGTH} characters
+                  </span>
+                )}
                 <FormMessage />
               </FormItem>
             )}
@@ -156,8 +162,18 @@ export function CreateManualForm() {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea className="h-28 max-h-40" {...field} />
+                  <Textarea
+                    className="max-h-24"
+                    maxLength={MAX_INPUT_LENGTH}
+                    placeholder="Small description (optional)"
+                    {...field}
+                  />
                 </FormControl>
+                {field.value.length >= MAX_INPUT_LENGTH - 20 && (
+                  <span className="text-xs text-muted-foreground">
+                    {field.value.length}/{MAX_INPUT_LENGTH} characters
+                  </span>
+                )}
                 <FormMessage />
               </FormItem>
             )}

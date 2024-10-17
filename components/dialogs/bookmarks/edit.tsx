@@ -13,6 +13,7 @@ import {
   DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
+  MAX_INPUT_LENGTH,
   TAG_ITEMS_QUERY,
   TAGS_QUERY,
 } from '@/lib/constants'
@@ -161,10 +162,15 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bookmark name</FormLabel>
+                    <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input placeholder={bookmark.name} maxLength={MAX_INPUT_LENGTH} {...field} />
                     </FormControl>
+                    {field.value.length >= MAX_INPUT_LENGTH - 20 && (
+                      <span className="text-xs text-muted-foreground">
+                        {field.value.length}/{MAX_INPUT_LENGTH} characters
+                      </span>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -176,8 +182,18 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea className="h-28 max-h-40" {...field} />
+                      <Textarea
+                        className="max-h-24"
+                        maxLength={MAX_INPUT_LENGTH}
+                        placeholder={bookmark.description || undefined}
+                        {...field}
+                      />
                     </FormControl>
+                    {field.value.length >= MAX_INPUT_LENGTH - 20 && (
+                      <span className="text-xs text-muted-foreground">
+                        {field.value.length}/{MAX_INPUT_LENGTH} characters
+                      </span>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -189,7 +205,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   <FormItem>
                     <FormLabel>URL</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input placeholder={bookmark.url} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

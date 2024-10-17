@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 import type { Tables } from '@/types/database.types'
-import { BOOKMARKS_QUERY, DEMO_ROLE, FAV_BOOKMARKS_QUERY, FOLDERS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, DEMO_ROLE, FAV_BOOKMARKS_QUERY, FOLDERS_QUERY, MAX_INPUT_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
@@ -89,6 +89,11 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
                   <FormControl>
                     <Input placeholder={folder.name} {...field} />
                   </FormControl>
+                  {field.value.length >= MAX_INPUT_LENGTH - 20 && (
+                    <span className="text-xs text-muted-foreground">
+                      {field.value.length}/{MAX_INPUT_LENGTH} characters
+                    </span>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -101,8 +106,18 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder={folder.description || ''} className="h-28 max-h-40" {...field} />
+                    <Textarea
+                      className="max-h-24"
+                      maxLength={MAX_INPUT_LENGTH}
+                      placeholder={folder.description || undefined}
+                      {...field}
+                    />
                   </FormControl>
+                  {field.value.length >= MAX_INPUT_LENGTH - 20 && (
+                    <span className="text-xs text-muted-foreground">
+                      {field.value.length}/{MAX_INPUT_LENGTH} characters
+                    </span>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}

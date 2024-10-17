@@ -267,7 +267,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                     <FormItem>
                       <FormLabel>Bookmarks</FormLabel>
                       <FormControl>
-                        <Textarea {...field} className="h-28 max-h-80" />
+                        <Textarea {...field} className="max-h-80" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

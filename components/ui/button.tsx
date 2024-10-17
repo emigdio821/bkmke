@@ -16,6 +16,7 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         nav: 'hover:bg-accent',
         underline: 'text-primary underline-offset-4 underline hover:no-underline',
+        plain: 'transition-opacity hover:opacity-70',
       },
       size: {
         default: 'h-9 px-4 py-2',
@@ -41,7 +42,7 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button'
-    const flatVariants = ['link', 'underline']
+    const flatVariants = ['link', 'underline', 'plain']
     const btnSize = size || (variant && flatVariants.includes(variant) ? 'flat' : size)
 
     return <Comp className={cn(buttonVariants({ variant, size: btnSize, className }))} ref={ref} {...props} />
