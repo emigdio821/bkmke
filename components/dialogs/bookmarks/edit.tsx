@@ -8,12 +8,20 @@ import { IconChevronRight } from '@tabler/icons-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
+import {
+  BOOKMARKS_QUERY,
+  DEMO_ROLE,
+  FAV_BOOKMARKS_QUERY,
+  FOLDER_ITEMS_QUERY,
+  TAG_ITEMS_QUERY,
+  TAGS_QUERY,
+} from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useProfile } from '@/hooks/use-profile'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
@@ -36,6 +44,8 @@ import { Spinner } from '@/components/spinner'
 
 export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bookmark }) => {
   const modal = useModal()
+  const { data: profile } = useProfile()
+  const appMetadata = profile?.app_metadata
   const { invalidateQueries } = useInvalidateQueries()
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
   const { data: tags, isLoading: tagsLoading } = useTags()
@@ -97,7 +107,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       return
     }
 
-    if (tagIds.length > 0) {
+    if (bookmarkData.length && tagIds.length > 0) {
       const bookmarkId = bookmarkData[0].id
       const tagItemsPayload = tagIds.map((tagId) => ({
         bookmark_id: bookmarkId,
@@ -360,7 +370,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                     Cancel
                   </Button>
                 </DialogClose>
-                <Button type="submit" disabled={form.formState.isSubmitting}>
+                <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
                   <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
                   {form.formState.isSubmitting && <Spinner className="absolute" />}
                 </Button>

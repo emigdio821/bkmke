@@ -54,7 +54,7 @@ export function NavContent() {
           <Card className="bg-muted/50">
             <CardHeader>
               <CardTitle>Demo mode</CardTitle>
-              <CardDescription>Some features may not work.</CardDescription>
+              <CardDescription>All modifications are disabled.</CardDescription>
             </CardHeader>
           </Card>
           <UserProfileDropdown />

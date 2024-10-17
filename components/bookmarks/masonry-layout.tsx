@@ -1,24 +1,16 @@
-import { startTransition, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import {
-  IconExternalLink,
-  IconFolder,
-  IconHash,
-  IconHeart,
-  IconHeartOff,
-  IconTag,
-  IconWorld,
-} from '@tabler/icons-react'
+import { IconExternalLink, IconFolder, IconHash, IconTag, IconWorld } from '@tabler/icons-react'
 import type { Row, Table } from '@tanstack/react-table'
 import { simplifiedURL } from '@/lib/utils'
-import { useToggleFavorite } from '@/hooks/use-toggle-favorite'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { BookmarkDetailsDialog } from '@/components/dialogs/bookmarks/details'
 import { RowActions } from './row-actions'
+import { ToggleFavBtn } from './toggle-fav-btn'
 
 interface TableLayoutProps {
   table: Table<Bookmark>
@@ -26,7 +18,6 @@ interface TableLayoutProps {
 
 function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> }) {
   const ogInfo = bookmark.og_info as unknown as OGInfo | undefined
-  const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
   const [openBookmarkDetails, setOpenBookmarkDetails] = useState(false)
   const toggleSelectedItem = () => row.toggleSelected(!row.getIsSelected())
 
@@ -115,11 +106,8 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
           />
 
           <div className="space-x-2">
-            <Button onClick={() => startTransition(handleToggleFavorite)} size="icon" variant="outline">
-              {optimisticBk.is_favorite ? <IconHeartOff className="size-4" /> : <IconHeart className="size-4" />}
-            </Button>
-
-            <RowActions bookmark={bookmark} triggerProps={{ variant: 'outline', className: 'hover:bg-accent' }} />
+            <ToggleFavBtn bookmark={bookmark} variant="outline" />
+            <RowActions bookmark={bookmark} variant="outline" className="hover:bg-accent" />
           </div>
         </CardFooter>
       </Card>

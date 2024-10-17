@@ -1,18 +1,18 @@
 'use client'
 
-import { startTransition, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import { IconHash, IconHeart, IconHeartOff, IconWorld } from '@tabler/icons-react'
+import { IconHash, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { simplifiedURL } from '@/lib/utils'
-import { useToggleFavorite } from '@/hooks/use-toggle-favorite'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table/column-header'
 import { BookmarkDetailsDialog } from '@/components/dialogs/bookmarks/details'
 import { RowActions } from './row-actions'
+import { ToggleFavBtn } from './toggle-fav-btn'
 
 export const columns: Array<ColumnDef<Bookmark>> = [
   {
@@ -165,19 +165,9 @@ export const columns: Array<ColumnDef<Bookmark>> = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const { handleToggleFavorite, optimisticBk } = useToggleFavorite(row.original)
-
       return (
         <div className="flex items-center justify-end space-x-1">
-          <Button
-            size="icon"
-            variant="ghost"
-            className="hover:bg-muted-foreground/10"
-            onClick={() => startTransition(handleToggleFavorite)}
-          >
-            {optimisticBk.is_favorite ? <IconHeartOff className="size-4" /> : <IconHeart className="size-4" />}
-            <span className="sr-only">Toggle favorite status</span>
-          </Button>
+          <ToggleFavBtn bookmark={row.original} />
           <RowActions bookmark={row.original} />
         </div>
       )

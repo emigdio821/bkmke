@@ -4,6 +4,7 @@ import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'sonner'
 import {
   BOOKMARKS_QUERY,
+  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
@@ -14,6 +15,7 @@ import {
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useProfile } from '@/hooks/use-profile'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -46,6 +48,8 @@ const messages = {
 }
 
 export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: DeleteBookmarksDialogProps) => {
+  const { data: profile } = useProfile()
+  const appMetadata = profile?.app_metadata
   const modal = useModal()
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -148,10 +152,10 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
           </AlertDialogCancel>
           <Button
             type="button"
+            disabled={isLoading || appMetadata?.userrole === DEMO_ROLE}
             onClick={() => {
               void handleDeleteBookmarks(bookmark ? [bookmark] : bookmarks)
             }}
-            disabled={isLoading}
           >
             <span className={cn(isLoading && 'invisible')}>Proceed</span>
             {isLoading && <Spinner className="absolute" />}

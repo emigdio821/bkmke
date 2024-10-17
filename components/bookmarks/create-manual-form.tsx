@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import type { z } from 'zod'
 import {
   BOOKMARKS_QUERY,
+  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
@@ -23,6 +24,7 @@ import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useProfile } from '@/hooks/use-profile'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
@@ -39,6 +41,8 @@ import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
 export function CreateManualForm() {
+  const { data: profile } = useProfile()
+  const appMetadata = profile?.app_metadata
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading: tagsLoading } = useTags()
@@ -303,7 +307,7 @@ export function CreateManualForm() {
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={form.formState.isSubmitting}>
+            <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
               <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
               {form.formState.isSubmitting && <Spinner className="absolute" />}
             </Button>

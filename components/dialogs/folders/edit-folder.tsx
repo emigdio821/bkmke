@@ -6,11 +6,12 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 import type { Tables } from '@/types/database.types'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDERS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, DEMO_ROLE, FAV_BOOKMARKS_QUERY, FOLDERS_QUERY } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -19,6 +20,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Spinner } from '@/components/spinner'
 
 export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'folders'> }) => {
+  const { data: profile } = useProfile()
+  const appMetadata = profile?.app_metadata
   const modal = useModal()
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -111,7 +114,7 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
                 <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
                 {form.formState.isSubmitting && <Spinner className="absolute" />}
               </Button>

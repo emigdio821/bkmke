@@ -13,7 +13,9 @@ import {
   IconTags,
   IconTrash,
 } from '@tabler/icons-react'
+import { DEMO_ROLE } from '@/lib/constants'
 import { handleCopyToClipboard } from '@/lib/utils'
+import { useProfile } from '@/hooks/use-profile'
 import { useToggleFavorite } from '@/hooks/use-toggle-favorite'
 import { Button, type ButtonProps } from '@/components/ui/button'
 import {
@@ -30,13 +32,14 @@ import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 
-interface RowActionsProps {
+interface RowActionsProps extends ButtonProps {
   bookmark: Bookmark
   hideDetails?: boolean
-  triggerProps?: ButtonProps
 }
 
-export function RowActions({ bookmark, hideDetails, triggerProps }: RowActionsProps) {
+export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps) {
+  const { data: profile } = useProfile()
+  const appMetadata = profile?.app_metadata
   const [openBookmarkDetails, setOpenBookmarkDetails] = useState(false)
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
 
@@ -45,7 +48,7 @@ export function RowActions({ bookmark, hideDetails, triggerProps }: RowActionsPr
       <BookmarkDetailsDialog open={openBookmarkDetails} setOpen={setOpenBookmarkDetails} bookmark={bookmark} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="ghost" className="hover:bg-muted-foreground/10" {...triggerProps}>
+          <Button size="icon" variant="ghost" className="hover:bg-muted-foreground/10" {...props}>
             <span className="sr-only">Open row actions</span>
             <IconDots className="size-4" />
           </Button>
@@ -87,7 +90,10 @@ export function RowActions({ bookmark, hideDetails, triggerProps }: RowActionsPr
             <IconFolderShare className="mr-2 size-4" />
             Move to folder
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => startTransition(handleToggleFavorite)}>
+          <DropdownMenuItem
+            disabled={appMetadata?.userrole === DEMO_ROLE}
+            onClick={() => startTransition(handleToggleFavorite)}
+          >
             {optimisticBk.is_favorite ? (
               <>
                 <IconHeartOff className="mr-2 size-4" />
@@ -102,6 +108,7 @@ export function RowActions({ bookmark, hideDetails, triggerProps }: RowActionsPr
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
+            disabled={appMetadata?.userrole === DEMO_ROLE}
             onClick={() =>
               NiceModal.show(DeleteBookmarksDialog, {
                 bookmark,

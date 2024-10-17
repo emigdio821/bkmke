@@ -3,6 +3,7 @@
 import type { UserMetadata } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { IconReload, IconUser } from '@tabler/icons-react'
+import { DEMO_ROLE } from '@/lib/constants'
 import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -47,7 +48,7 @@ export function ProfileSettings() {
               </div>
             </div>
 
-            {appMetadata?.userrole !== 'demo' && (
+            {appMetadata?.userrole !== DEMO_ROLE && (
               <Button
                 variant="outline"
                 className="w-full sm:w-auto"

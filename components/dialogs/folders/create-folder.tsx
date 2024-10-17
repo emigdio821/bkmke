@@ -6,10 +6,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { FOLDERS_QUERY } from '@/lib/constants'
+import { DEMO_ROLE, FOLDERS_QUERY } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
+import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -22,6 +23,8 @@ interface CreateFolderDialogProps {
 }
 
 export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFolderDialogProps) => {
+  const { data: profile } = useProfile()
+  const appMetadata = profile?.app_metadata
   const modal = useModal()
   const queryClient = useQueryClient()
   const supabase = createClient()
@@ -119,7 +122,7 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
                 <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
                 {form.formState.isSubmitting && <Spinner className="absolute" />}
               </Button>

@@ -11,6 +11,7 @@ import type { z } from 'zod'
 import { createBookmark } from '@/lib/api'
 import {
   BOOKMARKS_QUERY,
+  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
@@ -22,6 +23,7 @@ import { importBookmarksSchema } from '@/lib/schemas/form'
 import { cn, formatBytes } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useProfile } from '@/hooks/use-profile'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
@@ -45,11 +47,15 @@ import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
-const singleFailureMessage = 'Unable to import bookmark at this time, try again.'
-const multipleFailureMessage = 'Some bookmarks failed to import, try again.'
+const messages = {
+  default: 'Unable to import bookmarks at this time, try again.',
+  multipleFailure: 'Some bookmarks failed to import, try again.',
+}
 
 export const ImportBookmarksDialog = NiceModal.create(() => {
   const modal = useModal()
+  const { data: profile } = useProfile()
+  const appMetadata = profile?.app_metadata
   const { data: tags, isLoading: tagsLoading } = useTags()
   const { data: folders, isLoading: foldersLoading } = useFolders()
   const [progress, setProgress] = useState(0)
@@ -142,22 +148,6 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
     const settledPromises = await Promise.allSettled(importPromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    if (errors.length > 0) {
-      toast.error('Error', {
-        description: areMultipleBks ? multipleFailureMessage : singleFailureMessage,
-      })
-    } else {
-      toast.success('Success', {
-        description: areMultipleBks ? (
-          <>
-            <span className="font-semibold">{completedCount.count}</span> bookmarks have been imported.
-          </>
-        ) : (
-          'Bookmark has been imported.'
-        ),
-      })
-    }
-
     await invalidateQueries([
       FOLDERS_QUERY,
       BOOKMARKS_QUERY,
@@ -167,6 +157,25 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       FAV_BOOKMARKS_QUERY,
       NAV_ITEMS_COUNT_QUERY,
     ])
+
+    if (errors.length > 0) {
+      toast.error('Error', {
+        description: areMultipleBks ? messages.multipleFailure : messages.default,
+      })
+
+      return
+    }
+
+    toast.success('Success', {
+      description: areMultipleBks ? (
+        <>
+          <span className="font-semibold">{completedCount.count}</span> bookmarks have been imported.
+        </>
+      ) : (
+        'Bookmark has been imported.'
+      ),
+    })
+
     await modal.hide()
     modal.remove()
   }
@@ -383,7 +392,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
                 <span className={cn(form.formState.isSubmitting && 'invisible')}>Import</span>
                 {form.formState.isSubmitting && <Spinner className="absolute" />}
               </Button>

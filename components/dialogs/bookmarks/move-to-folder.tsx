@@ -5,6 +5,7 @@ import { IconChevronRight } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import {
   BOOKMARKS_QUERY,
+  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
@@ -14,6 +15,7 @@ import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -49,6 +51,8 @@ const messages = {
 }
 
 export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: MoveToFolderDialogProps) => {
+  const { data: profile } = useProfile()
+  const appMetadata = profile?.app_metadata
   const supabase = createClient()
   const modal = useModal()
   const initialFolderId =
@@ -183,9 +187,9 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
             </Button>
           </DialogClose>
           <Button
-            onClick={() => handleMoveToFolder(bookmarks ? bookmarks : [bookmark])}
             type="button"
-            disabled={isLoading}
+            disabled={isLoading || appMetadata?.userrole === DEMO_ROLE}
+            onClick={() => handleMoveToFolder(bookmarks ? bookmarks : [bookmark])}
           >
             <span className={cn(isLoading && 'invisible')}>Move</span>
             {isLoading && <Spinner className="absolute" />}

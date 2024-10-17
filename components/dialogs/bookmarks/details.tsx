@@ -1,19 +1,9 @@
 'use client'
 
-import { startTransition } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import {
-  IconCalendarMonth,
-  IconExternalLink,
-  IconFolder,
-  IconHash,
-  IconHeart,
-  IconHeartOff,
-  IconTag,
-} from '@tabler/icons-react'
+import { IconCalendarMonth, IconExternalLink, IconFolder, IconHash, IconTag } from '@tabler/icons-react'
 import { formatDateFromString, simplifiedURL } from '@/lib/utils'
-import { useToggleFavorite } from '@/hooks/use-toggle-favorite'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -26,6 +16,7 @@ import {
 } from '@/components/ui/dialog'
 import { BlurImage } from '@/components/blur-image'
 import { RowActions } from '@/components/bookmarks/row-actions'
+import { ToggleFavBtn } from '@/components/bookmarks/toggle-fav-btn'
 
 interface BookmarkDetailsDialogProps {
   bookmark: Bookmark
@@ -35,7 +26,6 @@ interface BookmarkDetailsDialogProps {
 
 export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetailsDialogProps) {
   const ogInfo = bookmark?.og_info as unknown as OGInfo | undefined
-  const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -95,11 +85,8 @@ export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetai
         )}
 
         <DialogFooter className="flex-row items-center justify-end space-x-2 pt-6">
-          <Button size="icon" onClick={() => startTransition(handleToggleFavorite)} variant="outline">
-            {optimisticBk.is_favorite ? <IconHeartOff className="size-4" /> : <IconHeart className="size-4" />}
-            <span className="sr-only">Toggle favorite status</span>
-          </Button>
-          <RowActions bookmark={bookmark} triggerProps={{ variant: 'outline' }} />
+          <ToggleFavBtn bookmark={bookmark} variant="outline" />
+          <RowActions bookmark={bookmark} variant="outline" />
           <DialogClose asChild>
             <Button type="button">Close</Button>
           </DialogClose>
