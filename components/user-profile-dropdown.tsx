@@ -8,6 +8,7 @@ import {
   IconFileImport,
   IconFolderPlus,
   IconLogout,
+  IconReload,
   IconSettings,
   IconTag,
 } from '@tabler/icons-react'
@@ -62,6 +63,7 @@ export function UserProfileDropdown() {
           void refetch()
         }}
       >
+        <IconReload size={16} className="mr-2" />
         Refetch profile data
       </Button>
     )

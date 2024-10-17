@@ -90,24 +90,24 @@ export type Database = {
       }
       tag_items: {
         Row: {
-          bookmark_id: string | null
+          bookmark_id: string
           created_at: string
           id: string
-          tag_id: string | null
+          tag_id: string
           user_id: string
         }
         Insert: {
-          bookmark_id?: string | null
+          bookmark_id: string
           created_at?: string
           id?: string
-          tag_id?: string | null
+          tag_id: string
           user_id?: string
         }
         Update: {
-          bookmark_id?: string | null
+          bookmark_id?: string
           created_at?: string
           id?: string
-          tag_id?: string | null
+          tag_id?: string
           user_id?: string
         }
         Relationships: [
