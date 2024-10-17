@@ -16,8 +16,8 @@ import { Loader } from '@/components/loader'
 
 export function TagitemsClientPage({ id }: { id: string }) {
   const tagId = id
-  const { data: tagItems, isLoading, error } = useTagItems(Number(tagId))
-  const { data: tag, isLoading: tagLoading } = useTags(Number(tagId))
+  const { data: tagItems, isLoading, error } = useTagItems(tagId)
+  const { data: tag, isLoading: tagLoading } = useTags(tagId)
 
   if (error)
     return (

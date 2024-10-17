@@ -21,7 +21,7 @@ export async function createBookmark(values: z.infer<typeof createAutomaticBookm
       name: ogInfo.title,
       is_favorite: isFavorite,
       description: ogInfo.description,
-      folder_id: folderId ? Number(folderId) : null,
+      folder_id: folderId || null,
       og_info: {
         title: ogInfo.title,
         imageUrl: ogInfo.imageUrl,
@@ -35,7 +35,7 @@ export async function createBookmark(values: z.infer<typeof createAutomaticBookm
       name: url,
       description: '',
       is_favorite: isFavorite,
-      folder_id: folderId ? Number(folderId) : null,
+      folder_id: folderId || null,
       og_info: {
         title: url,
         imageUrl: '',
@@ -52,7 +52,7 @@ export async function createBookmark(values: z.infer<typeof createAutomaticBookm
     const tagItemsPromises = []
 
     for (const tagId of tagIds) {
-      const tagItemsPayload = { bookmark_id: bookmark[0].id, tag_id: Number(tagId) }
+      const tagItemsPayload = { bookmark_id: bookmark[0].id, tag_id: tagId }
 
       tagItemsPromises.push(supabase.from('tag_items').insert(tagItemsPayload))
     }

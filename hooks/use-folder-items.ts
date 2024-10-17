@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { FOLDER_ITEMS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 
-export function useFolderItems(folderId: number) {
+export function useFolderItems(folderId: string) {
   const supabase = createClient()
 
   async function getFolderItems() {

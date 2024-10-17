@@ -12,9 +12,9 @@ export interface NavMenu {
 }
 
 export interface TagItem {
-  id: number
+  id: string
   tag: {
-    id: number
+    id: string
     name: string
   } | null
 }

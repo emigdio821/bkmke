@@ -23,8 +23,8 @@ import { Loader } from '@/components/loader'
 
 export function FolderItemsClientPage({ id }: { id: string }) {
   const folderId = id
-  const { data: folderItems, isLoading, error } = useFolderItems(Number(folderId))
-  const { data: folder, isLoading: folderLoading } = useFolder(Number(folderId))
+  const { data: folderItems, isLoading, error } = useFolderItems(folderId)
+  const { data: folder, isLoading: folderLoading } = useFolder(folderId)
 
   if (error)
     return (

@@ -7,8 +7,8 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
-          folder_id: number | null
-          id: number
+          folder_id: string | null
+          id: string
           is_favorite: boolean
           name: string
           og_info: Json | null
@@ -19,10 +19,10 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
-          folder_id?: number | null
-          id?: number
+          folder_id?: string | null
+          id?: string
           is_favorite?: boolean
-          name: string
+          name?: string
           og_info?: Json | null
           updated_at?: string | null
           url: string
@@ -31,8 +31,8 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
-          folder_id?: number | null
-          id?: number
+          folder_id?: string | null
+          id?: string
           is_favorite?: boolean
           name?: string
           og_info?: Json | null
@@ -54,7 +54,7 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
-          id: number
+          id: string
           name: string
           parent_id: number | null
           updated_at: string | null
@@ -63,8 +63,8 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
-          id?: number
-          name: string
+          id?: string
+          name?: string
           parent_id?: number | null
           updated_at?: string | null
           user_id?: string
@@ -72,42 +72,34 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
-          id?: number
+          id?: string
           name?: string
           parent_id?: number | null
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: 'folders_parent_id_fkey'
-            columns: ['parent_id']
-            isOneToOne: false
-            referencedRelation: 'folders'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       tag_items: {
         Row: {
-          bookmark_id: number
+          bookmark_id: string | null
           created_at: string
-          id: number
-          tag_id: number
+          id: string
+          tag_id: string | null
           user_id: string
         }
         Insert: {
-          bookmark_id: number
+          bookmark_id?: string | null
           created_at?: string
-          id?: number
-          tag_id: number
+          id?: string
+          tag_id?: string | null
           user_id?: string
         }
         Update: {
-          bookmark_id?: number
+          bookmark_id?: string | null
           created_at?: string
-          id?: number
-          tag_id?: number
+          id?: string
+          tag_id?: string | null
           user_id?: string
         }
         Relationships: [
@@ -130,19 +122,19 @@ export type Database = {
       tags: {
         Row: {
           created_at: string
-          id: number
+          id: string
           name: string
           user_id: string
         }
         Insert: {
           created_at?: string
-          id?: number
-          name: string
+          id?: string
+          name?: string
           user_id?: string
         }
         Update: {
           created_at?: string
-          id?: number
+          id?: string
           name?: string
           user_id?: string
         }

@@ -78,7 +78,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
     const movePromises = bookmarksToMove.map((bk) =>
       supabase
         .from('bookmarks')
-        .update({ folder_id: selectValue ? Number(selectValue) : null })
+        .update({ folder_id: selectValue || null })
         .eq('id', bk.id)
         .then((result) => {
           if (result.error) throw new Error(result.error.message)

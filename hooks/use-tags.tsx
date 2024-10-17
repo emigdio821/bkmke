@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { TAGS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 
-export function useTags(tagId?: number) {
+export function useTags(tagId?: string) {
   const supabase = createClient()
 
   async function getTags() {

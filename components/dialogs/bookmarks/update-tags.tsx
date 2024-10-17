@@ -74,7 +74,7 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
           const { error } = await supabase.from('tag_items').upsert(
             {
               bookmark_id: bk.id,
-              tag_id: Number(tagId),
+              tag_id: tagId,
             },
             { onConflict: 'bookmark_id, tag_id' },
           )

@@ -91,9 +91,9 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       url,
       name,
       description,
-      is_favorite: isFavorite,
-      folder_id: folderId ? Number(folderId) : null,
       og_info: ogInfoPayload,
+      is_favorite: isFavorite,
+      folder_id: folderId || null,
     }
 
     const { data: bookmarkData, error } = await supabase
@@ -110,12 +110,12 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
     if (bookmarkData.length && tagIds.length > 0) {
       const bookmarkId = bookmarkData[0].id
       const tagItemsPayload = tagIds.map((tagId) => ({
+        tag_id: tagId,
         bookmark_id: bookmarkId,
-        tag_id: Number(tagId),
       }))
 
       await supabase.from('tag_items').upsert(tagItemsPayload, { onConflict: 'bookmark_id, tag_id' })
-      const remainingTags = tagIds.map((tagId) => Number(tagId)).join(',')
+      const remainingTags = tagIds.join(',')
       await supabase.from('tag_items').delete().eq('bookmark_id', bookmarkId).not('tag_id', 'in', `(${remainingTags})`)
     } else {
       await supabase.from('tag_items').delete().eq('bookmark_id', bookmark.id)

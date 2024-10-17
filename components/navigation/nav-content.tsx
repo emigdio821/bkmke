@@ -2,7 +2,9 @@
 
 import { usePathname } from 'next/navigation'
 import { IconBookmarks, IconHeart } from '@tabler/icons-react'
+import { DEMO_ROLE } from '@/lib/constants'
 import { useNavItemsCount } from '@/hooks/use-nav-items-count'
+import { useProfile } from '@/hooks/use-profile'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FoldersNavItems } from '@/components/folders/nav-items'
 import { TagsNavItems } from '@/components/tags/nav-items'
@@ -11,6 +13,8 @@ import { NavItem } from './nav-item'
 
 export function NavContent() {
   const pathname = usePathname()
+  const { data: profile } = useProfile()
+  const appMetadata = profile?.app_metadata
   const { data: navItemsCount } = useNavItemsCount()
 
   return (
@@ -51,12 +55,14 @@ export function NavContent() {
           <TagsNavItems />
         </li>
         <li className="flex w-full grow flex-col justify-end gap-2 px-4 pb-4 pt-8">
-          <Card className="bg-muted/50">
-            <CardHeader>
-              <CardTitle>Demo mode</CardTitle>
-              <CardDescription>All modifications are disabled.</CardDescription>
-            </CardHeader>
-          </Card>
+          {appMetadata?.userrole === DEMO_ROLE && (
+            <Card className="bg-muted/50">
+              <CardHeader>
+                <CardTitle>Demo mode</CardTitle>
+                <CardDescription>All modifications are disabled.</CardDescription>
+              </CardHeader>
+            </Card>
+          )}
           <UserProfileDropdown />
         </li>
       </ul>
