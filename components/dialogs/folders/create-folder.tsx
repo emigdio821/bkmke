@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Spinner } from '@/components/spinner'
 
 interface CreateFolderDialogProps {
-  parentFolderId?: number
+  parentFolderId?: string
 }
 
 export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFolderDialogProps) => {

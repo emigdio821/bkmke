@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { BOOKMARKS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 
-export function useBookmarks(bookmarkId?: number) {
+export function useBookmarks(bookmarkId?: string) {
   const supabase = createClient()
 
   async function getBookmarks() {

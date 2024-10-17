@@ -20,7 +20,7 @@ import { EditTagDialog } from '@/components/dialogs/tags/edit-tag'
 export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
   const { invalidateQueries } = useInvalidateQueries()
 
-  async function handleDeleteFolder(id: number) {
+  async function handleDeleteFolder(id: string) {
     const supabase = createClient()
     const { error } = await supabase.from('tags').delete().eq('id', id)
 

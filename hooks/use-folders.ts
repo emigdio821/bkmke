@@ -14,7 +14,7 @@ export function useFolders() {
       return []
     }
 
-    const folderMap: Record<number, Folder> = {}
+    const folderMap: Record<string, Folder> = {}
     const tree: Folder[] = []
 
     for (const folder of data) {

@@ -28,7 +28,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
 
-  async function handleDeleteFolder(id: number) {
+  async function handleDeleteFolder(id: string) {
     const { error } = await supabase.from('folders').delete().eq('id', id)
 
     if (error) {

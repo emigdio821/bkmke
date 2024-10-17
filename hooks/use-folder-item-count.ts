@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { FOLDER_ITEM_COUNT_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 
-export function useFolderItemCount(folderId: number) {
+export function useFolderItemCount(folderId: string) {
   const supabase = createClient()
 
   async function getFolderItemCount() {
