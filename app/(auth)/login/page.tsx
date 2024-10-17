@@ -17,10 +17,10 @@ export default async function LoginPage() {
     <Card className="mx-auto max-w-sm">
       <CardHeader>
         <CardTitle className="text-lg">Log in</CardTitle>
-        <CardDescription className="flex items-center space-x-2">
-          <p>
+        <CardDescription className="flex items-center space-x-1">
+          <span>
             Welcome back to <span className="font-semibold">{siteConfig.name}</span>.
-          </p>
+          </span>
           <DemoPopover />
         </CardDescription>
       </CardHeader>
