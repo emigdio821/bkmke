@@ -36,25 +36,23 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
         className="outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring data-[selected=true]:bg-muted/50"
       >
         <CardHeader>
-          <CardTitle className="flex items-center justify-between space-x-2 break-words text-sm">
-            <p className="flex flex-1 flex-col gap-1 overflow-hidden leading-none sm:flex-row sm:items-center">
-              <Avatar className="mr-2 size-4 rounded-[4px]">
-                <AvatarImage src={ogInfo?.faviconUrl} />
-                <AvatarFallback className="rounded-[inherit]">
-                  <IconWorld className="size-4 text-muted-foreground" />
-                </AvatarFallback>
-              </Avatar>
-              <Button
-                variant="link"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setOpenBookmarkDetails((prev) => !prev)
-                }}
-                className="line-clamp-2 whitespace-normal text-left text-foreground focus-visible:underline focus-visible:outline-0"
-              >
-                {bookmark.name}
-              </Button>
-            </p>
+          <CardTitle className="flex items-center space-x-2">
+            <Avatar className="size-4 rounded-[4px]">
+              <AvatarImage src={ogInfo?.faviconUrl} />
+              <AvatarFallback className="rounded-[inherit]">
+                <IconWorld className="size-4 text-muted-foreground" />
+              </AvatarFallback>
+            </Avatar>
+            <Button
+              variant="link"
+              onClick={(e) => {
+                e.stopPropagation()
+                setOpenBookmarkDetails((prev) => !prev)
+              }}
+              className="line-clamp-2 whitespace-normal text-left text-foreground"
+            >
+              {bookmark.name}
+            </Button>
           </CardTitle>
           {bookmark.description && (
             <CardDescription className="line-clamp-2 break-words text-xs">{bookmark.description}</CardDescription>

@@ -48,7 +48,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-52">
-        <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-all p-0">{tag.name}</DropdownMenuLabel>
+        <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-words p-0">{tag.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {

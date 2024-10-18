@@ -29,11 +29,9 @@ export function ProfileSettings() {
           <>
             <div className="flex items-center space-x-2">
               <Avatar className="size-16">
-                <AvatarImage src={userMetadata?.avatar || ''} alt="User avatar" />
-                <AvatarFallback asChild>
-                  <div className="size-16 rounded-md">
-                    <IconUser className="size-4" />
-                  </div>
+                <AvatarImage src={userMetadata?.avatar} alt="User avatar" />
+                <AvatarFallback>
+                  <IconUser size={16} />
                 </AvatarFallback>
               </Avatar>
               <div className="text-sm">

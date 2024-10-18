@@ -21,6 +21,7 @@ export function useTagItems(tagId: string) {
 
     if (error) {
       console.log('Unable to fetch tag items', error.message)
+      throw new Error(error.message)
     }
 
     const formattedData = data?.map((item) => (Array.isArray(item.bookmark) ? item.bookmark[0] : item.bookmark)) || null

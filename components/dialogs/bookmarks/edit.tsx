@@ -147,7 +147,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       >
         <DialogHeader>
           <DialogTitle>Edit bookmark</DialogTitle>
-          <DialogDescription className="break-all">{bookmark.name}</DialogDescription>
+          <DialogDescription className="break-words">{bookmark.name}</DialogDescription>
         </DialogHeader>
         <div>
           <Form {...form}>

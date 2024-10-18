@@ -11,7 +11,7 @@ export function useFolders() {
 
     if (error) {
       console.log('Unable to fetch folders', error.message)
-      return []
+      throw new Error(error.message)
     }
 
     const folderMap: Record<string, Folder> = {}

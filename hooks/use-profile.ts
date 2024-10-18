@@ -10,6 +10,7 @@ export function useProfile() {
 
     if (error) {
       console.log('Unable to fetch your profile', error.message)
+      throw new Error(error.message)
     }
 
     return data?.user

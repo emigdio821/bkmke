@@ -54,7 +54,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="max-w-52">
-          <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-all p-0">{bookmark.name}</DropdownMenuLabel>
+          <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-words p-0">{bookmark.name}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => NiceModal.show(EditBookmarkDialog, { bookmark })}>
             <IconPencil className="mr-2 size-4" />

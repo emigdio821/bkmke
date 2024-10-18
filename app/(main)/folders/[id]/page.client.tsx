@@ -5,7 +5,7 @@ import NiceModal from '@ebay/nice-modal-react'
 import {
   IconBookmarkPlus,
   IconBookmarks,
-  IconChevronLeft,
+  IconBug,
   IconFileImport,
   IconFolderOff,
   IconReload,
@@ -24,47 +24,48 @@ import { Loader } from '@/components/loader'
 export function FolderItemsClientPage({ id }: { id: string }) {
   const folderId = id
   const { data: folderItems, isLoading, error } = useFolderItems(folderId)
-  const { data: folder, isLoading: folderLoading } = useFolder(folderId)
+  const { data: folder, isLoading: folderLoading, error: folderError } = useFolder(folderId)
 
-  if (error)
+  if (error || folderError)
     return (
-      <div className="rounded-lg border p-6 text-sm text-muted-foreground">
-        <p>Unable to fetch bookmarks, try again.</p>
-        <p className="flex items-center">
-          <Button variant="link">
-            Refetch <IconReload className="ml-2 size-4" />
-          </Button>
-        </p>
-      </div>
-    )
-
-  if (folderLoading) {
-    return (
-      <div className="flex h-7 items-center">
-        <Skeleton className="h-2 w-28" />
-      </div>
-    )
-  }
-
-  if (!folder?.length) {
-    return (
-      <div className="rounded-lg border p-6 text-sm text-muted-foreground">
-        <Button variant="link" asChild className="mb-4">
-          <Link href="/">
-            <IconChevronLeft className="mr-2 size-4" />
-            All bookmarks
-          </Link>
+      <div className="space-y-2 rounded-lg border p-6 text-center text-sm">
+        <div>
+          <div className="flex items-center justify-center space-x-2">
+            <IconBug size={24} />
+            <TypographyH4>Error</TypographyH4>
+          </div>
+          <p className="text-muted-foreground">
+            Unable to fetch this folder at this time, try again or check if the folder still exists.
+          </p>
+        </div>
+        <Button variant="outline">
+          <IconReload className="mr-2 size-4" />
+          Refetch
         </Button>
-        <p className="font-semibold">Folder not found.</p>
-        <p>The folder you're trying to see does not exist.</p>
       </div>
     )
-  }
 
   return (
     <>
-      <TypographyH4>{folder[0]?.name || 'Folder items'}</TypographyH4>
-      {folder[0]?.description && <p className="text-sm text-muted-foreground">{folder[0].description}</p>}
+      {folderLoading ? (
+        <div>
+          <div className="flex h-7 items-center">
+            <Skeleton className="h-2 w-28" />
+          </div>
+          <div className="flex h-5 items-center">
+            <Skeleton className="h-2 w-36" />
+          </div>
+        </div>
+      ) : (
+        <>
+          {folder && (
+            <>
+              <TypographyH4>{folder[0]?.name || 'Folder items'}</TypographyH4>
+              {folder[0]?.description && <p className="text-sm text-muted-foreground">{folder[0].description}</p>}
+            </>
+          )}
+        </>
+      )}
       <div className="mt-4">
         {isLoading ? (
           <Loader />

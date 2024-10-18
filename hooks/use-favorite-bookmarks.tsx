@@ -20,6 +20,7 @@ export function useFavoriteBookmarks() {
 
     if (error) {
       console.log('Unable to fetch favorite bookmarks', error.message)
+      throw new Error(error.message)
     }
 
     return data || []

@@ -9,8 +9,10 @@ import {
   IconFolderPlus,
   IconLogout,
   IconReload,
+  IconSelector,
   IconSettings,
   IconTag,
+  IconUser,
 } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
@@ -74,16 +76,18 @@ export function UserProfileDropdown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="justify-between gap-2">
-          <span title={profileNameOrEmail} className="max-w-40 truncate">
-            {profileNameOrEmail}
-          </span>
-
-          <Avatar className="size-5">
-            <AvatarImage src={userMetadata?.avatar || ''} />
-            <AvatarFallback asChild>
-              <div className="size-5 bg-gradient-to-r from-emerald-500 to-indigo-400" />
-            </AvatarFallback>
-          </Avatar>
+          <div className="flex items-center space-x-2">
+            <Avatar className="size-6">
+              <AvatarImage src={userMetadata?.avatar} />
+              <AvatarFallback>
+                <IconUser size={14} />
+              </AvatarFallback>
+            </Avatar>
+            <span title={profileNameOrEmail} className="max-w-40 truncate">
+              {profileNameOrEmail}
+            </span>
+          </div>
+          <IconSelector size={16} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">

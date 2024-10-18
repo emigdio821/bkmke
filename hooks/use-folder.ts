@@ -10,6 +10,7 @@ export function useFolder(folderId: string) {
 
     if (error) {
       console.log('Unable to fetch bookmarks', error.message)
+      throw new Error(error.message)
     }
 
     return data || []

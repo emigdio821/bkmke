@@ -30,6 +30,7 @@ export function useTags(tagId?: string) {
 
     if (error) {
       console.log('Unable to fetch bookmarks', error.message)
+      throw new Error(error.message)
     }
 
     return data || []

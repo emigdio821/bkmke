@@ -1,9 +1,15 @@
 import type { NextRequest } from 'next/server'
 import type { OGInfo } from '@/types'
 import ogs from 'open-graph-scraper'
+import { MAX_INPUT_LENGTH } from '@/lib/constants'
+import { truncateString } from '@/lib/utils'
 
 function getFaviconFromGoogle(url: string) {
   return `https://www.google.com/s2/favicons?domain=${url}&sz=128`
+}
+
+function handleTruncateString(text: string, maxLength: number): string {
+  return text.length > maxLength ? truncateString(text, maxLength - 3) : text
 }
 
 async function fetchOgData(url: string) {
@@ -11,14 +17,17 @@ async function fetchOgData(url: string) {
 
   if (error) throw new Error('Failed to get URL info')
 
-  const faviconUrl = getFaviconFromGoogle(url)
-  const imageUrl = result.ogImage?.[0]?.url || result.twitterImage?.[0]?.url || ''
+  const { ogImage, twitterImage, ogTitle, ogDescription } = result
+
+  const imageUrl = ogImage?.[0]?.url || twitterImage?.[0]?.url || ''
+  const title = ogTitle ? handleTruncateString(ogTitle, MAX_INPUT_LENGTH) : ''
+  const description = ogDescription ? handleTruncateString(ogDescription, MAX_INPUT_LENGTH) : ''
 
   return {
     imageUrl,
-    faviconUrl,
-    title: result.ogTitle || '',
-    description: result.ogDescription || '',
+    faviconUrl: getFaviconFromGoogle(url),
+    title,
+    description,
   } satisfies OGInfo
 }
 

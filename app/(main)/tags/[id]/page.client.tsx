@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import NiceModal from '@ebay/nice-modal-react'
-import { IconBookmarkPlus, IconBookmarks, IconFileImport, IconReload, IconTagOff } from '@tabler/icons-react'
+import { IconBookmarkPlus, IconBookmarks, IconBug, IconFileImport, IconReload, IconTagOff } from '@tabler/icons-react'
 import { useTagItems } from '@/hooks/use-tag-items'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
@@ -17,17 +17,24 @@ import { Loader } from '@/components/loader'
 export function TagitemsClientPage({ id }: { id: string }) {
   const tagId = id
   const { data: tagItems, isLoading, error } = useTagItems(tagId)
-  const { data: tag, isLoading: tagLoading } = useTags(tagId)
+  const { data: tag, isLoading: tagLoading, error: tagError } = useTags(tagId)
 
-  if (error)
+  if (error || tagError)
     return (
-      <div className="rounded-lg border p-6 text-sm text-muted-foreground">
-        <p>Unable to fetch bookmarks, try again.</p>
-        <p className="flex items-center">
-          <Button variant="link">
-            Refetch <IconReload className="ml-2 size-4" />
-          </Button>
-        </p>
+      <div className="space-y-2 rounded-lg border p-6 text-center text-sm">
+        <div>
+          <div className="flex items-center justify-center space-x-2">
+            <IconBug size={24} />
+            <TypographyH4>Error</TypographyH4>
+          </div>
+          <p className="text-muted-foreground">
+            Unable to fetch this tag at this time, try again or check if the tag still exists.
+          </p>
+        </div>
+        <Button variant="outline">
+          <IconReload className="mr-2 size-4" />
+          Refetch
+        </Button>
       </div>
     )
 

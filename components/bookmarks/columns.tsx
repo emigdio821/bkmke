@@ -84,7 +84,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
             </Button>
 
             {bookmark.description && (
-              <p className="line-clamp-1 w-full break-all text-xs text-muted-foreground" title={bookmark.description}>
+              <p className="line-clamp-1 w-full break-words text-xs text-muted-foreground" title={bookmark.description}>
                 {bookmark.description}
               </p>
             )}

@@ -147,7 +147,7 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
       >
         <DialogHeader>
           <DialogTitle>Update tags</DialogTitle>
-          <DialogDescription className="break-all">{bookmarkName}</DialogDescription>
+          <DialogDescription className="break-words">{bookmarkName}</DialogDescription>
         </DialogHeader>
 
         {tagsLoading ? (

@@ -94,3 +94,7 @@ export function debounce<T extends (...args: never[]) => unknown>(fn: T, delay =
     }, delay)
   }
 }
+
+export function truncateString(str: string, size: number) {
+  return `${str.slice(0, size)}...`
+}

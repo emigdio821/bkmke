@@ -55,7 +55,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-52">
-        <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-all p-0">{folder.name}</DropdownMenuLabel>
+        <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 break-words p-0">{folder.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {

@@ -131,7 +131,7 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
           <AlertDialogTitle>
             {bookmarks && bookmarks.length > 1 ? 'Remove bookmarks?' : 'Remove bookmark?'}
           </AlertDialogTitle>
-          <AlertDialogDescription className="break-all">
+          <AlertDialogDescription>
             {bookmarks && bookmarks.length > 1 ? (
               <>
                 You are about to remove <span className="font-semibold">{bookmarks.length}</span> bookmarks.

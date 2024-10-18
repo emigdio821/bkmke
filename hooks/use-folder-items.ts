@@ -20,6 +20,7 @@ export function useFolderItems(folderId: string) {
 
     if (error) {
       console.log('Unable to fetch folder items', error.message)
+      throw new Error(error.message)
     }
 
     return data || []

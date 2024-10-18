@@ -42,6 +42,7 @@ export function useBookmarks(bookmarkId?: string) {
 
     if (error) {
       console.log('Unable to fetch bookmarks', error.message)
+      throw new Error(error.message)
     }
 
     return data || []
