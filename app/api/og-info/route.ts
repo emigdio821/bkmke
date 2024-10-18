@@ -20,8 +20,8 @@ async function fetchOgData(url: string) {
   const { ogImage, twitterImage, ogTitle, ogDescription } = result
 
   const imageUrl = ogImage?.[0]?.url || twitterImage?.[0]?.url || ''
-  const title = ogTitle ? handleTruncateString(ogTitle, MAX_INPUT_LENGTH) : ''
-  const description = ogDescription ? handleTruncateString(ogDescription, MAX_INPUT_LENGTH) : ''
+  const title = ogTitle ? handleTruncateString(ogTitle.trim(), MAX_INPUT_LENGTH) : ''
+  const description = ogDescription ? handleTruncateString(ogDescription.trim(), MAX_INPUT_LENGTH) : ''
 
   return {
     imageUrl,

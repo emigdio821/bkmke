@@ -129,6 +129,8 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     cell: ({ row }) => {
       const tags = row.original.tag_items
 
+      if (tags.length === 0) return null
+
       return (
         <div className="flex max-w-40 flex-1 flex-wrap items-center gap-x-1">
           {tags.map((tagItem) => (
