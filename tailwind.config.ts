@@ -59,8 +59,12 @@ const config: Config = {
       },
       keyframes: {
         spinner: {
-          from: { opacity: '1' },
-          to: { opacity: '0.15' },
+          from: {
+            opacity: '1',
+          },
+          to: {
+            opacity: '0.15',
+          },
         },
       },
       animation: {

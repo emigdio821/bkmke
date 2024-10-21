@@ -1,71 +1,43 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
-import { IconBookmarks, IconHeart } from '@tabler/icons-react'
+import { siteConfig } from '@/config/site'
 import { DEMO_ROLE } from '@/lib/constants'
-import { useNavItemsCount } from '@/hooks/use-nav-items-count'
 import { useProfile } from '@/hooks/use-profile'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { TypographyH4 } from '@/components/ui/typography'
 import { FoldersNavItems } from '@/components/folders/nav-items'
 import { TagsNavItems } from '@/components/tags/nav-items'
 import { UserProfileDropdown } from '@/components/user-profile-dropdown'
-import { NavItem } from './nav-item'
+import { NavMain } from './nav-main'
 
 export function NavContent() {
-  const pathname = usePathname()
   const { data: profile } = useProfile()
   const appMetadata = profile?.app_metadata
-  const { data: navItemsCount } = useNavItemsCount()
 
   return (
-    <nav className="h-full w-full overflow-auto">
-      <ul className="flex h-full flex-col items-start space-y-1">
-        <li className="w-full space-y-2 px-4 pt-4">
-          <NavItem
-            menus={[
-              {
-                href: '/favorites',
-                label: 'Favorites',
-                active: pathname === '/favorites',
-                icon: IconHeart,
-                itemCount: navItemsCount?.favoritesCount,
-                submenus: [],
-              },
-            ]}
-          />
-        </li>
-        <li className="w-full space-y-2 px-4">
-          <NavItem
-            menus={[
-              {
-                href: '/',
-                label: 'Bookmarks',
-                active: pathname === '/',
-                icon: IconBookmarks,
-                itemCount: navItemsCount?.bookmarksCount,
-                submenus: [],
-              },
-            ]}
-          />
-        </li>
-        <li className="w-full px-4">
-          <FoldersNavItems />
-        </li>
-        <li className="w-full px-4">
-          <TagsNavItems />
-        </li>
-        <li className="flex w-full grow flex-col justify-end gap-2 px-4 pb-4 pt-8">
-          {appMetadata?.userrole === DEMO_ROLE && (
-            <Card className="bg-muted/50">
-              <CardHeader>
-                <CardTitle>Demo mode</CardTitle>
-                <CardDescription>All modifications are disabled.</CardDescription>
-              </CardHeader>
-            </Card>
-          )}
-          <UserProfileDropdown />
-        </li>
-      </ul>
+    <nav className="flex h-full w-full flex-col items-start border-r">
+      <div className="w-full p-4 pb-0">
+        <TypographyH4>{siteConfig.name}</TypographyH4>
+      </div>
+
+      <NavMain />
+
+      <div className="h-auto w-full space-y-1 overflow-auto px-4">
+        <FoldersNavItems />
+        <TagsNavItems />
+      </div>
+
+      <div className="flex w-full grow flex-col justify-end gap-2 px-4 pb-4">
+        {appMetadata?.userrole === DEMO_ROLE && (
+          <Card className="bg-muted/50">
+            <CardHeader>
+              <CardTitle>Demo mode</CardTitle>
+              <CardDescription>All modifications are disabled.</CardDescription>
+            </CardHeader>
+          </Card>
+        )}
+        <UserProfileDropdown />
+      </div>
     </nav>
   )
 }

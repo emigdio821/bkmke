@@ -1,7 +1,7 @@
 import { IconMenu } from '@tabler/icons-react'
 import { siteConfig } from '@/config/site'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { NavContent } from './navigation/nav-content'
 import { TypographyH4 } from './ui/typography'
 
@@ -17,11 +17,6 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex h-full max-w-72 flex-col justify-between p-0 sm:w-72">
-              <SheetHeader>
-                <SheetTitle asChild className="p-4 pb-0 text-left">
-                  <TypographyH4>{siteConfig.name}</TypographyH4>
-                </SheetTitle>
-              </SheetHeader>
               <NavContent />
             </SheetContent>
           </Sheet>
