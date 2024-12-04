@@ -1,7 +1,6 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
-import { IconChevronRight } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import {
   BOOKMARKS_QUERY,
@@ -28,8 +27,9 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
 import { Spinner } from '@/components/spinner'
 
 interface SingleBookmark {
@@ -159,20 +159,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
                   <SelectValue placeholder="Select folder" />
                 </SelectTrigger>
                 <SelectContent>
-                  {folders.map((folder) => (
-                    <Fragment key={`parent-folder-${folder.id}`}>
-                      <SelectItem value={`${folder.id}`}>{folder.name}</SelectItem>
-                      {folder.children.map((subfolder) => (
-                        <SelectItem key={`subfolder-${subfolder.id}`} value={`${subfolder.id}`}>
-                          <span className="flex items-center">
-                            <span className="text-xs text-muted-foreground">{folder.name}</span>
-                            <IconChevronRight className="size-3.5 text-muted-foreground" />
-                            {subfolder.name}
-                          </span>
-                        </SelectItem>
-                      ))}
-                    </Fragment>
-                  ))}
+                  <FolderSelectItems folders={folders} />
                 </SelectContent>
               </Select>
             </div>

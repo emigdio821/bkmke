@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import * as SelectPrimitive from '@radix-ui/react-select'
-import { IconCheck, IconChevronUp, IconSelector } from '@tabler/icons-react'
+import { IconCheck, IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 
 const Select = SelectPrimitive.Root
@@ -54,7 +54,7 @@ const SelectScrollDownButton = React.forwardRef<
     className={cn('flex cursor-default items-center justify-center py-1', className)}
     {...props}
   >
-    <IconSelector className="size-4" />
+    <IconChevronDown className="size-4" />
   </SelectPrimitive.ScrollDownButton>
 ))
 SelectScrollDownButton.displayName = SelectPrimitive.ScrollDownButton.displayName

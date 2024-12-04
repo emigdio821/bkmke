@@ -1,10 +1,9 @@
 'use client'
 
-import { Fragment } from 'react'
 import type { OGInfo } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconChevronRight, IconPlus } from '@tabler/icons-react'
+import { IconPlus } from '@tabler/icons-react'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -31,13 +30,14 @@ import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
 import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
@@ -226,20 +226,7 @@ export function CreateManualForm() {
                                 <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
                               </SelectTrigger>
                               <SelectContent>
-                                {folders.map((folder) => (
-                                  <Fragment key={`parent-folder-${folder.id}`}>
-                                    <SelectItem value={`${folder.id}`}>{folder.name}</SelectItem>
-                                    {folder.children.map((subfolder) => (
-                                      <SelectItem key={`subfolder-${subfolder.id}`} value={`${subfolder.id}`}>
-                                        <span className="flex items-center">
-                                          <span className="text-xs text-muted-foreground">{folder.name}</span>
-                                          <IconChevronRight className="size-3.5 text-muted-foreground" />
-                                          {subfolder.name}
-                                        </span>
-                                      </SelectItem>
-                                    ))}
-                                  </Fragment>
-                                ))}
+                                <FolderSelectItems folders={folders} />
                               </SelectContent>
                             </Select>
                           </FormControl>
