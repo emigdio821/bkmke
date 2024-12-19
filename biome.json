@@ -11,6 +11,6 @@
         "noUnusedImports": "error"
       }
     },
-    "ignore": [".next", "build", "components/ui", "next.config.mjs", "node_modules"]
+    "ignore": [".next", "build", "next.config.mjs", "node_modules"]
   }
 }

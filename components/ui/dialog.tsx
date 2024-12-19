@@ -2,9 +2,10 @@
 
 import * as React from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { IconX } from '@tabler/icons-react'
+// import { IconX } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
-import { Button } from './button'
+
+// import { Button } from './button'
 
 const Dialog = DialogPrimitive.Root
 
@@ -44,12 +45,12 @@ const DialogContent = React.forwardRef<
         {...props}
       >
         {children}
-        <DialogPrimitive.Close asChild>
+        {/* <DialogPrimitive.Close asChild>
           <Button size="icon" variant="ghost" className="absolute right-4 top-4 size-6">
             <IconX className="size-4" />
             <span className="sr-only">Close</span>
           </Button>
-        </DialogPrimitive.Close>
+        </DialogPrimitive.Close> */}
       </DialogPrimitive.Content>
     </DialogOverlay>
   </DialogPortal>
