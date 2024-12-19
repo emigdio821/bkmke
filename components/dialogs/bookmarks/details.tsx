@@ -53,7 +53,7 @@ export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetai
               <div className="flex flex-1 flex-wrap items-center gap-x-1">
                 {bookmark.tag_items.map((tagItem) => (
                   <Button key={`${tagItem.id}-bk-details-tag`} variant="link" asChild>
-                    <Link href={`/tags/${tagItem.id}`}>
+                    <Link href={`/tags/${tagItem.tag?.id}`}>
                       <IconHash className="size-4" />
                       {tagItem.tag?.name || ''}
                     </Link>
