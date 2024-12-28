@@ -10,8 +10,11 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,ts,cjs,mjs,jsx,tsx,json,jsonc}": [
-      "biome check"
+    "*.{ts,tsx,js,cjs,mjs}": [
+      "biome check --no-errors-on-unmatched"
+    ],
+    "*.{ts,tsx,js,cjs,mjs,css,md,json,jsonc,yaml,html}": [
+      "prettier . --check"
     ]
   },
   "dependencies": {
