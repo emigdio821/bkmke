@@ -43,11 +43,7 @@ export const AlertActionDialog = NiceModal.create(<T,>({ action, message, title 
       open={modal.visible}
       onOpenChange={(isOpen) => {
         if (isLoading) return
-        if (isOpen) {
-          void modal.show()
-        } else {
-          void modal.hide()
-        }
+        isOpen ? modal.show() : modal.hide()
       }}
     >
       <AlertDialogContent
@@ -65,7 +61,7 @@ export const AlertActionDialog = NiceModal.create(<T,>({ action, message, title 
             disabled={isLoading}
             onClick={(e) => {
               e.preventDefault()
-              void handleAction()
+              handleAction()
             }}
           >
             <span className={cn(isLoading && 'invisible')}>Proceed</span>

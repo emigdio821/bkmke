@@ -81,12 +81,7 @@ export function CreateAutomaticForm() {
         Add the URL and everything will be filled automatically, except for the tags and/or folder.
       </p>
       <Form {...form}>
-        <form
-          onSubmit={(e) => {
-            void form.handleSubmit(onSubmit)(e)
-          }}
-          className="space-y-2"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
             name="url"
             control={form.control}
@@ -146,13 +141,7 @@ export function CreateAutomaticForm() {
                 )
               }}
             />
-            <Button
-              size="icon"
-              type="button"
-              onClick={() => {
-                void NiceModal.show(CreateFolderDialog)
-              }}
-            >
+            <Button size="icon" type="button" onClick={() => NiceModal.show(CreateFolderDialog)}>
               <IconPlus className="size-4" />
             </Button>
           </div>

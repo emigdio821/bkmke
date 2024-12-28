@@ -22,7 +22,7 @@ export function NavContent() {
 
       <NavMain />
 
-      <div className="h-auto w-full space-y-1 overflow-auto px-4">
+      <div className="h-auto w-full overflow-auto px-4 py-1">
         <FoldersNavItems />
         <TagsNavItems />
       </div>

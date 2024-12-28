@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconCheck, IconSelector } from '@tabler/icons-react'
+import { IconCheck, IconChevronDown } from '@tabler/icons-react'
 import type { Column } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
@@ -64,7 +64,7 @@ export function MultiSelect<TData, TValue>({
             emptyText || 'Empty data'
           ) : (
             <>
-              {selectedValues.length > 0 ? 'Selected' : placeholder}
+              {selectedValues.length > 0 ? 'Selected' : <span className="text-muted-foreground/70">{placeholder}</span>}
               {selectedValues.length > 0 && (
                 <>
                   <Separator orientation="vertical" className="mx-2 h-4" />
@@ -76,7 +76,7 @@ export function MultiSelect<TData, TValue>({
             </>
           )}
 
-          <IconSelector className="ml-auto size-4 text-muted-foreground" />
+          <IconChevronDown className="ml-auto size-4 text-muted-foreground/80" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">
@@ -88,12 +88,7 @@ export function MultiSelect<TData, TValue>({
               {options.map((option) => {
                 const isSelected = selectedValues.includes(option.value)
                 return (
-                  <CommandItem
-                    key={option.value}
-                    onSelect={() => {
-                      handleSelect(option.value)
-                    }}
-                  >
+                  <CommandItem key={option.value} onSelect={() => handleSelect(option.value)}>
                     <div
                       className={cn(
                         'mr-2 flex size-4 items-center justify-center rounded-[4px] border',

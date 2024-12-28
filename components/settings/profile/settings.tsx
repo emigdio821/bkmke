@@ -66,12 +66,7 @@ export function ProfileSettings() {
             </Avatar>
             <div>
               <p>Unable to fetch your profile</p>
-              <Button
-                variant="link"
-                onClick={() => {
-                  void refetch()
-                }}
-              >
+              <Button variant="link" onClick={() => refetch()}>
                 Refetch <IconReload className="ml-2 size-4" />
               </Button>
             </div>

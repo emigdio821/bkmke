@@ -17,13 +17,7 @@ export function TagsNavItems() {
 
   if (error) {
     return (
-      <Button
-        onClick={() => {
-          void refetch()
-        }}
-        variant="ghost"
-        className="w-full justify-start"
-      >
+      <Button onClick={() => refetch()} variant="ghost" className="w-full justify-start">
         <IconReload className="mr-2 size-4" />
         Refresh folders
       </Button>

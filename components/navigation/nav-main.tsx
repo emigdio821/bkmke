@@ -8,7 +8,7 @@ export function NavMain() {
   const { data: navItemsCount } = useNavItemsCount()
 
   return (
-    <div className="w-full space-y-1 px-4 pb-1 pt-4">
+    <div className="w-full space-y-1 px-4 pt-4">
       <NavItem
         menus={[
           {

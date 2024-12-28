@@ -1,7 +1,9 @@
+import { useRef, useState } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import {
   IconBookmarkPlus,
+  IconCircleX,
   IconFileImport,
   IconLayoutDashboard,
   IconList,
@@ -29,29 +31,56 @@ import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { DataTableHeaderActions } from './header-actions'
 
 export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
-  const debouncedSetFilterValue = debounce((value: string) => {
-    table.getColumn('name')?.setFilterValue(value)
-  })
-
+  const [inputValue, setInputValue] = useState('')
+  const searchRef = useRef<HTMLInputElement>(null)
   const layout = useTableLayoutStore((state) => state.layout)
   const updateLayout = useTableLayoutStore((state) => state.update)
   const isMasonryLayout = layout === 'masonry'
+
+  function handleClearInput() {
+    setInputValue('')
+    filterTable('')
+    searchRef.current?.focus()
+  }
+
+  function filterTable(value: string) {
+    table.getColumn('name')?.setFilterValue(value)
+  }
+
+  const debouncedSetFilterValue = debounce((value: string) => {
+    filterTable(value)
+  })
 
   return (
     <div className="mb-4 flex flex-col-reverse items-center gap-2 md:flex-row">
       <div className="relative w-full max-w-sm">
         <Input
           type="search"
-          className="peer pl-9"
+          ref={searchRef}
+          value={inputValue}
+          className="peer pe-9 ps-9"
           placeholder="Search by name or description"
           onChange={(event) => {
             const value = event.target.value
+            setInputValue(value)
             debouncedSetFilterValue(value)
           }}
         />
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 text-muted-foreground peer-disabled:opacity-50">
-          <IconSearch size={16} aria-hidden="true" role="presentation" />
+        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+          <IconSearch size={16} />
         </div>
+        {inputValue && (
+          <Button
+            size="icon"
+            type="button"
+            variant="unstyled"
+            aria-label="Clear input"
+            onClick={handleClearInput}
+            className="absolute inset-y-0 end-0 rounded-s-none text-muted-foreground/80 transition-colors hover:text-foreground focus:z-10"
+          >
+            <IconCircleX size={16} strokeWidth={2} aria-hidden="true" />
+          </Button>
+        )}
       </div>
       <div className="flex w-full flex-wrap items-center justify-center gap-2 md:flex-nowrap md:justify-between">
         <div className="flex items-center gap-2">

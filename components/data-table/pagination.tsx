@@ -19,7 +19,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
     <div className="flex flex-col items-end gap-2">
       <div className="flex items-center space-x-2">
         <div className="flex-1 text-sm text-muted-foreground">
-          {filteredRowLength} of {rowLength} item(s) selected.
+          {filteredRowLength} of {rowLength} selected.
         </div>
         <div className="flex items-center space-x-2">
           <Button
@@ -44,6 +44,12 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
             <span className="sr-only">Go to previous page</span>
             <IconChevronLeft className="size-4" />
           </Button>
+
+          <div className="text-sm font-medium">
+            {table.getState().pagination.pageIndex + 1}
+            <span className="text-muted-foreground">/{table.getPageCount()}</span>
+          </div>
+
           <Button
             variant="outline"
             className="size-8 p-0"
@@ -70,7 +76,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
       </div>
       <div className="flex items-center space-x-2">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Items per page</p>
+          <p className="text-sm font-medium text-muted-foreground">Items per page</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value: string) => {
@@ -88,9 +94,6 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               ))}
             </SelectContent>
           </Select>
-        </div>
-        <div className="text-sm font-medium">
-          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </div>
       </div>
     </div>

@@ -5,11 +5,11 @@ import NiceModal from '@ebay/nice-modal-react'
 import {
   IconBookmarkPlus,
   IconBookmarks,
+  IconChevronDown,
   IconFileImport,
   IconFolderPlus,
   IconLogout,
   IconReload,
-  IconSelector,
   IconSettings,
   IconTag,
   IconUser,
@@ -59,12 +59,7 @@ export function UserProfileDropdown() {
   if (isLoading) return <Skeleton className="h-9" />
   if (error || !profile)
     return (
-      <Button
-        variant="outline"
-        onClick={() => {
-          void refetch()
-        }}
-      >
+      <Button variant="outline" onClick={() => refetch()}>
         <IconReload size={16} className="mr-2" />
         Refetch profile data
       </Button>
@@ -87,23 +82,15 @@ export function UserProfileDropdown() {
               {profileNameOrEmail}
             </span>
           </div>
-          <IconSelector size={16} />
+          <IconChevronDown size={16} className="text-muted-foreground/80" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
-        <DropdownMenuItem
-          onSelect={() => {
-            void NiceModal.show(CreateFolderDialog)
-          }}
-        >
+        <DropdownMenuItem onSelect={() => NiceModal.show(CreateFolderDialog)}>
           <IconFolderPlus size={16} className="mr-2" />
           Create folder
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onSelect={() => {
-            void NiceModal.show(CreateTagDialog)
-          }}
-        >
+        <DropdownMenuItem onSelect={() => NiceModal.show(CreateTagDialog)}>
           <IconTag className="mr-2 size-4" />
           Create tag
         </DropdownMenuItem>
@@ -115,20 +102,12 @@ export function UserProfileDropdown() {
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem
-                  onSelect={() => {
-                    void NiceModal.show(CreateBookmarkDialog)
-                  }}
-                >
+                <DropdownMenuItem onSelect={() => NiceModal.show(CreateBookmarkDialog)}>
                   <IconBookmarkPlus className="mr-2 size-4" />
                   Create
                 </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  onSelect={() => {
-                    void NiceModal.show(ImportBookmarksDialog)
-                  }}
-                >
+                <DropdownMenuItem onSelect={() => NiceModal.show(ImportBookmarksDialog)}>
                   <IconFileImport className="mr-2 size-4" />
                   Import
                 </DropdownMenuItem>
@@ -143,11 +122,7 @@ export function UserProfileDropdown() {
             Settings
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => {
-            void handleLogOut()
-          }}
-        >
+        <DropdownMenuItem onClick={handleLogOut}>
           <IconLogout className="mr-2 size-4" />
           Log out
         </DropdownMenuItem>
