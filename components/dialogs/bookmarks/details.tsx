@@ -84,7 +84,7 @@ export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetai
           </div>
         )}
 
-        <DialogFooter className="flex-row items-center justify-end space-x-2 pt-6">
+        <DialogFooter className="pt-6">
           <ToggleFavBtn bookmark={bookmark} variant="outline" />
           <RowActions bookmark={bookmark} variant="outline" />
           <DialogClose asChild>
