@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { GenericFn } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
+import { IconAlertCircle } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import {
@@ -46,16 +47,20 @@ export const AlertActionDialog = NiceModal.create(<T,>({ action, message, title 
         isOpen ? modal.show() : modal.hide()
       }}
     >
-      <AlertDialogContent
-        onCloseAutoFocus={() => {
-          modal.remove()
-        }}
-      >
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title || 'Are you sure?'}</AlertDialogTitle>
-          <AlertDialogDescription>{message || 'This action cannot be undone.'}</AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter className="pt-6">
+      <AlertDialogContent onCloseAutoFocus={() => modal.remove()}>
+        <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
+          <div
+            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border"
+            aria-hidden="true"
+          >
+            <IconAlertCircle className="opacity-80" size={16} strokeWidth={2} />
+          </div>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{title || 'Are you sure?'}</AlertDialogTitle>
+            <AlertDialogDescription>{message || 'This action cannot be undone.'}</AlertDialogDescription>
+          </AlertDialogHeader>
+        </div>
+        <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             disabled={isLoading}

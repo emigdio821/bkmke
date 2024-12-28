@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
+import { IconAlertCircle } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import {
   BOOKMARKS_QUERY,
@@ -127,21 +128,29 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
           modal.remove()
         }}
       >
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            {bookmarks && bookmarks.length > 1 ? 'Remove bookmarks?' : 'Remove bookmark?'}
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            {bookmarks && bookmarks.length > 1 ? (
-              <>
-                You are about to remove <span className="font-semibold">{bookmarks.length}</span> bookmarks.
-              </>
-            ) : (
-              'You are about to remove this bookmark.'
-            )}{' '}
-            This action cannot be undone.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+        <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
+          <div
+            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border"
+            aria-hidden="true"
+          >
+            <IconAlertCircle className="opacity-80" size={16} strokeWidth={2} />
+          </div>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {bookmarks && bookmarks.length > 1 ? 'Remove bookmarks?' : 'Remove bookmark?'}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {bookmarks && bookmarks.length > 1 ? (
+                <>
+                  You are about to remove <span className="font-semibold">{bookmarks.length}</span> bookmarks.
+                </>
+              ) : (
+                'You are about to remove this bookmark.'
+              )}{' '}
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+        </div>
 
         {progress > 0 && <Progress value={progress} />}
         <AlertDialogFooter className="pt-6">
