@@ -34,8 +34,8 @@ export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
   const modal = useModal()
   const supabase = createClient()
   const queryClient = useQueryClient()
+  const userMetadata = user.user_metadata
   const formRef = useRef<HTMLFormElement>(null)
-  const userMetadata = user.user_metadata as UserMetadata
   const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
     defaultValues: {

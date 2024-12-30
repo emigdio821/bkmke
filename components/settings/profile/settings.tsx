@@ -1,6 +1,5 @@
 'use client'
 
-import type { UserMetadata } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import { IconReload, IconUser } from '@tabler/icons-react'
 import { DEMO_ROLE } from '@/lib/constants'
@@ -13,7 +12,7 @@ import { SettingsProfileSkeleton } from '@/components/skeletons'
 
 export function ProfileSettings() {
   const { data: profile, isLoading, refetch } = useProfile()
-  const userMetadata = profile?.user_metadata as UserMetadata
+  const userMetadata = profile?.user_metadata
   const appMetadata = profile?.app_metadata
 
   if (isLoading) return <SettingsProfileSkeleton />

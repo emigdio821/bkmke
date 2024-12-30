@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import type { UserMetadata } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import {
   IconBookmarkPlus,
@@ -43,7 +42,7 @@ export function UserProfileDropdown() {
   const supabase = createClient()
   const queryClient = useQueryClient()
   const { data: profile, isLoading, error, refetch } = useProfile()
-  const userMetadata = profile?.user_metadata as UserMetadata
+  const userMetadata = profile?.user_metadata
 
   async function handleLogOut() {
     const { error } = await supabase.auth.signOut()
