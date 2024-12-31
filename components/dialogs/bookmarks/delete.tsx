@@ -48,6 +48,8 @@ const messages = {
   multipleFailure: 'Some bookmarks failed to be deleted, try again.',
 }
 
+let completedCount = 0
+
 export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: DeleteBookmarksDialogProps) => {
   const { data: profile } = useProfile()
   const appMetadata = profile?.app_metadata
@@ -60,7 +62,6 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
   async function handleDeleteBookmarks(bookmarksToMove: Bookmark[]) {
     setLoading(true)
     setProgress(0)
-    const completedCount = { count: 0 }
 
     const movePromises = bookmarksToMove.map((bk) =>
       supabase
@@ -69,12 +70,11 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
         .eq('id', bk.id)
         .then((result) => {
           if (result.error) throw new Error(result.error.message)
-          completedCount.count++
-          bookmarksToMove.length > 1 && setProgress((completedCount.count / totalOperations) * 100)
+          completedCount++
+          bookmarksToMove.length > 1 && setProgress((completedCount / totalOperations) * 100)
         }),
     )
 
-    const areMultipleBks = completedCount.count > 1
     const totalOperations = movePromises.length
     const settledPromises = await Promise.allSettled(movePromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
@@ -85,13 +85,14 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
       })
     } else {
       toast.success('Success', {
-        description: areMultipleBks ? (
-          <>
-            <span className="font-semibold">{completedCount.count}</span> bookmarks has been deleted.
-          </>
-        ) : (
-          messages.singleSuccess
-        ),
+        description:
+          completedCount > 1 ? (
+            <>
+              <span className="font-semibold">{completedCount}</span> bookmarks has been deleted.
+            </>
+          ) : (
+            messages.singleSuccess
+          ),
       })
     }
 
@@ -114,16 +115,11 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
       open={modal.visible}
       onOpenChange={(isOpen) => {
         if (isLoading) return
-        if (isOpen) {
-          void modal.show()
-        } else {
-          void modal.hide()
-        }
+        isOpen ? modal.show() : modal.hide()
       }}
     >
       <AlertDialogContent
         className="max-w-lg transition-transform"
-        aria-describedby={undefined}
         onCloseAutoFocus={() => {
           modal.remove()
         }}

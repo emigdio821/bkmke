@@ -53,6 +53,8 @@ const messages = {
   multipleFailure: 'Some bookmarks failed to import, try again.',
 }
 
+let completedCount = 0
+
 export const ImportBookmarksDialog = NiceModal.create(() => {
   const modal = useModal()
   const { data: profile } = useProfile()
@@ -62,6 +64,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
   const [progress, setProgress] = useState(0)
   const { invalidateQueries } = useInvalidateQueries()
   const [dndFiles, setDndFiles] = useState<File[]>([])
+
   const form = useForm<z.infer<typeof importBookmarksSchema>>({
     resolver: zodResolver(importBookmarksSchema),
     defaultValues: {
@@ -130,21 +133,19 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       return
     }
 
-    const completedCount = { count: 0 }
-    const importPromises = bookmarkUrls.map(async (url) => {
-      await createBookmark({
+    const importPromises = bookmarkUrls.map((url) =>
+      createBookmark({
         url,
         tags: values.tags,
         folderId: values.folderId,
         isFavorite: false,
       }).then((result) => {
         if (result?.error) throw new Error(result.error)
-        completedCount.count++
-        bookmarkUrls.length > 1 && setProgress((completedCount.count / totalOperations) * 100)
-      })
-    })
+        completedCount++
+        bookmarkUrls.length > 1 && setProgress((completedCount / totalOperations) * 100)
+      }),
+    )
 
-    const areMultipleBks = completedCount.count > 1
     const totalOperations = importPromises.length
     const settledPromises = await Promise.allSettled(importPromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
@@ -161,20 +162,21 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
 
     if (errors.length > 0) {
       toast.error('Error', {
-        description: areMultipleBks ? messages.multipleFailure : messages.default,
+        description: completedCount > 1 ? messages.multipleFailure : messages.default,
       })
 
       return
     }
 
     toast.success('Success', {
-      description: areMultipleBks ? (
-        <>
-          <span className="font-semibold">{completedCount.count}</span> bookmarks have been imported.
-        </>
-      ) : (
-        'Bookmark has been imported.'
-      ),
+      description:
+        completedCount > 1 ? (
+          <>
+            <span className="font-semibold">{completedCount}</span> bookmarks have been imported.
+          </>
+        ) : (
+          'Bookmark has been imported.'
+        ),
     })
 
     await modal.hide()
@@ -186,22 +188,14 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       open={modal.visible}
       onOpenChange={(isOpen) => {
         if (form.formState.isSubmitting) return
-        if (isOpen) {
-          void modal.show()
-        } else {
-          void modal.hide()
-        }
+        isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogContent
-        aria-describedby={undefined}
-        onCloseAutoFocus={() => {
-          modal.remove()
-        }}
-      >
+      <DialogContent onCloseAutoFocus={() => modal.remove()}>
         <DialogHeader>
           <DialogTitle>Import bookmarks</DialogTitle>
         </DialogHeader>
+        <DialogDescription className="sr-only">Import your bookmarks here.</DialogDescription>
         <Form {...form}>
           <form
             onSubmit={(e) => {

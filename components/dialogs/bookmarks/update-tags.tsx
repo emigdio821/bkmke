@@ -44,6 +44,8 @@ interface MultipleBookmarks {
 
 type UpdateTagsDialogProps = SingleBookmark | MultipleBookmarks
 
+let completedCount = 0
+
 export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: UpdateTagsDialogProps) => {
   const { data: profile } = useProfile()
   const appMetadata = profile?.app_metadata
@@ -66,8 +68,6 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
   }
 
   async function handleTagUpdate(bookmarksToUpdate: Bookmark[], isDelete: boolean) {
-    const completedCount = { count: 0 }
-
     const updatePromises = bookmarksToUpdate.map(async (bk) => {
       return await Promise.allSettled(
         selectValue.map(async (tagId) => {
@@ -85,8 +85,8 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
           }
 
           if (error) throw new Error(error.message)
-          completedCount.count++
-          bookmarksToUpdate.length > 1 && setProgress((completedCount.count / totalOperations) * 100)
+          completedCount++
+          bookmarksToUpdate.length > 1 && setProgress((completedCount / totalOperations) * 100)
         }),
       )
     })

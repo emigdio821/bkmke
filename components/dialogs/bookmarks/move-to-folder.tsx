@@ -50,6 +50,8 @@ const messages = {
   multipleFailure: 'Some bookmarks failed to move, try again.',
 }
 
+let completedCount = 0
+
 export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: MoveToFolderDialogProps) => {
   const { data: profile } = useProfile()
   const appMetadata = profile?.app_metadata
@@ -71,7 +73,6 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
       return
     }
 
-    const completedCount = { count: 0 }
     setLoading(true)
     setProgress(0)
 
@@ -82,23 +83,22 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
         .eq('id', bk.id)
         .then((result) => {
           if (result.error) throw new Error(result.error.message)
-          completedCount.count++
-          bookmarksToMove.length > 1 && setProgress((completedCount.count / totalOperations) * 100)
+          completedCount++
+          bookmarksToMove.length > 1 && setProgress((completedCount / totalOperations) * 100)
         }),
     )
 
     const totalOperations = movePromises.length
-    const areMultipleBks = completedCount.count > 1
     const settledPromises = await Promise.allSettled(movePromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
     if (errors.length > 0) {
       toast.error('Error', {
-        description: areMultipleBks ? messages.multipleFailure : messages.singleFailure,
+        description: completedCount > 1 ? messages.multipleFailure : messages.singleFailure,
       })
     } else {
       toast.success('Success', {
-        description: areMultipleBks ? `${completedCount.count} bookmarks have been moved.` : messages.singleSuccess,
+        description: completedCount > 1 ? `${completedCount} bookmarks have been moved.` : messages.singleSuccess,
       })
     }
 
