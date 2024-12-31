@@ -62,6 +62,7 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
   async function handleDeleteBookmarks(bookmarksToMove: Bookmark[]) {
     setLoading(true)
     setProgress(0)
+    completedCount = 0
 
     const movePromises = bookmarksToMove.map((bk) =>
       supabase

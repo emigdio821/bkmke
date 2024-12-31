@@ -123,6 +123,9 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
   }
 
   async function onSubmit(values: z.infer<typeof importBookmarksSchema>) {
+    setProgress(0)
+    completedCount = 0
+
     const bookmarkUrls = values.bookmarks
       .split('\n')
       .filter((url) => url.trim() !== '')

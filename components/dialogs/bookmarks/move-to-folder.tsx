@@ -75,6 +75,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
 
     setLoading(true)
     setProgress(0)
+    completedCount = 0
 
     const movePromises = bookmarksToMove.map((bk) =>
       supabase

@@ -68,6 +68,9 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
   }
 
   async function handleTagUpdate(bookmarksToUpdate: Bookmark[], isDelete: boolean) {
+    setProgress(0)
+    completedCount = 0
+
     const updatePromises = bookmarksToUpdate.map(async (bk) => {
       return await Promise.allSettled(
         selectValue.map(async (tagId) => {
