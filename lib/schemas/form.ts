@@ -1,10 +1,10 @@
 import { z } from 'zod'
-import { MAX_INPUT_LENGTH } from '@/lib/constants'
+import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 
 const requiredString = z.string().trim().min(1, 'Required field')
 const optionalString = z.string().trim()
-const requiredWithMaxChars = optionalString.max(MAX_INPUT_LENGTH)
-const optionalWithMaxChars = optionalString.max(MAX_INPUT_LENGTH)
+const requiredNameWithMaxChars = requiredString.max(MAX_NAME_LENGTH)
+const optionalDescWithMaxChars = optionalString.max(MAX_DESC_LENGTH)
 
 export const loginSchema = z.object({
   email: requiredString.email(),
@@ -18,17 +18,17 @@ export const editUserSchema = z.object({
 })
 
 export const createTagSchema = z.object({
-  name: requiredWithMaxChars,
+  name: requiredNameWithMaxChars,
 })
 
 export const createFolderSchema = z.object({
-  name: requiredWithMaxChars,
-  description: optionalWithMaxChars,
+  name: requiredNameWithMaxChars,
+  description: optionalDescWithMaxChars,
 })
 
 export const createManualBookmarkSchema = z.object({
-  name: requiredWithMaxChars,
-  description: optionalWithMaxChars,
+  name: requiredNameWithMaxChars,
+  description: optionalDescWithMaxChars,
   url: optionalString.url(),
   tags: optionalString.array(),
   folderId: optionalString,
@@ -43,8 +43,8 @@ export const createAutomaticBookmarkSchema = z.object({
 })
 
 export const editBookmarkSchema = z.object({
-  name: requiredWithMaxChars,
-  description: optionalWithMaxChars,
+  name: requiredNameWithMaxChars,
+  description: optionalDescWithMaxChars,
   url: requiredString.url(),
   tags: optionalString.array(),
   folderId: optionalString,

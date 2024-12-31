@@ -6,13 +6,21 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { DEMO_ROLE, FOLDERS_QUERY, MAX_INPUT_LENGTH } from '@/lib/constants'
+import { DEMO_ROLE, FOLDERS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -28,6 +36,7 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
   const modal = useModal()
   const queryClient = useQueryClient()
   const supabase = createClient()
+
   const form = useForm<z.infer<typeof createFolderSchema>>({
     resolver: zodResolver(createFolderSchema),
     defaultValues: {
@@ -63,23 +72,15 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
       open={modal.visible}
       onOpenChange={(isOpen) => {
         if (form.formState.isSubmitting) return
-        if (isOpen) {
-          void modal.show()
-        } else {
-          void modal.hide()
-        }
+        isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogContent
-        className="max-w-sm"
-        aria-describedby={undefined}
-        onCloseAutoFocus={() => {
-          modal.remove()
-        }}
-      >
+      <DialogContent className="sm:max-w-xs" onCloseAutoFocus={() => modal.remove()}>
         <DialogHeader>
           <DialogTitle>Create folder</DialogTitle>
         </DialogHeader>
+
+        <DialogDescription className="sr-only">Create folder dialog.</DialogDescription>
 
         <Form {...form}>
           <form
@@ -96,13 +97,11 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input maxLength={MAX_INPUT_LENGTH} {...field} />
+                    <Input maxLength={MAX_NAME_LENGTH} {...field} />
                   </FormControl>
-                  {field.value.length >= MAX_INPUT_LENGTH - 20 && (
-                    <span className="text-xs text-muted-foreground">
-                      {field.value.length}/{MAX_INPUT_LENGTH} characters
-                    </span>
-                  )}
+                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                    {MAX_NAME_LENGTH - field.value.length} characters left
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -114,13 +113,11 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea className="max-h-24" maxLength={MAX_INPUT_LENGTH} {...field} />
+                    <Textarea className="max-h-24" maxLength={MAX_DESC_LENGTH} {...field} />
                   </FormControl>
-                  {field.value.length >= MAX_INPUT_LENGTH - 20 && (
-                    <span className="text-xs text-muted-foreground">
-                      {field.value.length}/{MAX_INPUT_LENGTH} characters
-                    </span>
-                  )}
+                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                    {MAX_DESC_LENGTH - field.value.length} characters left
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}

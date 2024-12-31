@@ -14,7 +14,8 @@ import {
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
-  MAX_INPUT_LENGTH,
+  MAX_DESC_LENGTH,
+  MAX_NAME_LENGTH,
   NAV_ITEMS_COUNT_QUERY,
   TAG_ITEMS_QUERY,
   TAGS_QUERY,
@@ -131,12 +132,7 @@ export function CreateManualForm() {
         Create your bookmark by adding the details by yourself.
       </p>
       <Form {...form}>
-        <form
-          onSubmit={(e) => {
-            void form.handleSubmit(onSubmit)(e)
-          }}
-          className="space-y-2"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
             name="name"
             control={form.control}
@@ -144,13 +140,11 @@ export function CreateManualForm() {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input maxLength={MAX_INPUT_LENGTH} {...field} />
+                  <Input maxLength={MAX_NAME_LENGTH} {...field} />
                 </FormControl>
-                {field.value.length >= MAX_INPUT_LENGTH - 20 && (
-                  <span className="text-xs text-muted-foreground">
-                    {field.value.length}/{MAX_INPUT_LENGTH} characters
-                  </span>
-                )}
+                <div className="text-right text-xs tabular-nums text-muted-foreground">
+                  {MAX_NAME_LENGTH - field.value.length} characters left
+                </div>
                 <FormMessage />
               </FormItem>
             )}
@@ -164,16 +158,14 @@ export function CreateManualForm() {
                 <FormControl>
                   <Textarea
                     className="max-h-24"
-                    maxLength={MAX_INPUT_LENGTH}
+                    maxLength={MAX_DESC_LENGTH}
                     placeholder="Small description (optional)"
                     {...field}
                   />
                 </FormControl>
-                {field.value.length >= MAX_INPUT_LENGTH - 20 && (
-                  <span className="text-xs text-muted-foreground">
-                    {field.value.length}/{MAX_INPUT_LENGTH} characters
-                  </span>
-                )}
+                <div className="text-right text-xs tabular-nums text-muted-foreground">
+                  {MAX_DESC_LENGTH - field.value.length} characters left
+                </div>
                 <FormMessage />
               </FormItem>
             )}

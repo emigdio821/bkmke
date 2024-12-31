@@ -5,14 +5,22 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { DEMO_ROLE, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
+import { DEMO_ROLE, MAX_NAME_LENGTH, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
@@ -55,32 +63,18 @@ export const CreateTagDialog = NiceModal.create(() => {
       open={modal.visible}
       onOpenChange={(isOpen) => {
         if (form.formState.isSubmitting) return
-        if (isOpen) {
-          void modal.show()
-        } else {
-          void modal.hide()
-        }
+        isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogContent
-        className="max-w-xs"
-        aria-describedby={undefined}
-        onCloseAutoFocus={() => {
-          modal.remove()
-        }}
-      >
+      <DialogContent className="sm:max-w-xs" onCloseAutoFocus={() => modal.remove()}>
         <DialogHeader>
           <DialogTitle>Create tag</DialogTitle>
         </DialogHeader>
 
+        <DialogDescription className="sr-only">Create tag dialog.</DialogDescription>
+
         <Form {...form}>
-          <form
-            onSubmit={(e) => {
-              e.stopPropagation()
-              void form.handleSubmit(onSubmit)(e)
-            }}
-            className="space-y-2"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <FormField
               name="name"
               control={form.control}
@@ -88,8 +82,11 @@ export const CreateTagDialog = NiceModal.create(() => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input maxLength={MAX_NAME_LENGTH} {...field} />
                   </FormControl>
+                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                    {MAX_NAME_LENGTH - field.value.length} characters left
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}

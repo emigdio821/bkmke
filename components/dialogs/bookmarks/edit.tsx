@@ -11,7 +11,8 @@ import {
   DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
-  MAX_INPUT_LENGTH,
+  MAX_DESC_LENGTH,
+  MAX_NAME_LENGTH,
   TAG_ITEMS_QUERY,
   TAGS_QUERY,
 } from '@/lib/constants'
@@ -131,31 +132,17 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
     <Dialog
       open={modal.visible}
       onOpenChange={(isOpen) => {
-        if (isOpen) {
-          void modal.show()
-        } else {
-          void modal.hide()
-        }
+        isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogContent
-        aria-describedby={undefined}
-        onCloseAutoFocus={() => {
-          modal.remove()
-        }}
-      >
+      <DialogContent onCloseAutoFocus={() => modal.remove()}>
         <DialogHeader>
           <DialogTitle>Edit bookmark</DialogTitle>
-          <DialogDescription className="break-words">{bookmark.name}</DialogDescription>
         </DialogHeader>
+        <DialogDescription className="break-words">{bookmark.name}</DialogDescription>
         <div>
           <Form {...form}>
-            <form
-              onSubmit={(e) => {
-                void form.handleSubmit(onSubmit)(e)
-              }}
-              className="space-y-2"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
               <FormField
                 name="name"
                 control={form.control}
@@ -163,13 +150,11 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder={bookmark.name} maxLength={MAX_INPUT_LENGTH} {...field} />
+                      <Input placeholder={bookmark.name} maxLength={MAX_NAME_LENGTH} {...field} />
                     </FormControl>
-                    {field.value.length >= MAX_INPUT_LENGTH - 20 && (
-                      <span className="text-xs text-muted-foreground">
-                        {field.value.length}/{MAX_INPUT_LENGTH} characters
-                      </span>
-                    )}
+                    <div className="text-right text-xs tabular-nums text-muted-foreground">
+                      {MAX_NAME_LENGTH - field.value.length} characters left
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -183,16 +168,14 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                     <FormControl>
                       <Textarea
                         className="max-h-24"
-                        maxLength={MAX_INPUT_LENGTH}
+                        maxLength={MAX_DESC_LENGTH}
                         placeholder={bookmark.description || undefined}
                         {...field}
                       />
                     </FormControl>
-                    {field.value.length >= MAX_INPUT_LENGTH - 20 && (
-                      <span className="text-xs text-muted-foreground">
-                        {field.value.length}/{MAX_INPUT_LENGTH} characters
-                      </span>
-                    )}
+                    <div className="text-right text-xs tabular-nums text-muted-foreground">
+                      {MAX_DESC_LENGTH - field.value.length} characters left
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}

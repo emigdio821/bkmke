@@ -6,14 +6,29 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 import type { Tables } from '@/types/database.types'
-import { BOOKMARKS_QUERY, DEMO_ROLE, FAV_BOOKMARKS_QUERY, FOLDERS_QUERY, MAX_INPUT_LENGTH } from '@/lib/constants'
+import {
+  BOOKMARKS_QUERY,
+  DEMO_ROLE,
+  FAV_BOOKMARKS_QUERY,
+  FOLDERS_QUERY,
+  MAX_DESC_LENGTH,
+  MAX_NAME_LENGTH,
+} from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -54,24 +69,14 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
       open={modal.visible}
       onOpenChange={(isOpen) => {
         if (form.formState.isSubmitting) return
-        if (isOpen) {
-          void modal.show()
-        } else {
-          void modal.hide()
-        }
+        isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogContent
-        className="max-w-sm"
-        aria-describedby={undefined}
-        onCloseAutoFocus={() => {
-          modal.remove()
-        }}
-      >
+      <DialogContent className="sm:max-w-xs" onCloseAutoFocus={() => modal.remove()}>
         <DialogHeader>
           <DialogTitle>Edit folder</DialogTitle>
         </DialogHeader>
-
+        <DialogDescription className="sr-only">Edit folder dialog</DialogDescription>
         <Form {...form}>
           <form
             onSubmit={(e) => {
@@ -87,13 +92,11 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder={folder.name} {...field} />
+                    <Input placeholder={folder.name} maxLength={MAX_NAME_LENGTH} {...field} />
                   </FormControl>
-                  {field.value.length >= MAX_INPUT_LENGTH - 20 && (
-                    <span className="text-xs text-muted-foreground">
-                      {field.value.length}/{MAX_INPUT_LENGTH} characters
-                    </span>
-                  )}
+                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                    {MAX_NAME_LENGTH - field.value.length} characters left
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -108,16 +111,14 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
                   <FormControl>
                     <Textarea
                       className="max-h-24"
-                      maxLength={MAX_INPUT_LENGTH}
+                      maxLength={MAX_DESC_LENGTH}
                       placeholder={folder.description || undefined}
                       {...field}
                     />
                   </FormControl>
-                  {field.value.length >= MAX_INPUT_LENGTH - 20 && (
-                    <span className="text-xs text-muted-foreground">
-                      {field.value.length}/{MAX_INPUT_LENGTH} characters
-                    </span>
-                  )}
+                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                    {MAX_DESC_LENGTH - field.value.length} characters left
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}

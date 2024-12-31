@@ -107,12 +107,7 @@ export function CreateAutomaticForm() {
                       {field.value && (
                         <>
                           <span className="text-muted-foreground"> · </span>
-                          <Button
-                            variant="link"
-                            onClick={() => {
-                              form.setValue('folderId', '')
-                            }}
-                          >
+                          <Button variant="link" onClick={() => form.setValue('folderId', '')}>
                             Clear selection
                           </Button>
                         </>
