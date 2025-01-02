@@ -1,10 +1,11 @@
 'use client'
 
+import Link from 'next/link'
 import { siteConfig } from '@/config/site'
 import { DEMO_ROLE } from '@/lib/constants'
 import { useProfile } from '@/hooks/use-profile'
+import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { TypographyH4 } from '@/components/ui/typography'
 import { FoldersNavItems } from '@/components/folders/nav-items'
 import { TagsNavItems } from '@/components/tags/nav-items'
 import { UserProfileDropdown } from '@/components/user-profile-dropdown'
@@ -17,7 +18,17 @@ export function NavContent() {
   return (
     <nav className="flex h-full w-full flex-col items-start border-r">
       <div className="w-full p-4 pb-0">
-        <TypographyH4>{siteConfig.name}</TypographyH4>
+        <Button variant="plain" className="w-full space-x-2" asChild>
+          <Link href="/">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              bk
+            </div>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-semibold tracking-tight">{siteConfig.name}</span>
+              <span className="truncate text-xs tracking-tight">Bookmark manager</span>
+            </div>
+          </Link>
+        </Button>
       </div>
 
       <NavMain />

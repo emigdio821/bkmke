@@ -16,7 +16,7 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         underline: 'text-primary underline-offset-4 underline hover:no-underline',
-        plain: 'transition-opacity hover:opacity-70',
+        plain: 'transition-opacity hover:opacity-80',
         unstyled: '',
       },
       size: {
@@ -43,7 +43,7 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button'
-    const flatVariants = ['link', 'underline', 'unstyled']
+    const flatVariants = ['link', 'underline', 'unstyled', 'plain']
     const btnSize = size || (variant && flatVariants.includes(variant) ? 'flat' : size)
 
     return <Comp className={cn(buttonVariants({ variant, size: btnSize, className }))} ref={ref} {...props} />

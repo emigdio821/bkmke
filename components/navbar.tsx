@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { IconMenu } from '@tabler/icons-react'
 import { siteConfig } from '@/config/site'
 import { Button } from '@/components/ui/button'
@@ -20,7 +21,10 @@ export function Navbar() {
               <NavContent />
             </SheetContent>
           </Sheet>
-          <TypographyH4>{siteConfig.name}</TypographyH4>
+
+          <Link href="/" className="truncate font-semibold">
+            <TypographyH4>{siteConfig.name}</TypographyH4>
+          </Link>
         </div>
       </div>
     </header>
