@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { siteConfig } from '@/config/site'
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-// import { DemoPopover } from '@/components/demo-popover'
+import { DemoPopover } from '@/components/demo-popover'
 import { LoginForm } from '@/components/login/login-form'
 
 export default async function LoginPage() {
@@ -19,7 +19,7 @@ export default async function LoginPage() {
           <span>
             Welcome back to <span className="font-semibold">{siteConfig.name}</span>.
           </span>
-          {/* <DemoPopover /> */}
+          <DemoPopover />
         </CardDescription>
       </CardHeader>
       <CardContent>
