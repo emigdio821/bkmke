@@ -88,11 +88,16 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
             <FormField
               name="name"
               control={form.control}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder={folder.name} maxLength={MAX_NAME_LENGTH} {...field} />
+                    <Input
+                      placeholder={folder.name}
+                      hasError={!!fieldState.error}
+                      maxLength={MAX_NAME_LENGTH}
+                      {...field}
+                    />
                   </FormControl>
                   <div className="text-right text-xs tabular-nums text-muted-foreground">
                     {MAX_NAME_LENGTH - field.value.length} characters left

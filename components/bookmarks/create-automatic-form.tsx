@@ -85,11 +85,11 @@ export function CreateAutomaticForm() {
           <FormField
             name="url"
             control={form.control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel>URL</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input hasError={!!fieldState.error} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -48,11 +48,11 @@ export function LoginForm() {
         <FormField
           control={form.control}
           name="email"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input hasError={!!fieldState.error} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -61,11 +61,11 @@ export function LoginForm() {
         <FormField
           control={form.control}
           name="password"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <PasswordInput {...field} />
+                <PasswordInput hasError={!!fieldState.error} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

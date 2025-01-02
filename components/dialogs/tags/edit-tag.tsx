@@ -11,6 +11,7 @@ import {
   DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
+  MAX_NAME_LENGTH,
   TAG_ITEMS_QUERY,
   TAGS_QUERY,
 } from '@/lib/constants'
@@ -59,15 +60,11 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
       open={modal.visible}
       onOpenChange={(isOpen) => {
         if (form.formState.isSubmitting) return
-        if (isOpen) {
-          void modal.show()
-        } else {
-          void modal.hide()
-        }
+        isOpen ? modal.show() : modal.hide()
       }}
     >
       <DialogContent
-        className="max-w-xs"
+        className="sm:max-w-xs"
         aria-describedby={undefined}
         onCloseAutoFocus={() => {
           modal.remove()
@@ -88,12 +85,20 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
             <FormField
               name="name"
               control={form.control}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      placeholder={tag.name}
+                      hasError={!!fieldState.error}
+                      maxLength={MAX_NAME_LENGTH}
+                      {...field}
+                    />
                   </FormControl>
+                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                    {MAX_NAME_LENGTH - field.value.length} characters left
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}

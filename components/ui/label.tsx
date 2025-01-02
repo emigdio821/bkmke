@@ -4,10 +4,11 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 const Label = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
-  ({ className, ...props }, ref) => (
-    // biome-ignore lint/a11y/noLabelWithoutControl: <explanation>
+  ({ className, htmlFor, ...props }, ref) => (
     <label
       ref={ref}
+      htmlFor={htmlFor}
+      aria-label={props['aria-label']}
       className={cn(
         'text-sm font-medium leading-4 text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
         className,

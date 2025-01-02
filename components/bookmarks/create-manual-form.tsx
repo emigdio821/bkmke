@@ -136,11 +136,11 @@ export function CreateManualForm() {
           <FormField
             name="name"
             control={form.control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input maxLength={MAX_NAME_LENGTH} {...field} />
+                  <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
                 </FormControl>
                 <div className="text-right text-xs tabular-nums text-muted-foreground">
                   {MAX_NAME_LENGTH - field.value.length} characters left
@@ -173,11 +173,11 @@ export function CreateManualForm() {
           <FormField
             name="url"
             control={form.control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel>URL</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input hasError={!!fieldState.error} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

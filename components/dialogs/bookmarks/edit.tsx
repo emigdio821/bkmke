@@ -146,11 +146,16 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
               <FormField
                 name="name"
                 control={form.control}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder={bookmark.name} maxLength={MAX_NAME_LENGTH} {...field} />
+                      <Input
+                        placeholder={bookmark.name}
+                        hasError={!!fieldState.error}
+                        maxLength={MAX_NAME_LENGTH}
+                        {...field}
+                      />
                     </FormControl>
                     <div className="text-right text-xs tabular-nums text-muted-foreground">
                       {MAX_NAME_LENGTH - field.value.length} characters left
@@ -183,11 +188,11 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
               <FormField
                 name="url"
                 control={form.control}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel>URL</FormLabel>
                     <FormControl>
-                      <Input placeholder={bookmark.url} {...field} />
+                      <Input placeholder={bookmark.url} hasError={!!fieldState.error} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
