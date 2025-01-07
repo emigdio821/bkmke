@@ -14,7 +14,7 @@
       "biome check --no-errors-on-unmatched"
     ],
     "*.{ts,tsx,js,cjs,mjs,css,md,json,jsonc,yaml,html}": [
-      "prettier . --check"
+      "prettier --check"
     ]
   },
   "dependencies": {
