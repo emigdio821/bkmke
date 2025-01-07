@@ -12,7 +12,7 @@ import {
 } from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
 import { useTableLayoutStore } from '@/lib/stores/table-layout'
-import { debounce } from '@/lib/utils'
+import { useDebounceFn } from '@/hooks/use-debounce-fn'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -37,6 +37,12 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
   const updateLayout = useTableLayoutStore((state) => state.update)
   const isMasonryLayout = layout === 'masonry'
 
+  const debouncedFilter = useDebounceFn(handleSearchFilter)
+
+  function handleSearchFilter(value: string) {
+    filterTable(value)
+  }
+
   function handleClearInput() {
     setInputValue('')
     filterTable('')
@@ -46,10 +52,6 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
   function filterTable(value: string) {
     table.getColumn('name')?.setFilterValue(value)
   }
-
-  const debouncedSetFilterValue = debounce((value: string) => {
-    filterTable(value)
-  })
 
   return (
     <div className="mb-4 flex flex-col-reverse items-center gap-2 md:flex-row">
@@ -63,7 +65,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
           onChange={(event) => {
             const value = event.target.value
             setInputValue(value)
-            debouncedSetFilterValue(value)
+            debouncedFilter(value)
           }}
         />
         <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">

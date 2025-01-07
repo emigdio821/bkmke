@@ -81,18 +81,6 @@ export function formatBytes(
   }`
 }
 
-export function debounce<T extends (...args: never[]) => void>(fn: T, delay = 1000) {
-  let timeoutId: NodeJS.Timeout
-
-  return (...args: Parameters<T>) => {
-    if (timeoutId) clearTimeout(timeoutId)
-
-    timeoutId = setTimeout(() => {
-      fn(...args)
-    }, delay)
-  }
-}
-
 export function truncateString(str: string, size: number) {
   return `${str.slice(0, size)}...`
 }
