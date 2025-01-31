@@ -86,7 +86,7 @@ export function UserProfileDropdown() {
               {profileNameOrEmail}
             </span>
           </div>
-          <IconChevronDown size={16} className="text-muted-foreground/80" />
+          <IconChevronDown size={16} className="text-muted-foreground" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">

@@ -7,7 +7,7 @@ import { useTagItems } from '@/hooks/use-tag-items'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { TypographyH4 } from '@/components/ui/typography'
+import { Heading } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
@@ -25,7 +25,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
         <div>
           <div className="flex items-center justify-center space-x-2">
             <IconBug size={24} />
-            <TypographyH4>Error</TypographyH4>
+            <Heading>Error</Heading>
           </div>
           <p className="text-muted-foreground">
             Unable to fetch this tag at this time, try again or check if the tag still exists.
@@ -45,7 +45,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
           <Skeleton className="h-2 w-28" />
         </div>
       ) : (
-        <TypographyH4>{tag?.[0]?.name || 'Tag items'}</TypographyH4>
+        <Heading>{tag?.[0]?.name || 'Tag items'}</Heading>
       )}
       <div className="mt-4">
         {isLoading ? (
@@ -60,7 +60,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
                   <div>
                     <div className="flex items-center justify-center space-x-2">
                       <IconTagOff size={24} />
-                      <TypographyH4>Empty</TypographyH4>
+                      <Heading>Empty</Heading>
                     </div>
                     <p className="text-muted-foreground">This tag does not contain items yet.</p>
                   </div>

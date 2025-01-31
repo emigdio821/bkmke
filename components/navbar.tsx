@@ -4,7 +4,7 @@ import { siteConfig } from '@/config/site'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { NavContent } from './navigation/nav-content'
-import { TypographyH4 } from './ui/typography'
+import { Heading } from './ui/typography'
 
 export function Navbar() {
   return (
@@ -23,7 +23,7 @@ export function Navbar() {
           </Sheet>
 
           <Link href="/" className="truncate font-semibold">
-            <TypographyH4>{siteConfig.name}</TypographyH4>
+            <Heading>{siteConfig.name}</Heading>
           </Link>
         </div>
       </div>

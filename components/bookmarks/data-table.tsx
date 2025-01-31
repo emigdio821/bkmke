@@ -59,7 +59,7 @@ export function DataTable({ columns, data }: DataTableProps) {
   return (
     <>
       <DataTableHeaders table={table} />
-      <div className="mb-2">
+      <div className="mb-4">
         {layout === 'masonry' ? <MasonryLayout table={table} /> : <TableLayout table={table} />}
       </div>
       <DataTablePagination table={table} />

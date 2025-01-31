@@ -14,7 +14,7 @@ import { useFolder } from '@/hooks/use-folder'
 import { useFolderItems } from '@/hooks/use-folder-items'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { TypographyH4 } from '@/components/ui/typography'
+import { Heading } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
@@ -32,7 +32,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
         <div>
           <div className="flex items-center justify-center space-x-2">
             <IconBug size={24} />
-            <TypographyH4>Error</TypographyH4>
+            <Heading>Error</Heading>
           </div>
           <p className="text-muted-foreground">
             Unable to fetch this folder at this time, try again or check if the folder still exists.
@@ -60,7 +60,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
         <>
           {folder && (
             <>
-              <TypographyH4>{folder[0]?.name || 'Folder items'}</TypographyH4>
+              <Heading>{folder[0]?.name || 'Folder items'}</Heading>
               {folder[0]?.description && <p className="text-muted-foreground text-sm">{folder[0].description}</p>}
             </>
           )}
@@ -79,7 +79,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
                   <div>
                     <div className="flex items-center justify-center space-x-2">
                       <IconFolderOff size={24} />
-                      <TypographyH4>Empty</TypographyH4>
+                      <Heading>Empty</Heading>
                     </div>
                     <p className="text-muted-foreground">This folder does not contain items yet.</p>
                   </div>

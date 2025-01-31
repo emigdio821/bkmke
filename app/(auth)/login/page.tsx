@@ -1,5 +1,5 @@
 import { siteConfig } from '@/config/site'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { DemoPopover } from '@/components/demo-popover'
 import { LoginForm } from '@/components/login/login-form'
 
@@ -15,9 +15,7 @@ export default function LoginPage() {
           <DemoPopover />
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <LoginForm />
-      </CardContent>
+      <LoginForm />
     </Card>
   )
 }

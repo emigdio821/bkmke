@@ -13,8 +13,8 @@ export function DemoPopover() {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="text-sm">
-        <h4 className="font-medium">Demo credentials</h4>
-        <div className="bg-muted/50 text-muted-foreground mt-2 rounded-md border px-4 py-2 text-xs">
+        <p className="leading-none font-medium tracking-tight">Demo credentials</p>
+        <div className="text-muted-foreground mt-2 text-xs">
           <p>email: demo@bkmke.com</p>
           <p>password: demo</p>
         </div>

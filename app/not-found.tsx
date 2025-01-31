@@ -35,13 +35,13 @@ export default function NotFound() {
               <IconGhost3 size={32} className="text-muted-foreground mx-auto mb-2" />
               404
             </CardTitle>
-            <CardContent className="text-center text-sm">This page does not exist.</CardContent>
-            <CardFooter className="items-center justify-center">
-              <Button asChild>
-                <Link href="/">Back to home</Link>
-              </Button>
-            </CardFooter>
           </CardHeader>
+          <CardContent className="text-center text-sm">This page does not exist.</CardContent>
+          <CardFooter className="items-center justify-center">
+            <Button className="w-full" asChild>
+              <Link href="/">Back to home</Link>
+            </Button>
+          </CardFooter>
         </Card>
       </section>
       <Footer />

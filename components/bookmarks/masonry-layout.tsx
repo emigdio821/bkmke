@@ -33,7 +33,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
           }
         }}
         data-selected={row.getIsSelected()}
-        className="focus-visible:outline-ring data-[selected=true]:bg-muted/50 outline-hidden focus-visible:outline-2 focus-visible:outline-offset-1"
+        className="focus-visible:outline-ring data-[selected=true]:bg-subtle outline-hidden focus-visible:outline-2 focus-visible:outline-offset-1"
       >
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
@@ -94,7 +94,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
           )}
         </CardContent>
 
-        <CardFooter className="justify-between space-x-2">
+        <CardFooter className="items-center justify-between space-x-2">
           <Checkbox
             aria-label="Select row"
             checked={row.getIsSelected()}

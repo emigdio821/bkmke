@@ -27,7 +27,6 @@ import {
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { PasswordInput } from '@/components/ui/password-input'
 import { Spinner } from '@/components/spinner'
 
 export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
@@ -125,7 +124,7 @@ export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <PasswordInput {...field} />
+                      <Input type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -63,7 +63,7 @@ export function MultiSelect<TData, TValue>({
             emptyText || 'Empty data'
           ) : (
             <>
-              {selectedValues.length > 0 ? 'Selected' : <span className="text-muted-foreground/70">{placeholder}</span>}
+              {selectedValues.length > 0 ? 'Selected' : <span className="text-muted-foreground">{placeholder}</span>}
               {selectedValues.length > 0 && (
                 <>
                   <div className="bg-border mx-2 h-4 w-px" />
@@ -75,7 +75,7 @@ export function MultiSelect<TData, TValue>({
             </>
           )}
 
-          <IconChevronDown className="text-muted-foreground/80 ml-auto size-4" />
+          <IconChevronDown className="text-muted-foreground ml-auto size-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">

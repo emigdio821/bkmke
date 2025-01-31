@@ -8,7 +8,6 @@ import {
   IconLayoutDashboard,
   IconList,
   IconPlus,
-  IconSearch,
 } from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
 import { useTableLayoutStore } from '@/lib/stores/table-layout'
@@ -68,9 +67,6 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
             debouncedFilter(value)
           }}
         />
-        <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
-          <IconSearch size={16} />
-        </div>
         {inputValue && (
           <Button
             size="icon"
@@ -78,7 +74,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
             variant="unstyled"
             aria-label="Clear input"
             onClick={handleClearInput}
-            className="text-muted-foreground/80 hover:text-foreground absolute inset-y-0 end-0 rounded-s-none transition-colors focus:z-10"
+            className="text-muted-foreground hover:text-foreground absolute inset-y-0 end-0 rounded-s-none transition-colors focus:z-10"
           >
             <IconCircleX size={16} strokeWidth={2} aria-hidden="true" />
           </Button>

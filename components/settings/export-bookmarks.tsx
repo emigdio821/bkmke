@@ -5,8 +5,8 @@ import { toast } from 'sonner'
 import { siteConfig } from '@/config/site'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { TypographyInlineCode } from '@/components/ui/typography'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { InlineCode } from '@/components/ui/typography'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
 
 export function ExportBookmarks() {
@@ -37,11 +37,11 @@ export function ExportBookmarks() {
 
   return (
     <Card>
-      <CardHeader className="justify-between gap-2 sm:flex-row">
-        <div className="space-y-1.5">
-          <CardTitle>Export bookmarks</CardTitle>
-          <CardDescription>Export your bookmarks as a plain text file.</CardDescription>
-        </div>
+      <CardHeader>
+        <CardTitle>Export bookmarks</CardTitle>
+        <CardDescription>Export your bookmarks as a plain text file.</CardDescription>
+      </CardHeader>
+      <CardFooter>
         <Button
           type="button"
           variant="outline"
@@ -53,8 +53,7 @@ export function ExportBookmarks() {
               title: 'Export bookmarks?',
               message: (
                 <>
-                  This action will export all your bookmarks in a <TypographyInlineCode>.txt</TypographyInlineCode>{' '}
-                  file.
+                  This action will export all your bookmarks in a <InlineCode>.txt</InlineCode> file.
                 </>
               ),
             })
@@ -62,7 +61,7 @@ export function ExportBookmarks() {
         >
           Export
         </Button>
-      </CardHeader>
+      </CardFooter>
     </Card>
   )
 }

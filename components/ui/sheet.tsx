@@ -1,9 +1,8 @@
 'use client'
 
-import * as React from 'react'
-import * as SheetPrimitive from '@radix-ui/react-dialog'
 import { IconX } from '@tabler/icons-react'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Dialog as SheetPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
 
 const Sheet = SheetPrimitive.Root
@@ -14,19 +13,15 @@ const SheetClose = SheetPrimitive.Close
 
 const SheetPortal = SheetPrimitive.Portal
 
-const SheetOverlay = React.forwardRef<
-  React.ElementRef<typeof SheetPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+const SheetOverlay = ({ className, ...props }: SheetPrimitive.DialogOverlayProps) => (
   <SheetPrimitive.Overlay
     className={cn(
       'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80',
       className,
     )}
     {...props}
-    ref={ref}
   />
-))
+)
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
 
 const sheetVariants = cva(
@@ -48,28 +43,19 @@ const sheetVariants = cva(
   },
 )
 
-interface SheetContentProps
-  extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
-    VariantProps<typeof sheetVariants> {}
+interface SheetContentProps extends SheetPrimitive.DialogContentProps, VariantProps<typeof sheetVariants> {}
 
-const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Content>, SheetContentProps>(
-  ({ side = 'right', className, children, ...props }, ref) => (
-    <SheetPortal>
-      <SheetOverlay />
-      <SheetPrimitive.Content
-        ref={ref}
-        aria-describedby={undefined}
-        className={cn(sheetVariants({ side }), className)}
-        {...props}
-      >
-        <SheetPrimitive.Close className="focus:outline-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-sm opacity-70 outline-hidden transition-opacity hover:opacity-100 focus:outline-hidden focus:outline-2 focus:outline-offset-1 disabled:pointer-events-none">
-          <IconX className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </SheetPrimitive.Close>
-        {children}
-      </SheetPrimitive.Content>
-    </SheetPortal>
-  ),
+const SheetContent = ({ side = 'right', className, children, ...props }: SheetContentProps) => (
+  <SheetPortal>
+    <SheetOverlay />
+    <SheetPrimitive.Content aria-describedby={undefined} className={cn(sheetVariants({ side }), className)} {...props}>
+      <SheetPrimitive.Close className="focus:outline-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-sm opacity-70 outline-hidden transition-opacity hover:opacity-100 focus:outline-hidden focus:outline-2 focus:outline-offset-1 disabled:pointer-events-none">
+        <IconX className="h-4 w-4" />
+        <span className="sr-only">Close</span>
+      </SheetPrimitive.Close>
+      {children}
+    </SheetPrimitive.Content>
+  </SheetPortal>
 )
 SheetContent.displayName = SheetPrimitive.Content.displayName
 
@@ -83,20 +69,14 @@ const SheetFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 )
 SheetFooter.displayName = 'SheetFooter'
 
-const SheetTitle = React.forwardRef<
-  React.ElementRef<typeof SheetPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
->(({ className, ...props }, ref) => (
-  <SheetPrimitive.Title ref={ref} className={cn('text-foreground text-lg font-semibold', className)} {...props} />
-))
+const SheetTitle = ({ className, ...props }: SheetPrimitive.DialogTitleProps) => (
+  <SheetPrimitive.Title className={cn('text-foreground text-lg font-semibold', className)} {...props} />
+)
 SheetTitle.displayName = SheetPrimitive.Title.displayName
 
-const SheetDescription = React.forwardRef<
-  React.ElementRef<typeof SheetPrimitive.Description>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description>
->(({ className, ...props }, ref) => (
-  <SheetPrimitive.Description ref={ref} className={cn('text-muted-foreground text-sm', className)} {...props} />
-))
+const SheetDescription = ({ className, ...props }: SheetPrimitive.DialogDescriptionProps) => (
+  <SheetPrimitive.Description className={cn('text-muted-foreground text-sm', className)} {...props} />
+)
 SheetDescription.displayName = SheetPrimitive.Description.displayName
 
 export {

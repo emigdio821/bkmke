@@ -60,7 +60,7 @@ type FormItemContextValue = {
 
 const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue)
 
-const FormItem = ({ className, ...props }: React.ComponentProps<'div'>) => {
+function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
   const id = React.useId()
 
   return (
@@ -70,17 +70,13 @@ const FormItem = ({ className, ...props }: React.ComponentProps<'div'>) => {
   )
 }
 
-FormItem.displayName = 'FormItem'
-
-const FormLabel = ({ className, ...props }: React.ComponentProps<'label'>) => {
+function FormLabel({ className, ...props }: React.ComponentProps<'label'>) {
   const { formItemId } = useFormField()
 
-  return <Label className={className} htmlFor={formItemId} {...props} />
+  return <Label className={cn(className)} htmlFor={formItemId} {...props} />
 }
 
-FormLabel.displayName = 'FormLabel'
-
-const FormControl = ({ ...props }: Slot.SlotProps) => {
+function FormControl(props: Slot.SlotProps) {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
   return (
@@ -93,16 +89,13 @@ const FormControl = ({ ...props }: Slot.SlotProps) => {
   )
 }
 
-FormControl.displayName = 'FormControl'
-
-const FormDescription = ({ className, ...props }: React.ComponentProps<'p'>) => {
+function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
   const { formDescriptionId } = useFormField()
 
   return <p id={formDescriptionId} className={cn('text-muted-foreground text-[0.8rem]', className)} {...props} />
 }
-FormDescription.displayName = 'FormDescription'
 
-const FormMessage = ({ className, children, ...props }: React.ComponentProps<'p'>) => {
+function FormMessage({ className, children, ...props }: React.ComponentProps<'p'>) {
   const { error, formMessageId } = useFormField()
   const body = error ? String(error?.message) : children
 
@@ -114,7 +107,5 @@ const FormMessage = ({ className, children, ...props }: React.ComponentProps<'p'
     </p>
   )
 }
-
-FormMessage.displayName = 'FormMessage'
 
 export { useFormField, Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField }

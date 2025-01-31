@@ -41,7 +41,7 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
-import { TypographyInlineCode } from '@/components/ui/typography'
+import { InlineCode } from '@/components/ui/typography'
 import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
 import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
 import { FolderSelectItems } from '@/components/folders/folder-select-items'
@@ -97,7 +97,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         toast.info('Info', {
           description: (
             <>
-              Invalid file, please select only <TypographyInlineCode>.txt</TypographyInlineCode> files.
+              Invalid file, please select only <InlineCode>.txt</InlineCode> files.
             </>
           ),
         })
@@ -210,8 +210,8 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
               </div>
               <TabsContent value="drag-and-drop-import" className="space-y-4 rounded-md px-4">
                 <DialogDescription className="px-0 text-center sm:text-left">
-                  It must be a plaint text file <TypographyInlineCode>.txt</TypographyInlineCode> with all the
-                  bookamarks URLs separated by a new line.
+                  It must be a plaint text file <InlineCode>.txt</InlineCode> with all the bookamarks URLs separated by
+                  a new line.
                 </DialogDescription>
 
                 <div
@@ -372,7 +372,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button type="button" variant="ghost">
                   Cancel
                 </Button>
               </DialogClose>

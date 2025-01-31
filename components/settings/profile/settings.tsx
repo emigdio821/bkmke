@@ -6,7 +6,7 @@ import { DEMO_ROLE } from '@/lib/constants'
 import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { EditDialog } from '@/components/dialogs/profile/edit'
 import { SettingsProfileSkeleton } from '@/components/skeletons'
 
@@ -44,16 +44,6 @@ export function ProfileSettings() {
                 )}
               </div>
             </div>
-
-            {appMetadata?.userrole !== DEMO_ROLE && (
-              <Button
-                variant="outline"
-                className="w-full sm:w-auto"
-                onClick={() => NiceModal.show(EditDialog, { user: profile })}
-              >
-                Edit
-              </Button>
-            )}
           </>
         ) : (
           <div className="flex items-center space-x-2">
@@ -72,6 +62,18 @@ export function ProfileSettings() {
           </div>
         )}
       </CardContent>
+
+      {appMetadata?.userrole !== DEMO_ROLE && (
+        <CardFooter>
+          <Button
+            variant="outline"
+            className="w-full sm:w-auto"
+            onClick={() => NiceModal.show(EditDialog, { user: profile })}
+          >
+            Edit
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   )
 }

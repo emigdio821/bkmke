@@ -1,10 +1,8 @@
 'use client'
 
-import Link from 'next/link'
 import { siteConfig } from '@/config/site'
 import { DEMO_ROLE } from '@/lib/constants'
 import { useProfile } from '@/hooks/use-profile'
-import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FoldersNavItems } from '@/components/folders/nav-items'
 import { TagsNavItems } from '@/components/tags/nav-items'
@@ -17,18 +15,14 @@ export function NavContent() {
 
   return (
     <nav className="flex h-full w-full flex-col items-start border-r">
-      <div className="w-full p-4 pb-0">
-        <Button variant="plain" className="w-full space-x-2" asChild>
-          <Link href="/">
-            <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md">
-              bk
-            </div>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold tracking-tight">{siteConfig.name}</span>
-              <span className="truncate text-xs tracking-tight">Bookmark manager</span>
-            </div>
-          </Link>
-        </Button>
+      <div className="flex w-full items-center gap-2 p-4 pb-0">
+        <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md">
+          bk
+        </div>
+        <div className="grid flex-1 text-left text-sm leading-tight">
+          <span className="truncate font-semibold tracking-tight">{siteConfig.name}</span>
+          <span className="truncate text-xs tracking-tight">Bookmark manager</span>
+        </div>
       </div>
 
       <NavMain />
@@ -40,7 +34,7 @@ export function NavContent() {
 
       <div className="flex w-full grow flex-col justify-end gap-2 px-4 pb-4">
         {appMetadata?.userrole === DEMO_ROLE && (
-          <Card className="bg-muted/50">
+          <Card className="bg-subtle">
             <CardHeader>
               <CardTitle>Demo mode</CardTitle>
               <CardDescription>All modifications are disabled.</CardDescription>

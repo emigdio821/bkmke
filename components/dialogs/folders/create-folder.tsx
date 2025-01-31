@@ -123,9 +123,9 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
               />
             </div>
 
-            <DialogFooter className="pt-6">
+            <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button type="button" variant="ghost">
                   Cancel
                 </Button>
               </DialogClose>

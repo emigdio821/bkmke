@@ -10,10 +10,9 @@ import { loginSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { DialogFooter } from '@/components/ui/dialog'
+import { CardContent, CardFooter } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { PasswordInput } from '@/components/ui/password-input'
 import { Spinner } from '@/components/spinner'
 
 export function LoginForm() {
@@ -43,41 +42,45 @@ export function LoginForm() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field, fieldState }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input hasError={!!fieldState.error} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field, fieldState }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <PasswordInput hasError={!!fieldState.error} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <DialogFooter className="pt-6">
-          <Button type="submit" disabled={isLoading}>
-            <span className={cn(isLoading && 'invisible')}>Log in</span>
-            {isLoading && <Spinner className="absolute" />}
-          </Button>
-        </DialogFooter>
-      </form>
-    </Form>
+    <>
+      <CardContent>
+        <Form {...form}>
+          <form id="login-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input hasError={!!fieldState.error} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" hasError={!!fieldState.error} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </CardContent>
+      <CardFooter>
+        <Button type="submit" form="login-form" className="w-full" disabled={isLoading}>
+          <span className={cn(isLoading && 'invisible')}>Log in</span>
+          {isLoading && <Spinner className="absolute" />}
+        </Button>
+      </CardFooter>
+    </>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
-import * as SelectPrimitive from '@radix-ui/react-select'
 import { IconCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react'
+import { Select as SelectPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
 
 const Select = SelectPrimitive.Root
@@ -10,23 +10,23 @@ const SelectGroup = SelectPrimitive.Group
 
 const SelectValue = SelectPrimitive.Value
 
-const SelectTrigger = ({ className, children, ...props }: React.ComponentProps<typeof SelectPrimitive.Trigger>) => (
+const SelectTrigger = ({ className, children, ...props }: SelectPrimitive.SelectTriggerProps) => (
   <SelectPrimitive.Trigger
     className={cn(
-      'border-input bg-background text-foreground focus:border-ring focus:ring-ring/20 data-placeholder:text-muted-foreground/70 flex h-9 w-full items-center justify-between gap-2 rounded-md border px-3 py-2 text-start text-sm shadow-xs shadow-black/5 focus:ring-[3px] focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0',
+      'border-input bg-background text-foreground focus:border-ring focus:ring-ring/20 data-placeholder:text-muted-foreground flex h-9 w-full items-center justify-between gap-2 rounded-md border px-3 py-2 text-start text-sm shadow-xs shadow-black/5 focus:ring-[3px] focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0',
       className,
     )}
     {...props}
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <IconChevronDown size={16} strokeWidth={2} className="text-muted-foreground/80 shrink-0" />
+      <IconChevronDown size={16} strokeWidth={2} className="text-muted-foreground shrink-0" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 )
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
-const SelectScrollUpButton = ({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) => (
+const SelectScrollUpButton = ({ className, ...props }: SelectPrimitive.SelectScrollUpButtonProps) => (
   <SelectPrimitive.ScrollUpButton
     className={cn('flex cursor-default items-center justify-center py-1', className)}
     {...props}
@@ -36,10 +36,7 @@ const SelectScrollUpButton = ({ className, ...props }: React.ComponentProps<type
 )
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName
 
-const SelectScrollDownButton = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) => (
+const SelectScrollDownButton = ({ className, ...props }: SelectPrimitive.SelectScrollDownButtonProps) => (
   <SelectPrimitive.ScrollDownButton
     className={cn('flex cursor-default items-center justify-center py-1', className)}
     {...props}
@@ -49,12 +46,7 @@ const SelectScrollDownButton = ({
 )
 SelectScrollDownButton.displayName = SelectPrimitive.ScrollDownButton.displayName
 
-const SelectContent = ({
-  className,
-  children,
-  position = 'popper',
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.Content>) => (
+const SelectContent = ({ className, children, position = 'popper', ...props }: SelectPrimitive.SelectContentProps) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       className={cn(
@@ -78,7 +70,7 @@ const SelectContent = ({
 )
 SelectContent.displayName = SelectPrimitive.Content.displayName
 
-const SelectLabel = ({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Label>) => (
+const SelectLabel = ({ className, ...props }: SelectPrimitive.SelectLabelProps) => (
   <SelectPrimitive.Label
     className={cn('text-muted-foreground py-1.5 ps-8 pe-2 text-xs font-medium', className)}
     {...props}
@@ -86,7 +78,7 @@ const SelectLabel = ({ className, ...props }: React.ComponentProps<typeof Select
 )
 SelectLabel.displayName = SelectPrimitive.Label.displayName
 
-const SelectItem = ({ className, children, ...props }: React.ComponentProps<typeof SelectPrimitive.Item>) => (
+const SelectItem = ({ className, children, ...props }: SelectPrimitive.SelectItemProps) => (
   <SelectPrimitive.Item
     className={cn(
       'focus:bg-accent focus:text-accent-foreground relative flex w-full cursor-default items-center rounded-sm py-1.5 ps-8 pe-2 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50',
@@ -105,7 +97,7 @@ const SelectItem = ({ className, children, ...props }: React.ComponentProps<type
 )
 SelectItem.displayName = SelectPrimitive.Item.displayName
 
-const SelectSeparator = ({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Separator>) => (
+const SelectSeparator = ({ className, ...props }: SelectPrimitive.SelectSeparatorProps) => (
   <SelectPrimitive.Separator className={cn('bg-border -mx-1 my-1 h-px', className)} {...props} />
 )
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName

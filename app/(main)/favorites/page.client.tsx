@@ -5,7 +5,7 @@ import NiceModal from '@ebay/nice-modal-react'
 import { IconBookmarkPlus, IconBookmarks, IconBug, IconHeartsOff, IconReload } from '@tabler/icons-react'
 import { useFavoriteBookmarks } from '@/hooks/use-favorite-bookmarks'
 import { Button } from '@/components/ui/button'
-import { TypographyH4 } from '@/components/ui/typography'
+import { Heading } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
@@ -22,7 +22,7 @@ export function FavoritesClientPage() {
         <div>
           <div className="flex items-center justify-center space-x-2">
             <IconBug size={24} />
-            <TypographyH4>Error</TypographyH4>
+            <Heading>Error</Heading>
           </div>
           <p className="text-muted-foreground">Unable to fetch favorite bookmarks at this time, try again.</p>
         </div>
@@ -43,7 +43,7 @@ export function FavoritesClientPage() {
             <div>
               <div className="flex items-center justify-center space-x-2">
                 <IconHeartsOff size={24} />
-                <TypographyH4>Empty</TypographyH4>
+                <Heading>Empty</Heading>
               </div>
               <p className="text-muted-foreground">You have no favorite bookmarks yet.</p>
             </div>
