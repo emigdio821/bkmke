@@ -8,12 +8,15 @@ import {
   IconFileImport,
   IconFolderPlus,
   IconLogout,
+  IconMoonStars,
   IconReload,
   IconSettings,
+  IconSun,
   IconTag,
   IconUser,
 } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useTheme } from 'next-themes'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
@@ -25,6 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -41,6 +45,7 @@ export function UserProfileDropdown() {
   const router = useRouter()
   const supabase = createClient()
   const queryClient = useQueryClient()
+  const { setTheme, theme } = useTheme()
   const { data: profile, isLoading, error, refetch } = useProfile()
   const userMetadata = profile?.user_metadata
 
@@ -84,7 +89,7 @@ export function UserProfileDropdown() {
           <IconChevronDown size={16} className="text-muted-foreground/80" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
         <DropdownMenuItem onSelect={() => NiceModal.show(CreateFolderDialog)}>
           <IconFolderPlus size={16} className="mr-2" />
           Create folder
@@ -115,6 +120,43 @@ export function UserProfileDropdown() {
           </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <IconMoonStars className="hidden size-4 dark:block" />
+              <IconSun className="size-4 dark:hidden" />
+              <span className="ml-2">Appearance</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <DropdownMenuCheckboxItem
+                  checked={theme === 'light'}
+                  onClick={() => {
+                    setTheme('light')
+                  }}
+                >
+                  Light
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem
+                  checked={theme === 'dark'}
+                  onClick={() => {
+                    setTheme('dark')
+                  }}
+                >
+                  Dark
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem
+                  checked={theme === 'system'}
+                  onClick={() => {
+                    setTheme('system')
+                  }}
+                >
+                  System
+                </DropdownMenuCheckboxItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+        </DropdownMenuGroup>
         <DropdownMenuItem asChild>
           <Link href="/settings">
             <IconSettings className="mr-2 size-4" />

@@ -201,7 +201,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         <DialogDescription className="sr-only">Import your bookmarks here.</DialogDescription>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Tabs defaultValue="drag-and-drop-import">
+            <Tabs defaultValue="drag-and-drop-import" className="mt-4">
               <div className="flex w-full items-center justify-center px-4 sm:justify-start">
                 <TabsList>
                   <TabsTrigger value="drag-and-drop-import">Upload file</TabsTrigger>
