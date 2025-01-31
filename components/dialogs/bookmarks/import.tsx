@@ -200,28 +200,23 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         </DialogHeader>
         <DialogDescription className="sr-only">Import your bookmarks here.</DialogDescription>
         <Form {...form}>
-          <form
-            onSubmit={(e) => {
-              void form.handleSubmit(onSubmit)(e)
-            }}
-            className="space-y-2"
-          >
-            <Tabs defaultValue="drag-and-drop-import">
-              <div className="flex w-full items-center justify-center sm:justify-start">
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <Tabs defaultValue="drag-and-drop-import" className="mt-4">
+              <div className="flex w-full items-center justify-center px-4 sm:justify-start">
                 <TabsList>
                   <TabsTrigger value="drag-and-drop-import">Upload file</TabsTrigger>
                   <TabsTrigger value="copy-paste-import">Copy and paste</TabsTrigger>
                 </TabsList>
               </div>
-              <TabsContent value="drag-and-drop-import" className="space-y-2 rounded-lg">
-                <DialogDescription className="text-center sm:text-left">
+              <TabsContent value="drag-and-drop-import" className="space-y-4 rounded-md px-4">
+                <DialogDescription className="px-0 text-center sm:text-left">
                   It must be a plaint text file <TypographyInlineCode>.txt</TypographyInlineCode> with all the
                   bookamarks URLs separated by a new line.
                 </DialogDescription>
 
                 <div
                   className={cn(
-                    'flex h-28 w-full items-center justify-center rounded-lg border border-dashed p-6 transition-colors hover:bg-accent',
+                    'hover:bg-subtle flex h-28 w-full items-center justify-center rounded-md border border-dashed p-6 transition-colors',
                     {
                       'bg-accent': isDragActive,
                       'border-destructive': form.formState.errors.bookmarks,
@@ -232,7 +227,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                   <input {...getInputProps()} />
                   <div className="flex flex-col items-center">
                     <IconUpload className="size-4" />
-                    <p className="text-sm text-muted-foreground">Drop your file here, or click to select it.</p>
+                    <p className="text-muted-foreground text-sm">Drop your file here, or click to select it.</p>
                   </div>
                 </div>
 
@@ -254,8 +249,8 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                   </div>
                 )}
               </TabsContent>
-              <TabsContent value="copy-paste-import" className="rounded-lg">
-                <DialogDescription className="text-center sm:text-left">
+              <TabsContent value="copy-paste-import" className="space-y-4 rounded-md px-4">
+                <DialogDescription className="px-0 text-center sm:text-left">
                   Copy and paste your bookmarks here, each URL must be separated by a new line.
                 </DialogDescription>
                 <FormField
@@ -274,75 +269,77 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
               </TabsContent>
             </Tabs>
 
-            <div className="flex w-full items-end space-x-2">
-              <FormField
-                name="folderId"
-                control={form.control}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex-grow">
-                      <FormLabel>
-                        Folder
-                        {field.value && (
-                          <>
-                            <span className="text-muted-foreground"> · </span>
-                            <Button
-                              variant="link"
-                              onClick={() => {
-                                form.setValue('folderId', '')
-                              }}
-                            >
-                              Clear selection
-                            </Button>
-                          </>
-                        )}
-                      </FormLabel>
-                      {foldersLoading ? (
-                        <Skeleton className="h-9" />
-                      ) : (
-                        <>
-                          {folders && (
-                            <FormControl>
-                              <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <FolderSelectItems folders={folders} />
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
+            <div className="space-y-4 p-4">
+              <div className="flex w-full items-end space-x-2">
+                <FormField
+                  name="folderId"
+                  control={form.control}
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="grow">
+                        <FormLabel>
+                          Folder
+                          {field.value && (
+                            <>
+                              <span className="text-muted-foreground"> · </span>
+                              <Button
+                                variant="link"
+                                onClick={() => {
+                                  form.setValue('folderId', '')
+                                }}
+                              >
+                                Clear selection
+                              </Button>
+                            </>
                           )}
-                        </>
-                      )}
-                      <FormMessage />
-                    </FormItem>
-                  )
-                }}
-              />
-              <Button
-                size="icon"
-                type="button"
-                onClick={() => {
-                  void NiceModal.show(CreateFolderDialog)
-                }}
-              >
-                <IconPlus className="size-4" />
-              </Button>
-            </div>
+                        </FormLabel>
+                        {foldersLoading ? (
+                          <Skeleton className="h-9" />
+                        ) : (
+                          <FormControl>
+                            {folders && (
+                              <div>
+                                <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                                  <SelectTrigger>
+                                    <SelectValue
+                                      placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'}
+                                    />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <FolderSelectItems folders={folders} />
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
+                          </FormControl>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    )
+                  }}
+                />
+                <Button
+                  size="icon"
+                  type="button"
+                  onClick={() => {
+                    void NiceModal.show(CreateFolderDialog)
+                  }}
+                >
+                  <IconPlus className="size-4" />
+                </Button>
+              </div>
 
-            <div className="flex items-end space-x-2">
-              <FormField
-                name="tags"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Tags</FormLabel>
-                    <FormControl>
+              <div className="flex items-end space-x-2">
+                <FormField
+                  name="tags"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Tags</FormLabel>
                       {tagsLoading ? (
                         <Skeleton className="h-9" />
                       ) : (
-                        <>
+                        <FormControl>
                           {tags && (
                             <MultiSelect
                               placeholder="Select tags"
@@ -353,25 +350,27 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                               }}
                             />
                           )}
-                        </>
+                        </FormControl>
                       )}
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button
-                size="icon"
-                type="button"
-                onClick={() => {
-                  void NiceModal.show(CreateTagDialog)
-                }}
-              >
-                <IconPlus className="size-4" />
-              </Button>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  size="icon"
+                  type="button"
+                  onClick={() => {
+                    void NiceModal.show(CreateTagDialog)
+                  }}
+                >
+                  <IconPlus className="size-4" />
+                </Button>
+              </div>
+
+              {progress > 0 && <Progress value={progress} />}
             </div>
-            {progress > 0 && <Progress value={progress} />}
-            <DialogFooter className="pt-6">
+
+            <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   Cancel

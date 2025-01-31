@@ -38,7 +38,7 @@ export function SidebarTagsActions({ tags }: SidebarFoldersActionsProps) {
         </DropdownMenuItem>
         {tags.length > 100 && (
           <DropdownMenuItem disabled>
-            <IconInputSearch className="mr-2 size-4 text-muted-foreground" />
+            <IconInputSearch className="text-muted-foreground mr-2 size-4" />
             Toggle search
           </DropdownMenuItem>
         )}

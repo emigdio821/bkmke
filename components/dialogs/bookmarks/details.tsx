@@ -29,15 +29,16 @@ export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetai
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent aria-describedby={undefined}>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{bookmark.name}</DialogTitle>
           {bookmark.description && (
             <DialogDescription className="line-clamp-2 break-words">{bookmark.description}</DialogDescription>
           )}
         </DialogHeader>
+        {!bookmark.description && <DialogDescription className="sr-only">Details dialog</DialogDescription>}
 
-        <div>
+        <div className="overflow-y-auto p-4">
           <div className="flex items-center space-x-2">
             <IconExternalLink className="size-4" />
             <Button asChild variant="link" className="block truncate">
@@ -74,19 +75,21 @@ export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetai
 
           <div className="flex items-center space-x-2">
             <IconCalendarMonth className="size-4" />
-            <span className="text-sm text-muted-foreground">{formatDateFromString(bookmark.created_at)}</span>
+            <span className="text-muted-foreground text-sm">{formatDateFromString(bookmark.created_at)}</span>
           </div>
+
+          {ogInfo?.imageUrl && (
+            <div className="bg-muted mt-4 h-48 w-full rounded-md object-cover md:h-64">
+              <BlurImage src={ogInfo.imageUrl} alt={bookmark.name} />
+            </div>
+          )}
         </div>
 
-        {ogInfo?.imageUrl && (
-          <div className="h-48 w-full rounded-sm bg-muted object-cover md:h-64">
-            <BlurImage src={ogInfo.imageUrl} alt={bookmark.name} />
+        <DialogFooter>
+          <div className="flex justify-center gap-2">
+            <ToggleFavBtn bookmark={bookmark} variant="outline" />
+            <RowActions bookmark={bookmark} variant="outline" />
           </div>
-        )}
-
-        <DialogFooter className="pt-6">
-          <ToggleFavBtn bookmark={bookmark} variant="outline" />
-          <RowActions bookmark={bookmark} variant="outline" />
           <DialogClose asChild>
             <Button type="button">Close</Button>
           </DialogClose>

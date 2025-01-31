@@ -32,7 +32,7 @@ export default function NotFound() {
         <Card className="mx-auto w-full max-w-sm">
           <CardHeader>
             <CardTitle className="text-center text-4xl font-extrabold">
-              <IconGhost3 size={32} className="mx-auto mb-2 text-muted-foreground" />
+              <IconGhost3 size={32} className="text-muted-foreground mx-auto mb-2" />
               404
             </CardTitle>
             <CardContent className="text-center text-sm">This page does not exist.</CardContent>

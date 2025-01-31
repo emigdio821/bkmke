@@ -75,73 +75,68 @@ export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
         isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogContent
-        onCloseAutoFocus={() => modal.remove()}
-        className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-md [&>button:last-child]:top-3.5"
-      >
-        <DialogHeader className="contents space-y-0 text-left">
-          <DialogTitle className="border-b border-border px-6 py-4 text-base">Edit profile</DialogTitle>
+      <DialogContent onCloseAutoFocus={() => modal.remove()} className="sm:max-w-sm">
+        <DialogHeader className="space-y-0">
+          <DialogTitle>Edit profile</DialogTitle>
         </DialogHeader>
         <DialogDescription className="sr-only">Make changes to your profile here.</DialogDescription>
-        <div className="overflow-y-auto">
-          <div className="px-6 pb-6 pt-4">
-            <Avatar className="mb-2 size-16">
-              <AvatarImage src={form.getValues('avatar') || userMetadata?.avatar} />
-              <AvatarFallback>
-                <IconUser size={14} />
-              </AvatarFallback>
-            </Avatar>
-            <Form {...form}>
-              <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-                <FormField
-                  control={form.control}
-                  name="avatar"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div>
-                        <FormLabel>Avatar URL</FormLabel>
-                        <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
-                      </div>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Account name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <PasswordInput {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </form>
-            </Form>
-          </div>
+        <div className="overflow-y-auto p-4">
+          <Avatar className="mb-4 size-16">
+            <AvatarImage src={form.getValues('avatar') || userMetadata?.avatar} />
+            <AvatarFallback>
+              <IconUser size={14} />
+            </AvatarFallback>
+          </Avatar>
+          <Form {...form}>
+            <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="avatar"
+                render={({ field }) => (
+                  <FormItem>
+                    <div>
+                      <FormLabel>Avatar URL</FormLabel>
+                      <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                    </div>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Account name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <PasswordInput {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
         </div>
-        <DialogFooter className="border-t border-border px-6 py-4">
+        <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="ghost">
               Cancel
             </Button>
           </DialogClose>

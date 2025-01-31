@@ -1,5 +1,5 @@
 node_modules
 .next
 .husky
-supabase
+./supabase/*
 next-env.d.ts

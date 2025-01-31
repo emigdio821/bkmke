@@ -14,7 +14,6 @@ import {
   CommandSeparator,
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Separator } from '@/components/ui/separator'
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
@@ -67,8 +66,8 @@ export function MultiSelect<TData, TValue>({
               {selectedValues.length > 0 ? 'Selected' : <span className="text-muted-foreground/70">{placeholder}</span>}
               {selectedValues.length > 0 && (
                 <>
-                  <Separator orientation="vertical" className="mx-2 h-4" />
-                  <Badge variant="outline" className="rounded-sm">
+                  <div className="bg-border mx-2 h-4 w-px" />
+                  <Badge variant="outline" className="rounded-xs">
                     {selectedValues.length}
                   </Badge>
                 </>
@@ -76,7 +75,7 @@ export function MultiSelect<TData, TValue>({
             </>
           )}
 
-          <IconChevronDown className="ml-auto size-4 text-muted-foreground/80" />
+          <IconChevronDown className="text-muted-foreground/80 ml-auto size-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">
@@ -97,7 +96,7 @@ export function MultiSelect<TData, TValue>({
                     >
                       <IconCheck className="size-4" />
                     </div>
-                    {option.icon && <option.icon className="mr-2 size-4 text-muted-foreground" />}
+                    {option.icon && <option.icon className="text-muted-foreground mr-2 size-4" />}
                     <span>{option.label}</span>
                   </CommandItem>
                 )

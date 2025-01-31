@@ -21,7 +21,15 @@ import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
@@ -65,7 +73,6 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
     >
       <DialogContent
         className="sm:max-w-xs"
-        aria-describedby={undefined}
         onCloseAutoFocus={() => {
           modal.remove()
         }}
@@ -73,6 +80,7 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
         <DialogHeader>
           <DialogTitle>Edit tag</DialogTitle>
         </DialogHeader>
+        <DialogDescription className="sr-only">Edit tag dialog</DialogDescription>
 
         <Form {...form}>
           <form
@@ -80,33 +88,34 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
               e.stopPropagation()
               void form.handleSubmit(onSubmit)(e)
             }}
-            className="space-y-2"
           >
-            <FormField
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={tag.name}
-                      hasError={!!fieldState.error}
-                      maxLength={MAX_NAME_LENGTH}
-                      {...field}
-                    />
-                  </FormControl>
-                  <div className="text-right text-xs tabular-nums text-muted-foreground">
-                    {MAX_NAME_LENGTH - field.value.length} characters left
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-4 overflow-y-auto p-4">
+              <FormField
+                name="name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={tag.name}
+                        hasError={!!fieldState.error}
+                        maxLength={MAX_NAME_LENGTH}
+                        {...field}
+                      />
+                    </FormControl>
+                    <div className="text-muted-foreground text-right text-xs tabular-nums">
+                      {MAX_NAME_LENGTH - field.value.length} characters left
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <DialogFooter className="pt-6">
+            <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button type="button" variant="ghost">
                   Cancel
                 </Button>
               </DialogClose>

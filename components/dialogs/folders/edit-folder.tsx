@@ -72,66 +72,68 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
         isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogContent className="sm:max-w-xs" onCloseAutoFocus={() => modal.remove()}>
+      <DialogContent className="sm:max-w-sm" onCloseAutoFocus={() => modal.remove()}>
         <DialogHeader>
           <DialogTitle>Edit folder</DialogTitle>
         </DialogHeader>
         <DialogDescription className="sr-only">Edit folder dialog</DialogDescription>
+
         <Form {...form}>
           <form
             onSubmit={(e) => {
               e.stopPropagation()
               void form.handleSubmit(onSubmit)(e)
             }}
-            className="space-y-2"
           >
-            <FormField
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={folder.name}
-                      hasError={!!fieldState.error}
-                      maxLength={MAX_NAME_LENGTH}
-                      {...field}
-                    />
-                  </FormControl>
-                  <div className="text-right text-xs tabular-nums text-muted-foreground">
-                    {MAX_NAME_LENGTH - field.value.length} characters left
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-4 overflow-y-auto p-4">
+              <FormField
+                name="name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={folder.name}
+                        hasError={!!fieldState.error}
+                        maxLength={MAX_NAME_LENGTH}
+                        {...field}
+                      />
+                    </FormControl>
+                    <div className="text-muted-foreground text-right text-xs tabular-nums">
+                      {MAX_NAME_LENGTH - field.value.length} characters left
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              name="description"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="max-h-24"
-                      maxLength={MAX_DESC_LENGTH}
-                      placeholder={folder.description || undefined}
-                      {...field}
-                    />
-                  </FormControl>
-                  <div className="text-right text-xs tabular-nums text-muted-foreground">
-                    {MAX_DESC_LENGTH - field.value.length} characters left
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                name="description"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="max-h-24"
+                        maxLength={MAX_DESC_LENGTH}
+                        placeholder={folder.description || undefined}
+                        {...field}
+                      />
+                    </FormControl>
+                    <div className="text-muted-foreground text-right text-xs tabular-nums">
+                      {MAX_DESC_LENGTH - field.value.length} characters left
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <DialogFooter className="pt-6">
+            <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button type="button" variant="ghost">
                   Cancel
                 </Button>
               </DialogClose>

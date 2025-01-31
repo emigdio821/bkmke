@@ -125,10 +125,10 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
           modal.remove()
         }}
       >
-        <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
+        <div className="flex flex-col gap-2 p-4 pb-0 max-sm:items-center sm:flex-row sm:gap-4">
           <div
-            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border"
-            aria-hidden="true"
+            className="border-border flex size-9 shrink-0 items-center justify-center rounded-full border"
+            aria-hidden
           >
             <IconAlertCircle className="opacity-80" size={16} strokeWidth={2} />
           </div>
@@ -150,14 +150,15 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
         </div>
 
         {progress > 0 && <Progress value={progress} />}
-        <AlertDialogFooter className="pt-6">
+        <AlertDialogFooter>
           <AlertDialogCancel asChild>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="ghost">
               Cancel
             </Button>
           </AlertDialogCancel>
           <Button
             type="button"
+            variant="destructive"
             disabled={isLoading || appMetadata?.userrole === DEMO_ROLE}
             onClick={() => {
               void handleDeleteBookmarks(bookmark ? [bookmark] : bookmarks)

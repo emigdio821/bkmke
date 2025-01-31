@@ -74,27 +74,29 @@ export const CreateTagDialog = NiceModal.create(() => {
         <DialogDescription className="sr-only">Create tag dialog.</DialogDescription>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-            <FormField
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
-                  </FormControl>
-                  <div className="text-right text-xs tabular-nums text-muted-foreground">
-                    {MAX_NAME_LENGTH - field.value.length} characters left
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-4 overflow-y-auto p-4">
+              <FormField
+                name="name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
+                    </FormControl>
+                    <div className="text-muted-foreground text-right text-xs tabular-nums">
+                      {MAX_NAME_LENGTH - field.value.length} characters left
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <DialogFooter className="pt-6">
+            <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button type="button" variant="ghost">
                   Cancel
                 </Button>
               </DialogClose>

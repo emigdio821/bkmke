@@ -70,13 +70,13 @@ export const columns: Array<ColumnDef<Bookmark>> = [
             <Button
               variant="link"
               onClick={() => setOpenBookmarkDetails((prev) => !prev)}
-              className="block max-w-64 flex-auto overflow-hidden text-foreground"
+              className="text-foreground block max-w-64 flex-auto overflow-hidden"
             >
               <div className="flex items-center">
                 <Avatar className="mr-2 size-4 rounded-full">
                   <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
                   <AvatarFallback className="rounded-[inherit]">
-                    <IconWorld className="size-4 text-muted-foreground" />
+                    <IconWorld className="text-muted-foreground size-4" />
                   </AvatarFallback>
                 </Avatar>
                 <span className="truncate">{bookmark.name}</span>
@@ -84,7 +84,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
             </Button>
 
             {bookmark.description && (
-              <p className="line-clamp-1 w-full break-words text-xs text-muted-foreground" title={bookmark.description}>
+              <p className="text-muted-foreground line-clamp-1 w-full text-xs break-words" title={bookmark.description}>
                 {bookmark.description}
               </p>
             )}

@@ -5,17 +5,17 @@ interface TypographyProps {
 }
 
 export function TypographyH3({ children }: TypographyProps) {
-  return <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">{children}</h3>
+  return <h3 className="text-xl leading-none font-semibold tracking-tight">{children}</h3>
 }
 
 export function TypographyH4({ children }: TypographyProps) {
-  return <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">{children}</h4>
+  return <h4 className="text-lg leading-none font-semibold tracking-tight">{children}</h4>
 }
 
 export function TypographyInlineCode({ children, className }: TypographyProps & { className?: string }) {
   return (
     <code
-      className={cn('relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold', className)}
+      className={cn('bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold', className)}
     >
       {children}
     </code>

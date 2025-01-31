@@ -33,14 +33,14 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
           }
         }}
         data-selected={row.getIsSelected()}
-        className="outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring data-[selected=true]:bg-muted/50"
+        className="focus-visible:outline-ring data-[selected=true]:bg-muted/50 outline-hidden focus-visible:outline-2 focus-visible:outline-offset-1"
       >
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Avatar className="size-4 rounded-[4px]">
               <AvatarImage src={ogInfo?.faviconUrl} />
               <AvatarFallback className="rounded-[inherit]">
-                <IconWorld className="size-4 text-muted-foreground" />
+                <IconWorld className="text-muted-foreground size-4" />
               </AvatarFallback>
             </Avatar>
             <Button
@@ -49,13 +49,13 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
                 e.stopPropagation()
                 setOpenBookmarkDetails((prev) => !prev)
               }}
-              className="line-clamp-2 whitespace-normal text-left text-foreground"
+              className="text-foreground line-clamp-2 text-left whitespace-normal"
             >
               {bookmark.name}
             </Button>
           </CardTitle>
           {bookmark.description && (
-            <CardDescription className="line-clamp-2 break-words text-xs">{bookmark.description}</CardDescription>
+            <CardDescription className="line-clamp-2 text-xs break-words">{bookmark.description}</CardDescription>
           )}
         </CardHeader>
         <CardContent className="relative text-sm">
@@ -133,7 +133,7 @@ export function MasonryLayout({ table }: TableLayoutProps) {
           ))}
         </div>
       ) : (
-        <div className="flex h-24 items-center justify-center rounded-md border p-4 text-center text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex h-24 items-center justify-center rounded-md border p-4 text-center text-sm">
           No results.
         </div>
       )}

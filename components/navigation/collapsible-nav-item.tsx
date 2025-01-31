@@ -63,7 +63,7 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
                 <Button
                   asChild
                   variant="link"
-                  className={cn('block truncate text-foreground', {
+                  className={cn('text-foreground block truncate', {
                     'font-semibold': active,
                   })}
                 >

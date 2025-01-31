@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
 import { Navbar } from '@/components/navbar'
 import { Sidebar } from '@/components/navigation/sidebar'
 
@@ -7,14 +5,7 @@ interface MainLayoutProps {
   children: React.ReactNode
 }
 
-export default async function MainLayout({ children }: MainLayoutProps) {
-  const supabase = createClient()
-  const { data } = await supabase.auth.getUser()
-
-  if (!data.user) {
-    redirect('/login')
-  }
-
+export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="relative flex justify-center">
       <div className="hidden w-3/12 md:block">

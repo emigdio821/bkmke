@@ -122,8 +122,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
       }}
     >
       <DialogContent
-        className="max-w-md"
-        aria-describedby={undefined}
+        className="sm:max-w-sm"
         onCloseAutoFocus={() => {
           modal.remove()
         }}
@@ -133,44 +132,49 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
           <DialogDescription className="break-words">{bookmarkName}</DialogDescription>
         </DialogHeader>
 
-        {foldersLoading ? (
-          <Skeleton className="h-9 w-full" />
-        ) : (
-          folders &&
-          folders.length > 0 && (
-            <div className="space-y-2">
-              <Label>
-                Folder
-                {selectValue && (
-                  <>
-                    <span className="text-muted-foreground"> · </span>
-                    <Button
-                      variant="link"
-                      onClick={() => {
-                        setSelectValue('')
-                      }}
-                    >
-                      Clear selection
-                    </Button>
-                  </>
-                )}
-              </Label>
-              <Select value={selectValue} onValueChange={setSelectValue}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select folder" />
-                </SelectTrigger>
-                <SelectContent>
-                  <FolderSelectItems folders={folders} />
-                </SelectContent>
-              </Select>
-            </div>
-          )
-        )}
+        <div className="overflow-y-auto p-4">
+          {foldersLoading ? (
+            <Skeleton className="h-9 w-full" />
+          ) : (
+            folders &&
+            folders.length > 0 && (
+              <div className="space-y-2">
+                <Label>
+                  Folder
+                  {selectValue && (
+                    <>
+                      <span className="text-muted-foreground"> · </span>
+                      <Button
+                        variant="link"
+                        onClick={() => {
+                          setSelectValue('')
+                        }}
+                      >
+                        Clear selection
+                      </Button>
+                    </>
+                  )}
+                </Label>
+                <div>
+                  <Select value={selectValue} onValueChange={setSelectValue}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select folder" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <FolderSelectItems folders={folders} />
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )
+          )}
 
-        {progress > 0 && <Progress value={progress} />}
-        <DialogFooter className="pt-6">
+          {progress > 0 && <Progress value={progress} />}
+        </div>
+
+        <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="ghost">
               Cancel
             </Button>
           </DialogClose>

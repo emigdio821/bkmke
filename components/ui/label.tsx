@@ -1,22 +1,19 @@
 'use client'
 
-import * as React from 'react'
 import { cn } from '@/lib/utils'
 
-const Label = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
-  ({ className, htmlFor, ...props }, ref) => (
+function Label({ className, htmlFor, ...props }: React.ComponentProps<'label'>) {
+  return (
     <label
-      ref={ref}
       htmlFor={htmlFor}
       aria-label={props['aria-label']}
       className={cn(
-        'text-sm font-medium leading-4 text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+        'text-foreground text-sm leading-4 font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
         className,
       )}
       {...props}
     />
-  ),
-)
-Label.displayName = 'Label'
+  )
+}
 
 export { Label }
