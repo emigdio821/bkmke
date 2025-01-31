@@ -77,82 +77,82 @@ export function CreateAutomaticForm() {
 
   return (
     <>
-      <p className="text-muted-foreground my-4 text-center text-sm sm:text-left">
+      <p className="text-muted-foreground px-4 text-center text-sm sm:text-left">
         Add the URL and everything will be filled automatically, except for the tags and/or folder.
       </p>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-          <FormField
-            name="url"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>URL</FormLabel>
-                <FormControl>
-                  <Input hasError={!!fieldState.error} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex w-full items-end space-x-2">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="space-y-4 p-4">
             <FormField
-              name="folderId"
+              name="url"
               control={form.control}
-              render={({ field }) => {
-                return (
-                  <FormItem className="grow">
-                    <FormLabel>
-                      Folder
-                      {field.value && (
-                        <>
-                          <span className="text-muted-foreground"> · </span>
-                          <Button variant="link" onClick={() => form.setValue('folderId', '')}>
-                            Clear selection
-                          </Button>
-                        </>
-                      )}
-                    </FormLabel>
-                    {foldersLoading ? (
-                      <Skeleton className="h-9" />
-                    ) : (
-                      <>
-                        {folders && (
-                          <FormControl>
-                            <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                              <SelectTrigger>
-                                <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <FolderSelectItems folders={folders} />
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                        )}
-                      </>
-                    )}
-                    <FormMessage />
-                  </FormItem>
-                )
-              }}
-            />
-            <Button size="icon" type="button" onClick={() => NiceModal.show(CreateFolderDialog)}>
-              <IconPlus className="size-4" />
-            </Button>
-          </div>
-
-          <div className="flex items-end space-x-2">
-            <FormField
-              name="tags"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Tags</FormLabel>
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>URL</FormLabel>
                   <FormControl>
+                    <Input hasError={!!fieldState.error} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex w-full items-end space-x-2">
+              <FormField
+                name="folderId"
+                control={form.control}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="grow">
+                      <FormLabel>
+                        Folder
+                        {field.value && (
+                          <>
+                            <span className="text-muted-foreground"> · </span>
+                            <Button variant="link" onClick={() => form.setValue('folderId', '')}>
+                              Clear selection
+                            </Button>
+                          </>
+                        )}
+                      </FormLabel>
+                      {foldersLoading ? (
+                        <Skeleton className="h-9" />
+                      ) : (
+                        <FormControl>
+                          {folders && (
+                            <div>
+                              <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <FolderSelectItems folders={folders} />
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          )}
+                        </FormControl>
+                      )}
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
+              />
+              <Button size="icon" type="button" onClick={() => NiceModal.show(CreateFolderDialog)}>
+                <IconPlus className="size-4" />
+              </Button>
+            </div>
+
+            <div className="flex items-end space-x-2">
+              <FormField
+                name="tags"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Tags</FormLabel>
                     {tagsLoading ? (
                       <Skeleton className="h-9" />
                     ) : (
-                      <>
+                      <FormControl>
                         {tags && (
                           <MultiSelect
                             placeholder="Select tags"
@@ -163,43 +163,43 @@ export function CreateAutomaticForm() {
                             }}
                           />
                         )}
-                      </>
+                      </FormControl>
                     )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                size="icon"
+                type="button"
+                onClick={() => {
+                  void NiceModal.show(CreateTagDialog)
+                }}
+              >
+                <IconPlus className="size-4" />
+              </Button>
+            </div>
+
+            <FormField
+              name="isFavorite"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
+                  <div>
+                    <FormLabel>Favorite</FormLabel>
+                    <FormDescription>Add this bookmark to the favorites list.</FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
-            <Button
-              size="icon"
-              type="button"
-              onClick={() => {
-                void NiceModal.show(CreateTagDialog)
-              }}
-            >
-              <IconPlus className="size-4" />
-            </Button>
           </div>
 
-          <FormField
-            name="isFavorite"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
-                <div>
-                  <FormLabel>Favorite</FormLabel>
-                  <FormDescription>Add this bookmark to the favorites list.</FormDescription>
-                </div>
-                <FormControl>
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <DialogFooter className="pt-6">
+          <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="outline">
+              <Button type="button" variant="ghost">
                 Cancel
               </Button>
             </DialogClose>

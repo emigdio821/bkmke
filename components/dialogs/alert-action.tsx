@@ -14,6 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/spinner'
 
 interface AlertActionDialogProps<T> {
@@ -48,10 +49,10 @@ export const AlertActionDialog = NiceModal.create(<T,>({ action, message, title 
       }}
     >
       <AlertDialogContent onCloseAutoFocus={() => modal.remove()}>
-        <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
+        <div className="flex flex-col gap-2 p-4 pb-0 max-sm:items-center sm:flex-row sm:gap-4">
           <div
             className="border-border flex size-9 shrink-0 items-center justify-center rounded-full border"
-            aria-hidden="true"
+            aria-hidden
           >
             <IconAlertCircle className="opacity-80" size={16} strokeWidth={2} />
           </div>
@@ -61,7 +62,9 @@ export const AlertActionDialog = NiceModal.create(<T,>({ action, message, title 
           </AlertDialogHeader>
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel asChild>
+            <Button variant="ghost">Cancel</Button>
+          </AlertDialogCancel>
           <AlertDialogAction
             disabled={isLoading}
             onClick={(e) => {

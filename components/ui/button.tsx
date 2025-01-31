@@ -3,7 +3,7 @@ import { Slot } from 'radix-ui'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'outline-ring inline-flex items-center justify-center rounded-lg text-sm font-medium whitespace-nowrap outline-offset-2 transition-colors focus-visible:outline focus-visible:outline-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'outline-ring inline-flex items-center justify-center rounded-md text-sm font-medium whitespace-nowrap outline-offset-2 transition-colors focus-visible:outline focus-visible:outline-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -20,8 +20,8 @@ const buttonVariants = cva(
       },
       size: {
         default: 'h-9 px-4 py-2',
-        sm: 'h-8 rounded-lg px-3',
-        lg: 'h-10 rounded-lg px-8',
+        sm: 'h-8 rounded-md px-3',
+        lg: 'h-10 rounded-md px-8',
         icon: 'h-9 w-9',
         flat: 'p-0',
       },
@@ -45,4 +45,4 @@ function Button({ className, variant, size, asChild = false, ...props }: ButtonP
   return <Comp className={cn(buttonVariants({ variant, size: btnSize, className }))} {...props} />
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants, type ButtonProps }

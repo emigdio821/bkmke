@@ -28,7 +28,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
 
   if (error || folderError)
     return (
-      <div className="space-y-2 rounded-lg border p-6 text-center text-sm">
+      <div className="space-y-2 rounded-md border p-6 text-center text-sm">
         <div>
           <div className="flex items-center justify-center space-x-2">
             <IconBug size={24} />
@@ -75,7 +75,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
               (folderItems.length > 0 ? (
                 <DataTable columns={columns} data={folderItems} />
               ) : (
-                <div className="space-y-6 rounded-lg border p-6 text-center text-sm">
+                <div className="space-y-6 rounded-md border p-6 text-center text-sm">
                   <div>
                     <div className="flex items-center justify-center space-x-2">
                       <IconFolderOff size={24} />

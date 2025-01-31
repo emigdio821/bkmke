@@ -143,7 +143,7 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
       }}
     >
       <DialogContent
-        className="max-w-md"
+        className="sm:max-w-sm"
         onCloseAutoFocus={() => {
           modal.remove()
         }}
@@ -153,27 +153,30 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
           <DialogDescription className="break-words">{bookmarkName}</DialogDescription>
         </DialogHeader>
 
-        {tagsLoading ? (
-          <Skeleton className="h-9 w-full" />
-        ) : (
-          <div className="space-y-2">
-            <Label>Tags</Label>
-            {tags && (
-              <MultiSelect
-                value={selectValue}
-                emptyText="No tags yet"
-                placeholder="Select tags"
-                onChange={setSelectValue}
-                options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
-              />
-            )}
-          </div>
-        )}
+        <div className="overflow-y-auto p-4">
+          {tagsLoading ? (
+            <Skeleton className="h-9 w-full" />
+          ) : (
+            <div className="space-y-2">
+              <Label>Tags</Label>
+              {tags && (
+                <MultiSelect
+                  value={selectValue}
+                  emptyText="No tags yet"
+                  placeholder="Select tags"
+                  onChange={setSelectValue}
+                  options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+                />
+              )}
+            </div>
+          )}
 
-        {progress > 0 && <Progress value={progress} />}
-        <DialogFooter className="pt-6">
+          {progress > 0 && <Progress value={progress} />}
+        </div>
+
+        <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="ghost">
               Cancel
             </Button>
           </DialogClose>

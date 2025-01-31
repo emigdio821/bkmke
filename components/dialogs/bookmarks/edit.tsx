@@ -140,9 +140,9 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
           <DialogTitle>Edit bookmark</DialogTitle>
         </DialogHeader>
         <DialogDescription className="break-words">{bookmark.name}</DialogDescription>
-        <div>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-4 p-4">
               <FormField
                 name="name"
                 control={form.control}
@@ -225,22 +225,18 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                         {foldersLoading ? (
                           <Skeleton className="h-9" />
                         ) : (
-                          <>
+                          <FormControl>
                             {folders && (
-                              <FormControl>
-                                <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                                  <SelectTrigger>
-                                    <SelectValue
-                                      placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'}
-                                    />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <FolderSelectItems folders={folders} />
-                                  </SelectContent>
-                                </Select>
-                              </FormControl>
+                              <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <FolderSelectItems folders={folders} />
+                                </SelectContent>
+                              </Select>
                             )}
-                          </>
+                          </FormControl>
                         )}
                         <FormMessage />
                       </FormItem>
@@ -255,28 +251,26 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Tags</FormLabel>
-                      <FormControl>
-                        {tagsLoading ? (
-                          <Skeleton className="h-9" />
-                        ) : (
-                          <>
-                            {tags && (
-                              <MultiSelect
-                                value={bookmark.tag_items
-                                  .map((item) => item.tag?.id)
-                                  .filter((id) => id !== undefined)
-                                  .map((id) => id.toString())}
-                                placeholder="Select tags"
-                                options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
-                                emptyText="No tags yet"
-                                onChange={(options) => {
-                                  form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
-                                }}
-                              />
-                            )}
-                          </>
-                        )}
-                      </FormControl>
+                      {tagsLoading ? (
+                        <Skeleton className="h-9" />
+                      ) : (
+                        <FormControl>
+                          {tags && (
+                            <MultiSelect
+                              value={bookmark.tag_items
+                                .map((item) => item.tag?.id)
+                                .filter((id) => id !== undefined)
+                                .map((id) => id.toString())}
+                              placeholder="Select tags"
+                              options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+                              emptyText="No tags yet"
+                              onChange={(options) => {
+                                form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
+                              }}
+                            />
+                          )}
+                        </FormControl>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -353,21 +347,21 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   </div>
                 )}
               />
+            </div>
 
-              <DialogFooter className="pt-6">
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">
-                    Cancel
-                  </Button>
-                </DialogClose>
-                <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
-                  <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
-                  {form.formState.isSubmitting && <Spinner className="absolute" />}
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="ghost">
+                  Cancel
                 </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </div>
+              </DialogClose>
+              <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
+                <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
+                {form.formState.isSubmitting && <Spinner className="absolute" />}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

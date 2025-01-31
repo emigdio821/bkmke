@@ -21,7 +21,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
 
   if (error || tagError)
     return (
-      <div className="space-y-2 rounded-lg border p-6 text-center text-sm">
+      <div className="space-y-2 rounded-md border p-6 text-center text-sm">
         <div>
           <div className="flex items-center justify-center space-x-2">
             <IconBug size={24} />
@@ -56,7 +56,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
               (tagItems.length > 0 ? (
                 <DataTable columns={columns} data={tagItems} />
               ) : (
-                <div className="space-y-6 rounded-lg border p-6 text-center text-sm">
+                <div className="space-y-6 rounded-md border p-6 text-center text-sm">
                   <div>
                     <div className="flex items-center justify-center space-x-2">
                       <IconTagOff size={24} />

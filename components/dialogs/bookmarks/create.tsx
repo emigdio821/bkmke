@@ -17,21 +17,21 @@ export const CreateBookmarkDialog = NiceModal.create(() => {
       }}
     >
       <DialogContent onCloseAutoFocus={() => modal.remove()}>
-        <DialogHeader>
+        <DialogHeader className="space-y-0">
           <DialogTitle>Create bookmark</DialogTitle>
+          <DialogDescription className="sr-only">Create bookmark dialog</DialogDescription>
         </DialogHeader>
-        <DialogDescription className="sr-only">Create bookmark dialog</DialogDescription>
-        <Tabs defaultValue="automatic-bookmark">
-          <div className="flex w-full items-center justify-center sm:justify-start">
+        <Tabs defaultValue="automatic-bookmark" className="mt-4">
+          <div className="flex w-full items-center justify-center px-4 sm:justify-start">
             <TabsList>
               <TabsTrigger value="automatic-bookmark">Automatic</TabsTrigger>
               <TabsTrigger value="manual-bookmark">Manual</TabsTrigger>
             </TabsList>
           </div>
-          <TabsContent value="automatic-bookmark" className="rounded-lg">
+          <TabsContent value="automatic-bookmark" className="rounded-md">
             <CreateAutomaticForm />
           </TabsContent>
-          <TabsContent value="manual-bookmark" className="rounded-lg">
+          <TabsContent value="manual-bookmark" className="rounded-md">
             <CreateManualForm />
           </TabsContent>
         </Tabs>
