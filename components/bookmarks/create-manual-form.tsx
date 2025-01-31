@@ -128,7 +128,7 @@ export function CreateManualForm() {
 
   return (
     <>
-      <p className="my-4 text-center text-sm text-muted-foreground sm:text-left">
+      <p className="text-muted-foreground my-4 text-center text-sm sm:text-left">
         Create your bookmark by adding the details by yourself.
       </p>
       <Form {...form}>
@@ -142,7 +142,7 @@ export function CreateManualForm() {
                 <FormControl>
                   <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
                 </FormControl>
-                <div className="text-right text-xs tabular-nums text-muted-foreground">
+                <div className="text-muted-foreground text-right text-xs tabular-nums">
                   {MAX_NAME_LENGTH - field.value.length} characters left
                 </div>
                 <FormMessage />
@@ -163,7 +163,7 @@ export function CreateManualForm() {
                     {...field}
                   />
                 </FormControl>
-                <div className="text-right text-xs tabular-nums text-muted-foreground">
+                <div className="text-muted-foreground text-right text-xs tabular-nums">
                   {MAX_DESC_LENGTH - field.value.length} characters left
                 </div>
                 <FormMessage />
@@ -190,7 +190,7 @@ export function CreateManualForm() {
               control={form.control}
               render={({ field }) => {
                 return (
-                  <FormItem className="flex-grow">
+                  <FormItem className="grow">
                     <FormLabel>
                       Folder
                       {field.value && (
@@ -284,7 +284,7 @@ export function CreateManualForm() {
             name="isFavorite"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-sm">
+              <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
                 <div>
                   <FormLabel>Favorite</FormLabel>
                   <FormDescription>Add this bookmark to the favorites list.</FormDescription>

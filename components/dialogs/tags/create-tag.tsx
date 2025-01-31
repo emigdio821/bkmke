@@ -84,7 +84,7 @@ export const CreateTagDialog = NiceModal.create(() => {
                   <FormControl>
                     <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
                   </FormControl>
-                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                  <div className="text-muted-foreground text-right text-xs tabular-nums">
                     {MAX_NAME_LENGTH - field.value.length} characters left
                   </div>
                   <FormMessage />

@@ -99,7 +99,7 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
                       {...field}
                     />
                   </FormControl>
-                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                  <div className="text-muted-foreground text-right text-xs tabular-nums">
                     {MAX_NAME_LENGTH - field.value.length} characters left
                   </div>
                   <FormMessage />
@@ -121,7 +121,7 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
                       {...field}
                     />
                   </FormControl>
-                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                  <div className="text-muted-foreground text-right text-xs tabular-nums">
                     {MAX_DESC_LENGTH - field.value.length} characters left
                   </div>
                   <FormMessage />

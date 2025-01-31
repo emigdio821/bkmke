@@ -80,11 +80,11 @@ export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
         className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-md [&>button:last-child]:top-3.5"
       >
         <DialogHeader className="contents space-y-0 text-left">
-          <DialogTitle className="border-b border-border px-6 py-4 text-base">Edit profile</DialogTitle>
+          <DialogTitle className="border-border border-b px-6 py-4 text-base">Edit profile</DialogTitle>
         </DialogHeader>
         <DialogDescription className="sr-only">Make changes to your profile here.</DialogDescription>
         <div className="overflow-y-auto">
-          <div className="px-6 pb-6 pt-4">
+          <div className="px-6 pt-4 pb-6">
             <Avatar className="mb-2 size-16">
               <AvatarImage src={form.getValues('avatar') || userMetadata?.avatar} />
               <AvatarFallback>
@@ -139,7 +139,7 @@ export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
             </Form>
           </div>
         </div>
-        <DialogFooter className="border-t border-border px-6 py-4">
+        <DialogFooter className="border-border border-t px-6 py-4">
           <DialogClose asChild>
             <Button type="button" variant="outline">
               Cancel

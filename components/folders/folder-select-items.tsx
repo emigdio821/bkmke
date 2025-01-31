@@ -13,12 +13,12 @@ export function FolderSelectItems({ folders, parentFolder }: FolderSelectItemsPr
     <>
       {folders.map((folder) => (
         <Fragment key={`parent-folder-${folder.id}`}>
-          <SelectItem value={`${folder.id}`}>
+          <SelectItem value={folder.id}>
             <span className="flex items-center">
               {parentFolder && (
                 <>
-                  <span className="text-xs text-muted-foreground">{parentFolder.name}</span>
-                  <IconChevronRight className="size-3.5 text-muted-foreground" />
+                  <span className="text-muted-foreground text-xs">{parentFolder.name}</span>
+                  <IconChevronRight className="text-muted-foreground size-3.5" />
                 </>
               )}
               {folder.name}

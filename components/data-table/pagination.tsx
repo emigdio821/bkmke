@@ -16,11 +16,34 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
   if (rowLength === 0) return null
 
   return (
-    <div className="flex flex-col items-end gap-2">
-      <div className="flex items-center space-x-2">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {filteredRowLength} of {rowLength} selected.
+    <div className="flex items-baseline justify-between space-x-2 sm:items-center">
+      <div className="text-muted-foreground flex-1 text-sm">
+        {filteredRowLength} of {rowLength} selected.
+      </div>
+      <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2">
+            <p className="text-muted-foreground text-sm font-medium">Items per page</p>
+            <Select
+              value={`${table.getState().pagination.pageSize}`}
+              onValueChange={(value: string) => {
+                table.setPageSize(Number(value))
+              }}
+            >
+              <SelectTrigger className="h-8 w-[70px]">
+                <SelectValue placeholder={table.getState().pagination.pageSize} />
+              </SelectTrigger>
+              <SelectContent side="top" align="end">
+                {PAGINATION.map((pageSize) => (
+                  <SelectItem key={pageSize} value={`${pageSize}`}>
+                    {pageSize}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
+
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
@@ -72,28 +95,6 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
             <span className="sr-only">Go to last page</span>
             <IconChevronRightPipe className="size-4" />
           </Button>
-        </div>
-      </div>
-      <div className="flex items-center space-x-2">
-        <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium text-muted-foreground">Items per page</p>
-          <Select
-            value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value: string) => {
-              table.setPageSize(Number(value))
-            }}
-          >
-            <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
-            </SelectTrigger>
-            <SelectContent side="top" align="end">
-              {PAGINATION.map((pageSize) => (
-                <SelectItem key={pageSize} value={`${pageSize}`}>
-                  {pageSize}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
       </div>
     </div>

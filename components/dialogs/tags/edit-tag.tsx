@@ -96,7 +96,7 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
                       {...field}
                     />
                   </FormControl>
-                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                  <div className="text-muted-foreground text-right text-xs tabular-nums">
                     {MAX_NAME_LENGTH - field.value.length} characters left
                   </div>
                   <FormMessage />

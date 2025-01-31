@@ -77,7 +77,7 @@ export function CreateAutomaticForm() {
 
   return (
     <>
-      <p className="my-4 text-center text-sm text-muted-foreground sm:text-left">
+      <p className="text-muted-foreground my-4 text-center text-sm sm:text-left">
         Add the URL and everything will be filled automatically, except for the tags and/or folder.
       </p>
       <Form {...form}>
@@ -101,7 +101,7 @@ export function CreateAutomaticForm() {
               control={form.control}
               render={({ field }) => {
                 return (
-                  <FormItem className="flex-grow">
+                  <FormItem className="grow">
                     <FormLabel>
                       Folder
                       {field.value && (
@@ -185,7 +185,7 @@ export function CreateAutomaticForm() {
             name="isFavorite"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-sm">
+              <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
                 <div>
                   <FormLabel>Favorite</FormLabel>
                   <FormDescription>Add this bookmark to the favorites list.</FormDescription>

@@ -50,7 +50,7 @@ export const AlertActionDialog = NiceModal.create(<T,>({ action, message, title 
       <AlertDialogContent onCloseAutoFocus={() => modal.remove()}>
         <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
           <div
-            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border"
+            className="border-border flex size-9 shrink-0 items-center justify-center rounded-full border"
             aria-hidden="true"
           >
             <IconAlertCircle className="opacity-80" size={16} strokeWidth={2} />

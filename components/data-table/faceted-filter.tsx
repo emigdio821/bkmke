@@ -13,7 +13,6 @@ import {
   CommandSeparator,
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Separator } from '@/components/ui/separator'
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
@@ -41,7 +40,7 @@ export function DataTableFacetedFilter<TData, TValue>({
           {title}
           {selectedValues.size > 0 && (
             <>
-              <Separator orientation="vertical" className="mx-2 h-4" />
+              <div className="bg-border mx-2 h-4 w-px" />
               <Badge variant="outline" className="rounded-sm">
                 {selectedValues.size}
               </Badge>
@@ -78,7 +77,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     >
                       <IconCheck className="size-4" />
                     </div>
-                    {option.icon && <option.icon className="mr-2 size-4 text-muted-foreground" />}
+                    {option.icon && <option.icon className="text-muted-foreground mr-2 size-4" />}
                     <span>{option.label}</span>
                     {facets?.get(option.value) && (
                       <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">

@@ -61,7 +61,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
           {folder && (
             <>
               <TypographyH4>{folder[0]?.name || 'Folder items'}</TypographyH4>
-              {folder[0]?.description && <p className="text-sm text-muted-foreground">{folder[0].description}</p>}
+              {folder[0]?.description && <p className="text-muted-foreground text-sm">{folder[0].description}</p>}
             </>
           )}
         </>

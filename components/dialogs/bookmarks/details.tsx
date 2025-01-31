@@ -74,12 +74,12 @@ export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetai
 
           <div className="flex items-center space-x-2">
             <IconCalendarMonth className="size-4" />
-            <span className="text-sm text-muted-foreground">{formatDateFromString(bookmark.created_at)}</span>
+            <span className="text-muted-foreground text-sm">{formatDateFromString(bookmark.created_at)}</span>
           </div>
         </div>
 
         {ogInfo?.imageUrl && (
-          <div className="h-48 w-full rounded-sm bg-muted object-cover md:h-64">
+          <div className="bg-muted h-48 w-full rounded-sm object-cover md:h-64">
             <BlurImage src={ogInfo.imageUrl} alt={bookmark.name} />
           </div>
         )}

@@ -20,6 +20,7 @@
   "dependencies": {
     "@ebay/nice-modal-react": "^1.2.13",
     "@hookform/resolvers": "^3.10.0",
+    "@radix-ui/colors": "^3.0.0",
     "@supabase/ssr": "^0.5.2",
     "@tabler/icons-react": "^3.29.0",
     "@tanstack/react-query": "^5.65.1",
@@ -39,7 +40,7 @@
     "react-dropzone": "^14.3.5",
     "react-hook-form": "^7.54.2",
     "sonner": "^1.7.3",
-    "tailwind-merge": "^2.6.0",
+    "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.1",
     "zustand": "^5.0.3"
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
+    "@tailwindcss/postcss": "^4.0.1",
     "@types/node": "^22.12.0",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
@@ -56,7 +58,7 @@
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "supabase": "^2.9.6",
-    "tailwindcss": "^3.4.17",
+    "tailwindcss": "^4.0.1",
     "typescript": "^5.7.3"
   },
   "overrides": {

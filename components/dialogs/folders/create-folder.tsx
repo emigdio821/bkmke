@@ -99,7 +99,7 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
                   <FormControl>
                     <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
                   </FormControl>
-                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                  <div className="text-muted-foreground text-right text-xs tabular-nums">
                     {MAX_NAME_LENGTH - field.value.length} characters left
                   </div>
                   <FormMessage />
@@ -115,7 +115,7 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
                   <FormControl>
                     <Textarea className="max-h-24" maxLength={MAX_DESC_LENGTH} {...field} />
                   </FormControl>
-                  <div className="text-right text-xs tabular-nums text-muted-foreground">
+                  <div className="text-muted-foreground text-right text-xs tabular-nums">
                     {MAX_DESC_LENGTH - field.value.length} characters left
                   </div>
                   <FormMessage />

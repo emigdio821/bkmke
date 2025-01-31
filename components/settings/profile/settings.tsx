@@ -60,7 +60,7 @@ export function ProfileSettings() {
             <Avatar>
               <AvatarImage src="" alt="User avatar" className="size-16 rounded-md" />
               <AvatarFallback>
-                <div className="size-16 rounded-md bg-gradient-to-r from-emerald-500 to-indigo-400" />
+                <div className="size-16 rounded-md bg-linear-to-r from-emerald-500 to-indigo-400" />
               </AvatarFallback>
             </Avatar>
             <div>

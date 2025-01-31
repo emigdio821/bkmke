@@ -8,7 +8,7 @@ interface TableLayoutProps {
 
 export function TableLayout({ table }: TableLayoutProps) {
   return (
-    <div className="w-full overflow-auto rounded-md border shadow-sm">
+    <div className="w-full overflow-auto rounded-md border shadow-xs">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -34,7 +34,7 @@ export function TableLayout({ table }: TableLayoutProps) {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center text-muted-foreground">
+              <TableCell colSpan={table.getAllColumns().length} className="text-muted-foreground h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>

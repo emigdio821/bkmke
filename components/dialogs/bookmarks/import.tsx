@@ -221,7 +221,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
 
                 <div
                   className={cn(
-                    'flex h-28 w-full items-center justify-center rounded-lg border border-dashed p-6 transition-colors hover:bg-accent',
+                    'hover:bg-accent flex h-28 w-full items-center justify-center rounded-lg border border-dashed p-6 transition-colors',
                     {
                       'bg-accent': isDragActive,
                       'border-destructive': form.formState.errors.bookmarks,
@@ -232,7 +232,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                   <input {...getInputProps()} />
                   <div className="flex flex-col items-center">
                     <IconUpload className="size-4" />
-                    <p className="text-sm text-muted-foreground">Drop your file here, or click to select it.</p>
+                    <p className="text-muted-foreground text-sm">Drop your file here, or click to select it.</p>
                   </div>
                 </div>
 
@@ -280,7 +280,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                 control={form.control}
                 render={({ field }) => {
                   return (
-                    <FormItem className="flex-grow">
+                    <FormItem className="grow">
                       <FormLabel>
                         Folder
                         {field.value && (

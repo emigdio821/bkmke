@@ -157,7 +157,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                         {...field}
                       />
                     </FormControl>
-                    <div className="text-right text-xs tabular-nums text-muted-foreground">
+                    <div className="text-muted-foreground text-right text-xs tabular-nums">
                       {MAX_NAME_LENGTH - field.value.length} characters left
                     </div>
                     <FormMessage />
@@ -178,7 +178,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                         {...field}
                       />
                     </FormControl>
-                    <div className="text-right text-xs tabular-nums text-muted-foreground">
+                    <div className="text-muted-foreground text-right text-xs tabular-nums">
                       {MAX_DESC_LENGTH - field.value.length} characters left
                     </div>
                     <FormMessage />
@@ -205,7 +205,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                   control={form.control}
                   render={({ field }) => {
                     return (
-                      <FormItem className="flex-grow">
+                      <FormItem className="grow">
                         <FormLabel>
                           Folder
                           {field.value && (
@@ -287,7 +287,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                 name="isFavorite"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-sm">
+                  <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
                     <div>
                       <FormLabel>Favorite</FormLabel>
                       <FormDescription>Add this bookmark to the favorites list.</FormDescription>
@@ -303,7 +303,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                 name="updateOG"
                 control={form.control}
                 render={({ field }) => (
-                  <div className="space-y-2 rounded-md border p-3 shadow-sm">
+                  <div className="space-y-2 rounded-md border p-3 shadow-xs">
                     <FormItem className="flex items-center justify-between">
                       <div>
                         <FormLabel>Images</FormLabel>

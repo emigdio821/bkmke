@@ -60,7 +60,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
           type="search"
           ref={searchRef}
           value={inputValue}
-          className="peer pe-9 ps-9"
+          className="peer ps-9 pe-9"
           placeholder="Search by name or description"
           onChange={(event) => {
             const value = event.target.value
@@ -68,7 +68,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
             debouncedFilter(value)
           }}
         />
-        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+        <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
           <IconSearch size={16} />
         </div>
         {inputValue && (
@@ -78,7 +78,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
             variant="unstyled"
             aria-label="Clear input"
             onClick={handleClearInput}
-            className="absolute inset-y-0 end-0 rounded-s-none text-muted-foreground/80 transition-colors hover:text-foreground focus:z-10"
+            className="text-muted-foreground/80 hover:text-foreground absolute inset-y-0 end-0 rounded-s-none transition-colors focus:z-10"
           >
             <IconCircleX size={16} strokeWidth={2} aria-hidden="true" />
           </Button>
