@@ -4,16 +4,15 @@ import NiceModal from '@ebay/nice-modal-react'
 import {
   IconBookmarkPlus,
   IconBookmarks,
-  IconChevronDown,
   IconFileImport,
   IconFolderPlus,
   IconLogout,
   IconMoonStars,
   IconReload,
+  IconSelector,
   IconSettings,
   IconSun,
   IconTag,
-  IconUser,
 } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTheme } from 'next-themes'
@@ -24,7 +23,6 @@ import { CreateBookmarkDialog } from './dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from './dialogs/bookmarks/import'
 import { CreateFolderDialog } from './dialogs/folders/create-folder'
 import { CreateTagDialog } from './dialogs/tags/create-tag'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
 import {
   DropdownMenu,
@@ -75,18 +73,10 @@ export function UserProfileDropdown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="justify-between gap-2">
-          <div className="flex items-center space-x-2">
-            <Avatar className="size-6">
-              <AvatarImage src={userMetadata?.avatar} />
-              <AvatarFallback>
-                <IconUser size={14} />
-              </AvatarFallback>
-            </Avatar>
-            <span title={profileNameOrEmail} className="max-w-40 truncate">
-              {profileNameOrEmail}
-            </span>
-          </div>
-          <IconChevronDown size={16} className="text-muted-foreground" />
+          <span title={profileNameOrEmail} className="max-w-40 truncate">
+            {profileNameOrEmail}
+          </span>
+          <IconSelector size={16} className="text-muted-foreground" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">

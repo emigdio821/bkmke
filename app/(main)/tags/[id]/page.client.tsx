@@ -6,6 +6,7 @@ import { IconBookmarkPlus, IconBookmarks, IconBug, IconFileImport, IconReload, I
 import { useTagItems } from '@/hooks/use-tag-items'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Heading } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
@@ -21,21 +22,23 @@ export function TagitemsClientPage({ id }: { id: string }) {
 
   if (error || tagError)
     return (
-      <div className="space-y-2 rounded-md border p-6 text-center text-sm">
-        <div>
-          <div className="flex items-center justify-center space-x-2">
+      <Card>
+        <CardHeader className="flex flex-col items-center justify-center gap-2">
+          <CardTitle className="mb-2">
             <IconBug size={24} />
-            <Heading>Error</Heading>
-          </div>
-          <p className="text-muted-foreground">
+          </CardTitle>
+          <Heading>Error</Heading>
+          <CardDescription className="text-center">
             Unable to fetch this tag at this time, try again or check if the tag still exists.
-          </p>
-        </div>
-        <Button variant="outline">
-          <IconReload className="mr-2 size-4" />
-          Refetch
-        </Button>
-      </div>
+          </CardDescription>
+        </CardHeader>
+        <CardFooter className="justify-center">
+          <Button variant="outline">
+            <IconReload className="mr-2 size-4" />
+            Refetch
+          </Button>
+        </CardFooter>
+      </Card>
     )
 
   return (
@@ -56,15 +59,15 @@ export function TagitemsClientPage({ id }: { id: string }) {
               (tagItems.length > 0 ? (
                 <DataTable columns={columns} data={tagItems} />
               ) : (
-                <div className="space-y-6 rounded-md border p-6 text-center text-sm">
-                  <div>
-                    <div className="flex items-center justify-center space-x-2">
+                <Card>
+                  <CardHeader className="flex flex-col items-center justify-center gap-2">
+                    <CardTitle className="mb-2">
                       <IconTagOff size={24} />
-                      <Heading>Empty</Heading>
-                    </div>
-                    <p className="text-muted-foreground">This tag does not contain items yet.</p>
-                  </div>
-                  <div className="flex flex-col justify-center gap-2 sm:flex-row">
+                    </CardTitle>
+                    <Heading>Emtpy</Heading>
+                    <CardDescription className="text-center">This tag does not contain items yet.</CardDescription>
+                  </CardHeader>
+                  <CardFooter className="justify-center">
                     <Button variant="outline" asChild>
                       <Link href="/">
                         <IconBookmarks size={16} className="mr-2" />
@@ -81,8 +84,8 @@ export function TagitemsClientPage({ id }: { id: string }) {
                       <IconFileImport size={16} className="mr-2" />
                       Import bookmarks
                     </Button>
-                  </div>
-                </div>
+                  </CardFooter>
+                </Card>
               ))}
           </>
         )}

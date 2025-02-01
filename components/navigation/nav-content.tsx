@@ -36,7 +36,7 @@ export function NavContent() {
         {appMetadata?.userrole === DEMO_ROLE && (
           <Card className="bg-subtle">
             <CardHeader>
-              <CardTitle>Demo mode</CardTitle>
+              <CardTitle className="text-sm sm:text-base">Demo mode</CardTitle>
               <CardDescription>All modifications are disabled.</CardDescription>
             </CardHeader>
           </Card>

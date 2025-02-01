@@ -1,13 +1,7 @@
 import { cn } from '@/lib/utils'
 
 function Heading({ className, ...props }: React.ComponentProps<'h4'>) {
-  return (
-    <h4
-      slot="title"
-      className={cn('text-base leading-none font-semibold tracking-tight sm:text-lg', className)}
-      {...props}
-    />
-  )
+  return <h4 className={cn('text-base leading-none font-semibold tracking-tight sm:text-lg', className)} {...props} />
 }
 
 function InlineCode({ className, ...props }: React.ComponentProps<'code'>) {

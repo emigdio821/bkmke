@@ -25,7 +25,7 @@ export function BookmarksClientPage() {
             <IconBug size={24} />
           </CardTitle>
           <Heading>Error</Heading>
-          <CardDescription>Unable to fetch bookmarks at this time, try again.</CardDescription>
+          <CardDescription className="text-center">Unable to fetch bookmarks at this time, try again.</CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
           <Button variant="outline">
@@ -43,12 +43,12 @@ export function BookmarksClientPage() {
           <DataTable columns={columns} data={bookmarks} />
         ) : (
           <Card>
-            <CardHeader className="flex flex-col items-center justify-center">
+            <CardHeader className="flex flex-col items-center justify-center gap-2">
               <CardTitle className="mb-4">
                 <IconBookmarksOff size={24} />
               </CardTitle>
               <Heading>Emtpy</Heading>
-              <CardDescription>You have no bookmarks yet.</CardDescription>
+              <CardDescription className="text-center">You have no bookmarks yet.</CardDescription>
             </CardHeader>
             <CardFooter className="justify-center">
               <Button variant="outline" onClick={() => NiceModal.show(CreateBookmarkDialog)}>

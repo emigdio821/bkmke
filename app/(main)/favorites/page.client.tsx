@@ -5,6 +5,7 @@ import NiceModal from '@ebay/nice-modal-react'
 import { IconBookmarkPlus, IconBookmarks, IconBug, IconHeartsOff, IconReload } from '@tabler/icons-react'
 import { useFavoriteBookmarks } from '@/hooks/use-favorite-bookmarks'
 import { Button } from '@/components/ui/button'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Heading } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
@@ -18,49 +19,53 @@ export function FavoritesClientPage() {
 
   if (error)
     return (
-      <div className="space-y-2 rounded-md border p-6 text-center text-sm">
-        <div>
-          <div className="flex items-center justify-center space-x-2">
+      <Card>
+        <CardHeader className="flex flex-col items-center justify-center gap-2">
+          <CardTitle className="mb-2">
             <IconBug size={24} />
-            <Heading>Error</Heading>
-          </div>
-          <p className="text-muted-foreground">Unable to fetch favorite bookmarks at this time, try again.</p>
-        </div>
-        <Button variant="outline">
-          <IconReload className="mr-2 size-4" />
-          Refetch
-        </Button>
-      </div>
+          </CardTitle>
+          <Heading>Error</Heading>
+          <CardDescription className="text-center">
+            Unable to fetch favorite bookmarks at this time, try again.
+          </CardDescription>
+        </CardHeader>
+        <CardFooter className="justify-center">
+          <Button variant="outline">
+            <IconReload className="mr-2 size-4" />
+            Refetch
+          </Button>
+        </CardFooter>
+      </Card>
     )
 
   return (
     <>
       {bookmarks &&
-        (bookmarks.length > 0 ? (
+        (bookmarks.length === 0 ? (
           <DataTable columns={columns} data={bookmarks} />
         ) : (
-          <div className="space-y-6 rounded-md border p-6 text-center text-sm">
-            <div>
-              <div className="flex items-center justify-center space-x-2">
+          <Card>
+            <CardHeader className="flex flex-col items-center justify-center gap-2">
+              <CardTitle className="mb-2">
                 <IconHeartsOff size={24} />
-                <Heading>Empty</Heading>
-              </div>
-              <p className="text-muted-foreground">You have no favorite bookmarks yet.</p>
-            </div>
-            <div className="flex flex-col justify-center gap-2 sm:flex-row">
+              </CardTitle>
+              <Heading>Emtpy</Heading>
+              <CardDescription className="text-center">You have no favorite bookmarks yet.</CardDescription>
+            </CardHeader>
+            <CardFooter className="justify-center">
+              <Button variant="outline" onClick={() => NiceModal.show(CreateBookmarkDialog)}>
+                <IconBookmarkPlus size={16} className="mr-2" />
+                Create
+              </Button>
+
               <Button variant="outline" asChild>
                 <Link href="/">
                   <IconBookmarks size={16} className="mr-2" />
                   Bookmarks
                 </Link>
               </Button>
-
-              <Button variant="outline" onClick={() => NiceModal.show(CreateBookmarkDialog)}>
-                <IconBookmarkPlus size={16} className="mr-2" />
-                Create
-              </Button>
-            </div>
-          </div>
+            </CardFooter>
+          </Card>
         ))}
     </>
   )
