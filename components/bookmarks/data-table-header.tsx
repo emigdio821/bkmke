@@ -74,9 +74,9 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
             variant="unstyled"
             aria-label="Clear input"
             onClick={handleClearInput}
-            className="text-muted-foreground hover:text-foreground absolute inset-y-0 end-0 rounded-s-none transition-colors focus:z-10"
+            className="text-muted-foreground hover:text-foreground absolute inset-y-0 end-0 transition-colors focus:z-10"
           >
-            <IconCircleX size={16} strokeWidth={2} aria-hidden="true" />
+            <IconCircleX size={16} strokeWidth={2} aria-hidden />
           </Button>
         )}
       </div>
