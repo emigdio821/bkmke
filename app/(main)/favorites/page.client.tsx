@@ -41,7 +41,7 @@ export function FavoritesClientPage() {
   return (
     <>
       {bookmarks &&
-        (bookmarks.length === 0 ? (
+        (bookmarks.length > 0 ? (
           <DataTable columns={columns} data={bookmarks} />
         ) : (
           <Card>
