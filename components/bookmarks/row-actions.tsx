@@ -48,7 +48,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
       <BookmarkDetailsDialog open={openBookmarkDetails} setOpen={setOpenBookmarkDetails} bookmark={bookmark} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="ghost" className="hover:bg-muted-foreground/10" {...props}>
+          <Button size="icon" variant="ghost" {...props}>
             <span className="sr-only">Open row actions</span>
             <IconDots className="size-4" />
           </Button>

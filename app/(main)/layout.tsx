@@ -7,14 +7,13 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="relative flex justify-center">
-      <div className="hidden w-3/12 md:block">
-        <Sidebar />
+    <div className="grid-cols-[288px_1fr] gap-4 lg:grid">
+      <div />
+      <Navbar />
+      <Sidebar />
+      <div className="flex gap-4 p-4 lg:pl-0">
+        <section className="mx-auto w-full lg:max-w-4xl">{children}</section>
       </div>
-      <main className="flex h-full w-full flex-col md:w-9/12">
-        <Navbar />
-        <section className="p-4">{children}</section>
-      </main>
     </div>
   )
 }

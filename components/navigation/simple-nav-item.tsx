@@ -2,7 +2,7 @@ import type { NavMenu } from '@/types'
 import { ItemCount } from './item-count'
 import { NavItemContent } from './nav-item-content'
 
-export function SimpleNavItem({ ...props }: NavMenu) {
+export function SimpleNavItem(props: NavMenu) {
   const { href, icon: Icon, active, label, actions, itemCount } = props
 
   return (

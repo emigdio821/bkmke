@@ -72,14 +72,14 @@ export function UserProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="justify-between gap-2">
+        <Button variant="outline" className="bg-subtle justify-between gap-2">
           <span title={profileNameOrEmail} className="max-w-40 truncate">
             {profileNameOrEmail}
           </span>
           <IconSelector size={16} className="text-muted-foreground" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
+      <DropdownMenuContent align="start" className="sm:w-(--radix-dropdown-menu-trigger-width)">
         <DropdownMenuItem onSelect={() => NiceModal.show(CreateFolderDialog)}>
           <IconFolderPlus size={16} className="mr-2" />
           Create folder
@@ -119,28 +119,13 @@ export function UserProfileDropdown() {
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuCheckboxItem
-                  checked={theme === 'light'}
-                  onClick={() => {
-                    setTheme('light')
-                  }}
-                >
+                <DropdownMenuCheckboxItem checked={theme === 'light'} onClick={() => setTheme('light')}>
                   Light
                 </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={theme === 'dark'}
-                  onClick={() => {
-                    setTheme('dark')
-                  }}
-                >
+                <DropdownMenuCheckboxItem checked={theme === 'dark'} onClick={() => setTheme('dark')}>
                   Dark
                 </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={theme === 'system'}
-                  onClick={() => {
-                    setTheme('system')
-                  }}
-                >
+                <DropdownMenuCheckboxItem checked={theme === 'system'} onClick={() => setTheme('system')}>
                   System
                 </DropdownMenuCheckboxItem>
               </DropdownMenuSubContent>

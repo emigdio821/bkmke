@@ -14,35 +14,39 @@ export function NavContent() {
   const appMetadata = profile?.app_metadata
 
   return (
-    <nav className="flex h-full w-full flex-col items-start border-r">
-      <div className="flex w-full items-center gap-2 p-4 pb-0">
-        <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md">
-          bk
-        </div>
-        <div className="grid flex-1 text-left text-sm leading-tight">
-          <span className="truncate font-semibold tracking-tight">{siteConfig.name}</span>
-          <span className="truncate text-xs tracking-tight">Bookmark manager</span>
+    <>
+      <div className="px-4 pb-0">
+        <div className="flex w-full items-center gap-2 border-b border-dashed pb-4">
+          <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md">
+            bk
+          </div>
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold tracking-tight">{siteConfig.name}</span>
+            <span className="truncate text-xs tracking-tight">Bookmark manager</span>
+          </div>
         </div>
       </div>
 
       <NavMain />
 
-      <div className="h-auto w-full space-y-1 overflow-auto px-4 py-1">
+      <div className="h-auto w-full space-y-1 overflow-auto p-4">
         <FoldersNavItems />
         <TagsNavItems />
       </div>
 
-      <div className="flex w-full grow flex-col justify-end gap-2 px-4 pb-4">
-        {appMetadata?.userrole === DEMO_ROLE && (
-          <Card className="bg-subtle">
-            <CardHeader>
-              <CardTitle className="text-sm sm:text-base">Demo mode</CardTitle>
-              <CardDescription>All modifications are disabled.</CardDescription>
-            </CardHeader>
-          </Card>
-        )}
-        <UserProfileDropdown />
+      <div className="flex w-full grow flex-col justify-end px-4">
+        <div className="flex w-full flex-col gap-2 border-t border-dashed pt-4">
+          {appMetadata?.userrole === DEMO_ROLE && (
+            <Card className="bg-muted">
+              <CardHeader>
+                <CardTitle className="text-sm sm:text-base">Demo mode</CardTitle>
+                <CardDescription>All modifications are disabled.</CardDescription>
+              </CardHeader>
+            </Card>
+          )}
+          <UserProfileDropdown />
+        </div>
       </div>
-    </nav>
+    </>
   )
 }

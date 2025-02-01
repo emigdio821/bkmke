@@ -44,6 +44,7 @@ export function CollapsibleNavItem({ ...props }: NavMenu) {
             variant="ghost"
             className={cn('block flex-auto overflow-hidden', {
               'bg-accent font-semibold': active,
+              'hover:bg-accent! data-[state=open]:bg-[inherit]': !active,
             })}
             onClick={(e) => {
               e.stopPropagation()

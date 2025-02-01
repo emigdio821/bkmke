@@ -31,7 +31,7 @@ export function SettingsProfileSkeleton() {
 
 export function NavItemsSkeleton() {
   return (
-    <div className="flex h-9 w-full items-center justify-between px-4">
+    <div className="flex h-9 w-full items-center justify-between">
       <div className="flex items-center">
         <Skeleton className="mr-2 size-4" />
         <Skeleton className="h-2 w-16" />

@@ -2,8 +2,8 @@ import { NavContent } from './nav-content'
 
 export async function Sidebar() {
   return (
-    <aside className="sticky top-0 bottom-0 hidden h-dvh w-full overflow-hidden md:block">
+    <nav className="bg-subtle fixed top-0 hidden h-full w-72 flex-col border-r pt-4 pb-4 lg:flex">
       <NavContent />
-    </aside>
+    </nav>
   )
 }

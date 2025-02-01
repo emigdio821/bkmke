@@ -94,7 +94,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
           )}
         </CardContent>
 
-        <CardFooter className="items-center justify-between space-x-2">
+        <CardFooter className="flex-row items-center justify-between gap-2">
           <Checkbox
             aria-label="Select row"
             checked={row.getIsSelected()}
@@ -105,7 +105,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
 
           <div className="space-x-2">
             <ToggleFavBtn bookmark={bookmark} variant="outline" />
-            <RowActions bookmark={bookmark} variant="outline" className="hover:bg-accent" />
+            <RowActions bookmark={bookmark} variant="outline" />
           </div>
         </CardFooter>
       </Card>

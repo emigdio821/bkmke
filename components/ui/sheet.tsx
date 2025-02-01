@@ -48,7 +48,7 @@ interface SheetContentProps extends SheetPrimitive.DialogContentProps, VariantPr
 const SheetContent = ({ side = 'right', className, children, ...props }: SheetContentProps) => (
   <SheetPortal>
     <SheetOverlay />
-    <SheetPrimitive.Content aria-describedby={undefined} className={cn(sheetVariants({ side }), className)} {...props}>
+    <SheetPrimitive.Content className={cn(sheetVariants({ side }), className)} {...props}>
       <SheetPrimitive.Close className="focus:outline-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-sm opacity-70 outline-hidden transition-opacity hover:opacity-100 focus:outline-hidden focus:outline-2 focus:outline-offset-1 disabled:pointer-events-none">
         <IconX className="h-4 w-4" />
         <span className="sr-only">Close</span>
