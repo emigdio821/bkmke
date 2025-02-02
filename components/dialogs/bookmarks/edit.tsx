@@ -135,7 +135,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
         isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogContent onCloseAutoFocus={() => modal.remove()}>
+      <DialogContent side="right" onCloseAutoFocus={() => modal.remove()}>
         <DialogHeader>
           <DialogTitle>Edit bookmark</DialogTitle>
           <DialogDescription className="p-0 break-words">{bookmark.name}</DialogDescription>

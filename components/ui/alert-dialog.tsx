@@ -2,7 +2,7 @@
 
 import { AlertDialog as AlertDialogPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
+import { Button, type ButtonProps } from '@/components/ui/button'
 
 const AlertDialog = AlertDialogPrimitive.Root
 
@@ -62,8 +62,12 @@ const AlertDialogDescription = ({ className, ...props }: AlertDialogPrimitive.Al
 )
 AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayName
 
-const AlertDialogAction = ({ className, ...props }: AlertDialogPrimitive.AlertDialogActionProps) => (
-  <AlertDialogPrimitive.Action className={cn(buttonVariants(), className)} {...props} />
+interface AlertDialogActionProps extends AlertDialogPrimitive.AlertDialogActionProps, ButtonProps {}
+
+const AlertDialogAction = ({ className, ...props }: AlertDialogActionProps) => (
+  <AlertDialogPrimitive.Action asChild>
+    <Button {...props} />
+  </AlertDialogPrimitive.Action>
 )
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
 

@@ -82,6 +82,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
           className="text-destructive focus:text-destructive"
           onSelect={() => {
             void NiceModal.show(AlertActionDialog, {
+              destructive: true,
               title: 'Delete folder?',
               message:
                 'It will also delete all bookmarks/folders related to this folder. This action cannot be undone.',

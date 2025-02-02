@@ -194,7 +194,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogContent onCloseAutoFocus={() => modal.remove()}>
+      <DialogContent side="right" onCloseAutoFocus={() => modal.remove()}>
         <DialogHeader>
           <DialogTitle>Import bookmarks</DialogTitle>
         </DialogHeader>

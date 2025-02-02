@@ -29,7 +29,7 @@ export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetai
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent side="right">
         <DialogHeader>
           <DialogTitle>{bookmark.name}</DialogTitle>
           {bookmark.description && (
@@ -85,7 +85,7 @@ export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetai
           )}
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="flex-row justify-end">
           <div className="flex justify-center gap-2">
             <ToggleFavBtn bookmark={bookmark} variant="outline" />
             <RowActions bookmark={bookmark} variant="outline" />

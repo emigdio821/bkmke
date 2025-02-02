@@ -21,9 +21,11 @@ interface AlertActionDialogProps<T> {
   title?: React.ReactNode
   message?: React.ReactNode
   action: GenericFn<T>
+  destructive?: boolean
 }
 
-export const AlertActionDialog = NiceModal.create(<T,>({ action, message, title }: AlertActionDialogProps<T>) => {
+export const AlertActionDialog = NiceModal.create(<T,>(props: AlertActionDialogProps<T>) => {
+  const { action, message, title, destructive } = props
   const modal = useModal()
   const [isLoading, setLoading] = useState(false)
 
@@ -67,6 +69,7 @@ export const AlertActionDialog = NiceModal.create(<T,>({ action, message, title 
           </AlertDialogCancel>
           <AlertDialogAction
             disabled={isLoading}
+            variant={destructive ? 'destructive' : 'default'}
             onClick={(e) => {
               e.preventDefault()
               handleAction()

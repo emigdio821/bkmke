@@ -74,7 +74,7 @@ export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
         isOpen ? modal.show() : modal.hide()
       }}
     >
-      <DialogContent onCloseAutoFocus={() => modal.remove()} className="sm:max-w-sm">
+      <DialogContent side="right" onCloseAutoFocus={() => modal.remove()} className="sm:max-w-sm">
         <DialogHeader className="space-y-0">
           <DialogTitle>Edit profile</DialogTitle>
         </DialogHeader>
