@@ -65,7 +65,7 @@ function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div className={cn('flex flex-col gap-2', className)} {...props} />
+      <div className={cn('space-y-2', className)} {...props} />
     </FormItemContext.Provider>
   )
 }
@@ -73,7 +73,7 @@ function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
 function FormLabel({ className, ...props }: React.ComponentProps<'label'>) {
   const { formItemId } = useFormField()
 
-  return <Label className={cn(className)} htmlFor={formItemId} {...props} />
+  return <Label className={cn('block w-fit', className)} htmlFor={formItemId} {...props} />
 }
 
 function FormControl(props: Slot.SlotProps) {
@@ -102,7 +102,7 @@ function FormMessage({ className, children, ...props }: React.ComponentProps<'p'
   if (!body) return null
 
   return (
-    <p id={formMessageId} className={cn('text-destructive text-[0.8rem] font-medium', className)} {...props}>
+    <p id={formMessageId} className={cn('text-destructive text-xs font-medium', className)} {...props}>
       {body}
     </p>
   )

@@ -139,8 +139,8 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
             folders &&
             folders.length > 0 && (
               <div className="space-y-2">
-                <Label>
-                  Folder
+                <div>
+                  <Label htmlFor="select-folder">Folder</Label>
                   {selectValue && (
                     <>
                       <span className="text-muted-foreground"> · </span>
@@ -154,10 +154,10 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
                       </Button>
                     </>
                   )}
-                </Label>
+                </div>
                 <div>
                   <Select value={selectValue} onValueChange={setSelectValue}>
-                    <SelectTrigger>
+                    <SelectTrigger id="select-folder">
                       <SelectValue placeholder="Select folder" />
                     </SelectTrigger>
                     <SelectContent>

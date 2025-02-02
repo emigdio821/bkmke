@@ -158,9 +158,12 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
             <Skeleton className="h-9 w-full" />
           ) : (
             <div className="space-y-2">
-              <Label>Tags</Label>
+              <div>
+                <Label htmlFor="select-tags">Tags</Label>
+              </div>
               {tags && (
                 <MultiSelect
+                  id="select-tags"
                   value={selectValue}
                   emptyText="No tags yet"
                   placeholder="Select tags"

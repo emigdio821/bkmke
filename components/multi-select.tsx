@@ -16,6 +16,8 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 interface DataTableFacetedFilterProps<TData, TValue> {
+  id?: string
+  name?: string
   column?: Column<TData, TValue>
   placeholder?: string
   value?: string[]
@@ -28,13 +30,8 @@ interface DataTableFacetedFilterProps<TData, TValue> {
   onChange?: (values: string[]) => void
 }
 
-export function MultiSelect<TData, TValue>({
-  placeholder,
-  options,
-  onChange,
-  value,
-  emptyText,
-}: DataTableFacetedFilterProps<TData, TValue>) {
+export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TData, TValue>) {
+  const { placeholder, options, onChange, value, emptyText, id, name } = props
   const [selectedValues, setSelectedValues] = useState<string[]>(value || [])
 
   function updateSelectedValues(newValues: string[]) {
@@ -54,6 +51,8 @@ export function MultiSelect<TData, TValue>({
     <Popover>
       <PopoverTrigger asChild>
         <Button
+          id={id}
+          name={name}
           type="button"
           variant="outline"
           disabled={options.length === 0}

@@ -26,7 +26,7 @@ const AlertDialogContent = ({ className, ...props }: AlertDialogPrimitive.AlertD
     <AlertDialogOverlay>
       <AlertDialogPrimitive.Content
         className={cn(
-          'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-50 grid max-h-[calc(100%-4rem)] w-full gap-4 overflow-y-auto border shadow-lg shadow-black/5 outline-hidden sm:max-w-sm sm:rounded-xl',
+          'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-50 grid max-h-[calc(100%-1rem)] w-full gap-4 overflow-y-auto border shadow-lg shadow-black/5 outline-hidden sm:max-w-sm sm:rounded-md',
           className,
         )}
         {...props}

@@ -128,187 +128,197 @@ export function CreateManualForm() {
 
   return (
     <>
-      <p className="text-muted-foreground px-4 text-center text-sm sm:text-left">
-        Create your bookmark by adding the details by yourself.
-      </p>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="space-y-4 p-4">
-            <FormField
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
-                  </FormControl>
-                  <div className="text-muted-foreground text-right text-xs tabular-nums">
+        <form
+          id="create-manual-bk-form"
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 overflow-y-auto p-4 pt-0"
+        >
+          <p className="text-muted-foreground text-center text-sm sm:text-left">
+            Create your bookmark by adding the details by yourself.
+          </p>
+          <FormField
+            name="name"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
+                </FormControl>
+                <div className="flex items-center justify-between">
+                  <FormMessage />
+                  <div className="text-muted-foreground flex-auto text-right text-xs tabular-nums">
                     {MAX_NAME_LENGTH - field.value.length} characters left
                   </div>
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="description"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    className="max-h-24"
+                    maxLength={MAX_DESC_LENGTH}
+                    placeholder="Small description (optional)"
+                    {...field}
+                  />
+                </FormControl>
+                <div className="flex items-center justify-between">
                   <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="description"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="max-h-24"
-                      maxLength={MAX_DESC_LENGTH}
-                      placeholder="Small description (optional)"
-                      {...field}
-                    />
-                  </FormControl>
-                  <div className="text-muted-foreground text-right text-xs tabular-nums">
+                  <div className="text-muted-foreground flex-auto text-right text-xs tabular-nums">
                     {MAX_DESC_LENGTH - field.value.length} characters left
                   </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="url"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>URL</FormLabel>
-                  <FormControl>
-                    <Input hasError={!!fieldState.error} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="url"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>URL</FormLabel>
+                <FormControl>
+                  <Input hasError={!!fieldState.error} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <div className="flex w-full items-end space-x-2">
-              <FormField
-                name="folderId"
-                control={form.control}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="grow">
-                      <FormLabel>
-                        Folder
-                        {field.value && (
-                          <>
-                            <span className="text-muted-foreground"> · </span>
-                            <Button
-                              variant="link"
-                              onClick={() => {
-                                form.setValue('folderId', '')
-                              }}
-                            >
-                              Clear selection
-                            </Button>
-                          </>
-                        )}
-                      </FormLabel>
-                      {foldersLoading ? (
-                        <Skeleton className="h-9" />
-                      ) : (
-                        <FormControl>
-                          {folders && (
-                            <div>
-                              <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <FolderSelectItems folders={folders} />
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          )}
-                        </FormControl>
+          <div className="flex w-full items-end space-x-2">
+            <FormField
+              name="folderId"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem className="grow">
+                    <FormLabel>
+                      Folder
+                      {field.value && (
+                        <>
+                          <span className="text-muted-foreground"> · </span>
+                          <Button
+                            variant="link"
+                            onClick={() => {
+                              form.setValue('folderId', '')
+                            }}
+                          >
+                            Clear selection
+                          </Button>
+                        </>
                       )}
-                      <FormMessage />
-                    </FormItem>
-                  )
-                }}
-              />
-              <Button
-                size="icon"
-                type="button"
-                onClick={() => {
-                  void NiceModal.show(CreateFolderDialog)
-                }}
-              >
-                <IconPlus className="size-4" />
-              </Button>
-            </div>
-            <div className="flex items-end space-x-2">
-              <FormField
-                name="tags"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Tags</FormLabel>
-                    {tagsLoading ? (
+                    </FormLabel>
+                    {foldersLoading ? (
                       <Skeleton className="h-9" />
                     ) : (
                       <FormControl>
-                        {tags && (
-                          <MultiSelect
-                            placeholder="Select tags"
-                            options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
-                            emptyText="No tags yet"
-                            onChange={(options) => {
-                              form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
-                            }}
-                          />
+                        {folders && (
+                          <div>
+                            <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                              <SelectTrigger>
+                                <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <FolderSelectItems folders={folders} />
+                              </SelectContent>
+                            </Select>
+                          </div>
                         )}
                       </FormControl>
                     )}
                     <FormMessage />
                   </FormItem>
-                )}
-              />
-              <Button
-                size="icon"
-                type="button"
-                onClick={() => {
-                  void NiceModal.show(CreateTagDialog)
-                }}
-              >
-                <IconPlus className="size-4" />
-              </Button>
-            </div>
-
+                )
+              }}
+            />
+            <Button
+              size="icon"
+              type="button"
+              onClick={() => {
+                void NiceModal.show(CreateFolderDialog)
+              }}
+            >
+              <IconPlus className="size-4" />
+            </Button>
+          </div>
+          <div className="flex items-end space-x-2">
             <FormField
-              name="isFavorite"
+              name="tags"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
-                  <div>
-                    <FormLabel>Favorite</FormLabel>
-                    <FormDescription>Add this bookmark to the favorites list.</FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
+                <FormItem className="flex-1">
+                  <FormLabel>Tags</FormLabel>
+                  {tagsLoading ? (
+                    <Skeleton className="h-9" />
+                  ) : (
+                    <FormControl>
+                      {tags && (
+                        <MultiSelect
+                          placeholder="Select tags"
+                          options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+                          emptyText="No tags yet"
+                          onChange={(options) => {
+                            form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
+                          }}
+                        />
+                      )}
+                    </FormControl>
+                  )}
+                  <FormMessage />
                 </FormItem>
               )}
             />
+            <Button
+              size="icon"
+              type="button"
+              onClick={() => {
+                void NiceModal.show(CreateTagDialog)
+              }}
+            >
+              <IconPlus className="size-4" />
+            </Button>
           </div>
 
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button type="button" variant="ghost">
-                Cancel
-              </Button>
-            </DialogClose>
-            <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
-              <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
-              {form.formState.isSubmitting && <Spinner className="absolute" />}
-            </Button>
-          </DialogFooter>
+          <FormField
+            name="isFavorite"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
+                <div>
+                  <FormLabel>Favorite</FormLabel>
+                  <FormDescription>Add this bookmark to the favorites list.</FormDescription>
+                </div>
+                <FormControl>
+                  <Switch checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
         </form>
       </Form>
+
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button type="button" variant="ghost">
+            Cancel
+          </Button>
+        </DialogClose>
+        <Button
+          type="submit"
+          form="create-manual-bk-form"
+          disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}
+        >
+          <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
+          {form.formState.isSubmitting && <Spinner className="absolute" />}
+        </Button>
+      </DialogFooter>
     </>
   )
 }

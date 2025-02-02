@@ -200,189 +200,199 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
         </DialogHeader>
         <DialogDescription className="sr-only">Import your bookmarks here.</DialogDescription>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Tabs defaultValue="drag-and-drop-import" className="mt-4">
+          <form id="import-bk-form" className="flex flex-col overflow-y-auto" onSubmit={form.handleSubmit(onSubmit)}>
+            <Tabs defaultValue="drag-and-drop-import" className="pt-4">
               <div className="flex w-full items-center justify-center px-4 sm:justify-start">
                 <TabsList>
                   <TabsTrigger value="drag-and-drop-import">Upload file</TabsTrigger>
                   <TabsTrigger value="copy-paste-import">Copy and paste</TabsTrigger>
                 </TabsList>
               </div>
-              <TabsContent value="drag-and-drop-import" className="space-y-4 rounded-md px-4">
-                <DialogDescription className="px-0 text-center sm:text-left">
-                  It must be a plaint text file <InlineCode>.txt</InlineCode> with all the bookamarks URLs separated by
-                  a new line.
-                </DialogDescription>
+              <div className="overflow-y-auto">
+                <TabsContent value="drag-and-drop-import" className="space-y-4 rounded-md px-4">
+                  <DialogDescription className="px-0 text-center sm:text-left">
+                    It must be a plaint text file <InlineCode>.txt</InlineCode> with all the bookamarks URLs separated
+                    by a new line.
+                  </DialogDescription>
 
-                <div
-                  className={cn(
-                    'hover:bg-subtle flex h-28 w-full items-center justify-center rounded-md border border-dashed p-6 transition-colors',
-                    {
-                      'bg-accent': isDragActive,
-                      'border-destructive': form.formState.errors.bookmarks,
-                    },
-                  )}
-                  {...getRootProps()}
-                >
-                  <input {...getInputProps()} />
-                  <div className="flex flex-col items-center">
-                    <IconUpload className="size-4" />
-                    <p className="text-muted-foreground text-sm">Drop your file here, or click to select it.</p>
+                  <div
+                    className={cn(
+                      'hover:bg-subtle flex h-28 w-full items-center justify-center rounded-md border border-dashed p-6 transition-colors',
+                      {
+                        'bg-accent': isDragActive,
+                        'border-destructive': form.formState.errors.bookmarks,
+                      },
+                    )}
+                    {...getRootProps()}
+                  >
+                    <input {...getInputProps()} />
+                    <div className="flex flex-col items-center">
+                      <IconUpload className="size-4" />
+                      <p className="text-muted-foreground text-sm">Drop your file here, or click to select it.</p>
+                    </div>
                   </div>
-                </div>
 
-                {acceptedFiles.length > 0 && dndFiles.length > 0 && (
-                  <div>
-                    {dndFiles.map((file) => (
-                      <span key={file.name} className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <p className="text-sm">
-                          {file.name}
-                          <br />
-                          <span className="text-muted-foreground">{formatBytes(file.size)}</span>
-                        </p>
-                        <Button size="icon" variant="ghost" onClick={handleRemoveFile}>
-                          <IconTrash className="size-4" />
-                          <span className="sr-only">Remove file</span>
-                        </Button>
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </TabsContent>
-              <TabsContent value="copy-paste-import" className="space-y-4 rounded-md px-4">
-                <DialogDescription className="px-0 text-center sm:text-left">
-                  Copy and paste your bookmarks here, each URL must be separated by a new line.
-                </DialogDescription>
-                <FormField
-                  name="bookmarks"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Bookmarks</FormLabel>
-                      <FormControl>
-                        <Textarea {...field} className="max-h-80" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                  {acceptedFiles.length > 0 && dndFiles.length > 0 && (
+                    <div>
+                      {dndFiles.map((file) => (
+                        <span key={file.name} className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                          <p className="text-sm">
+                            {file.name}
+                            <br />
+                            <span className="text-muted-foreground">{formatBytes(file.size)}</span>
+                          </p>
+                          <Button size="icon" variant="ghost" onClick={handleRemoveFile}>
+                            <IconTrash className="size-4" />
+                            <span className="sr-only">Remove file</span>
+                          </Button>
+                        </span>
+                      ))}
+                    </div>
                   )}
-                />
-              </TabsContent>
-            </Tabs>
-
-            <div className="space-y-4 p-4">
-              <div className="flex w-full items-end space-x-2">
-                <FormField
-                  name="folderId"
-                  control={form.control}
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="grow">
-                        <FormLabel>
-                          Folder
-                          {field.value && (
-                            <>
-                              <span className="text-muted-foreground"> · </span>
-                              <Button
-                                variant="link"
-                                onClick={() => {
-                                  form.setValue('folderId', '')
-                                }}
-                              >
-                                Clear selection
-                              </Button>
-                            </>
-                          )}
-                        </FormLabel>
-                        {foldersLoading ? (
-                          <Skeleton className="h-9" />
-                        ) : (
-                          <FormControl>
-                            {folders && (
-                              <div>
-                                <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                                  <SelectTrigger>
-                                    <SelectValue
-                                      placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'}
-                                    />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <FolderSelectItems folders={folders} />
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            )}
-                          </FormControl>
-                        )}
+                </TabsContent>
+                <TabsContent value="copy-paste-import" className="space-y-4 rounded-md px-4">
+                  <DialogDescription className="px-0 text-center sm:text-left">
+                    Copy and paste your bookmarks here, each URL must be separated by a new line.
+                  </DialogDescription>
+                  <FormField
+                    name="bookmarks"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Bookmarks</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} className="max-h-80" />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
-                    )
-                  }}
-                />
-                <Button
-                  size="icon"
-                  type="button"
-                  onClick={() => {
-                    void NiceModal.show(CreateFolderDialog)
-                  }}
-                >
-                  <IconPlus className="size-4" />
-                </Button>
-              </div>
+                    )}
+                  />
+                </TabsContent>
 
-              <div className="flex items-end space-x-2">
-                <FormField
-                  name="tags"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Tags</FormLabel>
-                      {tagsLoading ? (
-                        <Skeleton className="h-9" />
-                      ) : (
-                        <FormControl>
-                          {tags && (
-                            <MultiSelect
-                              placeholder="Select tags"
-                              options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
-                              emptyText="No tags yet"
-                              onChange={(options) => {
-                                form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
-                              }}
-                            />
+                <div className="space-y-4 p-4">
+                  <div className="flex w-full items-end space-x-2">
+                    <FormField
+                      name="folderId"
+                      control={form.control}
+                      render={({ field }) => {
+                        return (
+                          <FormItem className="grow">
+                            <FormLabel>
+                              Folder
+                              {field.value && (
+                                <>
+                                  <span className="text-muted-foreground"> · </span>
+                                  <Button
+                                    variant="link"
+                                    onClick={() => {
+                                      form.setValue('folderId', '')
+                                    }}
+                                  >
+                                    Clear selection
+                                  </Button>
+                                </>
+                              )}
+                            </FormLabel>
+                            {foldersLoading ? (
+                              <Skeleton className="h-9" />
+                            ) : (
+                              <FormControl>
+                                {folders && (
+                                  <div>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      value={field.value}
+                                      disabled={!folders.length}
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue
+                                          placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'}
+                                        />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <FolderSelectItems folders={folders} />
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                )}
+                              </FormControl>
+                            )}
+                            <FormMessage />
+                          </FormItem>
+                        )
+                      }}
+                    />
+                    <Button
+                      size="icon"
+                      type="button"
+                      onClick={() => {
+                        void NiceModal.show(CreateFolderDialog)
+                      }}
+                    >
+                      <IconPlus className="size-4" />
+                    </Button>
+                  </div>
+
+                  <div className="flex items-end space-x-2">
+                    <FormField
+                      name="tags"
+                      control={form.control}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Tags</FormLabel>
+                          {tagsLoading ? (
+                            <Skeleton className="h-9" />
+                          ) : (
+                            <FormControl>
+                              {tags && (
+                                <MultiSelect
+                                  placeholder="Select tags"
+                                  options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+                                  emptyText="No tags yet"
+                                  onChange={(options) => {
+                                    form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
+                                  }}
+                                />
+                              )}
+                            </FormControl>
                           )}
-                        </FormControl>
+                          <FormMessage />
+                        </FormItem>
                       )}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  size="icon"
-                  type="button"
-                  onClick={() => {
-                    void NiceModal.show(CreateTagDialog)
-                  }}
-                >
-                  <IconPlus className="size-4" />
-                </Button>
+                    />
+                    <Button
+                      size="icon"
+                      type="button"
+                      onClick={() => {
+                        void NiceModal.show(CreateTagDialog)
+                      }}
+                    >
+                      <IconPlus className="size-4" />
+                    </Button>
+                  </div>
+
+                  {progress > 0 && <Progress value={progress} />}
+                </div>
               </div>
-
-              {progress > 0 && <Progress value={progress} />}
-            </div>
-
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="ghost">
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
-                <span className={cn(form.formState.isSubmitting && 'invisible')}>Import</span>
-                {form.formState.isSubmitting && <Spinner className="absolute" />}
-              </Button>
-            </DialogFooter>
+            </Tabs>
           </form>
         </Form>
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="ghost">
+              Cancel
+            </Button>
+          </DialogClose>
+          <Button
+            type="submit"
+            form="import-bk-form"
+            disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}
+          >
+            <span className={cn(form.formState.isSubmitting && 'invisible')}>Import</span>
+            {form.formState.isSubmitting && <Spinner className="absolute" />}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

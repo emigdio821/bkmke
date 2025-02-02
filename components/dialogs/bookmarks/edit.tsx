@@ -138,167 +138,171 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       <DialogContent onCloseAutoFocus={() => modal.remove()}>
         <DialogHeader>
           <DialogTitle>Edit bookmark</DialogTitle>
+          <DialogDescription className="p-0 break-words">{bookmark.name}</DialogDescription>
         </DialogHeader>
-        <DialogDescription className="break-words">{bookmark.name}</DialogDescription>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-4 p-4">
-              <FormField
-                name="name"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={bookmark.name}
-                        hasError={!!fieldState.error}
-                        maxLength={MAX_NAME_LENGTH}
-                        {...field}
-                      />
-                    </FormControl>
-                    <div className="text-muted-foreground text-right text-xs tabular-nums">
+          <form id="edit-bk-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 overflow-y-auto p-4">
+            <FormField
+              name="name"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={bookmark.name}
+                      hasError={!!fieldState.error}
+                      maxLength={MAX_NAME_LENGTH}
+                      {...field}
+                    />
+                  </FormControl>
+                  <div className="flex items-center justify-between">
+                    <FormMessage />
+                    <div className="text-muted-foreground flex-auto text-right text-xs tabular-nums">
                       {MAX_NAME_LENGTH - field.value.length} characters left
                     </div>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="description"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="max-h-24"
+                      maxLength={MAX_DESC_LENGTH}
+                      placeholder={bookmark.description || undefined}
+                      {...field}
+                    />
+                  </FormControl>
+                  <div className="flex items-center justify-between">
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="description"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="max-h-24"
-                        maxLength={MAX_DESC_LENGTH}
-                        placeholder={bookmark.description || undefined}
-                        {...field}
-                      />
-                    </FormControl>
-                    <div className="text-muted-foreground text-right text-xs tabular-nums">
+                    <div className="text-muted-foreground flex-auto text-right text-xs tabular-nums">
                       {MAX_DESC_LENGTH - field.value.length} characters left
                     </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="url"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>URL</FormLabel>
-                    <FormControl>
-                      <Input placeholder={bookmark.url} hasError={!!fieldState.error} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="url"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>URL</FormLabel>
+                  <FormControl>
+                    <Input placeholder={bookmark.url} hasError={!!fieldState.error} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <div className="flex w-full items-end space-x-2">
-                <FormField
-                  name="folderId"
-                  control={form.control}
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="grow">
-                        <FormLabel>
-                          Folder
-                          {field.value && (
-                            <>
-                              <span className="text-muted-foreground"> · </span>
-                              <Button
-                                variant="link"
-                                onClick={() => {
-                                  form.setValue('folderId', '')
-                                }}
-                              >
-                                Clear selection
-                              </Button>
-                            </>
-                          )}
-                        </FormLabel>
-                        {foldersLoading ? (
-                          <Skeleton className="h-9" />
-                        ) : (
-                          <FormControl>
-                            {folders && (
-                              <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <FolderSelectItems folders={folders} />
-                                </SelectContent>
-                              </Select>
-                            )}
-                          </FormControl>
+            <div className="flex w-full items-end space-x-2">
+              <FormField
+                name="folderId"
+                control={form.control}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="grow">
+                      <FormLabel>
+                        Folder
+                        {field.value && (
+                          <>
+                            <span className="text-muted-foreground"> · </span>
+                            <Button
+                              variant="link"
+                              onClick={() => {
+                                form.setValue('folderId', '')
+                              }}
+                            >
+                              Clear selection
+                            </Button>
+                          </>
                         )}
-                        <FormMessage />
-                      </FormItem>
-                    )
-                  }}
-                />
-              </div>
-              <div className="flex items-end space-x-2">
-                <FormField
-                  name="tags"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Tags</FormLabel>
-                      {tagsLoading ? (
+                      </FormLabel>
+                      {foldersLoading ? (
                         <Skeleton className="h-9" />
                       ) : (
                         <FormControl>
-                          {tags && (
-                            <MultiSelect
-                              value={bookmark.tag_items
-                                .map((item) => item.tag?.id)
-                                .filter((id) => id !== undefined)
-                                .map((id) => id.toString())}
-                              placeholder="Select tags"
-                              options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
-                              emptyText="No tags yet"
-                              onChange={(options) => {
-                                form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
-                              }}
-                            />
+                          {folders && (
+                            <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                              <SelectTrigger>
+                                <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <FolderSelectItems folders={folders} />
+                              </SelectContent>
+                            </Select>
                           )}
                         </FormControl>
                       )}
                       <FormMessage />
                     </FormItem>
-                  )}
-                />
-              </div>
-
+                  )
+                }}
+              />
+            </div>
+            <div className="flex items-end space-x-2">
               <FormField
-                name="isFavorite"
+                name="tags"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
-                    <div>
-                      <FormLabel>Favorite</FormLabel>
-                      <FormDescription>Add this bookmark to the favorites list.</FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
+                  <FormItem className="flex-1">
+                    <FormLabel>Tags</FormLabel>
+                    {tagsLoading ? (
+                      <Skeleton className="h-9" />
+                    ) : (
+                      <FormControl>
+                        {tags && (
+                          <MultiSelect
+                            value={bookmark.tag_items
+                              .map((item) => item.tag?.id)
+                              .filter((id) => id !== undefined)
+                              .map((id) => id.toString())}
+                            placeholder="Select tags"
+                            options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+                            emptyText="No tags yet"
+                            onChange={(options) => {
+                              form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
+                            }}
+                          />
+                        )}
+                      </FormControl>
+                    )}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
+            </div>
 
-              <FormField
-                name="updateOG"
-                control={form.control}
-                render={({ field }) => (
-                  <div className="space-y-2 rounded-md border p-3 shadow-xs">
-                    <FormItem className="flex items-center justify-between">
+            <FormField
+              name="isFavorite"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
+                  <div>
+                    <FormLabel>Favorite</FormLabel>
+                    <FormDescription>Add this bookmark to the favorites list.</FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="updateOG"
+              control={form.control}
+              render={({ field }) => (
+                <div className="space-y-2 rounded-md border p-3 shadow-xs">
+                  <FormItem>
+                    <div className="flex items-center justify-between">
                       <div>
                         <FormLabel>Images</FormLabel>
                         <FormDescription>Update bookmark images manually.</FormDescription>
@@ -306,62 +310,66 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
                       <FormControl>
                         <Switch checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
-                    </FormItem>
+                    </div>
+                  </FormItem>
 
-                    {form.getValues('updateOG') && (
-                      <div className="space-y-2 border-t border-dashed pt-2">
-                        <FormField
-                          name="faviconUrl"
-                          control={form.control}
-                          render={({ field }) => (
-                            <FormItem>
-                              <div>
-                                <FormLabel>Favicon URL</FormLabel>
-                                <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
-                              </div>
-                              <FormControl>
-                                <Input {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          name="imageUrl"
-                          control={form.control}
-                          render={({ field }) => (
-                            <FormItem>
-                              <div>
-                                <FormLabel>Image URL</FormLabel>
-                                <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
-                              </div>
-                              <FormControl>
-                                <Input {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-              />
-            </div>
-
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="ghost">
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
-                <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
-                {form.formState.isSubmitting && <Spinner className="absolute" />}
-              </Button>
-            </DialogFooter>
+                  {form.getValues('updateOG') && (
+                    <div className="space-y-2 border-t border-dashed pt-2">
+                      <FormField
+                        name="faviconUrl"
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <div>
+                              <FormLabel>Favicon URL</FormLabel>
+                              <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                            </div>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        name="imageUrl"
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <div>
+                              <FormLabel>Image URL</FormLabel>
+                              <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                            </div>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            />
           </form>
         </Form>
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="ghost">
+              Cancel
+            </Button>
+          </DialogClose>
+          <Button
+            type="submit"
+            form="edit-bk-form"
+            disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}
+          >
+            <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
+            {form.formState.isSubmitting && <Spinner className="absolute" />}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

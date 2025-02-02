@@ -28,7 +28,7 @@ const DialogContent = ({ className, children, ...props }: DialogPrimitive.Dialog
     <DialogOverlay>
       <DialogPrimitive.Content
         className={cn(
-          'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-50 grid max-h-[calc(100%-4rem)] w-full overflow-y-auto border shadow-lg shadow-black/5 outline-hidden sm:max-w-md sm:rounded-md',
+          'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-50 grid max-h-[calc(100%-1rem)] w-full overflow-y-auto border shadow-lg shadow-black/5 outline-hidden sm:max-w-lg sm:rounded-md',
           className,
         )}
         {...props}
@@ -45,7 +45,7 @@ const DialogContent = ({ className, children, ...props }: DialogPrimitive.Dialog
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
 const DialogHeader = ({ className, ...props }: React.ComponentProps<'div'>) => (
-  <div className={cn('flex flex-col space-y-4 text-center sm:text-left', className)} {...props} />
+  <div className={cn('flex flex-col gap-2 border-b p-4 text-center sm:text-left', className)} {...props} />
 )
 DialogHeader.displayName = 'DialogHeader'
 
@@ -58,15 +58,12 @@ const DialogFooter = ({ className, ...props }: React.ComponentProps<'div'>) => (
 DialogFooter.displayName = 'DialogFooter'
 
 const DialogTitle = ({ className, ...props }: DialogPrimitive.DialogTitleProps) => (
-  <DialogPrimitive.Title
-    className={cn('border-border border-b p-4 text-base leading-none font-semibold tracking-tight', className)}
-    {...props}
-  />
+  <DialogPrimitive.Title className={cn('text-base leading-none font-semibold tracking-tight', className)} {...props} />
 )
 DialogTitle.displayName = DialogPrimitive.Title.displayName
 
 const DialogDescription = ({ className, ...props }: DialogPrimitive.DialogDescriptionProps) => (
-  <DialogPrimitive.Description className={cn('text-muted-foreground px-4 text-sm', className)} {...props} />
+  <DialogPrimitive.Description className={cn('text-muted-foreground text-sm', className)} {...props} />
 )
 DialogDescription.displayName = DialogPrimitive.Description.displayName
 

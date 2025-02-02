@@ -21,7 +21,7 @@ import { ToggleFavBtn } from '@/components/bookmarks/toggle-fav-btn'
 interface BookmarkDetailsDialogProps {
   bookmark: Bookmark
   open: boolean
-  setOpen: (opt: boolean) => void
+  setOpen(opt: boolean): void
 }
 
 export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetailsDialogProps) {
