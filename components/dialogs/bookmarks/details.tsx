@@ -29,7 +29,7 @@ export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetai
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent side="right">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{bookmark.name}</DialogTitle>
           {bookmark.description && (

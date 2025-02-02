@@ -46,7 +46,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body className={cn('antialiased', fontSans.className, fontSans.variable)}>
         <Providers>
-          <main className="relative min-h-dvh">{children}</main>
+          <main className="relative flex min-h-dvh flex-col">{children}</main>
         </Providers>
       </body>
     </html>
