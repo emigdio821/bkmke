@@ -1,6 +1,6 @@
 import { siteConfig } from '@/config/site'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { DemoPopover } from '@/components/demo-popover'
+// import { DemoPopover } from '@/components/demo-popover'
 import { LoginForm } from '@/components/login/login-form'
 
 export default function LoginPage() {
@@ -12,7 +12,7 @@ export default function LoginPage() {
           <span>
             Welcome back to <span className="font-semibold">{siteConfig.name}</span>.
           </span>
-          <DemoPopover />
+          {/* <DemoPopover /> */}
         </CardDescription>
       </CardHeader>
       <LoginForm />
