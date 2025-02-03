@@ -5,7 +5,6 @@ import { IconAlertCircle } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import {
   BOOKMARKS_QUERY,
-  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
@@ -14,7 +13,7 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { cn, isAdminRole } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
 import {
@@ -52,7 +51,6 @@ let completedCount = 0
 
 export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: DeleteBookmarksDialogProps) => {
   const { data: profile } = useProfile()
-  const appMetadata = profile?.app_metadata
   const modal = useModal()
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -156,17 +154,19 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
               Cancel
             </Button>
           </AlertDialogCancel>
-          <Button
-            type="button"
-            variant="destructive"
-            disabled={isLoading || appMetadata?.userrole === DEMO_ROLE}
-            onClick={() => {
-              void handleDeleteBookmarks(bookmark ? [bookmark] : bookmarks)
-            }}
-          >
-            <span className={cn(isLoading && 'invisible')}>Proceed</span>
-            {isLoading && <Spinner className="absolute" />}
-          </Button>
+          {isAdminRole(profile?.user_role) && (
+            <Button
+              type="button"
+              variant="destructive"
+              disabled={isLoading}
+              onClick={() => {
+                void handleDeleteBookmarks(bookmark ? [bookmark] : bookmarks)
+              }}
+            >
+              <span className={cn(isLoading && 'invisible')}>Proceed</span>
+              {isLoading && <Spinner className="absolute" />}
+            </Button>
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

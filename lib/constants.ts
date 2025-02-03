@@ -7,6 +7,5 @@ export const FOLDER_ITEMS_QUERY = 'folder-items'
 export const FOLDER_ITEM_COUNT_QUERY = 'folder-item-count'
 export const TAG_ITEMS_QUERY = 'tag-items'
 export const NAV_ITEMS_COUNT_QUERY = 'nav-items-count'
-export const DEMO_ROLE = 'demo'
 export const MAX_NAME_LENGTH = 80
 export const MAX_DESC_LENGTH = 120

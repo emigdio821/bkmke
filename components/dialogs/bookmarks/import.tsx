@@ -11,7 +11,6 @@ import type { z } from 'zod'
 import { createBookmark } from '@/lib/api'
 import {
   BOOKMARKS_QUERY,
-  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
@@ -20,7 +19,7 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { importBookmarksSchema } from '@/lib/schemas/form'
-import { cn, formatBytes } from '@/lib/utils'
+import { cn, formatBytes, isAdminRole } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
@@ -58,7 +57,6 @@ let completedCount = 0
 export const ImportBookmarksDialog = NiceModal.create(() => {
   const modal = useModal()
   const { data: profile } = useProfile()
-  const appMetadata = profile?.app_metadata
   const { data: tags, isLoading: tagsLoading } = useTags()
   const { data: folders, isLoading: foldersLoading } = useFolders()
   const [progress, setProgress] = useState(0)
@@ -384,14 +382,12 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
               Cancel
             </Button>
           </DialogClose>
-          <Button
-            type="submit"
-            form="import-bk-form"
-            disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}
-          >
-            <span className={cn(form.formState.isSubmitting && 'invisible')}>Import</span>
-            {form.formState.isSubmitting && <Spinner className="absolute" />}
-          </Button>
+          {isAdminRole(profile?.user_role) && (
+            <Button type="submit" form="import-bk-form" disabled={form.formState.isSubmitting}>
+              <span className={cn(form.formState.isSubmitting && 'invisible')}>Import</span>
+              {form.formState.isSubmitting && <Spinner className="absolute" />}
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -4,7 +4,6 @@ import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'sonner'
 import {
   BOOKMARKS_QUERY,
-  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
@@ -12,7 +11,7 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { cn, isAdminRole } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
 import { useTags } from '@/hooks/use-tags'
@@ -48,7 +47,6 @@ let completedCount = 0
 
 export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: UpdateTagsDialogProps) => {
   const { data: profile } = useProfile()
-  const appMetadata = profile?.app_metadata
   const modal = useModal()
   const supabase = createClient()
   const [isLoading, setLoading] = useState(false)
@@ -183,14 +181,16 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
               Cancel
             </Button>
           </DialogClose>
-          <Button
-            type="button"
-            disabled={isLoading || appMetadata?.userrole === DEMO_ROLE}
-            onClick={() => handleUpdateTags(bookmarks ? bookmarks : [bookmark])}
-          >
-            <span className={cn(isLoading && 'invisible')}>Update</span>
-            {isLoading && <Spinner className="absolute" />}
-          </Button>
+          {isAdminRole(profile?.user_role) && (
+            <Button
+              type="button"
+              disabled={isLoading}
+              onClick={() => handleUpdateTags(bookmarks ? bookmarks : [bookmark])}
+            >
+              <span className={cn(isLoading && 'invisible')}>Update</span>
+              {isLoading && <Spinner className="absolute" />}
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

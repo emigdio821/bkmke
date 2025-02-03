@@ -2,7 +2,7 @@
 
 import NiceModal from '@ebay/nice-modal-react'
 import { IconReload, IconUser } from '@tabler/icons-react'
-import { DEMO_ROLE } from '@/lib/constants'
+import { isAdminRole } from '@/lib/utils'
 import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -12,8 +12,6 @@ import { SettingsProfileSkeleton } from '@/components/skeletons'
 
 export function ProfileSettings() {
   const { data: profile, isLoading, refetch } = useProfile()
-  const userMetadata = profile?.user_metadata
-  const appMetadata = profile?.app_metadata
 
   if (isLoading) return <SettingsProfileSkeleton />
 
@@ -28,18 +26,21 @@ export function ProfileSettings() {
           <>
             <div className="flex items-center space-x-2">
               <Avatar className="size-16">
-                <AvatarImage src={userMetadata?.avatar} alt="User avatar" />
+                <AvatarImage src={profile.avatar_url || ''} alt="User avatar" />
                 <AvatarFallback>
                   <IconUser size={16} />
                 </AvatarFallback>
               </Avatar>
               <div className="text-sm">
-                {profile.user_metadata.name && <p className="font-medium">{userMetadata?.name}</p>}
+                <div>
+                  {profile.first_name && <span className="font-medium">{profile.first_name}</span>}
+                  {profile.last_name && <span className="font-medium"> {profile.last_name}</span>}
+                </div>
                 <p className="text-muted-foreground">{profile.email}</p>
-                {userMetadata?.profile_updated_at && (
+                {profile.updated_at && (
                   <p>
                     <span className="text-muted-foreground">Last update: </span>
-                    <span>{new Date(userMetadata.profile_updated_at).toLocaleDateString()}</span>
+                    <span>{new Date(profile.updated_at).toLocaleDateString()}</span>
                   </p>
                 )}
               </div>
@@ -63,7 +64,7 @@ export function ProfileSettings() {
         )}
       </CardContent>
 
-      {appMetadata?.userrole !== DEMO_ROLE && (
+      {profile && isAdminRole(profile.user_role) && (
         <CardFooter>
           <Button
             variant="outline"

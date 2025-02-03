@@ -1,10 +1,9 @@
 'use client'
 
 import { useRef } from 'react'
-import type { UserMetadata } from '@/types'
+import type { UserProfile } from '@/types'
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { User } from '@supabase/auth-js'
 import { IconUser } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
@@ -29,32 +28,41 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
-export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
+export const EditDialog = NiceModal.create(({ user }: { user: UserProfile }) => {
   const modal = useModal()
   const supabase = createClient()
   const queryClient = useQueryClient()
-  const userMetadata = user.user_metadata
   const formRef = useRef<HTMLFormElement>(null)
   const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
     defaultValues: {
-      name: userMetadata?.name || '',
-      avatar: userMetadata?.avatar || '',
+      firstName: user.first_name ?? '',
+      lastName: user.last_name ?? '',
+      avatarUrl: user.avatar_url ?? '',
       password: '',
     },
   })
 
   async function onSubmit(values: z.infer<typeof editUserSchema>) {
-    const metadata = {
-      name: values.name,
-      avatar: values.avatar,
-      profile_updated_at: new Date().toString(),
-    } satisfies UserMetadata
+    if (values.password) {
+      const { error } = await supabase.auth.updateUser({
+        password: values.password,
+      })
 
-    const { error } = await supabase.auth.updateUser({
-      password: values.password || undefined,
-      data: metadata,
-    })
+      if (error) {
+        toast.error('Error', { description: error.message })
+        return
+      }
+    }
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({
+        first_name: values.firstName,
+        last_name: values.lastName,
+        avatar_url: values.avatarUrl,
+      })
+      .eq('id', user.id)
 
     if (error) {
       toast.error('Error', { description: error.message })
@@ -81,7 +89,7 @@ export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
         <DialogDescription className="sr-only">Make changes to your profile here.</DialogDescription>
         <div className="overflow-y-auto p-4">
           <Avatar className="mb-4 size-16">
-            <AvatarImage src={form.getValues('avatar') || userMetadata?.avatar} />
+            <AvatarImage src={form.getValues('avatarUrl') || user.avatar_url || ''} />
             <AvatarFallback>
               <IconUser size={14} />
             </AvatarFallback>
@@ -90,7 +98,7 @@ export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
             <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="avatar"
+                name="avatarUrl"
                 render={({ field }) => (
                   <FormItem>
                     <div>
@@ -106,10 +114,23 @@ export const EditDialog = NiceModal.create(({ user }: { user: User }) => {
               />
               <FormField
                 control={form.control}
-                name="name"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Account name</FormLabel>
+                    <FormLabel>First name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>

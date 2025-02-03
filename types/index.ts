@@ -40,14 +40,11 @@ export interface OGInfo {
   description: string
 }
 
-export type UserMetadata =
-  | {
-      name?: string
-      avatar?: string
-      profile_updated_at?: string
-    }
-  | undefined
-
 export type BkOGInfo = Omit<OGInfo, 'title' | 'description'>
 export type GenericFn<T> = (...args: never[]) => T | Promise<T>
 export type TableLayout = 'table' | 'masonry'
+
+export interface UserProfile extends Tables<'profiles'> {
+  email?: string
+  user_role: Tables<'role_permissions'>['role'] | null
+}

@@ -13,8 +13,7 @@ import {
   IconTags,
   IconTrash,
 } from '@tabler/icons-react'
-import { DEMO_ROLE } from '@/lib/constants'
-import { handleCopyToClipboard } from '@/lib/utils'
+import { handleCopyToClipboard, isAdminRole } from '@/lib/utils'
 import { useProfile } from '@/hooks/use-profile'
 import { useToggleFavorite } from '@/hooks/use-toggle-favorite'
 import { Button, type ButtonProps } from '@/components/ui/button'
@@ -39,7 +38,6 @@ interface RowActionsProps extends ButtonProps {
 
 export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps) {
   const { data: profile } = useProfile()
-  const appMetadata = profile?.app_metadata
   const [openBookmarkDetails, setOpenBookmarkDetails] = useState(false)
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
 
@@ -90,35 +88,37 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
             <IconFolderShare className="mr-2 size-4" />
             Move to folder
           </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={appMetadata?.userrole === DEMO_ROLE}
-            onClick={() => startTransition(handleToggleFavorite)}
-          >
-            {optimisticBk.is_favorite ? (
-              <>
-                <IconHeartOff className="mr-2 size-4" />
-                Remove from favorites
-              </>
-            ) : (
-              <>
-                <IconHeart className="mr-2 size-4" />
-                Add to favorites
-              </>
-            )}
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            disabled={appMetadata?.userrole === DEMO_ROLE}
-            onClick={() =>
-              NiceModal.show(DeleteBookmarksDialog, {
-                bookmark,
-              })
-            }
-            className="text-destructive focus:text-destructive"
-          >
-            <IconTrash className="mr-2 size-4" />
-            Delete
-          </DropdownMenuItem>
+          {isAdminRole(profile?.user_role) && (
+            <DropdownMenuItem onClick={() => startTransition(handleToggleFavorite)}>
+              {optimisticBk.is_favorite ? (
+                <>
+                  <IconHeartOff className="mr-2 size-4" />
+                  Remove from favorites
+                </>
+              ) : (
+                <>
+                  <IconHeart className="mr-2 size-4" />
+                  Add to favorites
+                </>
+              )}
+            </DropdownMenuItem>
+          )}
+          {isAdminRole(profile?.user_role) && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() =>
+                  NiceModal.show(DeleteBookmarksDialog, {
+                    bookmark,
+                  })
+                }
+                className="text-destructive focus:text-destructive"
+              >
+                <IconTrash className="mr-2 size-4" />
+                Delete
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

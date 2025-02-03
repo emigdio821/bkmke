@@ -48,6 +48,13 @@ export type Database = {
             referencedRelation: 'folders'
             referencedColumns: ['id']
           },
+          {
+            foreignKeyName: 'bookmarks_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
         ]
       }
       folders: {
@@ -86,7 +93,56 @@ export type Database = {
             referencedRelation: 'folders'
             referencedColumns: ['id']
           },
+          {
+            foreignKeyName: 'folders_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
         ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      role_permissions: {
+        Row: {
+          id: string
+          permission: Database['public']['Enums']['app_permission']
+          role: Database['public']['Enums']['app_role']
+        }
+        Insert: {
+          id?: string
+          permission: Database['public']['Enums']['app_permission']
+          role: Database['public']['Enums']['app_role']
+        }
+        Update: {
+          id?: string
+          permission?: Database['public']['Enums']['app_permission']
+          role?: Database['public']['Enums']['app_role']
+        }
+        Relationships: []
       }
       tag_items: {
         Row: {
@@ -125,6 +181,13 @@ export type Database = {
             referencedRelation: 'tags'
             referencedColumns: ['id']
           },
+          {
+            foreignKeyName: 'tag_items_user_id_fkey1'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
         ]
       }
       tags: {
@@ -146,6 +209,32 @@ export type Database = {
           name?: string
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'tags_user_id_fkey1'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database['public']['Enums']['app_role']
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database['public']['Enums']['app_role']
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database['public']['Enums']['app_role']
+          user_id?: string
+        }
         Relationships: []
       }
     }
@@ -153,51 +242,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      delete_claim: {
+      authorize: {
         Args: {
-          uid: string
-          claim: string
+          requested_permission: Database['public']['Enums']['app_permission']
         }
-        Returns: string
-      }
-      get_claim: {
-        Args: {
-          uid: string
-          claim: string
-        }
-        Returns: Json
-      }
-      get_claims: {
-        Args: {
-          uid: string
-        }
-        Returns: Json
-      }
-      get_my_claim: {
-        Args: {
-          claim: string
-        }
-        Returns: Json
-      }
-      get_my_claims: {
-        Args: Record<PropertyKey, never>
-        Returns: Json
-      }
-      is_claims_admin: {
-        Args: Record<PropertyKey, never>
         Returns: boolean
       }
-      set_claim: {
+      custom_access_token_hook: {
         Args: {
-          uid: string
-          claim: string
-          value: Json
+          event: Json
         }
-        Returns: string
+        Returns: Json
       }
     }
     Enums: {
-      [_ in never]: never
+      app_permission: 'app.all' | 'app.create' | 'app.update' | 'app.read' | 'app.delete'
+      app_role: 'admin' | 'demo'
     }
     CompositeTypes: {
       [_ in never]: never

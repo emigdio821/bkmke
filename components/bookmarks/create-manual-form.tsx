@@ -10,7 +10,6 @@ import { toast } from 'sonner'
 import type { z } from 'zod'
 import {
   BOOKMARKS_QUERY,
-  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
@@ -22,7 +21,7 @@ import {
 } from '@/lib/constants'
 import { createManualBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { cn, isAdminRole } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
@@ -44,7 +43,6 @@ import { Spinner } from '@/components/spinner'
 
 export function CreateManualForm() {
   const { data: profile } = useProfile()
-  const appMetadata = profile?.app_metadata
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading: tagsLoading } = useTags()
@@ -310,14 +308,12 @@ export function CreateManualForm() {
             Cancel
           </Button>
         </DialogClose>
-        <Button
-          type="submit"
-          form="create-manual-bk-form"
-          disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}
-        >
-          <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
-          {form.formState.isSubmitting && <Spinner className="absolute" />}
-        </Button>
+        {isAdminRole(profile?.user_role) && (
+          <Button type="submit" form="create-manual-bk-form" disabled={form.formState.isSubmitting}>
+            <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
+            {form.formState.isSubmitting && <Spinner className="absolute" />}
+          </Button>
+        )}
       </DialogFooter>
     </>
   )

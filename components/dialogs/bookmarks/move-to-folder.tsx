@@ -4,14 +4,13 @@ import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'sonner'
 import {
   BOOKMARKS_QUERY,
-  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
   TAG_ITEMS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { cn, isAdminRole } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
@@ -54,7 +53,6 @@ let completedCount = 0
 
 export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: MoveToFolderDialogProps) => {
   const { data: profile } = useProfile()
-  const appMetadata = profile?.app_metadata
   const supabase = createClient()
   const modal = useModal()
   const initialFolderId =
@@ -178,14 +176,16 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
               Cancel
             </Button>
           </DialogClose>
-          <Button
-            type="button"
-            disabled={isLoading || appMetadata?.userrole === DEMO_ROLE}
-            onClick={() => handleMoveToFolder(bookmarks ? bookmarks : [bookmark])}
-          >
-            <span className={cn(isLoading && 'invisible')}>Move</span>
-            {isLoading && <Spinner className="absolute" />}
-          </Button>
+          {isAdminRole(profile?.user_role) && (
+            <Button
+              type="button"
+              disabled={isLoading}
+              onClick={() => handleMoveToFolder(bookmarks ? bookmarks : [bookmark])}
+            >
+              <span className={cn(isLoading && 'invisible')}>Move</span>
+              {isLoading && <Spinner className="absolute" />}
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

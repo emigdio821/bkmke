@@ -5,10 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { DEMO_ROLE, MAX_NAME_LENGTH, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
+import { MAX_NAME_LENGTH, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { cn, isAdminRole } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
@@ -27,7 +27,6 @@ import { Spinner } from '@/components/spinner'
 
 export const CreateTagDialog = NiceModal.create(() => {
   const { data: profile } = useProfile()
-  const appMetadata = profile?.app_metadata
   const modal = useModal()
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -102,10 +101,12 @@ export const CreateTagDialog = NiceModal.create(() => {
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
-                <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
-                {form.formState.isSubmitting && <Spinner className="absolute" />}
-              </Button>
+              {isAdminRole(profile?.user_role) && (
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
+                  {form.formState.isSubmitting && <Spinner className="absolute" />}
+                </Button>
+              )}
             </DialogFooter>
           </form>
         </Form>

@@ -1,7 +1,7 @@
 'use client'
 
 import { siteConfig } from '@/config/site'
-import { DEMO_ROLE } from '@/lib/constants'
+import { isAdminRole } from '@/lib/utils'
 import { useProfile } from '@/hooks/use-profile'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FoldersNavItems } from '@/components/folders/nav-items'
@@ -11,7 +11,6 @@ import { NavMain } from './nav-main'
 
 export function NavContent() {
   const { data: profile } = useProfile()
-  const appMetadata = profile?.app_metadata
 
   return (
     <>
@@ -36,8 +35,8 @@ export function NavContent() {
 
       <div className="flex w-full grow flex-col justify-end px-4">
         <div className="flex w-full flex-col gap-2 border-t border-dashed pt-4">
-          {appMetadata?.userrole === DEMO_ROLE && (
-            <Card className="bg-muted">
+          {!isAdminRole(profile?.user_role) && (
+            <Card className="bg-transparent">
               <CardHeader>
                 <CardTitle className="text-sm sm:text-base">Demo mode</CardTitle>
                 <CardDescription>All modifications are disabled.</CardDescription>

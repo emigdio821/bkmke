@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { toast } from 'sonner'
 import { twMerge } from 'tailwind-merge'
+import type { Tables } from '@/types/database.types'
 import { siteConfig } from '@/config/site'
 
 export function cn(...inputs: ClassValue[]) {
@@ -83,4 +84,10 @@ export function formatBytes(
 
 export function truncateString(str: string, size: number) {
   return `${str.slice(0, size)}...`
+}
+
+export function isAdminRole(role?: Tables<'role_permissions'>['role'] | null) {
+  if (!role) return false
+
+  return role.includes('admin')
 }

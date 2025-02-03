@@ -8,7 +8,6 @@ import type { z } from 'zod'
 import type { Tables } from '@/types/database.types'
 import {
   BOOKMARKS_QUERY,
-  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   MAX_NAME_LENGTH,
@@ -17,7 +16,7 @@ import {
 } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { cn, isAdminRole } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
@@ -36,7 +35,6 @@ import { Spinner } from '@/components/spinner'
 
 export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> }) => {
   const { data: profile } = useProfile()
-  const appMetadata = profile?.app_metadata
   const modal = useModal()
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -121,10 +119,12 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}>
-                <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
-                {form.formState.isSubmitting && <Spinner className="absolute" />}
-              </Button>
+              {isAdminRole(profile?.user_role) && (
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
+                  {form.formState.isSubmitting && <Spinner className="absolute" />}
+                </Button>
+              )}
             </DialogFooter>
           </form>
         </Form>

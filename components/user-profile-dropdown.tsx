@@ -45,7 +45,6 @@ export function UserProfileDropdown() {
   const queryClient = useQueryClient()
   const { setTheme, theme } = useTheme()
   const { data: profile, isLoading, error, refetch } = useProfile()
-  const userMetadata = profile?.user_metadata
 
   async function handleLogOut() {
     const { error } = await supabase.auth.signOut()
@@ -67,7 +66,7 @@ export function UserProfileDropdown() {
       </Button>
     )
 
-  const profileNameOrEmail = userMetadata?.name || profile.email
+  const profileNameOrEmail = profile.first_name || profile.email || 'User'
 
   return (
     <DropdownMenu>

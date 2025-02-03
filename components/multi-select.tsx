@@ -59,7 +59,7 @@ export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TD
           className="w-full justify-start px-3 font-normal"
         >
           {options.length === 0 ? (
-            emptyText || 'Empty data'
+            <span className="text-muted-foreground">{emptyText || 'Empty data'}</span>
           ) : (
             <>
               {selectedValues.length > 0 ? 'Selected' : <span className="text-muted-foreground">{placeholder}</span>}

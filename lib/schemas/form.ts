@@ -12,8 +12,9 @@ export const loginSchema = z.object({
 })
 
 export const editUserSchema = z.object({
-  name: optionalString,
-  avatar: optionalString,
+  firstName: optionalString,
+  lastName: optionalString,
+  avatarUrl: optionalString,
   password: optionalString,
 })
 

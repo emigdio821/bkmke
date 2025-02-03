@@ -9,7 +9,6 @@ import type { z } from 'zod'
 import { createBookmark } from '@/lib/api'
 import {
   BOOKMARKS_QUERY,
-  DEMO_ROLE,
   FAV_BOOKMARKS_QUERY,
   FOLDER_ITEMS_QUERY,
   FOLDERS_QUERY,
@@ -18,7 +17,7 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
-import { cn } from '@/lib/utils'
+import { cn, isAdminRole } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useProfile } from '@/hooks/use-profile'
@@ -39,7 +38,6 @@ import { Spinner } from '@/components/spinner'
 
 export function CreateAutomaticForm() {
   const { data: profile } = useProfile()
-  const appMetadata = profile?.app_metadata
   const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading: tagsLoading } = useTags()
   const { data: folders, isLoading: foldersLoading } = useFolders()
@@ -208,14 +206,12 @@ export function CreateAutomaticForm() {
             Cancel
           </Button>
         </DialogClose>
-        <Button
-          type="submit"
-          form="create-auto-bk-form"
-          disabled={form.formState.isSubmitting || appMetadata?.userrole === DEMO_ROLE}
-        >
-          <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
-          {form.formState.isSubmitting && <Spinner className="absolute" />}
-        </Button>
+        {isAdminRole(profile?.user_role) && (
+          <Button type="submit" form="create-auto-bk-form" disabled={form.formState.isSubmitting}>
+            <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
+            {form.formState.isSubmitting && <Spinner className="absolute" />}
+          </Button>
+        )}
       </DialogFooter>
     </>
   )
