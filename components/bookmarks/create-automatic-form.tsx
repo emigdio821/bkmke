@@ -17,10 +17,9 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
-import { cn, isAdminRole } from '@/lib/utils'
+import { areModificationsEnabled, cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useProfile } from '@/hooks/use-profile'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
@@ -37,7 +36,6 @@ import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
 export function CreateAutomaticForm() {
-  const { data: profile } = useProfile()
   const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading: tagsLoading } = useTags()
   const { data: folders, isLoading: foldersLoading } = useFolders()
@@ -206,7 +204,7 @@ export function CreateAutomaticForm() {
             Cancel
           </Button>
         </DialogClose>
-        {isAdminRole(profile?.user_role) && (
+        {areModificationsEnabled() && (
           <Button type="submit" form="create-auto-bk-form" disabled={form.formState.isSubmitting}>
             <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
             {form.formState.isSubmitting && <Spinner className="absolute" />}

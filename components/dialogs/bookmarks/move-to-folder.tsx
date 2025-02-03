@@ -10,10 +10,9 @@ import {
   TAG_ITEMS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { cn, isAdminRole } from '@/lib/utils'
+import { areModificationsEnabled, cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -52,7 +51,6 @@ const messages = {
 let completedCount = 0
 
 export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: MoveToFolderDialogProps) => {
-  const { data: profile } = useProfile()
   const supabase = createClient()
   const modal = useModal()
   const initialFolderId =
@@ -176,7 +174,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
               Cancel
             </Button>
           </DialogClose>
-          {isAdminRole(profile?.user_role) && (
+          {areModificationsEnabled() && (
             <Button
               type="button"
               disabled={isLoading}

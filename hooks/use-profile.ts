@@ -3,10 +3,12 @@ import { useQuery } from '@tanstack/react-query'
 import { jwtDecode } from 'jwt-decode'
 import type { Tables } from '@/types/database.types'
 import { PROFILE_QUERY } from '@/lib/constants'
+import { useProfileStore } from '@/lib/stores/profile'
 import { createClient } from '@/lib/supabase/client'
 
 export function useProfile() {
   const supabase = createClient()
+  const updateProfile = useProfileStore((state) => state.updateProfile)
 
   async function getProfile(): Promise<UserProfile> {
     const {
@@ -34,7 +36,10 @@ export function useProfile() {
       throw new Error(profilesError.message)
     }
 
-    return { email: user.email, user_role: userRole, ...profile }
+    const profileData: UserProfile = { email: user.email, user_role: userRole, ...profile }
+    updateProfile(profileData)
+
+    return profileData
   }
 
   return useQuery({ queryKey: [PROFILE_QUERY], queryFn: getProfile })

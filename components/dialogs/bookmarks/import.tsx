@@ -19,10 +19,9 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { importBookmarksSchema } from '@/lib/schemas/form'
-import { cn, formatBytes, isAdminRole } from '@/lib/utils'
+import { areModificationsEnabled, cn, formatBytes } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useProfile } from '@/hooks/use-profile'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
@@ -56,7 +55,6 @@ let completedCount = 0
 
 export const ImportBookmarksDialog = NiceModal.create(() => {
   const modal = useModal()
-  const { data: profile } = useProfile()
   const { data: tags, isLoading: tagsLoading } = useTags()
   const { data: folders, isLoading: foldersLoading } = useFolders()
   const [progress, setProgress] = useState(0)
@@ -382,7 +380,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
               Cancel
             </Button>
           </DialogClose>
-          {isAdminRole(profile?.user_role) && (
+          {areModificationsEnabled() && (
             <Button type="submit" form="import-bk-form" disabled={form.formState.isSubmitting}>
               <span className={cn(form.formState.isSubmitting && 'invisible')}>Import</span>
               {form.formState.isSubmitting && <Spinner className="absolute" />}

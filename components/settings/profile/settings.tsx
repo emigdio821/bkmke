@@ -2,7 +2,7 @@
 
 import NiceModal from '@ebay/nice-modal-react'
 import { IconReload, IconUser } from '@tabler/icons-react'
-import { isAdminRole } from '@/lib/utils'
+import { areModificationsEnabled } from '@/lib/utils'
 import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -64,7 +64,7 @@ export function ProfileSettings() {
         )}
       </CardContent>
 
-      {profile && isAdminRole(profile.user_role) && (
+      {areModificationsEnabled() && (
         <CardFooter>
           <Button
             variant="outline"

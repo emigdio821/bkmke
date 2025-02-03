@@ -256,8 +256,8 @@ export type Database = {
       }
     }
     Enums: {
-      app_permission: 'app.all' | 'app.create' | 'app.update' | 'app.read' | 'app.delete'
-      app_role: 'admin' | 'demo'
+      app_permission: 'app.pro' | 'app.admin' | 'app.demo'
+      app_role: 'admin' | 'demo' | 'pro'
     }
     CompositeTypes: {
       [_ in never]: never

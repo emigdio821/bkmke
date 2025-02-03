@@ -17,10 +17,9 @@ import {
 } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { cn, isAdminRole } from '@/lib/utils'
+import { areModificationsEnabled, cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useProfile } from '@/hooks/use-profile'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
@@ -44,7 +43,6 @@ import { Spinner } from '@/components/spinner'
 
 export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bookmark }) => {
   const modal = useModal()
-  const { data: profile } = useProfile()
   const { invalidateQueries } = useInvalidateQueries()
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
   const { data: tags, isLoading: tagsLoading } = useTags()
@@ -359,7 +357,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
               Cancel
             </Button>
           </DialogClose>
-          {isAdminRole(profile?.user_role) && (
+          {areModificationsEnabled() && (
             <Button type="submit" form="edit-bk-form" disabled={form.formState.isSubmitting}>
               <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
               {form.formState.isSubmitting && <Spinner className="absolute" />}

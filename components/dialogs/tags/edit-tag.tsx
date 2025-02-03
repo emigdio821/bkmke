@@ -16,9 +16,8 @@ import {
 } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { cn, isAdminRole } from '@/lib/utils'
+import { areModificationsEnabled, cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -34,7 +33,6 @@ import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
 export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> }) => {
-  const { data: profile } = useProfile()
   const modal = useModal()
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -119,7 +117,7 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
                   Cancel
                 </Button>
               </DialogClose>
-              {isAdminRole(profile?.user_role) && (
+              {areModificationsEnabled() && (
                 <Button type="submit" disabled={form.formState.isSubmitting}>
                   <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
                   {form.formState.isSubmitting && <Spinner className="absolute" />}

@@ -8,9 +8,8 @@ import type { z } from 'zod'
 import { MAX_NAME_LENGTH, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { cn, isAdminRole } from '@/lib/utils'
+import { areModificationsEnabled, cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -26,7 +25,6 @@ import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
 export const CreateTagDialog = NiceModal.create(() => {
-  const { data: profile } = useProfile()
   const modal = useModal()
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -101,7 +99,7 @@ export const CreateTagDialog = NiceModal.create(() => {
                   Cancel
                 </Button>
               </DialogClose>
-              {isAdminRole(profile?.user_role) && (
+              {areModificationsEnabled() && (
                 <Button type="submit" disabled={form.formState.isSubmitting}>
                   <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
                   {form.formState.isSubmitting && <Spinner className="absolute" />}

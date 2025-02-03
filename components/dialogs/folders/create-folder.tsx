@@ -9,8 +9,7 @@ import type { z } from 'zod'
 import { FOLDERS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { cn, isAdminRole } from '@/lib/utils'
-import { useProfile } from '@/hooks/use-profile'
+import { areModificationsEnabled, cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -31,7 +30,6 @@ interface CreateFolderDialogProps {
 }
 
 export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFolderDialogProps) => {
-  const { data: profile } = useProfile()
   const modal = useModal()
   const queryClient = useQueryClient()
   const supabase = createClient()
@@ -130,7 +128,7 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
                   Cancel
                 </Button>
               </DialogClose>
-              {isAdminRole(profile?.user_role) && (
+              {areModificationsEnabled() && (
                 <Button type="submit" disabled={form.formState.isSubmitting}>
                   <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
                   {form.formState.isSubmitting && <Spinner className="absolute" />}

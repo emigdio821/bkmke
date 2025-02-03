@@ -9,9 +9,8 @@ import type { Tables } from '@/types/database.types'
 import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDERS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { cn, isAdminRole } from '@/lib/utils'
+import { areModificationsEnabled, cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useProfile } from '@/hooks/use-profile'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -28,7 +27,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { Spinner } from '@/components/spinner'
 
 export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'folders'> }) => {
-  const { data: profile } = useProfile()
   const modal = useModal()
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -131,7 +129,7 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
                   Cancel
                 </Button>
               </DialogClose>
-              {isAdminRole(profile?.user_role) && (
+              {areModificationsEnabled() && (
                 <Button type="submit" disabled={form.formState.isSubmitting}>
                   <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
                   {form.formState.isSubmitting && <Spinner className="absolute" />}

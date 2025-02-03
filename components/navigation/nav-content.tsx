@@ -1,8 +1,7 @@
 'use client'
 
 import { siteConfig } from '@/config/site'
-import { isAdminRole } from '@/lib/utils'
-import { useProfile } from '@/hooks/use-profile'
+import { useProfileStore } from '@/lib/stores/profile'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FoldersNavItems } from '@/components/folders/nav-items'
 import { TagsNavItems } from '@/components/tags/nav-items'
@@ -10,7 +9,7 @@ import { UserProfileDropdown } from '@/components/user-profile-dropdown'
 import { NavMain } from './nav-main'
 
 export function NavContent() {
-  const { data: profile } = useProfile()
+  const profile = useProfileStore((state) => state.profile)
 
   return (
     <>
@@ -35,11 +34,19 @@ export function NavContent() {
 
       <div className="flex w-full grow flex-col justify-end px-4">
         <div className="flex w-full flex-col gap-2 border-t border-dashed pt-4">
-          {!isAdminRole(profile?.user_role) && (
+          {profile?.user_role === 'demo' && (
             <Card className="bg-transparent">
               <CardHeader>
                 <CardTitle className="text-sm sm:text-base">Demo mode</CardTitle>
                 <CardDescription>All modifications are disabled.</CardDescription>
+              </CardHeader>
+            </Card>
+          )}
+
+          {profile?.user_role === 'admin' && (
+            <Card className="bg-transparent">
+              <CardHeader>
+                <CardTitle className="text-sm sm:text-base">Admin mode</CardTitle>
               </CardHeader>
             </Card>
           )}

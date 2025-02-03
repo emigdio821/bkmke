@@ -13,8 +13,7 @@ import {
   IconTags,
   IconTrash,
 } from '@tabler/icons-react'
-import { handleCopyToClipboard, isAdminRole } from '@/lib/utils'
-import { useProfile } from '@/hooks/use-profile'
+import { areModificationsEnabled, handleCopyToClipboard } from '@/lib/utils'
 import { useToggleFavorite } from '@/hooks/use-toggle-favorite'
 import { Button, type ButtonProps } from '@/components/ui/button'
 import {
@@ -37,7 +36,6 @@ interface RowActionsProps extends ButtonProps {
 }
 
 export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps) {
-  const { data: profile } = useProfile()
   const [openBookmarkDetails, setOpenBookmarkDetails] = useState(false)
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
 
@@ -88,7 +86,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
             <IconFolderShare className="mr-2 size-4" />
             Move to folder
           </DropdownMenuItem>
-          {isAdminRole(profile?.user_role) && (
+          {areModificationsEnabled() && (
             <DropdownMenuItem onClick={() => startTransition(handleToggleFavorite)}>
               {optimisticBk.is_favorite ? (
                 <>
@@ -103,7 +101,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
               )}
             </DropdownMenuItem>
           )}
-          {isAdminRole(profile?.user_role) && (
+          {areModificationsEnabled() && (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem

@@ -13,9 +13,8 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { cn, isAdminRole } from '@/lib/utils'
+import { areModificationsEnabled, cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useProfile } from '@/hooks/use-profile'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -50,7 +49,6 @@ const messages = {
 let completedCount = 0
 
 export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: DeleteBookmarksDialogProps) => {
-  const { data: profile } = useProfile()
   const modal = useModal()
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -154,7 +152,7 @@ export const DeleteBookmarksDialog = NiceModal.create(({ bookmark, bookmarks }: 
               Cancel
             </Button>
           </AlertDialogCancel>
-          {isAdminRole(profile?.user_role) && (
+          {areModificationsEnabled() && (
             <Button
               type="button"
               variant="destructive"

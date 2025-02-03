@@ -11,9 +11,8 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { cn, isAdminRole } from '@/lib/utils'
+import { areModificationsEnabled, cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useProfile } from '@/hooks/use-profile'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
@@ -46,7 +45,6 @@ type UpdateTagsDialogProps = SingleBookmark | MultipleBookmarks
 let completedCount = 0
 
 export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: UpdateTagsDialogProps) => {
-  const { data: profile } = useProfile()
   const modal = useModal()
   const supabase = createClient()
   const [isLoading, setLoading] = useState(false)
@@ -181,7 +179,7 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
               Cancel
             </Button>
           </DialogClose>
-          {isAdminRole(profile?.user_role) && (
+          {areModificationsEnabled() && (
             <Button
               type="button"
               disabled={isLoading}
