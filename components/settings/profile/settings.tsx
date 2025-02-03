@@ -2,8 +2,10 @@
 
 import NiceModal from '@ebay/nice-modal-react'
 import { IconReload, IconUser } from '@tabler/icons-react'
+import { useQueryClient } from '@tanstack/react-query'
+import { PROFILE_QUERY } from '@/lib/constants'
+import { useProfileStore } from '@/lib/stores/profile'
 import { areModificationsEnabled } from '@/lib/utils'
-import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,9 +13,19 @@ import { EditDialog } from '@/components/dialogs/profile/edit'
 import { SettingsProfileSkeleton } from '@/components/skeletons'
 
 export function ProfileSettings() {
-  const { data: profile, isLoading, refetch } = useProfile()
+  const queryClient = useQueryClient()
+  const profile = useProfileStore((state) => state.profile)
+  const isProfileLoading = useProfileStore((state) => state.isLoading)
 
-  if (isLoading) return <SettingsProfileSkeleton />
+  async function handleRefetchProfile() {
+    try {
+      await queryClient.invalidateQueries({ queryKey: [PROFILE_QUERY] })
+    } catch (err) {
+      console.error('Failed to refetch profile', err)
+    }
+  }
+
+  if (isProfileLoading) return <SettingsProfileSkeleton />
 
   return (
     <Card>
@@ -48,15 +60,15 @@ export function ProfileSettings() {
           </>
         ) : (
           <div className="flex items-center space-x-2">
-            <Avatar>
-              <AvatarImage src="" alt="User avatar" className="size-16 rounded-md" />
+            <Avatar className="size-16">
+              <AvatarImage src="" alt="User avatar" />
               <AvatarFallback>
-                <div className="size-16 rounded-md bg-linear-to-r from-emerald-500 to-indigo-400" />
+                <IconUser size={16} />
               </AvatarFallback>
             </Avatar>
             <div>
-              <p>Unable to fetch your profile</p>
-              <Button variant="link" onClick={() => refetch()}>
+              <p>Unable to fetch your profile at this time</p>
+              <Button variant="outline" size="sm" onClick={handleRefetchProfile}>
                 Refetch <IconReload className="ml-2 size-4" />
               </Button>
             </div>
@@ -64,7 +76,7 @@ export function ProfileSettings() {
         )}
       </CardContent>
 
-      {areModificationsEnabled() && (
+      {profile && areModificationsEnabled() && (
         <CardFooter>
           <Button
             variant="outline"

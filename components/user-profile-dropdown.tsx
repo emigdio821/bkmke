@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import NiceModal from '@ebay/nice-modal-react'
@@ -17,6 +18,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query'
 import { useTheme } from 'next-themes'
 import { toast } from 'sonner'
+import { useProfileStore } from '@/lib/stores/profile'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
 import { CreateBookmarkDialog } from './dialogs/bookmarks/create'
@@ -44,6 +46,10 @@ export function UserProfileDropdown() {
   const supabase = createClient()
   const queryClient = useQueryClient()
   const { setTheme, theme } = useTheme()
+
+  const updateProfile = useProfileStore((state) => state.updateProfile)
+  const setLoadingProfile = useProfileStore((state) => state.setLoadingProfile)
+
   const { data: profile, isLoading, error, refetch } = useProfile()
 
   async function handleLogOut() {
@@ -56,6 +62,16 @@ export function UserProfileDropdown() {
     queryClient.clear()
     router.push('/login')
   }
+
+  useEffect(() => {
+    if (profile) {
+      updateProfile(profile)
+    }
+  }, [profile, updateProfile])
+
+  useEffect(() => {
+    setLoadingProfile(isLoading)
+  }, [isLoading, setLoadingProfile])
 
   if (isLoading) return <Skeleton className="h-9" />
   if (error || !profile)

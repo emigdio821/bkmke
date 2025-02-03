@@ -95,7 +95,7 @@ export const EditDialog = NiceModal.create(({ user }: { user: UserProfile }) => 
             </AvatarFallback>
           </Avatar>
           <Form {...form}>
-            <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form ref={formRef} id="update-profile-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="avatarUrl"
@@ -160,7 +160,7 @@ export const EditDialog = NiceModal.create(({ user }: { user: UserProfile }) => 
               Cancel
             </Button>
           </DialogClose>
-          <Button type="button" disabled={form.formState.isSubmitting} onClick={() => form.handleSubmit(onSubmit)()}>
+          <Button type="submit" form="update-profile-form" disabled={form.formState.isSubmitting}>
             <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
             {form.formState.isSubmitting && <Spinner className="absolute" />}
           </Button>

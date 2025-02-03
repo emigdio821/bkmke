@@ -34,7 +34,7 @@ export function Providers({ children }: ProvidersProps) {
             />
           </NiceModal.Provider>
         </TooltipProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        <ReactQueryDevtools buttonPosition="top-right" />
       </QueryClientProvider>
     </NextThemesProvider>
   )
