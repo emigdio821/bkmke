@@ -1,26 +1,24 @@
 import { cn } from '@/lib/utils'
-import styles from '@/styles/spinner.module.css'
 
-interface SpinnerProps {
-  className?: string
-  barsClassName?: string
-}
+type SpinnerProps = React.HTMLAttributes<SVGElement>
 
-export function Spinner({ className, barsClassName }: SpinnerProps) {
+export function Spinner({ className, ...props }: SpinnerProps) {
   return (
-    <div className={cn('size-4', className)}>
-      <div className="relative top-1/2 left-1/2 h-[inherit] w-[inherit]">
-        {Array.from(Array(12).keys()).map((n) => (
-          <div
-            key={`spinner-bar-${n}`}
-            className={cn(
-              'animate-spinner absolute -top-[3.9%] -left-[10%] h-[8%] w-[24%] rounded-[6px] bg-current',
-              styles['spinner-bar'],
-              barsClassName,
-            )}
-          />
-        ))}
-      </div>
-    </div>
+    <svg
+      role="img"
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-label="loading"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn('size-4 animate-spin', className)}
+      {...props}
+    >
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
   )
 }

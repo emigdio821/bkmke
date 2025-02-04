@@ -15,7 +15,7 @@ import { Loader } from '@/components/loader'
 export function BookmarksClientPage() {
   const { data: bookmarks, isLoading, error } = useBookmarks()
 
-  if (isLoading) return <Loader />
+  if (isLoading) return <Loader msg="Fetching your bookmarks" />
 
   if (error)
     return (

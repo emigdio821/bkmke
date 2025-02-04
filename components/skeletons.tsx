@@ -1,5 +1,5 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card'
-import { Skeleton } from './ui/skeleton'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function SettingsProfileSkeleton() {
   return (
@@ -30,13 +30,5 @@ export function SettingsProfileSkeleton() {
 }
 
 export function NavItemsSkeleton() {
-  return (
-    <div className="flex h-9 w-full items-center justify-between">
-      <div className="flex items-center">
-        <Skeleton className="mr-2 size-4" />
-        <Skeleton className="h-2 w-16" />
-      </div>
-      <Skeleton className="size-4" />
-    </div>
-  )
+  return <Skeleton className="size-9 w-full" />
 }
