@@ -1,5 +1,4 @@
 import { usePathname } from 'next/navigation'
-import NiceModal from '@ebay/nice-modal-react'
 import { IconHash, IconReload, IconTag, IconTags } from '@tabler/icons-react'
 import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
@@ -27,17 +26,14 @@ export function TagsNavItems() {
   return (
     <>
       {!tags?.length ? (
-        <Button
-          type="button"
-          variant="ghost"
-          className="w-full justify-start"
-          onClick={() => {
-            void NiceModal.show(CreateTagDialog)
-          }}
-        >
-          <IconTag className="mr-2 size-4" />
-          Create tag
-        </Button>
+        <CreateTagDialog
+          trigger={
+            <Button type="button" variant="ghost" className="w-full justify-start">
+              <IconTag className="mr-2 size-4" />
+              Create tag
+            </Button>
+          }
+        />
       ) : (
         <NavItem
           menus={[

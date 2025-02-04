@@ -1,4 +1,4 @@
-import { startTransition, useState } from 'react'
+import { startTransition } from 'react'
 import type { Bookmark } from '@/types'
 import NiceModal from '@ebay/nice-modal-react'
 import {
@@ -36,12 +36,10 @@ interface RowActionsProps extends ButtonProps {
 }
 
 export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps) {
-  const [openBookmarkDetails, setOpenBookmarkDetails] = useState(false)
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
 
   return (
     <>
-      <BookmarkDetailsDialog open={openBookmarkDetails} setOpen={setOpenBookmarkDetails} bookmark={bookmark} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="icon" variant="ghost" {...props}>
@@ -63,10 +61,19 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
             </a>
           </DropdownMenuItem>
           {!hideDetails && (
-            <DropdownMenuItem onClick={() => setOpenBookmarkDetails(true)}>
-              <IconId className="mr-2 size-4" />
-              Details
-            </DropdownMenuItem>
+            <BookmarkDetailsDialog
+              bookmark={bookmark}
+              trigger={
+                <DropdownMenuItem
+                  onSelect={(e) => {
+                    e.preventDefault()
+                  }}
+                >
+                  <IconId className="mr-2 size-4" />
+                  Details
+                </DropdownMenuItem>
+              }
+            />
           )}
           <DropdownMenuItem onClick={() => handleCopyToClipboard(bookmark.url, 'URL copied')}>
             <IconCopy className="mr-2 size-4" />

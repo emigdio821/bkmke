@@ -13,6 +13,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { BlurImage } from '@/components/blur-image'
 import { RowActions } from '@/components/bookmarks/row-actions'
@@ -20,15 +21,15 @@ import { ToggleFavBtn } from '@/components/bookmarks/toggle-fav-btn'
 
 interface BookmarkDetailsDialogProps {
   bookmark: Bookmark
-  open: boolean
-  setOpen(opt: boolean): void
+  trigger: React.ReactNode
 }
 
-export function BookmarkDetailsDialog({ bookmark, open, setOpen }: BookmarkDetailsDialogProps) {
+export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDialogProps) {
   const ogInfo = bookmark?.og_info as unknown as OGInfo | undefined
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{bookmark.name}</DialogTitle>

@@ -99,10 +99,15 @@ export function UserProfileDropdown() {
           <IconFolderPlus size={16} className="mr-2" />
           Create folder
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => NiceModal.show(CreateTagDialog)}>
-          <IconTag className="mr-2 size-4" />
-          Create tag
-        </DropdownMenuItem>
+        <CreateTagDialog
+          trigger={
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <IconTag className="mr-2 size-4" />
+              Create tag
+            </DropdownMenuItem>
+          }
+        />
+
         <DropdownMenuGroup>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>

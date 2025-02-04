@@ -1,4 +1,3 @@
-import NiceModal from '@ebay/nice-modal-react'
 import { IconDots, IconInputSearch, IconTag } from '@tabler/icons-react'
 import type { Tables } from '@/types/database.types'
 import { Button } from '@/components/ui/button'
@@ -28,14 +27,18 @@ export function SidebarTagsActions({ tags }: SidebarFoldersActionsProps) {
       <DropdownMenuContent>
         <DropdownMenuLabel>Tags</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={() => {
-            void NiceModal.show(CreateTagDialog)
-          }}
-        >
-          <IconTag className="mr-2 size-4" />
-          Create
-        </DropdownMenuItem>
+        <CreateTagDialog
+          trigger={
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault()
+              }}
+            >
+              <IconTag className="mr-2 size-4" />
+              Create
+            </DropdownMenuItem>
+          }
+        />
         {tags.length > 100 && (
           <DropdownMenuItem disabled>
             <IconInputSearch className="text-muted-foreground mr-2 size-4" />

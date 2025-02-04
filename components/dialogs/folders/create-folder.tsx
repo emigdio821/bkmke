@@ -82,7 +82,7 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
           <form
             onSubmit={(e) => {
               e.stopPropagation()
-              void form.handleSubmit(onSubmit)(e)
+              form.handleSubmit(onSubmit)(e)
             }}
           >
             <div className="space-y-4 overflow-y-auto p-4">

@@ -356,15 +356,13 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                         </FormItem>
                       )}
                     />
-                    <Button
-                      size="icon"
-                      type="button"
-                      onClick={() => {
-                        void NiceModal.show(CreateTagDialog)
-                      }}
-                    >
-                      <IconPlus className="size-4" />
-                    </Button>
+                    <CreateTagDialog
+                      trigger={
+                        <Button size="icon" type="button">
+                          <IconPlus className="size-4" />
+                        </Button>
+                      }
+                    />
                   </div>
 
                   {progress > 0 && <Progress value={progress} />}

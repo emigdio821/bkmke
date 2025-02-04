@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
 import { IconExternalLink, IconFolder, IconHash, IconTag, IconWorld } from '@tabler/icons-react'
@@ -18,20 +17,10 @@ interface TableLayoutProps {
 
 function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> }) {
   const ogInfo = bookmark.og_info as unknown as OGInfo | undefined
-  const [openBookmarkDetails, setOpenBookmarkDetails] = useState(false)
-  const toggleSelectedItem = () => row.toggleSelected(!row.getIsSelected())
 
   return (
     <>
-      <BookmarkDetailsDialog open={openBookmarkDetails} setOpen={setOpenBookmarkDetails} bookmark={bookmark} />
       <Card
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === ' ' || e.key === 'Enter' || e.key === 'Spacebar') {
-            e.preventDefault()
-            toggleSelectedItem()
-          }
-        }}
         data-selected={row.getIsSelected()}
         className="focus-visible:outline-ring data-[selected=true]:bg-subtle outline-hidden focus-visible:outline-2 focus-visible:outline-offset-1"
       >
@@ -43,16 +32,14 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
                 <IconWorld className="text-muted-foreground size-4" />
               </AvatarFallback>
             </Avatar>
-            <Button
-              variant="link"
-              onClick={(e) => {
-                e.stopPropagation()
-                setOpenBookmarkDetails((prev) => !prev)
-              }}
-              className="text-foreground line-clamp-2 text-left whitespace-normal"
-            >
-              {bookmark.name}
-            </Button>
+            <BookmarkDetailsDialog
+              bookmark={bookmark}
+              trigger={
+                <Button variant="link" className="text-foreground line-clamp-2 text-left whitespace-normal">
+                  {bookmark.name}
+                </Button>
+              }
+            />
           </CardTitle>
           {bookmark.description && (
             <CardDescription className="line-clamp-2 text-xs break-words">{bookmark.description}</CardDescription>

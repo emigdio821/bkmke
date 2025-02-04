@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
 import { IconHash, IconWorld } from '@tabler/icons-react'
@@ -61,27 +60,26 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     cell: ({ row }) => {
       const bookmark = row.original
       const ogInfo = row.original.og_info as unknown as OGInfo | undefined
-      const [openBookmarkDetails, setOpenBookmarkDetails] = useState(false)
 
       return (
         <>
-          <BookmarkDetailsDialog open={openBookmarkDetails} setOpen={setOpenBookmarkDetails} bookmark={bookmark} />
           <div className="flex max-w-64 flex-col items-start">
-            <Button
-              variant="link"
-              onClick={() => setOpenBookmarkDetails((prev) => !prev)}
-              className="text-foreground block max-w-64 flex-auto overflow-hidden"
-            >
-              <div className="flex items-center">
-                <Avatar className="mr-2 size-4 rounded-full">
-                  <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
-                  <AvatarFallback className="rounded-[inherit]">
-                    <IconWorld className="text-muted-foreground size-4" />
-                  </AvatarFallback>
-                </Avatar>
-                <span className="truncate">{bookmark.name}</span>
-              </div>
-            </Button>
+            <BookmarkDetailsDialog
+              bookmark={bookmark}
+              trigger={
+                <Button variant="link" className="text-foreground block max-w-64 flex-auto overflow-hidden">
+                  <div className="flex items-center">
+                    <Avatar className="mr-2 size-4 rounded-full">
+                      <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
+                      <AvatarFallback className="rounded-[inherit]">
+                        <IconWorld className="text-muted-foreground size-4" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="truncate">{bookmark.name}</span>
+                  </div>
+                </Button>
+              }
+            />
 
             {bookmark.description && (
               <p className="text-muted-foreground line-clamp-1 w-full text-xs break-words" title={bookmark.description}>
