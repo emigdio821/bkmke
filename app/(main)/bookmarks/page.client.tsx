@@ -2,7 +2,7 @@
 
 import NiceModal from '@ebay/nice-modal-react'
 import { IconBookmarkPlus, IconBookmarksOff, IconBug, IconFileImport, IconReload } from '@tabler/icons-react'
-import { useBookmarks } from '@/hooks/use-bookmarks'
+import { useBookmarks } from '@/hooks/bookmarks/use-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Heading } from '@/components/ui/typography'

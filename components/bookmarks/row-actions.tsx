@@ -14,7 +14,7 @@ import {
   IconTrash,
 } from '@tabler/icons-react'
 import { areModificationsEnabled, handleCopyToClipboard } from '@/lib/utils'
-import { useToggleFavorite } from '@/hooks/use-toggle-favorite'
+import { useToggleFavorite } from '@/hooks/bookmarks/use-toggle-favorite'
 import { Button, type ButtonProps } from '@/components/ui/button'
 import {
   DropdownMenu,

@@ -2,7 +2,7 @@ import { startTransition } from 'react'
 import type { Bookmark } from '@/types'
 import { IconHeart, IconHeartOff } from '@tabler/icons-react'
 import { areModificationsEnabled } from '@/lib/utils'
-import { useToggleFavorite } from '@/hooks/use-toggle-favorite'
+import { useToggleFavorite } from '@/hooks/bookmarks/use-toggle-favorite'
 import { Button, type ButtonProps } from '@/components/ui/button'
 
 interface ToggleFavBtnProps extends ButtonProps {

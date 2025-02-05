@@ -1,6 +1,6 @@
 import { usePathname } from 'next/navigation'
 import { IconHash, IconReload, IconTag, IconTags } from '@tabler/icons-react'
-import { useTags } from '@/hooks/use-tags'
+import { useTags } from '@/hooks/tags/use-tags'
 import { Button } from '@/components/ui/button'
 import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
 import { NavItem } from '@/components/navigation/nav-item'

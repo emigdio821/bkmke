@@ -10,7 +10,7 @@ import {
   NAV_ITEMS_COUNT_QUERY,
   TAG_ITEMS_QUERY,
 } from '@/lib/constants'
-import { useInvalidateQueries } from './use-invalidate-queries'
+import { useInvalidateQueries } from '../use-invalidate-queries'
 
 export function useToggleFavorite(bookmark: Bookmark) {
   const { invalidateQueries } = useInvalidateQueries()

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import NiceModal from '@ebay/nice-modal-react'
 import { IconBookmarkPlus, IconBookmarks, IconBug, IconHeartsOff, IconReload } from '@tabler/icons-react'
-import { useFavoriteBookmarks } from '@/hooks/use-favorite-bookmarks'
+import { useFavoriteBookmarks } from '@/hooks/bookmarks/use-favorite-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Heading } from '@/components/ui/typography'

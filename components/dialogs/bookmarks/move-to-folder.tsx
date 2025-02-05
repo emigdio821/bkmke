@@ -11,7 +11,7 @@ import {
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { areModificationsEnabled, cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/use-folders'
+import { useFolders } from '@/hooks/folders/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { Button } from '@/components/ui/button'
 import {

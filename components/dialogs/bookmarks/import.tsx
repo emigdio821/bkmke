@@ -20,9 +20,9 @@ import {
 } from '@/lib/constants'
 import { importBookmarksSchema } from '@/lib/schemas/form'
 import { areModificationsEnabled, cn, formatBytes } from '@/lib/utils'
-import { useFolders } from '@/hooks/use-folders'
+import { useFolders } from '@/hooks/folders/use-folders'
+import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useTags } from '@/hooks/use-tags'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,

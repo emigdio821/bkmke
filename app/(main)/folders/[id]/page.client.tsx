@@ -10,8 +10,8 @@ import {
   IconFolderOff,
   IconReload,
 } from '@tabler/icons-react'
-import { useFolder } from '@/hooks/use-folder'
-import { useFolderItems } from '@/hooks/use-folder-items'
+import { useFolder } from '@/hooks/folders/use-folder'
+import { useFolderItems } from '@/hooks/folders/use-folder-items'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
