@@ -1,8 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { UserProfile } from '@/types'
-import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconUser } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -23,22 +22,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
-export const EditDialog = NiceModal.create(({ user }: { user: UserProfile }) => {
-  const modal = useModal()
+interface EditProfileDialogProps {
+  profile: UserProfile
+  trigger: React.ReactNode
+}
+
+export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) {
+  const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
   const queryClient = useQueryClient()
   const formRef = useRef<HTMLFormElement>(null)
+
   const form = useForm<z.infer<typeof editUserSchema>>({
+    shouldUnregister: true,
     resolver: zodResolver(editUserSchema),
     defaultValues: {
-      firstName: user.first_name ?? '',
-      lastName: user.last_name ?? '',
-      avatarUrl: user.avatar_url ?? '',
+      firstName: profile.first_name ?? '',
+      lastName: profile.last_name ?? '',
+      avatarUrl: profile.avatar_url ?? '',
       password: '',
     },
   })
@@ -62,7 +69,7 @@ export const EditDialog = NiceModal.create(({ user }: { user: UserProfile }) => 
         last_name: values.lastName,
         avatar_url: values.avatarUrl,
       })
-      .eq('id', user.id)
+      .eq('id', profile.id)
 
     if (error) {
       toast.error('Error', { description: error.message })
@@ -70,26 +77,28 @@ export const EditDialog = NiceModal.create(({ user }: { user: UserProfile }) => 
     }
 
     await queryClient.invalidateQueries({ queryKey: [PROFILE_QUERY] })
+    form.reset(values)
+    setOpenDialog(false)
     toast.success('Success', { description: 'Profile has been updated.' })
-    await modal.hide()
   }
 
   return (
     <Dialog
-      open={modal.visible}
+      open={openDialog}
       onOpenChange={(isOpen) => {
         if (form.formState.isSubmitting) return
-        isOpen ? modal.show() : modal.hide()
+        setOpenDialog(isOpen)
       }}
     >
-      <DialogContent side="right" onCloseAutoFocus={() => modal.remove()} className="sm:max-w-sm">
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent side="right" className="sm:max-w-sm">
         <DialogHeader className="space-y-0">
           <DialogTitle>Edit profile</DialogTitle>
         </DialogHeader>
         <DialogDescription className="sr-only">Make changes to your profile here.</DialogDescription>
         <div className="overflow-y-auto p-4">
           <Avatar className="mb-4 size-16">
-            <AvatarImage src={form.getValues('avatarUrl') || user.avatar_url || ''} />
+            <AvatarImage src={form.getValues('avatarUrl') || profile.avatar_url || ''} />
             <AvatarFallback>
               <IconUser size={14} />
             </AvatarFallback>
@@ -168,4 +177,4 @@ export const EditDialog = NiceModal.create(({ user }: { user: UserProfile }) => 
       </DialogContent>
     </Dialog>
   )
-})
+}

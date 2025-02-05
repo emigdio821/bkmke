@@ -82,14 +82,24 @@ export function UserProfileDropdown() {
       </Button>
     )
 
-  const profileNameOrEmail = profile.first_name || profile.email || 'User'
+  function getProfileName() {
+    if (!profile) return 'User'
+
+    if (profile.first_name) {
+      const name = profile.last_name ? `${profile.first_name} ${profile.last_name}` : profile.first_name
+
+      return name
+    }
+
+    return profile.email || 'User'
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="bg-subtle justify-between gap-2">
-          <span title={profileNameOrEmail} className="max-w-40 truncate">
-            {profileNameOrEmail}
+          <span title={getProfileName()} className="max-w-40 truncate">
+            {getProfileName()}
           </span>
           <IconSelector size={16} className="text-muted-foreground" />
         </Button>

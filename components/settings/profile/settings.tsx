@@ -1,6 +1,5 @@
 'use client'
 
-import NiceModal from '@ebay/nice-modal-react'
 import { IconReload, IconUser } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { PROFILE_QUERY } from '@/lib/constants'
@@ -9,7 +8,7 @@ import { areModificationsEnabled } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { EditDialog } from '@/components/dialogs/profile/edit'
+import { EditProfileDialog } from '@/components/dialogs/profile/edit'
 import { SettingsProfileSkeleton } from '@/components/skeletons'
 
 export function ProfileSettings() {
@@ -78,13 +77,14 @@ export function ProfileSettings() {
 
       {profile && areModificationsEnabled() && (
         <CardFooter>
-          <Button
-            variant="outline"
-            className="w-full sm:w-auto"
-            onClick={() => NiceModal.show(EditDialog, { user: profile })}
-          >
-            Edit
-          </Button>
+          <EditProfileDialog
+            profile={profile}
+            trigger={
+              <Button variant="outline" className="w-full sm:w-auto">
+                Edit
+              </Button>
+            }
+          />
         </CardFooter>
       )}
     </Card>
