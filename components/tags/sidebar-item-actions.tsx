@@ -60,21 +60,23 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
           <IconPencil className="mr-2 size-4" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className="text-destructive focus:text-destructive"
-          onSelect={() => {
-            void NiceModal.show(AlertActionDialog, {
-              title: 'Delete tag?',
-              message: 'It will also unlik all bookmarks related to this tag. This action cannot be undone.',
-              action: async () => {
-                await handleDeleteFolder(tag.id)
-              },
-            })
-          }}
-        >
-          <IconTrash className="mr-2 size-4" />
-          Delete
-        </DropdownMenuItem>
+        <AlertActionDialog
+          destructive
+          title="Delete tag?"
+          message="It will also unlik all bookmarks related to this tag. This action cannot be undone."
+          action={async () => await handleDeleteFolder(tag.id)}
+          trigger={
+            <DropdownMenuItem
+              className="!text-destructive"
+              onSelect={(e) => {
+                e.preventDefault()
+              }}
+            >
+              <IconTrash className="mr-2 size-4" />
+              Delete
+            </DropdownMenuItem>
+          }
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   )

@@ -1,6 +1,5 @@
 'use client'
 
-import NiceModal from '@ebay/nice-modal-react'
 import { toast } from 'sonner'
 import { siteConfig } from '@/config/site'
 import { createClient } from '@/lib/supabase/client'
@@ -42,25 +41,20 @@ export function ExportBookmarks() {
         <CardDescription>Export your bookmarks as a plain text file.</CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => {
-            void NiceModal.show(AlertActionDialog, {
-              action: async () => {
-                await handleExportBookmarks()
-              },
-              title: 'Export bookmarks?',
-              message: (
-                <>
-                  This action will export all your bookmarks in a <InlineCode>.txt</InlineCode> file.
-                </>
-              ),
-            })
-          }}
-        >
-          Export
-        </Button>
+        <AlertActionDialog
+          title="Export bookmarks?"
+          message={
+            <>
+              This action will export all your bookmarks in a <InlineCode>.txt</InlineCode> file.
+            </>
+          }
+          action={async () => await handleExportBookmarks()}
+          trigger={
+            <Button type="button" variant="outline">
+              Export
+            </Button>
+          }
+        />
       </CardFooter>
     </Card>
   )

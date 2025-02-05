@@ -78,23 +78,24 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
           Create folder
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="text-destructive focus:text-destructive"
-          onSelect={() => {
-            void NiceModal.show(AlertActionDialog, {
-              destructive: true,
-              title: 'Delete folder?',
-              message:
-                'It will also delete all bookmarks/folders related to this folder. This action cannot be undone.',
-              action: async () => {
-                await handleDeleteFolder(folder.id)
-              },
-            })
-          }}
-        >
-          <IconTrash className="mr-2 size-4" />
-          Delete
-        </DropdownMenuItem>
+
+        <AlertActionDialog
+          destructive
+          title="Delete folder?"
+          message="It will also delete all bookmarks/folders related to this folder. This action cannot be undone."
+          action={async () => await handleDeleteFolder(folder.id)}
+          trigger={
+            <DropdownMenuItem
+              className="!text-destructive"
+              onSelect={(e) => {
+                e.preventDefault()
+              }}
+            >
+              <IconTrash className="mr-2 size-4" />
+              Delete
+            </DropdownMenuItem>
+          }
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   )

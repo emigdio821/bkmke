@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import type { GenericFn } from '@/types'
-import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { IconAlertCircle } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -13,6 +12,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/spinner'
@@ -22,18 +22,19 @@ interface AlertActionDialogProps<T> {
   message?: React.ReactNode
   action: GenericFn<T>
   destructive?: boolean
+  trigger: React.ReactNode
 }
 
-export const AlertActionDialog = NiceModal.create(<T,>(props: AlertActionDialogProps<T>) => {
-  const { action, message, title, destructive } = props
-  const modal = useModal()
+export function AlertActionDialog<T>(props: AlertActionDialogProps<T>) {
+  const { action, message, title, destructive, trigger } = props
+  const [openAlert, setOpenAlert] = useState(false)
   const [isLoading, setLoading] = useState(false)
 
   async function handleAction() {
     setLoading(true)
     try {
       await action()
-      await modal.hide()
+      setOpenAlert(false)
     } catch (err) {
       console.log('Alert action dialog error', err)
       toast.error('Error', { description: 'Unable to perform this action, try again.' })
@@ -44,13 +45,14 @@ export const AlertActionDialog = NiceModal.create(<T,>(props: AlertActionDialogP
 
   return (
     <AlertDialog
-      open={modal.visible}
+      open={openAlert}
       onOpenChange={(isOpen) => {
         if (isLoading) return
-        isOpen ? modal.show() : modal.hide()
+        setOpenAlert(isOpen)
       }}
     >
-      <AlertDialogContent onCloseAutoFocus={() => modal.remove()}>
+      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+      <AlertDialogContent>
         <div className="flex flex-col gap-2 p-4 pb-0 max-sm:items-center sm:flex-row sm:gap-4">
           <div
             className="border-border flex size-9 shrink-0 items-center justify-center rounded-full border"
@@ -82,4 +84,4 @@ export const AlertActionDialog = NiceModal.create(<T,>(props: AlertActionDialogP
       </AlertDialogContent>
     </AlertDialog>
   )
-})
+}
