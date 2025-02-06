@@ -44,15 +44,15 @@ export function TagitemsClientPage({ id }: { id: string }) {
   return (
     <>
       {tagLoading ? (
-        <div className="flex h-7 items-center">
-          <Skeleton className="h-2 w-28" />
+        <div className="flex h-[18px] items-center">
+          <Skeleton className="h-3 w-28" />
         </div>
       ) : (
         <Heading>{tag?.[0]?.name || 'Tag items'}</Heading>
       )}
       <div className="mt-4">
         {isLoading ? (
-          <Loader />
+          <Loader msg="Fetching tag bookmarks" />
         ) : (
           <>
             {tagItems &&

@@ -52,10 +52,10 @@ export function FolderItemsClientPage({ id }: { id: string }) {
     <>
       {folderLoading ? (
         <div>
-          <div className="flex h-7 items-center">
-            <Skeleton className="h-2 w-28" />
+          <div className="flex h-[18px] items-center">
+            <Skeleton className="h-3 w-28" />
           </div>
-          <div className="flex h-5 items-center">
+          <div className="mt-4 flex h-5 items-center">
             <Skeleton className="h-2 w-36" />
           </div>
         </div>
@@ -63,7 +63,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
         <>
           {folder && (
             <>
-              <Heading>{folder[0]?.name || 'Folder items'}</Heading>
+              <Heading className="mb-4">{folder[0]?.name || 'Folder items'}</Heading>
               {folder[0]?.description && <p className="text-muted-foreground text-sm">{folder[0].description}</p>}
             </>
           )}
@@ -71,7 +71,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
       )}
       <div className="mt-4">
         {isLoading ? (
-          <Loader />
+          <Loader msg="Fetching folder bookmarks" />
         ) : (
           <>
             {folderItems &&

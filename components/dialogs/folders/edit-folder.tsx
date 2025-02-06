@@ -1,6 +1,6 @@
 'use client'
 
-import NiceModal, { useModal } from '@ebay/nice-modal-react'
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -20,14 +20,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Spinner } from '@/components/spinner'
 
-export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'folders'> }) => {
-  const modal = useModal()
+interface EditFolderDialogProps {
+  folder: Tables<'folders'>
+  trigger: React.ReactNode
+}
+
+export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
+  const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
   const form = useForm<z.infer<typeof createFolderSchema>>({
@@ -46,23 +52,25 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
       return
     }
 
+    await invalidateQueries([FOLDERS_QUERY, BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY])
+
+    setOpenDialog(false)
+
     toast.success('Success', {
       description: 'Folder has been updated.',
     })
-
-    await invalidateQueries([FOLDERS_QUERY, BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY])
-    await modal.hide()
   }
 
   return (
     <Dialog
-      open={modal.visible}
+      open={openDialog}
       onOpenChange={(isOpen) => {
         if (form.formState.isSubmitting) return
-        isOpen ? modal.show() : modal.hide()
+        setOpenDialog(isOpen)
       }}
     >
-      <DialogContent className="sm:max-w-sm" onCloseAutoFocus={() => modal.remove()}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>Edit folder</DialogTitle>
         </DialogHeader>
@@ -141,4 +149,4 @@ export const EditFolderDialog = NiceModal.create(({ folder }: { folder: Tables<'
       </DialogContent>
     </Dialog>
   )
-})
+}

@@ -1,4 +1,3 @@
-import NiceModal from '@ebay/nice-modal-react'
 import { IconDots, IconFolderPlus, IconPencil, IconTrash } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
@@ -57,16 +56,19 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
       <DropdownMenuContent className="max-w-52">
         <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 break-words">{folder.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={() => {
-            void NiceModal.show(EditFolderDialog, {
-              folder,
-            })
-          }}
-        >
-          <IconPencil className="mr-2 size-4" />
-          Edit
-        </DropdownMenuItem>
+        <EditFolderDialog
+          trigger={
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault()
+              }}
+            >
+              <IconPencil className="mr-2 size-4" />
+              Edit
+            </DropdownMenuItem>
+          }
+          folder={folder}
+        />
         <CreateFolderDialog
           parentFolderId={folder.id}
           trigger={
