@@ -56,10 +56,14 @@ export function BookmarksClientPage() {
                 Create
               </Button>
 
-              <Button variant="outline" onClick={() => NiceModal.show(ImportBookmarksDialog)}>
-                <IconFileImport size={16} className="mr-2" />
-                Import
-              </Button>
+              <ImportBookmarksDialog
+                trigger={
+                  <Button variant="outline">
+                    <IconFileImport size={16} className="mr-2" />
+                    Import
+                  </Button>
+                }
+              />
             </CardFooter>
           </Card>
         ))}

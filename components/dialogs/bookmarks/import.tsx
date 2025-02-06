@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconPlus, IconTrash, IconUpload } from '@tabler/icons-react'
 import { useDropzone } from 'react-dropzone'
@@ -32,6 +31,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Progress } from '@/components/ui/progress'
@@ -53,8 +53,8 @@ const messages = {
 
 let completedCount = 0
 
-export const ImportBookmarksDialog = NiceModal.create(() => {
-  const modal = useModal()
+export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode }) {
+  const [openDialog, setOpenDialog] = useState(false)
   const { data: tags, isLoading: tagsLoading } = useTags()
   const { data: folders, isLoading: foldersLoading } = useFolders()
   const [progress, setProgress] = useState(0)
@@ -167,6 +167,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       return
     }
 
+    setOpenDialog(false)
     toast.success('Success', {
       description:
         completedCount > 1 ? (
@@ -177,20 +178,18 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
           'Bookmark has been imported.'
         ),
     })
-
-    await modal.hide()
-    modal.remove()
   }
 
   return (
     <Dialog
-      open={modal.visible}
+      open={openDialog}
       onOpenChange={(isOpen) => {
         if (form.formState.isSubmitting) return
-        isOpen ? modal.show() : modal.hide()
+        setOpenDialog(isOpen)
       }}
     >
-      <DialogContent side="right" onCloseAutoFocus={() => modal.remove()}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent side="right">
         <DialogHeader>
           <DialogTitle>Import bookmarks</DialogTitle>
         </DialogHeader>
@@ -213,7 +212,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
 
                   <div
                     className={cn(
-                      'hover:bg-subtle flex h-28 w-full items-center justify-center rounded-md border border-dashed p-6 transition-colors',
+                      'outline-ring hover:bg-subtle flex h-28 w-full items-center justify-center rounded-md border border-dashed p-6 outline-hidden outline-offset-2 transition-colors focus-visible:outline-2',
                       {
                         'bg-accent': isDragActive,
                         'border-destructive': form.formState.errors.bookmarks,
@@ -257,7 +256,7 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                       <FormItem>
                         <FormLabel>Bookmarks</FormLabel>
                         <FormControl>
-                          <Textarea {...field} className="max-h-80" />
+                          <Textarea {...field} className="max-h-80 min-h-[88px]" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -318,15 +317,13 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
                         )
                       }}
                     />
-                    <Button
-                      size="icon"
-                      type="button"
-                      onClick={() => {
-                        void NiceModal.show(CreateFolderDialog)
-                      }}
-                    >
-                      <IconPlus className="size-4" />
-                    </Button>
+                    <CreateFolderDialog
+                      trigger={
+                        <Button size="icon" type="button">
+                          <IconPlus className="size-4" />
+                        </Button>
+                      }
+                    />
                   </div>
 
                   <div className="flex items-end space-x-2">
@@ -388,4 +385,4 @@ export const ImportBookmarksDialog = NiceModal.create(() => {
       </DialogContent>
     </Dialog>
   )
-})
+}

@@ -80,10 +80,14 @@ export function TagitemsClientPage({ id }: { id: string }) {
                       Create bookmark
                     </Button>
 
-                    <Button variant="outline" onClick={() => NiceModal.show(ImportBookmarksDialog)}>
-                      <IconFileImport size={16} className="mr-2" />
-                      Import bookmarks
-                    </Button>
+                    <ImportBookmarksDialog
+                      trigger={
+                        <Button variant="outline">
+                          <IconFileImport size={16} className="mr-2" />
+                          Import
+                        </Button>
+                      }
+                    />
                   </CardFooter>
                 </Card>
               ))}

@@ -121,14 +121,19 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
                 <IconBookmarkPlus className="mr-2 size-4" />
                 Create
               </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => {
-                  void NiceModal.show(ImportBookmarksDialog)
-                }}
-              >
-                <IconFileImport className="mr-2 size-4" />
-                Import
-              </DropdownMenuItem>
+
+              <ImportBookmarksDialog
+                trigger={
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.preventDefault()
+                    }}
+                  >
+                    <IconFileImport className="mr-2 size-4" />
+                    Import
+                  </DropdownMenuItem>
+                }
+              />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

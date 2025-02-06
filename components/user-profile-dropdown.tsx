@@ -136,10 +136,14 @@ export function UserProfileDropdown() {
                   Create
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onSelect={() => NiceModal.show(ImportBookmarksDialog)}>
-                  <IconFileImport className="mr-2 size-4" />
-                  Import
-                </DropdownMenuItem>
+                <ImportBookmarksDialog
+                  trigger={
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <IconFileImport className="mr-2 size-4" />
+                      Import
+                    </DropdownMenuItem>
+                  }
+                />
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>

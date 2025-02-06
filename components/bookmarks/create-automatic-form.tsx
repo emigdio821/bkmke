@@ -186,7 +186,7 @@ export function CreateAutomaticForm() {
             name="isFavorite"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
+              <FormItem className="flex flex-row items-center justify-between space-y-0 rounded-md border p-3 shadow-xs">
                 <div>
                   <FormLabel>Favorite</FormLabel>
                   <FormDescription>Add this bookmark to the favorites list.</FormDescription>
