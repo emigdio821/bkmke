@@ -108,7 +108,7 @@ export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
                 </Button>
               </DialogClose>
               {areModificationsEnabled() && (
-                <Button type="button" disabled={form.formState.isSubmitting}>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
                   <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
                   {form.formState.isSubmitting && <Spinner className="absolute" />}
                 </Button>

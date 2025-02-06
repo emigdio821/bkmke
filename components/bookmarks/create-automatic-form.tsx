@@ -137,9 +137,13 @@ export function CreateAutomaticForm() {
                 )
               }}
             />
-            <Button size="icon" type="button" onClick={() => NiceModal.show(CreateFolderDialog)}>
-              <IconPlus className="size-4" />
-            </Button>
+            <CreateFolderDialog
+              trigger={
+                <Button size="icon" type="button">
+                  <IconPlus className="size-4" />
+                </Button>
+              }
+            />
           </div>
 
           <div className="flex items-end space-x-2">

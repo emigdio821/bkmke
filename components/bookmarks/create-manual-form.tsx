@@ -234,15 +234,13 @@ export function CreateManualForm() {
                 )
               }}
             />
-            <Button
-              size="icon"
-              type="button"
-              onClick={() => {
-                void NiceModal.show(CreateFolderDialog)
-              }}
-            >
-              <IconPlus className="size-4" />
-            </Button>
+            <CreateFolderDialog
+              trigger={
+                <Button size="icon" type="button">
+                  <IconPlus className="size-4" />
+                </Button>
+              }
+            />
           </div>
           <div className="flex items-end space-x-2">
             <FormField
@@ -284,7 +282,7 @@ export function CreateManualForm() {
             name="isFavorite"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
+              <FormItem className="flex flex-row items-center justify-between space-y-0 rounded-md border p-3 shadow-xs">
                 <div>
                   <FormLabel>Favorite</FormLabel>
                   <FormDescription>Add this bookmark to the favorites list.</FormDescription>

@@ -1,4 +1,3 @@
-import NiceModal from '@ebay/nice-modal-react'
 import { IconDots, IconFolderPlus, IconInputSearch } from '@tabler/icons-react'
 import type { Tables } from '@/types/database.types'
 import { Button } from '@/components/ui/button'
@@ -28,14 +27,18 @@ export function SidebarFoldersActions({ folders }: SidebarFoldersActionsProps) {
       <DropdownMenuContent>
         <DropdownMenuLabel>Folders</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={() => {
-            void NiceModal.show(CreateFolderDialog)
-          }}
-        >
-          <IconFolderPlus className="mr-2 size-4" />
-          Create
-        </DropdownMenuItem>
+        <CreateFolderDialog
+          trigger={
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault()
+              }}
+            >
+              <IconFolderPlus className="mr-2 size-4" />
+              Create
+            </DropdownMenuItem>
+          }
+        />
 
         {folders.length > 100 && (
           <DropdownMenuItem disabled>

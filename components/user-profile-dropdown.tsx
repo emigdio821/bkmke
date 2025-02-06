@@ -105,10 +105,15 @@ export function UserProfileDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="sm:w-(--radix-dropdown-menu-trigger-width)">
-        <DropdownMenuItem onSelect={() => NiceModal.show(CreateFolderDialog)}>
-          <IconFolderPlus size={16} className="mr-2" />
-          Create folder
-        </DropdownMenuItem>
+        <CreateFolderDialog
+          trigger={
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <IconFolderPlus size={16} className="mr-2" />
+              Create folder
+            </DropdownMenuItem>
+          }
+        />
+
         <CreateTagDialog
           trigger={
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>

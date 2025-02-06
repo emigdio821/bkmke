@@ -1,6 +1,5 @@
 import { usePathname } from 'next/navigation'
 import type { Folder, NavMenu } from '@/types'
-import NiceModal from '@ebay/nice-modal-react'
 import { IconFolder, IconFolderPlus, IconFolders, IconReload } from '@tabler/icons-react'
 import { useFolders } from '@/hooks/folders/use-folders'
 import { Button } from '@/components/ui/button'
@@ -40,17 +39,14 @@ export function FoldersNavItems() {
   return (
     <>
       {!folders?.length ? (
-        <Button
-          type="button"
-          variant="ghost"
-          className="w-full justify-start"
-          onClick={() => {
-            void NiceModal.show(CreateFolderDialog)
-          }}
-        >
-          <IconFolderPlus className="mr-2 size-4" />
-          Create folder
-        </Button>
+        <CreateFolderDialog
+          trigger={
+            <Button type="button" variant="ghost" className="w-full justify-start">
+              <IconFolderPlus className="mr-2 size-4" />
+              Create folder
+            </Button>
+          }
+        />
       ) : (
         <NavItem
           menus={[

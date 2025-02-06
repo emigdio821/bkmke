@@ -1,6 +1,6 @@
 'use client'
 
-import NiceModal, { useModal } from '@ebay/nice-modal-react'
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
@@ -19,6 +19,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -27,10 +28,11 @@ import { Spinner } from '@/components/spinner'
 
 interface CreateFolderDialogProps {
   parentFolderId?: string
+  trigger: React.ReactNode
 }
 
-export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFolderDialogProps) => {
-  const modal = useModal()
+export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDialogProps) {
+  const [openDialog, setOpenDialog] = useState(false)
   const queryClient = useQueryClient()
   const supabase = createClient()
 
@@ -61,18 +63,19 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
       ),
     })
     await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
-    await modal.hide()
+    setOpenDialog(false)
   }
 
   return (
     <Dialog
-      open={modal.visible}
+      open={openDialog}
       onOpenChange={(isOpen) => {
         if (form.formState.isSubmitting) return
-        isOpen ? modal.show() : modal.hide()
+        setOpenDialog(isOpen)
       }}
     >
-      <DialogContent className="sm:max-w-sm" onCloseAutoFocus={() => modal.remove()}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>Create folder</DialogTitle>
         </DialogHeader>
@@ -140,4 +143,4 @@ export const CreateFolderDialog = NiceModal.create(({ parentFolderId }: CreateFo
       </DialogContent>
     </Dialog>
   )
-})
+}

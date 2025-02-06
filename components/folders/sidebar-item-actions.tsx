@@ -67,16 +67,19 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
           <IconPencil className="mr-2 size-4" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onSelect={() => {
-            void NiceModal.show(CreateFolderDialog, {
-              parentFolderId: folder.id,
-            })
-          }}
-        >
-          <IconFolderPlus className="mr-2 size-4" />
-          Create folder
-        </DropdownMenuItem>
+        <CreateFolderDialog
+          parentFolderId={folder.id}
+          trigger={
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault()
+              }}
+            >
+              <IconFolderPlus className="mr-2 size-4" />
+              Create folder
+            </DropdownMenuItem>
+          }
+        />
         <DropdownMenuSeparator />
 
         <AlertActionDialog
