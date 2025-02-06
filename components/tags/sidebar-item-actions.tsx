@@ -1,4 +1,3 @@
-import NiceModal from '@ebay/nice-modal-react'
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
@@ -50,16 +49,19 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
       <DropdownMenuContent className="max-w-52">
         <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 break-words">{tag.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={() => {
-            void NiceModal.show(EditTagDialog, {
-              tag,
-            })
-          }}
-        >
-          <IconPencil className="mr-2 size-4" />
-          Edit
-        </DropdownMenuItem>
+        <EditTagDialog
+          tag={tag}
+          trigger={
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault()
+              }}
+            >
+              <IconPencil className="mr-2 size-4" />
+              Edit
+            </DropdownMenuItem>
+          }
+        />
         <AlertActionDialog
           destructive
           title="Delete tag?"

@@ -1,6 +1,6 @@
 'use client'
 
-import NiceModal, { useModal } from '@ebay/nice-modal-react'
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -27,13 +27,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
-export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> }) => {
-  const modal = useModal()
+interface EditTagDialogProps {
+  trigger: React.ReactNode
+  tag: Tables<'tags'>
+}
+
+export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
+  const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
   const form = useForm<z.infer<typeof createTagSchema>>({
@@ -56,23 +62,19 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
     })
 
     await invalidateQueries([TAGS_QUERY, BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
-    await modal.hide()
+    setOpenDialog(false)
   }
 
   return (
     <Dialog
-      open={modal.visible}
+      open={openDialog}
       onOpenChange={(isOpen) => {
         if (form.formState.isSubmitting) return
-        isOpen ? modal.show() : modal.hide()
+        setOpenDialog(isOpen)
       }}
     >
-      <DialogContent
-        className="sm:max-w-xs"
-        onCloseAutoFocus={() => {
-          modal.remove()
-        }}
-      >
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="sm:max-w-xs">
         <DialogHeader>
           <DialogTitle>Edit tag</DialogTitle>
         </DialogHeader>
@@ -129,4 +131,4 @@ export const EditTagDialog = NiceModal.create(({ tag }: { tag: Tables<'tags'> })
       </DialogContent>
     </Dialog>
   )
-})
+}
