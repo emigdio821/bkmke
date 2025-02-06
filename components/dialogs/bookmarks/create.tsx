@@ -1,22 +1,33 @@
 'use client'
 
-import NiceModal, { useModal } from '@ebay/nice-modal-react'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { useDialogStore } from '@/lib/stores/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { CreateAutomaticForm } from '@/components/bookmarks/create-automatic-form'
 import { CreateManualForm } from '@/components/bookmarks/create-manual-form'
 
-export const CreateBookmarkDialog = NiceModal.create(() => {
-  const modal = useModal()
+export function CreateBookmarkDialog({ trigger }: { trigger: React.ReactNode }) {
+  const open = useDialogStore((state) => state.open)
+  const toggle = useDialogStore((state) => state.toggle)
+  const isLoading = useDialogStore((state) => state.isLoading)
 
   return (
     <Dialog
-      open={modal.visible}
+      open={open}
       onOpenChange={(isOpen) => {
-        isOpen ? modal.show() : modal.hide()
+        if (isLoading) return
+        toggle(isOpen)
       }}
     >
-      <DialogContent side="right" onCloseAutoFocus={() => modal.remove()}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent side="right">
         <DialogHeader className="space-y-0">
           <DialogTitle>Create bookmark</DialogTitle>
           <DialogDescription className="sr-only">Create bookmark dialog</DialogDescription>
@@ -38,4 +49,4 @@ export const CreateBookmarkDialog = NiceModal.create(() => {
       </DialogContent>
     </Dialog>
   )
-})
+}

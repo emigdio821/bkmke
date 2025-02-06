@@ -1,6 +1,5 @@
 'use client'
 
-import NiceModal from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconPlus } from '@tabler/icons-react'
 import { useForm } from 'react-hook-form'
@@ -17,6 +16,7 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
+import { useDialogStore } from '@/lib/stores/dialog'
 import { areModificationsEnabled, cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/folders/use-folders'
 import { useTags } from '@/hooks/tags/use-tags'
@@ -28,7 +28,6 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
-import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
 import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
 import { FolderSelectItems } from '@/components/folders/folder-select-items'
@@ -36,6 +35,9 @@ import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
 export function CreateAutomaticForm() {
+  const toggleDialog = useDialogStore((state) => state.toggle)
+  const toggleDialogLoading = useDialogStore((state) => state.toggleLoading)
+
   const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading: tagsLoading } = useTags()
   const { data: folders, isLoading: foldersLoading } = useFolders()
@@ -50,9 +52,11 @@ export function CreateAutomaticForm() {
   })
 
   async function onSubmit(values: z.infer<typeof createAutomaticBookmarkSchema>) {
+    toggleDialogLoading(true)
     const response = await createBookmark(values)
 
     if (response?.error) {
+      toggleDialogLoading(false)
       toast.error('Error', { description: response.error })
       return
     }
@@ -66,9 +70,9 @@ export function CreateAutomaticForm() {
       TAG_ITEMS_QUERY,
       NAV_ITEMS_COUNT_QUERY,
     ])
+    toggleDialog(false)
+    toggleDialogLoading(false)
     toast.success('Success', { description: 'Bookmark has been created.' })
-    await NiceModal.hide(CreateBookmarkDialog)
-    NiceModal.remove(CreateBookmarkDialog)
   }
 
   return (

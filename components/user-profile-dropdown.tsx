@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import NiceModal from '@ebay/nice-modal-react'
 import {
   IconBookmarkPlus,
   IconBookmarks,
@@ -131,10 +130,14 @@ export function UserProfileDropdown() {
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem onSelect={() => NiceModal.show(CreateBookmarkDialog)}>
-                  <IconBookmarkPlus className="mr-2 size-4" />
-                  Create
-                </DropdownMenuItem>
+                <CreateBookmarkDialog
+                  trigger={
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <IconBookmarkPlus className="mr-2 size-4" />
+                      Create
+                    </DropdownMenuItem>
+                  }
+                />
 
                 <ImportBookmarksDialog
                   trigger={

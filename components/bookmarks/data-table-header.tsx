@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import type { Bookmark } from '@/types'
-import NiceModal from '@ebay/nice-modal-react'
 import {
   IconBookmarkPlus,
   IconCircleX,
@@ -113,14 +112,14 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Bookmarks</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={() => {
-                  void NiceModal.show(CreateBookmarkDialog)
-                }}
-              >
-                <IconBookmarkPlus className="mr-2 size-4" />
-                Create
-              </DropdownMenuItem>
+              <CreateBookmarkDialog
+                trigger={
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    <IconBookmarkPlus className="mr-2 size-4" />
+                    Create
+                  </DropdownMenuItem>
+                }
+              />
 
               <ImportBookmarksDialog
                 trigger={

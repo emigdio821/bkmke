@@ -1,7 +1,6 @@
 'use client'
 
 import type { OGInfo } from '@/types'
-import NiceModal from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconPlus } from '@tabler/icons-react'
 import axios from 'axios'
@@ -20,6 +19,7 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createManualBookmarkSchema } from '@/lib/schemas/form'
+import { useDialogStore } from '@/lib/stores/dialog'
 import { createClient } from '@/lib/supabase/client'
 import { areModificationsEnabled, cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/folders/use-folders'
@@ -33,7 +33,6 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
 import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
 import { FolderSelectItems } from '@/components/folders/folder-select-items'
@@ -41,6 +40,9 @@ import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
 export function CreateManualForm() {
+  const toggleDialog = useDialogStore((state) => state.toggle)
+  const toggleDialogLoading = useDialogStore((state) => state.toggleLoading)
+
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading: tagsLoading } = useTags()
@@ -117,9 +119,10 @@ export function CreateManualForm() {
       TAGS_QUERY,
       NAV_ITEMS_COUNT_QUERY,
     ])
+
+    toggleDialog(false)
+    toggleDialogLoading(false)
     toast.success('Success', { description: 'Bookmark has been created.' })
-    await NiceModal.hide(CreateBookmarkDialog)
-    NiceModal.remove(CreateBookmarkDialog)
   }
 
   return (

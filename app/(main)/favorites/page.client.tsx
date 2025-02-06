@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import NiceModal from '@ebay/nice-modal-react'
 import { IconBookmarkPlus, IconBookmarks, IconBug, IconHeartsOff, IconReload } from '@tabler/icons-react'
 import { useFavoriteBookmarks } from '@/hooks/bookmarks/use-favorite-bookmarks'
 import { Button } from '@/components/ui/button'
@@ -53,10 +52,14 @@ export function FavoritesClientPage() {
               <CardDescription className="text-center">You have no favorite bookmarks yet.</CardDescription>
             </CardHeader>
             <CardFooter className="justify-center">
-              <Button variant="outline" onClick={() => NiceModal.show(CreateBookmarkDialog)}>
-                <IconBookmarkPlus size={16} className="mr-2" />
-                Create
-              </Button>
+              <CreateBookmarkDialog
+                trigger={
+                  <Button variant="outline">
+                    <IconBookmarkPlus size={16} className="mr-2" />
+                    Create
+                  </Button>
+                }
+              />
 
               <Button variant="outline" asChild>
                 <Link href="/">

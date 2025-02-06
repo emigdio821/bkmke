@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import NiceModal from '@ebay/nice-modal-react'
 import {
   IconBookmarkPlus,
   IconBookmarks,
@@ -94,10 +93,14 @@ export function FolderItemsClientPage({ id }: { id: string }) {
                       </Link>
                     </Button>
 
-                    <Button variant="outline" onClick={() => NiceModal.show(CreateBookmarkDialog)}>
-                      <IconBookmarkPlus size={16} className="mr-2" />
-                      Create bookmark
-                    </Button>
+                    <CreateBookmarkDialog
+                      trigger={
+                        <Button variant="outline">
+                          <IconBookmarkPlus size={16} className="mr-2" />
+                          Create
+                        </Button>
+                      }
+                    />
 
                     <ImportBookmarksDialog
                       trigger={
