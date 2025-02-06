@@ -62,7 +62,9 @@ export function AlertActionDialog<T>(props: AlertActionDialogProps<T>) {
           </div>
           <AlertDialogHeader>
             <AlertDialogTitle>{title || 'Are you sure?'}</AlertDialogTitle>
-            <AlertDialogDescription>{message || 'This action cannot be undone.'}</AlertDialogDescription>
+            <AlertDialogDescription asChild>
+              <div>{message || 'This action cannot be undone.'}</div>
+            </AlertDialogDescription>
           </AlertDialogHeader>
         </div>
         <AlertDialogFooter>

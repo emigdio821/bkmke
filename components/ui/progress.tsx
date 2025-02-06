@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 function Progress({ className, value, ...props }: ProgressPrimitive.ProgressProps) {
   return (
     <ProgressPrimitive.Root
-      className={cn('bg-primary/20 relative h-2 w-full overflow-hidden rounded-full', className)}
+      className={cn('bg-primary/20 relative h-1 w-full overflow-hidden rounded-full', className)}
       {...props}
     >
       <ProgressPrimitive.Indicator

@@ -13,7 +13,9 @@ import {
   IconTags,
   IconTrash,
 } from '@tabler/icons-react'
+import { toast } from 'sonner'
 import { areModificationsEnabled, handleCopyToClipboard } from '@/lib/utils'
+import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
 import { useToggleFavorite } from '@/hooks/bookmarks/use-toggle-favorite'
 import { Button, type ButtonProps } from '@/components/ui/button'
 import {
@@ -24,7 +26,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { DeleteBookmarksDialog } from '@/components/dialogs/bookmarks/delete'
+import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { BookmarkDetailsDialog } from '@/components/dialogs/bookmarks/details'
 import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
@@ -36,7 +38,24 @@ interface RowActionsProps extends ButtonProps {
 }
 
 export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps) {
+  const { handleRemoveBookmarks } = useRemoveBookmarks()
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
+
+  async function handleRemoveBk() {
+    try {
+      await handleRemoveBookmarks([bookmark])
+      toast.success('Success', {
+        description: (
+          <div>
+            Bookmark <span className="font-semibold">{bookmark.name}</span> has been removed.
+          </div>
+        ),
+      })
+    } catch (err) {
+      console.error('Unable to remove bookmark', err)
+      toast.error('Error', { description: 'Unable to remove bookmark at this time, try again' })
+    }
+  }
 
   return (
     <>
@@ -111,17 +130,17 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
           {areModificationsEnabled() && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() =>
-                  NiceModal.show(DeleteBookmarksDialog, {
-                    bookmark,
-                  })
+              <AlertActionDialog
+                destructive
+                title="Delete bookmark?"
+                action={async () => await handleRemoveBk()}
+                trigger={
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="!text-destructive">
+                    <IconTrash className="mr-2 size-4" />
+                    Delete
+                  </DropdownMenuItem>
                 }
-                className="text-destructive focus:text-destructive"
-              >
-                <IconTrash className="mr-2 size-4" />
-                Delete
-              </DropdownMenuItem>
+              />
             </>
           )}
         </DropdownMenuContent>
