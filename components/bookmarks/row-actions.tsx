@@ -1,6 +1,5 @@
 import { startTransition } from 'react'
 import type { Bookmark } from '@/types'
-import NiceModal from '@ebay/nice-modal-react'
 import {
   IconCopy,
   IconDots,
@@ -99,7 +98,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
               }
             />
           )}
-          <DropdownMenuItem onClick={() => handleCopyToClipboard(bookmark.url, 'URL copied')}>
+          <DropdownMenuItem onSelect={() => handleCopyToClipboard(bookmark.url, 'URL copied')}>
             <IconCopy className="mr-2 size-4" />
             Copy URL
           </DropdownMenuItem>
@@ -112,12 +111,17 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
               </DropdownMenuItem>
             }
           />
-          <DropdownMenuItem onClick={() => NiceModal.show(MoveToFolderDialog, { bookmark })}>
-            <IconFolderShare className="mr-2 size-4" />
-            Move to folder
-          </DropdownMenuItem>
+          <MoveToFolderDialog
+            bookmark={bookmark}
+            trigger={
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                <IconFolderShare className="mr-2 size-4" />
+                Move to folder
+              </DropdownMenuItem>
+            }
+          />
           {areModificationsEnabled() && (
-            <DropdownMenuItem onClick={() => startTransition(handleToggleFavorite)}>
+            <DropdownMenuItem onSelect={() => startTransition(handleToggleFavorite)}>
               {optimisticBk.is_favorite ? (
                 <>
                   <IconHeartOff className="mr-2 size-4" />

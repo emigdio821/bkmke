@@ -1,6 +1,5 @@
 'use client'
 
-import NiceModal from '@ebay/nice-modal-react'
 import { IconAlertTriangle, IconCircleCheck, IconExclamationCircle, IconInfoCircle } from '@tabler/icons-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -20,19 +19,17 @@ export function Providers({ children }: ProvidersProps) {
     <NextThemesProvider enableSystem attribute="class" defaultTheme="system" disableTransitionOnChange>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider delayDuration={300}>
-          <NiceModal.Provider>
-            {children}
-            <Toaster
-              expand
-              icons={{
-                error: <IconExclamationCircle className="size-4" />,
-                warning: <IconAlertTriangle className="size-4" />,
-                info: <IconInfoCircle className="size-4" />,
-                success: <IconCircleCheck className="size-4" />,
-                loading: <Spinner />,
-              }}
-            />
-          </NiceModal.Provider>
+          {children}
+          <Toaster
+            expand
+            icons={{
+              error: <IconExclamationCircle className="size-4" />,
+              warning: <IconAlertTriangle className="size-4" />,
+              info: <IconInfoCircle className="size-4" />,
+              success: <IconCircleCheck className="size-4" />,
+              loading: <Spinner />,
+            }}
+          />
         </TooltipProvider>
         <ReactQueryDevtools buttonPosition="top-right" />
       </QueryClientProvider>

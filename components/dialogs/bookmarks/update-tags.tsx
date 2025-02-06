@@ -136,7 +136,12 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
       }}
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent
+        className="sm:max-w-sm"
+        onCloseAutoFocus={() => {
+          setSelectValue(getInitialItems())
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Update tags</DialogTitle>
           <DialogDescription className="break-words">{bookmarkName}</DialogDescription>

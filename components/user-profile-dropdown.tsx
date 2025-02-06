@@ -180,7 +180,7 @@ export function UserProfileDropdown() {
             Settings
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleLogOut}>
+        <DropdownMenuItem onSelect={handleLogOut}>
           <IconLogout className="mr-2 size-4" />
           Log out
         </DropdownMenuItem>

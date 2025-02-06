@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import type { Bookmark } from '@/types'
-import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'sonner'
 import {
   BOOKMARKS_QUERY,
@@ -22,6 +21,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
@@ -40,7 +40,7 @@ interface MultipleBookmarks {
   bookmarks: Bookmark[]
 }
 
-type MoveToFolderDialogProps = SingleBookmark | MultipleBookmarks
+type MoveToFolderDialogProps = (SingleBookmark | MultipleBookmarks) & { trigger: React.ReactNode }
 
 const messages = {
   singleSuccess: 'Bookmark has been moved.',
@@ -50,9 +50,9 @@ const messages = {
 
 let completedCount = 0
 
-export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: MoveToFolderDialogProps) => {
+export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolderDialogProps) {
   const supabase = createClient()
-  const modal = useModal()
+  const [openDialog, setOpenDialog] = useState(false)
   const initialFolderId =
     bookmark?.folder_id?.toString() || (bookmarks?.length === 1 ? bookmarks[0].folder_id?.toString() : '')
 
@@ -65,7 +65,7 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
 
   async function handleMoveToFolder(bookmarksToMove: Bookmark[]) {
     if (selectValue === initialFolderId && bookmarksToMove.length === 1) {
-      await modal.hide()
+      setOpenDialog(false)
       return
     }
 
@@ -89,6 +89,10 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
     const settledPromises = await Promise.allSettled(movePromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
+    await invalidateQueries([FOLDERS_QUERY, BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
+    setOpenDialog(false)
+    setLoading(false)
+
     if (errors.length > 0) {
       toast.error('Error', {
         description: completedCount > 1 ? messages.multipleFailure : messages.singleFailure,
@@ -98,29 +102,21 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
         description: completedCount > 1 ? `${completedCount} bookmarks have been moved.` : messages.singleSuccess,
       })
     }
-
-    await invalidateQueries([FOLDERS_QUERY, BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
-    await modal.hide()
-    setLoading(false)
-    modal.remove()
   }
 
   return (
     <Dialog
-      open={modal.visible}
+      open={openDialog}
       onOpenChange={(isOpen) => {
         if (isLoading) return
-        if (isOpen) {
-          void modal.show()
-        } else {
-          void modal.hide()
-        }
+        setOpenDialog(isOpen)
       }}
     >
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
         className="sm:max-w-sm"
         onCloseAutoFocus={() => {
-          modal.remove()
+          setSelectValue(initialFolderId)
         }}
       >
         <DialogHeader>
@@ -188,4 +184,4 @@ export const MoveToFolderDialog = NiceModal.create(({ bookmark, bookmarks }: Mov
       </DialogContent>
     </Dialog>
   )
-})
+}

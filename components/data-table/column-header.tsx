@@ -41,7 +41,7 @@ export function DataTableColumnHeader<TData, TValue>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem
-            onClick={() => {
+            onSelect={() => {
               column.toggleSorting(false)
             }}
           >
@@ -49,7 +49,7 @@ export function DataTableColumnHeader<TData, TValue>({
             Asc
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => {
+            onSelect={() => {
               column.toggleSorting(true)
             }}
           >
@@ -58,7 +58,7 @@ export function DataTableColumnHeader<TData, TValue>({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => {
+            onSelect={() => {
               column.toggleVisibility(false)
             }}
           >

@@ -1,5 +1,4 @@
 import type { Bookmark } from '@/types'
-import NiceModal from '@ebay/nice-modal-react'
 import { IconFolderShare, IconTags, IconTrash } from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
 import { toast } from 'sonner'
@@ -78,21 +77,17 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  void NiceModal.show(MoveToFolderDialog, {
-                    bookmarks: selectedRows.map((row) => row.original),
-                  })
-                }}
-              >
-                <IconFolderShare className="size-4" />
-                <span className="sr-only">Move to folder</span>
-              </Button>
-            </TooltipTrigger>
+            <MoveToFolderDialog
+              bookmarks={selectedRows.map((row) => row.original)}
+              trigger={
+                <TooltipTrigger asChild>
+                  <Button size="icon" type="button" variant="outline">
+                    <IconFolderShare className="size-4" />
+                    <span className="sr-only">Move to folder</span>
+                  </Button>
+                </TooltipTrigger>
+              }
+            />
             <TooltipContent>Move to folder</TooltipContent>
           </Tooltip>
         </>
