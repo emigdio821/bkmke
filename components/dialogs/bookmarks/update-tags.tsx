@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import type { Bookmark } from '@/types'
-import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'sonner'
 import {
   BOOKMARKS_QUERY,
@@ -23,6 +22,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
@@ -40,12 +40,14 @@ interface MultipleBookmarks {
   bookmarks: Bookmark[]
 }
 
-type UpdateTagsDialogProps = SingleBookmark | MultipleBookmarks
+type UpdateTagsDialogProps = (SingleBookmark | MultipleBookmarks) & {
+  trigger: React.ReactNode
+}
 
 let completedCount = 0
 
-export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: UpdateTagsDialogProps) => {
-  const modal = useModal()
+export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDialogProps) {
+  const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
   const [isLoading, setLoading] = useState(false)
   const { invalidateQueries } = useInvalidateQueries()
@@ -114,36 +116,27 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
       bookmarksToUpdate.length === 1 &&
       JSON.stringify(bookmarksToUpdate[0].tag_items) === JSON.stringify(selectValue)
     ) {
-      await modal.hide()
+      setOpenDialog(false)
       return
     }
 
     setLoading(true)
     setProgress(0)
     await handleTagUpdate(bookmarksToUpdate, selectValue.length > 0)
-    await modal.hide()
+    setOpenDialog(false)
     setLoading(false)
-    modal.remove()
   }
 
   return (
     <Dialog
-      open={modal.visible}
+      open={openDialog}
       onOpenChange={(isOpen) => {
         if (isLoading) return
-        if (isOpen) {
-          void modal.show()
-        } else {
-          void modal.hide()
-        }
+        setOpenDialog(isOpen)
       }}
     >
-      <DialogContent
-        className="sm:max-w-sm"
-        onCloseAutoFocus={() => {
-          modal.remove()
-        }}
-      >
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>Update tags</DialogTitle>
           <DialogDescription className="break-words">{bookmarkName}</DialogDescription>
@@ -193,4 +186,4 @@ export const UpdateTagsDialog = NiceModal.create(({ bookmark, bookmarks }: Updat
       </DialogContent>
     </Dialog>
   )
-})
+}

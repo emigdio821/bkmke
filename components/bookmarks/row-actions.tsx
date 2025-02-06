@@ -103,16 +103,15 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
             <IconCopy className="mr-2 size-4" />
             Copy URL
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() =>
-              NiceModal.show(UpdateTagsDialog, {
-                bookmark,
-              })
+          <UpdateTagsDialog
+            bookmark={bookmark}
+            trigger={
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                <IconTags className="mr-2 size-4" />
+                Update tags
+              </DropdownMenuItem>
             }
-          >
-            <IconTags className="mr-2 size-4" />
-            Update tags
-          </DropdownMenuItem>
+          />
           <DropdownMenuItem onClick={() => NiceModal.show(MoveToFolderDialog, { bookmark })}>
             <IconFolderShare className="mr-2 size-4" />
             Move to folder

@@ -63,21 +63,17 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  void NiceModal.show(UpdateTagsDialog, {
-                    bookmarks: selectedRows.map((row) => row.original),
-                  })
-                }}
-              >
-                <IconTags className="size-4" />
-                <span className="sr-only">Update tags</span>
-              </Button>
-            </TooltipTrigger>
+            <UpdateTagsDialog
+              bookmarks={selectedRows.map((row) => row.original)}
+              trigger={
+                <TooltipTrigger asChild>
+                  <Button size="icon" type="button" variant="outline">
+                    <IconTags className="size-4" />
+                    <span className="sr-only">Update tags</span>
+                  </Button>
+                </TooltipTrigger>
+              }
+            />
             <TooltipContent>Update tags</TooltipContent>
           </Tooltip>
 
