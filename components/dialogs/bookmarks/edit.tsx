@@ -1,7 +1,7 @@
 'use client'
 
+import { useState } from 'react'
 import type { BkOGInfo, Bookmark } from '@/types'
-import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -30,6 +30,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -41,8 +42,13 @@ import { FolderSelectItems } from '@/components/folders/folder-select-items'
 import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
-export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bookmark }) => {
-  const modal = useModal()
+interface EditBookmarkDialogProps {
+  bookmark: Bookmark
+  trigger: React.ReactNode
+}
+
+export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProps) {
+  const [openDialog, setOpenDialog] = useState(false)
   const { invalidateQueries } = useInvalidateQueries()
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
   const { data: tags, isLoading: tagsLoading } = useTags()
@@ -53,6 +59,7 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
     .filter((id) => id !== undefined)
     .map((id) => id.toString())
   const form = useForm<z.infer<typeof editBookmarkSchema>>({
+    shouldUnregister: true,
     resolver: zodResolver(editBookmarkSchema),
     defaultValues: {
       url: bookmark.url,
@@ -119,19 +126,21 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
     }
 
     await invalidateQueries([BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY, FAV_BOOKMARKS_QUERY])
+    form.reset(values)
+    setOpenDialog(false)
     toast.success('Success', { description: 'Bookmark has been updated.' })
-    await modal.hide()
-    modal.remove()
   }
 
   return (
     <Dialog
-      open={modal.visible}
+      open={openDialog}
       onOpenChange={(isOpen) => {
-        isOpen ? modal.show() : modal.hide()
+        if (form.formState.isSubmitting) return
+        setOpenDialog(isOpen)
       }}
     >
-      <DialogContent side="right" onCloseAutoFocus={() => modal.remove()}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent side="right">
         <DialogHeader>
           <DialogTitle>Edit bookmark</DialogTitle>
           <DialogDescription className="p-0 break-words">{bookmark.name}</DialogDescription>
@@ -367,4 +376,4 @@ export const EditBookmarkDialog = NiceModal.create(({ bookmark }: { bookmark: Bo
       </DialogContent>
     </Dialog>
   )
-})
+}
