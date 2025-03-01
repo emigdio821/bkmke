@@ -69,9 +69,9 @@ export const columns: Array<ColumnDef<Bookmark>> = [
               trigger={
                 <Button variant="link" className="text-foreground block max-w-64 flex-auto overflow-hidden">
                   <div className="flex items-center">
-                    <Avatar className="mr-2 size-4 rounded-full">
+                    <Avatar className="mr-2 size-4 rounded-none">
                       <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
-                      <AvatarFallback className="rounded-[inherit]">
+                      <AvatarFallback className="rounded-[inherit] bg-transparent">
                         <IconWorld className="text-muted-foreground size-4" />
                       </AvatarFallback>
                     </Avatar>
@@ -101,7 +101,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       const url = row.original.url
 
       return (
-        <Button asChild variant="link">
+        <Button asChild variant="link" className="block max-w-48 truncate">
           <a href={url} target="_blank" rel="noreferrer">
             {simplifiedURL(url)}
           </a>
