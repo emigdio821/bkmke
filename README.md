@@ -12,4 +12,4 @@
 
 #### Preview
 
-<img src="./public/images/bkmke-preview.jpg" alt="bkmke - preview" width="1000px" height="auto" />
+<img src="./public/images/bkmke-preview.png" alt="bkmke - preview" width="1000px" height="auto" />
