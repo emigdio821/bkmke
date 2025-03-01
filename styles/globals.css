@@ -2,8 +2,6 @@
 @import '@radix-ui/colors/mauve-dark.css' layer(base);
 @import '@radix-ui/colors/tomato.css' layer(base);
 @import '@radix-ui/colors/tomato-dark.css' layer(base);
-@import '@radix-ui/colors/iris.css' layer(base);
-@import '@radix-ui/colors/iris-dark.css' layer(base);
 
 @import 'tailwindcss';
 @plugin 'tailwindcss-animate';
@@ -11,20 +9,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --animate-spinner: spinner 1.2s linear infinite;
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
   --animate-collapsible-down: collapsible-down 0.2s ease-out;
   --animate-collapsible-up: collapsible-up 0.2s ease-out;
 
-  @keyframes spinner {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0.15;
-    }
-  }
   @keyframes accordion-down {
     from {
       height: 0;
