@@ -12,10 +12,10 @@ const storeCreator: StateCreator<StoreState> = (set) => ({
   open: false,
   isLoading: false,
   toggle: (open) => {
-    set((state) => ({ open: open || !state.open }))
+    set((state) => ({ open: open === undefined ? !state.open : open }))
   },
   toggleLoading: (loading) => {
-    set((state) => ({ isLoading: loading || !state.isLoading }))
+    set((state) => ({ isLoading: loading === undefined ? !state.isLoading : loading }))
   },
 })
 

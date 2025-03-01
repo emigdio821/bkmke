@@ -60,6 +60,7 @@ export function CreateManualForm() {
   })
 
   async function onSubmit(values: z.infer<typeof createManualBookmarkSchema>) {
+    toggleDialogLoading(true)
     const { name, description, url, tags: tagIds, folderId } = values
 
     let ogInfoPayload = null
@@ -106,6 +107,7 @@ export function CreateManualForm() {
     }
 
     if (error) {
+      toggleDialogLoading(false)
       toast.error('Error', { description: error.message })
       return
     }

@@ -70,6 +70,7 @@ export function CreateAutomaticForm() {
       TAG_ITEMS_QUERY,
       NAV_ITEMS_COUNT_QUERY,
     ])
+
     toggleDialog(false)
     toggleDialogLoading(false)
     toast.success('Success', { description: 'Bookmark has been created.' })

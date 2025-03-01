@@ -17,6 +17,7 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
   async function handleRemoveBks() {
     try {
       await handleRemoveBookmarks(selectedRows.map((row) => row.original))
+      table.toggleAllRowsSelected(false)
       if (errors && errors.length > 0) throw new Error('Unable to remove some bookmarks')
 
       toast.success('Success', {
