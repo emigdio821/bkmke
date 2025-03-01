@@ -33,6 +33,10 @@ export async function updateSession(request: NextRequest) {
 
   const user = await supabase.auth.getUser()
 
+  if (request.nextUrl.pathname === '/login' && user.data.user) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
+
   if (request.nextUrl.pathname !== '/login' && user.error) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
