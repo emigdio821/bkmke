@@ -58,6 +58,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
     .map((item) => item.tag?.id)
     .filter((id) => id !== undefined)
     .map((id) => id.toString())
+
   const form = useForm<z.infer<typeof editBookmarkSchema>>({
     shouldUnregister: true,
     resolver: zodResolver(editBookmarkSchema),
@@ -318,42 +319,44 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
                     </div>
                   </FormItem>
 
-                  {form.getValues('updateOG') && (
-                    <div className="space-y-2 border-t border-dashed pt-2">
-                      <FormField
-                        name="faviconUrl"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem>
-                            <div>
-                              <FormLabel>Favicon URL</FormLabel>
-                              <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
-                            </div>
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        name="imageUrl"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem>
-                            <div>
-                              <FormLabel>Image URL</FormLabel>
-                              <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
-                            </div>
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  )}
+                  <div
+                    className={cn('space-y-2 border-t border-dashed pt-2', {
+                      hidden: !form.getValues('updateOG'),
+                    })}
+                  >
+                    <FormField
+                      name="faviconUrl"
+                      control={form.control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <div>
+                            <FormLabel>Favicon URL</FormLabel>
+                            <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                          </div>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      name="imageUrl"
+                      control={form.control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <div>
+                            <FormLabel>Image URL</FormLabel>
+                            <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                          </div>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               )}
             />
