@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Figtree } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import { siteConfig } from '@/config/site'
 import { cn } from '@/lib/utils'
 import { Providers } from '@/components/providers'
@@ -9,9 +9,15 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-const fontSans = Figtree({
+const fontSans = Geist({
   subsets: ['latin'],
   variable: '--font-sans',
+  preload: true,
+})
+
+const fontMono = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
   preload: true,
 })
 
@@ -44,7 +50,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={cn('antialiased', fontSans.className, fontSans.variable)}>
+      <body className={cn('antialiased', fontSans.className, fontSans.variable, fontMono.variable)}>
         <Providers>
           <main className="relative flex min-h-dvh flex-col">{children}</main>
         </Providers>

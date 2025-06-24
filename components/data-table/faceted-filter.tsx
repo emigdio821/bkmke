@@ -41,9 +41,7 @@ export function DataTableFacetedFilter<TData, TValue>({
           {selectedValues.size > 0 && (
             <>
               <div className="bg-border mx-2 h-4 w-px" />
-              <Badge variant="outline" className="rounded-sm">
-                {selectedValues.size}
-              </Badge>
+              <Badge className="rounded-sm">{selectedValues.size}</Badge>
             </>
           )}
         </Button>

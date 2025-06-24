@@ -91,16 +91,11 @@ export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
               <FormField
                 name="name"
                 control={form.control}
-                render={({ field, fieldState }) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder={tag.name}
-                        hasError={!!fieldState.error}
-                        maxLength={MAX_NAME_LENGTH}
-                        {...field}
-                      />
+                      <Input placeholder={tag.name} maxLength={MAX_NAME_LENGTH} {...field} />
                     </FormControl>
                     <div className="flex items-center justify-between">
                       <FormMessage />

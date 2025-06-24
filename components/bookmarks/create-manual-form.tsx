@@ -141,11 +141,11 @@ export function CreateManualForm() {
           <FormField
             name="name"
             control={form.control}
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
+                  <Input maxLength={MAX_NAME_LENGTH} {...field} />
                 </FormControl>
                 <div className="flex items-center justify-between">
                   <FormMessage />
@@ -182,11 +182,11 @@ export function CreateManualForm() {
           <FormField
             name="url"
             control={form.control}
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>URL</FormLabel>
                 <FormControl>
-                  <Input hasError={!!fieldState.error} {...field} />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -223,7 +223,7 @@ export function CreateManualForm() {
                         {folders && (
                           <div>
                             <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                              <SelectTrigger>
+                              <SelectTrigger className="w-full">
                                 <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
                               </SelectTrigger>
                               <SelectContent>

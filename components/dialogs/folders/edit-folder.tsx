@@ -87,16 +87,11 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
               <FormField
                 name="name"
                 control={form.control}
-                render={({ field, fieldState }) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder={folder.name}
-                        hasError={!!fieldState.error}
-                        maxLength={MAX_NAME_LENGTH}
-                        {...field}
-                      />
+                      <Input placeholder={folder.name} maxLength={MAX_NAME_LENGTH} {...field} />
                     </FormControl>
                     <div className="flex items-center justify-between">
                       <FormMessage />

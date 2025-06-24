@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import { IconHash, IconWorld } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
+import { HashIcon } from 'lucide-react'
 import { simplifiedURL } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -68,12 +68,10 @@ export const columns: Array<ColumnDef<Bookmark>> = [
               bookmark={bookmark}
               trigger={
                 <Button variant="link" className="text-foreground block max-w-64 flex-auto overflow-hidden">
-                  <div className="flex items-center">
-                    <Avatar className="mr-2 size-4 rounded-none">
+                  <div className="flex items-center space-x-2">
+                    <Avatar className="size-4">
                       <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
-                      <AvatarFallback className="rounded-[inherit] bg-transparent">
-                        <IconWorld className="text-muted-foreground size-4" />
-                      </AvatarFallback>
+                      <AvatarFallback />
                     </Avatar>
                     <span className="truncate">{bookmark.name}</span>
                   </div>
@@ -134,7 +132,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
           {tags.map((tagItem) => (
             <Button key={`${tagItem.id}-tag-table-item`} variant="link" asChild>
               <Link href={`/tags/${tagItem.tag?.id}`}>
-                <IconHash className="size-4" />
+                <HashIcon className="size-4" />
                 {tagItem.tag?.name || ''}
               </Link>
             </Button>

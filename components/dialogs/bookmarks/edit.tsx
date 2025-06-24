@@ -141,7 +141,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
       }}
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent side="right">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit bookmark</DialogTitle>
           <DialogDescription className="p-0 break-words">{bookmark.name}</DialogDescription>
@@ -151,16 +151,11 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
             <FormField
               name="name"
               control={form.control}
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder={bookmark.name}
-                      hasError={!!fieldState.error}
-                      maxLength={MAX_NAME_LENGTH}
-                      {...field}
-                    />
+                    <Input placeholder={bookmark.name} maxLength={MAX_NAME_LENGTH} {...field} />
                   </FormControl>
                   <div className="flex items-center justify-between">
                     <FormMessage />
@@ -197,11 +192,11 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
             <FormField
               name="url"
               control={form.control}
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>URL</FormLabel>
                   <FormControl>
-                    <Input placeholder={bookmark.url} hasError={!!fieldState.error} {...field} />
+                    <Input placeholder={bookmark.url} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -237,7 +232,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
                         <FormControl>
                           {folders && (
                             <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                              <SelectTrigger>
+                              <SelectTrigger className="w-full">
                                 <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
                               </SelectTrigger>
                               <SelectContent>

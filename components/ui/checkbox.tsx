@@ -1,26 +1,27 @@
 'use client'
 
-import { IconCheck, IconMinus } from '@tabler/icons-react'
+import { CheckIcon } from 'lucide-react'
 import { Checkbox as CheckboxPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
 
-const Checkbox = ({ className, ...props }: CheckboxPrimitive.CheckboxProps) => (
-  <CheckboxPrimitive.Root
-    className={cn(
-      'peer outline-ring bg-background border-input focus-visible:outline-ring/70 data-[state=checked]:border-primary data-[state=indeterminate]:border-primary data-[state=checked]:bg-primary data-[state=indeterminate]:bg-primary data-[state=checked]:text-primary-foreground data-[state=indeterminate]:text-primary-foreground grid size-4 shrink-0 place-content-center rounded border shadow-sm shadow-black/5 outline-offset-2 focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-50',
-      className,
-    )}
-    {...props}
-  >
-    <CheckboxPrimitive.Indicator className="grid place-content-center text-current">
-      {props.checked === 'indeterminate' ? (
-        <IconMinus size={16} strokeWidth={2} />
-      ) : (
-        <IconCheck size={16} strokeWidth={2} />
+function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
+  return (
+    <CheckboxPrimitive.Root
+      data-slot="checkbox"
+      className={cn(
+        'peer border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+        className,
       )}
-    </CheckboxPrimitive.Indicator>
-  </CheckboxPrimitive.Root>
-)
-Checkbox.displayName = CheckboxPrimitive.Root.displayName
+      {...props}
+    >
+      <CheckboxPrimitive.Indicator
+        data-slot="checkbox-indicator"
+        className="flex items-center justify-center text-current transition-none"
+      >
+        <CheckIcon className="size-3.5" />
+      </CheckboxPrimitive.Indicator>
+    </CheckboxPrimitive.Root>
+  )
+}
 
 export { Checkbox }

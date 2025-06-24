@@ -1,10 +1,7 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { Toaster as Sonner } from 'sonner'
-import { buttonVariants } from './button'
-
-type ToasterProps = React.ComponentProps<typeof Sonner>
+import { Toaster as Sonner, type ToasterProps } from 'sonner'
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme()
@@ -12,16 +9,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       theme={theme as ToasterProps['theme']}
-      className="toaster group pointer-events-auto"
-      toastOptions={{
-        unstyled: true,
-        classNames: {
-          toast: 'bg-background flex w-(--width) items-center gap-2 rounded-md border p-4 font-sans text-sm shadow-xs',
-          description: '!text-muted-foreground',
-          actionButton: buttonVariants({ size: 'sm' }),
-          cancelButton: buttonVariants({ variant: 'outline', size: 'sm' }),
-        },
-      }}
+      className="toaster group"
+      style={
+        {
+          '--normal-bg': 'var(--popover)',
+          '--normal-text': 'var(--popover-foreground)',
+          '--normal-border': 'var(--border)',
+        } as React.CSSProperties
+      }
       {...props}
     />
   )

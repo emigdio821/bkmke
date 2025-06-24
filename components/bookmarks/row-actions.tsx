@@ -143,7 +143,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
                 title="Delete bookmark?"
                 action={async () => await handleRemoveBk()}
                 trigger={
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="!text-destructive">
+                  <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
                     <IconTrash className="mr-2 size-4" />
                     Delete
                   </DropdownMenuItem>

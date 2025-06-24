@@ -69,7 +69,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
           action={async () => await handleDeleteFolder(tag.id)}
           trigger={
             <DropdownMenuItem
-              className="!text-destructive"
+              variant="destructive"
               onSelect={(e) => {
                 e.preventDefault()
               }}

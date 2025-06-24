@@ -189,7 +189,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
       }}
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent side="right">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Import bookmarks</DialogTitle>
         </DialogHeader>
@@ -299,7 +299,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
                                       value={field.value}
                                       disabled={!folders.length}
                                     >
-                                      <SelectTrigger>
+                                      <SelectTrigger className="w-full">
                                         <SelectValue
                                           placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'}
                                         />

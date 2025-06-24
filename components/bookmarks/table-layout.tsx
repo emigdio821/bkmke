@@ -1,6 +1,5 @@
 import type { Bookmark } from '@/types'
 import { flexRender, type Table as ReactTable } from '@tanstack/react-table'
-import { Card } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 interface TableLayoutProps {
@@ -9,7 +8,7 @@ interface TableLayoutProps {
 
 export function TableLayout({ table }: TableLayoutProps) {
   return (
-    <Card className="overflow-hidden">
+    <div className="overflow-hidden rounded-md border shadow-xs">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -42,6 +41,6 @@ export function TableLayout({ table }: TableLayoutProps) {
           )}
         </TableBody>
       </Table>
-    </Card>
+    </div>
   )
 }

@@ -84,11 +84,11 @@ export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
               <FormField
                 name="name"
                 control={form.control}
-                render={({ field, fieldState }) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
+                      <Input maxLength={MAX_NAME_LENGTH} {...field} />
                     </FormControl>
                     <div className="flex items-center justify-between">
                       <FormMessage />

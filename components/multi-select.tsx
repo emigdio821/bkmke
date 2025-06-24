@@ -66,9 +66,7 @@ export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TD
               {selectedValues.length > 0 && (
                 <>
                   <div className="bg-border mx-2 h-4 w-px" />
-                  <Badge variant="outline" className="rounded-xs">
-                    {selectedValues.length}
-                  </Badge>
+                  <Badge>{selectedValues.length}</Badge>
                 </>
               )}
             </>
@@ -77,7 +75,7 @@ export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TD
           <IconChevronDown className="text-muted-foreground ml-auto size-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" align="start">
+      <PopoverContent className="w-52 p-0" align="start">
         <Command>
           <CommandInput placeholder="Seach" />
           <CommandList className="max-h-full overflow-hidden">
