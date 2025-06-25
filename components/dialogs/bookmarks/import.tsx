@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconPlus, IconTrash, IconUpload } from '@tabler/icons-react'
+import { FileUpIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -189,181 +189,173 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
       }}
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent side="right">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Import bookmarks</DialogTitle>
         </DialogHeader>
         <DialogDescription className="sr-only">Import your bookmarks here.</DialogDescription>
         <Form {...form}>
-          <form id="import-bk-form" className="flex flex-col overflow-y-auto" onSubmit={form.handleSubmit(onSubmit)}>
-            <Tabs defaultValue="drag-and-drop-import" className="pt-4">
-              <div className="flex w-full items-center justify-center px-4 sm:justify-start">
-                <TabsList>
-                  <TabsTrigger value="drag-and-drop-import">Upload file</TabsTrigger>
-                  <TabsTrigger value="copy-paste-import">Copy and paste</TabsTrigger>
-                </TabsList>
-              </div>
-              <div className="overflow-y-auto">
-                <TabsContent value="drag-and-drop-import" className="space-y-4 rounded-md px-4">
-                  <DialogDescription className="px-0 text-center sm:text-left">
-                    It must be a plaint text file <InlineCode>.txt</InlineCode> with all the bookamarks URLs separated
-                    by a new line.
-                  </DialogDescription>
+          <form id="import-bk-form" className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+            <Tabs defaultValue="drag-and-drop-import">
+              <TabsList>
+                <TabsTrigger value="drag-and-drop-import">Upload file</TabsTrigger>
+                <TabsTrigger value="copy-paste-import">Copy and paste</TabsTrigger>
+              </TabsList>
+              <TabsContent value="drag-and-drop-import" className="space-y-4">
+                <DialogDescription className="px-0 text-center sm:text-left">
+                  It must be a plaint text file <InlineCode>.txt</InlineCode> with all the bookamarks URLs separated by
+                  a new line.
+                </DialogDescription>
 
-                  <div
-                    className={cn(
-                      'outline-ring hover:bg-subtle flex h-28 w-full items-center justify-center rounded-md border border-dashed p-6 outline-hidden outline-offset-2 transition-colors focus-visible:outline-2',
-                      {
-                        'bg-accent': isDragActive,
-                        'border-destructive': form.formState.errors.bookmarks,
-                      },
-                    )}
-                    {...getRootProps()}
-                  >
-                    <input {...getInputProps()} />
-                    <div className="flex flex-col items-center">
-                      <IconUpload className="size-4" />
-                      <p className="text-muted-foreground text-sm">Drop your file here, or click to select it.</p>
-                    </div>
-                  </div>
-
-                  {acceptedFiles.length > 0 && dndFiles.length > 0 && (
-                    <div>
-                      {dndFiles.map((file) => (
-                        <span key={file.name} className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                          <p className="text-sm">
-                            {file.name}
-                            <br />
-                            <span className="text-muted-foreground">{formatBytes(file.size)}</span>
-                          </p>
-                          <Button size="icon" variant="ghost" onClick={handleRemoveFile}>
-                            <IconTrash className="size-4" />
-                            <span className="sr-only">Remove file</span>
-                          </Button>
-                        </span>
-                      ))}
-                    </div>
+                <div
+                  className={cn(
+                    'outline-ring hover:bg-muted flex h-28 w-full items-center justify-center rounded-md border border-dashed p-6 outline-hidden outline-offset-2 transition-colors focus-visible:outline-2',
+                    {
+                      'bg-accent': isDragActive,
+                      'border-destructive': form.formState.errors.bookmarks,
+                    },
                   )}
-                </TabsContent>
-                <TabsContent value="copy-paste-import" className="space-y-4 rounded-md px-4">
-                  <DialogDescription className="px-0 text-center sm:text-left">
-                    Copy and paste your bookmarks here, each URL must be separated by a new line.
-                  </DialogDescription>
-                  <FormField
-                    name="bookmarks"
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Bookmarks</FormLabel>
-                        <FormControl>
-                          <Textarea {...field} className="max-h-80 min-h-[88px]" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </TabsContent>
-
-                <div className="space-y-4 p-4">
-                  <div className="flex w-full items-end space-x-2">
-                    <FormField
-                      name="folderId"
-                      control={form.control}
-                      render={({ field }) => {
-                        return (
-                          <FormItem className="grow">
-                            <FormLabel>
-                              Folder
-                              {field.value && (
-                                <>
-                                  <span className="text-muted-foreground"> · </span>
-                                  <Button
-                                    variant="link"
-                                    onClick={() => {
-                                      form.setValue('folderId', '')
-                                    }}
-                                  >
-                                    Clear selection
-                                  </Button>
-                                </>
-                              )}
-                            </FormLabel>
-                            {foldersLoading ? (
-                              <Skeleton className="h-9" />
-                            ) : (
-                              <FormControl>
-                                {folders && (
-                                  <div>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      value={field.value}
-                                      disabled={!folders.length}
-                                    >
-                                      <SelectTrigger>
-                                        <SelectValue
-                                          placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'}
-                                        />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        <FolderSelectItems folders={folders} />
-                                      </SelectContent>
-                                    </Select>
-                                  </div>
-                                )}
-                              </FormControl>
-                            )}
-                            <FormMessage />
-                          </FormItem>
-                        )
-                      }}
-                    />
-                    <CreateFolderDialog
-                      trigger={
-                        <Button size="icon" type="button">
-                          <IconPlus className="size-4" />
-                        </Button>
-                      }
-                    />
+                  {...getRootProps()}
+                >
+                  <input {...getInputProps()} />
+                  <div className="flex flex-col items-center">
+                    <FileUpIcon className="text-muted-foreground size-4" />
+                    <p className="text-muted-foreground text-sm">Drop your file here, or click to select it.</p>
                   </div>
+                </div>
 
-                  <div className="flex items-end space-x-2">
-                    <FormField
-                      name="tags"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <FormLabel>Tags</FormLabel>
-                          {tagsLoading ? (
+                {acceptedFiles.length > 0 && dndFiles.length > 0 && (
+                  <div>
+                    {dndFiles.map((file) => (
+                      <span key={file.name} className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <p className="text-sm">
+                          {file.name}
+                          <br />
+                          <span className="text-muted-foreground">{formatBytes(file.size)}</span>
+                        </p>
+                        <Button size="icon" variant="ghost" onClick={handleRemoveFile}>
+                          <Trash2Icon className="size-4" />
+                          <span className="sr-only">Remove file</span>
+                        </Button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+              <TabsContent value="copy-paste-import" className="space-y-4">
+                <DialogDescription className="px-0 text-center sm:text-left">
+                  Copy and paste your bookmarks here, each URL must be separated by a new line.
+                </DialogDescription>
+                <FormField
+                  name="bookmarks"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Bookmarks</FormLabel>
+                      <FormControl>
+                        <Textarea {...field} className="max-h-80 min-h-[90px]" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </TabsContent>
+
+              <div className="mt-4 space-y-4">
+                <div className="flex w-full items-end space-x-2">
+                  <FormField
+                    name="folderId"
+                    control={form.control}
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="grow">
+                          <FormLabel>
+                            Folder
+                            {field.value && (
+                              <>
+                                <span className="text-muted-foreground"> · </span>
+                                <Button
+                                  variant="link"
+                                  onClick={() => {
+                                    form.setValue('folderId', '')
+                                  }}
+                                >
+                                  Clear selection
+                                </Button>
+                              </>
+                            )}
+                          </FormLabel>
+                          {foldersLoading ? (
                             <Skeleton className="h-9" />
                           ) : (
                             <FormControl>
-                              {tags && (
-                                <MultiSelect
-                                  placeholder="Select tags"
-                                  options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
-                                  emptyText="No tags yet"
-                                  onChange={(options) => {
-                                    form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
-                                  }}
-                                />
+                              {folders && (
+                                <div>
+                                  <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                                    <SelectTrigger className="w-full">
+                                      <SelectValue
+                                        placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'}
+                                      />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <FolderSelectItems folders={folders} />
+                                    </SelectContent>
+                                  </Select>
+                                </div>
                               )}
                             </FormControl>
                           )}
                           <FormMessage />
                         </FormItem>
-                      )}
-                    />
-                    <CreateTagDialog
-                      trigger={
-                        <Button size="icon" type="button">
-                          <IconPlus className="size-4" />
-                        </Button>
-                      }
-                    />
-                  </div>
-
-                  {progress > 0 && <Progress value={progress} />}
+                      )
+                    }}
+                  />
+                  <CreateFolderDialog
+                    trigger={
+                      <Button size="icon" type="button">
+                        <PlusIcon className="size-4" />
+                      </Button>
+                    }
+                  />
                 </div>
+
+                <div className="flex items-end space-x-2">
+                  <FormField
+                    name="tags"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Tags</FormLabel>
+                        {tagsLoading ? (
+                          <Skeleton className="h-9" />
+                        ) : (
+                          <FormControl>
+                            {tags && (
+                              <MultiSelect
+                                placeholder="Select tags"
+                                options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
+                                emptyText="No tags yet"
+                                onChange={(options) => {
+                                  form.setValue(field.name, options, { shouldDirty: true, shouldValidate: true })
+                                }}
+                              />
+                            )}
+                          </FormControl>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <CreateTagDialog
+                    trigger={
+                      <Button size="icon" type="button">
+                        <PlusIcon className="size-4" />
+                      </Button>
+                    }
+                  />
+                </div>
+
+                {progress > 0 && <Progress value={progress} />}
               </div>
             </Tabs>
           </form>
@@ -371,7 +363,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="ghost">
+            <Button type="button" variant="outline">
               Cancel
             </Button>
           </DialogClose>

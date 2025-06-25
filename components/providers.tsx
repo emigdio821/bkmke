@@ -1,8 +1,8 @@
 'use client'
 
-import { IconAlertTriangle, IconCircleCheck, IconExclamationCircle, IconInfoCircle } from '@tabler/icons-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { CircleAlertIcon, CircleCheckIcon, InfoIcon, TriangleAlertIcon } from 'lucide-react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -23,10 +23,10 @@ export function Providers({ children }: ProvidersProps) {
           <Toaster
             expand
             icons={{
-              error: <IconExclamationCircle className="size-4" />,
-              warning: <IconAlertTriangle className="size-4" />,
-              info: <IconInfoCircle className="size-4" />,
-              success: <IconCircleCheck className="size-4" />,
+              error: <CircleAlertIcon className="size-4" />,
+              warning: <TriangleAlertIcon className="size-4" />,
+              info: <InfoIcon className="size-4" />,
+              success: <CircleCheckIcon className="size-4" />,
               loading: <Spinner />,
             }}
           />

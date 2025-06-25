@@ -1,7 +1,7 @@
 'use client'
 
-import { IconReload, IconUser } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
+import { RotateCwIcon } from 'lucide-react'
 import { PROFILE_QUERY } from '@/lib/constants'
 import { useProfileStore } from '@/lib/stores/profile'
 import { areModificationsEnabled } from '@/lib/utils'
@@ -34,41 +34,35 @@ export function ProfileSettings() {
       </CardHeader>
       <CardContent className="flex flex-col items-start justify-between gap-2 text-sm sm:flex-row">
         {profile ? (
-          <>
-            <div className="flex items-center space-x-2">
-              <Avatar className="size-16">
-                <AvatarImage src={profile.avatar_url || ''} alt="User avatar" />
-                <AvatarFallback>
-                  <IconUser size={16} />
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-sm">
-                <div>
-                  {profile.first_name && <span className="font-medium">{profile.first_name}</span>}
-                  {profile.last_name && <span className="font-medium"> {profile.last_name}</span>}
-                </div>
-                <p className="text-muted-foreground">{profile.email}</p>
-                {profile.updated_at && (
-                  <p>
-                    <span className="text-muted-foreground">Last update: </span>
-                    <span>{new Date(profile.updated_at).toLocaleDateString()}</span>
-                  </p>
-                )}
+          <div className="flex items-center space-x-2">
+            <Avatar className="size-16">
+              <AvatarImage src={profile.avatar_url || ''} alt="User avatar" />
+              <AvatarFallback />
+            </Avatar>
+            <div className="text-sm">
+              <div>
+                {profile.first_name && <span className="font-medium">{profile.first_name}</span>}
+                {profile.last_name && <span className="font-medium"> {profile.last_name}</span>}
               </div>
+              <p className="text-muted-foreground">{profile.email}</p>
+              {profile.updated_at && (
+                <p>
+                  <span className="text-muted-foreground">Last update: </span>
+                  <span>{new Date(profile.updated_at).toLocaleDateString()}</span>
+                </p>
+              )}
             </div>
-          </>
+          </div>
         ) : (
           <div className="flex items-center space-x-2">
             <Avatar className="size-16">
               <AvatarImage src="" alt="User avatar" />
-              <AvatarFallback>
-                <IconUser size={16} />
-              </AvatarFallback>
+              <AvatarFallback />
             </Avatar>
             <div>
               <p>Unable to fetch your profile at this time</p>
               <Button variant="outline" size="sm" onClick={handleRefetchProfile}>
-                Refetch <IconReload className="ml-2 size-4" />
+                Refetch <RotateCwIcon className="size-4" />
               </Button>
             </div>
           </div>

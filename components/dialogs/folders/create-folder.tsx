@@ -83,63 +83,63 @@ export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDial
 
         <Form {...form}>
           <form
+            className="space-y-4"
+            id="create-folder-form"
             onSubmit={(e) => {
               e.stopPropagation()
               form.handleSubmit(onSubmit)(e)
             }}
           >
-            <div className="space-y-4 overflow-y-auto p-4">
-              <FormField
-                name="name"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input maxLength={MAX_NAME_LENGTH} hasError={!!fieldState.error} {...field} />
-                    </FormControl>
-                    <div className="flex items-center justify-between">
-                      <FormMessage />
-                      <div className="text-muted-foreground flex-auto text-right text-xs tabular-nums">
-                        {MAX_NAME_LENGTH - field.value.length} characters left
-                      </div>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="description"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea className="max-h-24" maxLength={MAX_DESC_LENGTH} {...field} />
-                    </FormControl>
-                    <div className="text-muted-foreground text-right text-xs tabular-nums">
-                      {MAX_DESC_LENGTH - field.value.length} characters left
-                    </div>
+            <FormField
+              name="name"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input maxLength={MAX_NAME_LENGTH} {...field} />
+                  </FormControl>
+                  <div className="flex items-center justify-between">
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="ghost">
-                  Cancel
-                </Button>
-              </DialogClose>
-              {areModificationsEnabled() && (
-                <Button type="submit" disabled={form.formState.isSubmitting}>
-                  <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
-                  {form.formState.isSubmitting && <Spinner className="absolute" />}
-                </Button>
+                    <div className="text-muted-foreground flex-auto text-right text-xs tabular-nums">
+                      {MAX_NAME_LENGTH - field.value.length} characters left
+                    </div>
+                  </div>
+                </FormItem>
               )}
-            </DialogFooter>
+            />
+            <FormField
+              name="description"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea className="max-h-24" maxLength={MAX_DESC_LENGTH} {...field} />
+                  </FormControl>
+                  <div className="text-muted-foreground text-right text-xs tabular-nums">
+                    {MAX_DESC_LENGTH - field.value.length} characters left
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </form>
         </Form>
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
+          {areModificationsEnabled() && (
+            <Button type="submit" form="create-folder-form" disabled={form.formState.isSubmitting}>
+              <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
+              {form.formState.isSubmitting && <Spinner className="absolute" />}
+            </Button>
+          )}
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

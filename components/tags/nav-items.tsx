@@ -1,5 +1,5 @@
 import { usePathname } from 'next/navigation'
-import { IconHash, IconReload, IconTag, IconTags } from '@tabler/icons-react'
+import { HashIcon, RotateCwIcon, TagIcon } from 'lucide-react'
 import { useTags } from '@/hooks/tags/use-tags'
 import { Button } from '@/components/ui/button'
 import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
@@ -17,7 +17,7 @@ export function TagsNavItems() {
   if (error) {
     return (
       <Button onClick={() => refetch()} variant="ghost" className="w-full justify-start">
-        <IconReload className="mr-2 size-4" />
+        <RotateCwIcon className="size-4" />
         Refresh folders
       </Button>
     )
@@ -29,7 +29,7 @@ export function TagsNavItems() {
         <CreateTagDialog
           trigger={
             <Button type="button" variant="ghost" className="w-full justify-start">
-              <IconTag className="mr-2 size-4" />
+              <TagIcon className="size-4" />
               Create tag
             </Button>
           }
@@ -41,14 +41,14 @@ export function TagsNavItems() {
               label: 'Tags',
               itemCount: tags.length,
               active: pathname.startsWith('/tags'),
-              icon: IconTags,
+              icon: TagIcon,
               actions: <SidebarTagsActions tags={tags} />,
               submenus: tags.map((tag) => ({
                 href: `/tags/${tag.id}`,
                 label: tag.name,
                 actions: <SidebarItemActions tag={tag} />,
                 active: pathname === `/tags/${tag.id}`,
-                icon: IconHash,
+                icon: HashIcon,
                 itemCount: tag.items[0].count,
                 submenus: [],
               })),

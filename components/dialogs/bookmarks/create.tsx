@@ -27,22 +27,20 @@ export function CreateBookmarkDialog({ trigger }: { trigger: React.ReactNode }) 
       }}
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent side="right">
-        <DialogHeader className="space-y-0">
+      <DialogContent>
+        <DialogHeader>
           <DialogTitle>Create bookmark</DialogTitle>
           <DialogDescription className="sr-only">Create bookmark dialog</DialogDescription>
         </DialogHeader>
-        <Tabs defaultValue="automatic-bookmark" className="flex h-full flex-col overflow-y-auto pt-4">
-          <div className="flex w-full items-center justify-center px-4 sm:justify-start">
-            <TabsList>
-              <TabsTrigger value="automatic-bookmark">Automatic</TabsTrigger>
-              <TabsTrigger value="manual-bookmark">Manual</TabsTrigger>
-            </TabsList>
-          </div>
-          <TabsContent value="automatic-bookmark" className="flex h-full flex-col overflow-y-auto rounded-md">
+        <Tabs defaultValue="automatic-bookmark">
+          <TabsList>
+            <TabsTrigger value="automatic-bookmark">Automatic</TabsTrigger>
+            <TabsTrigger value="manual-bookmark">Manual</TabsTrigger>
+          </TabsList>
+          <TabsContent value="automatic-bookmark">
             <CreateAutomaticForm />
           </TabsContent>
-          <TabsContent value="manual-bookmark" className="flex h-full flex-col overflow-y-auto rounded-md">
+          <TabsContent value="manual-bookmark">
             <CreateManualForm />
           </TabsContent>
         </Tabs>

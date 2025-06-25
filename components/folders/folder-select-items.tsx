@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import type { Folder } from '@/types'
-import { IconChevronRight } from '@tabler/icons-react'
+import { ChevronRightIcon } from 'lucide-react'
 import { SelectItem } from '@/components/ui/select'
 
 interface FolderSelectItemsProps {
@@ -18,7 +18,7 @@ export function FolderSelectItems({ folders, parentFolder }: FolderSelectItemsPr
               {parentFolder && (
                 <>
                   <span className="text-muted-foreground text-xs">{parentFolder.name}</span>
-                  <IconChevronRight className="text-muted-foreground size-3.5" />
+                  <ChevronRightIcon className="text-muted-foreground size-3.5" />
                 </>
               )}
               {folder.name}

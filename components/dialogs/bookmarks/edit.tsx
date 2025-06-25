@@ -141,26 +141,21 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
       }}
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent side="right">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit bookmark</DialogTitle>
           <DialogDescription className="p-0 break-words">{bookmark.name}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form id="edit-bk-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 overflow-y-auto p-4">
+          <form id="edit-bk-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               name="name"
               control={form.control}
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder={bookmark.name}
-                      hasError={!!fieldState.error}
-                      maxLength={MAX_NAME_LENGTH}
-                      {...field}
-                    />
+                    <Input placeholder={bookmark.name} maxLength={MAX_NAME_LENGTH} {...field} />
                   </FormControl>
                   <div className="flex items-center justify-between">
                     <FormMessage />
@@ -197,11 +192,11 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
             <FormField
               name="url"
               control={form.control}
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>URL</FormLabel>
                   <FormControl>
-                    <Input placeholder={bookmark.url} hasError={!!fieldState.error} {...field} />
+                    <Input placeholder={bookmark.url} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -215,8 +210,8 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
                 render={({ field }) => {
                   return (
                     <FormItem className="grow">
-                      <FormLabel>
-                        Folder
+                      <div className="flex h-3.5 items-center gap-2">
+                        <FormLabel htmlFor="select-folder-edit-bk-form">Folder</FormLabel>
                         {field.value && (
                           <>
                             <span className="text-muted-foreground"> · </span>
@@ -230,14 +225,14 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
                             </Button>
                           </>
                         )}
-                      </FormLabel>
+                      </div>
                       {foldersLoading ? (
                         <Skeleton className="h-9" />
                       ) : (
                         <FormControl>
                           {folders && (
                             <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                              <SelectTrigger>
+                              <SelectTrigger id="select-folder-edit-bk-form" className="w-full">
                                 <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
                               </SelectTrigger>
                               <SelectContent>
@@ -258,8 +253,10 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
                 name="tags"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Tags</FormLabel>
+                  <FormItem className="grow">
+                    <div className="flex">
+                      <FormLabel>Tags</FormLabel>
+                    </div>
                     {tagsLoading ? (
                       <Skeleton className="h-9" />
                     ) : (
@@ -365,7 +362,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="ghost">
+            <Button type="button" variant="outline">
               Cancel
             </Button>
           </DialogClose>

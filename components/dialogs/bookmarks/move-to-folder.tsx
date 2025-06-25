@@ -124,39 +124,33 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
           <DialogDescription className="break-words">{bookmarkName}</DialogDescription>
         </DialogHeader>
 
-        <div className="overflow-y-auto p-4">
+        <div className="space-y-4">
           {foldersLoading ? (
             <Skeleton className="h-9 w-full" />
           ) : (
             folders &&
             folders.length > 0 && (
               <div className="space-y-2">
-                <div>
+                <div className="flex h-3.5 items-center gap-2">
                   <Label htmlFor="select-folder">Folder</Label>
                   {selectValue && (
                     <>
                       <span className="text-muted-foreground"> · </span>
-                      <Button
-                        variant="link"
-                        onClick={() => {
-                          setSelectValue('')
-                        }}
-                      >
+                      <Button variant="plain" onClick={() => setSelectValue('')}>
                         Clear selection
                       </Button>
                     </>
                   )}
                 </div>
-                <div>
-                  <Select value={selectValue} onValueChange={setSelectValue}>
-                    <SelectTrigger id="select-folder">
-                      <SelectValue placeholder="Select folder" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <FolderSelectItems folders={folders} />
-                    </SelectContent>
-                  </Select>
-                </div>
+
+                <Select value={selectValue} onValueChange={setSelectValue}>
+                  <SelectTrigger id="select-folder" className="w-full">
+                    <SelectValue placeholder="Select folder" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <FolderSelectItems folders={folders} />
+                  </SelectContent>
+                </Select>
               </div>
             )
           )}
@@ -166,7 +160,7 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="ghost">
+            <Button type="button" variant="outline">
               Cancel
             </Button>
           </DialogClose>

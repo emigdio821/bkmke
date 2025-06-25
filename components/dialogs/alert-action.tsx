@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { GenericFn } from '@/types'
-import { IconAlertCircle } from '@tabler/icons-react'
+import { AlertCircleIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import {
@@ -53,12 +53,9 @@ export function AlertActionDialog<T>(props: AlertActionDialogProps<T>) {
     >
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
       <AlertDialogContent>
-        <div className="flex flex-col gap-2 p-4 pb-0 max-sm:items-center sm:flex-row sm:gap-4">
-          <div
-            className="border-border flex size-9 shrink-0 items-center justify-center rounded-full border"
-            aria-hidden
-          >
-            <IconAlertCircle className="opacity-80" size={16} strokeWidth={2} />
+        <div className="flex flex-col gap-2 pb-0 max-sm:items-center sm:flex-row sm:gap-4">
+          <div className="border-border flex size-9 shrink-0 items-center justify-center rounded-full border">
+            <AlertCircleIcon className="text-muted-foreground size-4" />
           </div>
           <AlertDialogHeader>
             <AlertDialogTitle>{title || 'Are you sure?'}</AlertDialogTitle>

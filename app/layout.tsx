@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Figtree } from 'next/font/google'
+import { Geist } from 'next/font/google'
 import { siteConfig } from '@/config/site'
 import { cn } from '@/lib/utils'
 import { Providers } from '@/components/providers'
@@ -9,7 +9,7 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-const fontSans = Figtree({
+const fontSans = Geist({
   subsets: ['latin'],
   variable: '--font-sans',
   preload: true,

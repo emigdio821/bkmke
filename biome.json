@@ -6,6 +6,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "nursery": {
+        "useUniqueElementIds": "off"
+      },
       "correctness": {
         "noUnusedVariables": "error",
         "noUnusedImports": "error"

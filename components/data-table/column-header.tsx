@@ -1,14 +1,8 @@
-import { IconArrowDown, IconArrowUp, IconEyeOff, IconSelector } from '@tabler/icons-react'
 import type { Column } from '@tanstack/react-table'
+import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>
@@ -28,14 +22,14 @@ export function DataTableColumnHeader<TData, TValue>({
     <div className={cn('flex items-center space-x-2', className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="hover:bg-muted-foreground/10 h-8">
+          <Button variant="plain" className="[&_svg:not([class*='text-'])]:text-muted-foreground h-auto">
             <span>{title}</span>
             {column.getIsSorted() === 'desc' ? (
-              <IconArrowDown className="ml-2 size-4" />
+              <ArrowDownIcon className="size-4" />
             ) : column.getIsSorted() === 'asc' ? (
-              <IconArrowUp className="ml-2 size-4" />
+              <ArrowUpIcon className="size-4" />
             ) : (
-              <IconSelector className="ml-2 size-4" />
+              <ChevronsUpDownIcon className="size-4" />
             )}
           </Button>
         </DropdownMenuTrigger>
@@ -45,7 +39,7 @@ export function DataTableColumnHeader<TData, TValue>({
               column.toggleSorting(false)
             }}
           >
-            <IconArrowUp className="mr-2 size-4" />
+            <ArrowUpIcon className="size-4" />
             Asc
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -53,17 +47,8 @@ export function DataTableColumnHeader<TData, TValue>({
               column.toggleSorting(true)
             }}
           >
-            <IconArrowDown className="mr-2 size-4" />
+            <ArrowDownIcon className="size-4" />
             Desc
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onSelect={() => {
-              column.toggleVisibility(false)
-            }}
-          >
-            <IconEyeOff className="mr-2 size-4" />
-            Hide
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

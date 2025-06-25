@@ -1,6 +1,6 @@
 'use client'
 
-import { IconInfoCircle } from '@tabler/icons-react'
+import { InfoIcon } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from './ui/button'
 
@@ -9,7 +9,7 @@ export function DemoPopover() {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="plain">
-          <IconInfoCircle size={16} />
+          <InfoIcon className="size-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="text-sm">

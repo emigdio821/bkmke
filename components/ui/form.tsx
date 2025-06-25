@@ -1,9 +1,16 @@
 'use client'
 
 import * as React from 'react'
-import { Slot } from 'radix-ui'
-import { Controller, FormProvider, useFormContext } from 'react-hook-form'
-import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form'
+import { Slot as SlotPrimitive, type Label as LabelPrimitive } from 'radix-ui'
+import {
+  Controller,
+  FormProvider,
+  useFormContext,
+  useFormState,
+  type ControllerProps,
+  type FieldPath,
+  type FieldValues,
+} from 'react-hook-form'
 import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
 
@@ -32,10 +39,10 @@ const FormField = <
 }
 
 const useFormField = () => {
-  const fieldContext = React.use(FormFieldContext)
-  const itemContext = React.use(FormItemContext)
-  const { getFieldState, formState } = useFormContext()
-
+  const fieldContext = React.useContext(FormFieldContext)
+  const itemContext = React.useContext(FormItemContext)
+  const { getFieldState } = useFormContext()
+  const formState = useFormState({ name: fieldContext.name })
   const fieldState = getFieldState(fieldContext.name, formState)
 
   if (!fieldContext) {
@@ -60,27 +67,37 @@ type FormItemContextValue = {
 
 const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue)
 
-function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
-  const id = React.useId()
+function FormItem({ className, id: customId, ...props }: React.ComponentProps<'div'>) {
+  const reactId = React.useId()
+  const id = customId || reactId
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div className={cn('space-y-2', className)} {...props} />
+      <div data-slot="form-item" className={cn('grid gap-2', className)} {...props} />
     </FormItemContext.Provider>
   )
 }
 
-function FormLabel({ className, ...props }: React.ComponentProps<'label'>) {
-  const { formItemId } = useFormField()
+function FormLabel({ className, ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
+  const { error, formItemId } = useFormField()
 
-  return <Label className={cn('block w-fit', className)} htmlFor={formItemId} {...props} />
+  return (
+    <Label
+      data-slot="form-label"
+      data-error={!!error}
+      className={cn('data-[error=true]:text-destructive', className)}
+      htmlFor={formItemId}
+      {...props}
+    />
+  )
 }
 
-function FormControl(props: Slot.SlotProps) {
+function FormControl({ ...props }: React.ComponentProps<typeof SlotPrimitive.Slot>) {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
   return (
-    <Slot.Root
+    <SlotPrimitive.Slot
+      data-slot="form-control"
       id={formItemId}
       aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
       aria-invalid={!!error}
@@ -92,17 +109,26 @@ function FormControl(props: Slot.SlotProps) {
 function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
   const { formDescriptionId } = useFormField()
 
-  return <p id={formDescriptionId} className={cn('text-muted-foreground text-[0.8rem]', className)} {...props} />
+  return (
+    <p
+      data-slot="form-description"
+      id={formDescriptionId}
+      className={cn('text-muted-foreground text-sm', className)}
+      {...props}
+    />
+  )
 }
 
-function FormMessage({ className, children, ...props }: React.ComponentProps<'p'>) {
+function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   const { error, formMessageId } = useFormField()
-  const body = error ? String(error?.message) : children
+  const body = error ? String(error?.message ?? '') : props.children
 
-  if (!body) return null
+  if (!body) {
+    return null
+  }
 
   return (
-    <p id={formMessageId} className={cn('text-destructive text-xs font-medium', className)} {...props}>
+    <p data-slot="form-message" id={formMessageId} className={cn('text-destructive text-sm', className)} {...props}>
       {body}
     </p>
   )

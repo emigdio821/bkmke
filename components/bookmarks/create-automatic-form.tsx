@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconPlus } from '@tabler/icons-react'
+import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -78,24 +78,19 @@ export function CreateAutomaticForm() {
 
   return (
     <>
+      <p className="text-muted-foreground mb-2 text-center text-sm sm:text-left">
+        Add the URL and everything will be filled automatically, except for the tags and/or folder.
+      </p>
       <Form {...form}>
-        <form
-          id="create-auto-bk-form"
-          className="space-y-4 overflow-y-auto p-4 pt-0"
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
-          <p className="text-muted-foreground text-center text-sm sm:text-left">
-            Add the URL and everything will be filled automatically, except for the tags and/or folder.
-          </p>
-
+        <form id="create-auto-bk-form" className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             name="url"
             control={form.control}
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>URL</FormLabel>
                 <FormControl>
-                  <Input hasError={!!fieldState.error} {...field} />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -107,33 +102,31 @@ export function CreateAutomaticForm() {
               control={form.control}
               render={({ field }) => {
                 return (
-                  <FormItem className="grow">
-                    <FormLabel>
-                      Folder
+                  <FormItem id="create-automatic-bk-folder" className="grow">
+                    <div className="flex h-3.5 items-center gap-2">
+                      <FormLabel>Folder</FormLabel>
                       {field.value && (
                         <>
                           <span className="text-muted-foreground"> · </span>
-                          <Button variant="link" onClick={() => form.setValue('folderId', '')}>
+                          <Button variant="plain" onClick={() => form.setValue('folderId', '')}>
                             Clear selection
                           </Button>
                         </>
                       )}
-                    </FormLabel>
+                    </div>
                     {foldersLoading ? (
                       <Skeleton className="h-9" />
                     ) : (
                       <FormControl>
                         {folders && (
-                          <div>
-                            <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                              <SelectTrigger>
-                                <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <FolderSelectItems folders={folders} />
-                              </SelectContent>
-                            </Select>
-                          </div>
+                          <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                            <SelectTrigger id="create-automatic-bk-folder-form-item" className="w-full">
+                              <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <FolderSelectItems folders={folders} />
+                            </SelectContent>
+                          </Select>
                         )}
                       </FormControl>
                     )}
@@ -145,7 +138,7 @@ export function CreateAutomaticForm() {
             <CreateFolderDialog
               trigger={
                 <Button size="icon" type="button">
-                  <IconPlus className="size-4" />
+                  <PlusIcon className="size-4" />
                 </Button>
               }
             />
@@ -157,7 +150,9 @@ export function CreateAutomaticForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Tags</FormLabel>
+                  <div className="flex">
+                    <FormLabel>Tags</FormLabel>
+                  </div>
                   {tagsLoading ? (
                     <Skeleton className="h-9" />
                   ) : (
@@ -181,7 +176,7 @@ export function CreateAutomaticForm() {
             <CreateTagDialog
               trigger={
                 <Button size="icon" type="button">
-                  <IconPlus className="size-4" />
+                  <PlusIcon className="size-4" />
                 </Button>
               }
             />
@@ -205,9 +200,9 @@ export function CreateAutomaticForm() {
         </form>
       </Form>
 
-      <DialogFooter>
+      <DialogFooter className="mt-4">
         <DialogClose asChild>
-          <Button type="button" variant="ghost">
+          <Button type="button" variant="outline">
             Cancel
           </Button>
         </DialogClose>

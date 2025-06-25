@@ -1,11 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { IconBookmarkPlus, IconBookmarks, IconBug, IconHeartsOff, IconReload } from '@tabler/icons-react'
+import { BookmarkIcon, BookmarkPlusIcon, BugIcon, RotateCwIcon, WindIcon } from 'lucide-react'
 import { useFavoriteBookmarks } from '@/hooks/bookmarks/use-favorite-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Heading } from '@/components/ui/typography'
+import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
@@ -19,18 +19,18 @@ export function FavoritesClientPage() {
   if (error)
     return (
       <Card>
-        <CardHeader className="flex flex-col items-center justify-center gap-2">
-          <CardTitle className="mb-2">
-            <IconBug size={24} />
+        <CardHeader className="flex flex-col items-center justify-center">
+          <CardTitle className="mb-4">
+            <BugIcon className="size-6" />
           </CardTitle>
-          <Heading>Error</Heading>
+          <TypographyH4>Error</TypographyH4>
           <CardDescription className="text-center">
             Unable to fetch favorite bookmarks at this time, try again.
           </CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
           <Button variant="outline">
-            <IconReload className="mr-2 size-4" />
+            <RotateCwIcon className="size-4" />
             Refetch
           </Button>
         </CardFooter>
@@ -46,16 +46,16 @@ export function FavoritesClientPage() {
           <Card>
             <CardHeader className="flex flex-col items-center justify-center gap-2">
               <CardTitle className="mb-2">
-                <IconHeartsOff size={24} />
+                <WindIcon className="size-6" />
               </CardTitle>
-              <Heading>Emtpy</Heading>
+              <TypographyH4>Emtpy</TypographyH4>
               <CardDescription className="text-center">You have no favorite bookmarks yet.</CardDescription>
             </CardHeader>
-            <CardFooter className="justify-center">
+            <CardFooter className="justify-center gap-2">
               <CreateBookmarkDialog
                 trigger={
                   <Button variant="outline">
-                    <IconBookmarkPlus size={16} className="mr-2" />
+                    <BookmarkPlusIcon className="size-4" />
                     Create
                   </Button>
                 }
@@ -63,7 +63,7 @@ export function FavoritesClientPage() {
 
               <Button variant="outline" asChild>
                 <Link href="/">
-                  <IconBookmarks size={16} className="mr-2" />
+                  <BookmarkIcon className="size-4" />
                   Bookmarks
                 </Link>
               </Button>

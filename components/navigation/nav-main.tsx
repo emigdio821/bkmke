@@ -1,5 +1,5 @@
 import { usePathname } from 'next/navigation'
-import { IconBookmarks, IconHeart } from '@tabler/icons-react'
+import { BookmarkIcon, HeartIcon } from 'lucide-react'
 import { useNavItemsCount } from '@/hooks/use-nav-items-count'
 import { NavItem } from './nav-item'
 
@@ -16,7 +16,7 @@ export function NavMain() {
               href: '/favorites',
               label: 'Favorites',
               active: pathname === '/favorites',
-              icon: IconHeart,
+              icon: HeartIcon,
               itemCount: navItemsCount?.favoritesCount,
               submenus: [],
             },
@@ -29,7 +29,7 @@ export function NavMain() {
               href: '/',
               label: 'Bookmarks',
               active: pathname === '/',
-              icon: IconBookmarks,
+              icon: BookmarkIcon,
               itemCount: navItemsCount?.bookmarksCount,
               submenus: [],
             },

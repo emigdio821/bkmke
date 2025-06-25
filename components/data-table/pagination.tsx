@@ -1,7 +1,8 @@
-import { IconChevronLeft, IconChevronLeftPipe, IconChevronRight, IconChevronRightPipe } from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
+import { ChevronFirstIcon, ChevronLastIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Label } from '../ui/label'
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
@@ -23,14 +24,16 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
       <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
         <div className="flex items-center space-x-2">
           <div className="flex items-center space-x-2">
-            <p className="text-muted-foreground text-sm font-medium">Items per page</p>
+            <Label className="text-muted-foreground" htmlFor="table-pagination-select">
+              Items per page
+            </Label>
             <Select
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value: string) => {
                 table.setPageSize(Number(value))
               }}
             >
-              <SelectTrigger className="h-8 w-[70px]">
+              <SelectTrigger className="h-8 w-[70px]" id="table-pagination-select">
                 <SelectValue placeholder={table.getState().pagination.pageSize} />
               </SelectTrigger>
               <SelectContent side="top" align="end">
@@ -46,26 +49,26 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
 
         <div className="flex items-center space-x-2">
           <Button
+            size="icon"
             variant="outline"
-            className="hidden size-8 p-0 sm:flex"
             onClick={() => {
               table.setPageIndex(0)
             }}
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to first page</span>
-            <IconChevronLeftPipe className="size-4" />
+            <ChevronFirstIcon className="size-4" />
           </Button>
           <Button
+            size="icon"
             variant="outline"
-            className="size-8 p-0"
             onClick={() => {
               table.previousPage()
             }}
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to previous page</span>
-            <IconChevronLeft className="size-4" />
+            <ChevronLeftIcon className="size-4" />
           </Button>
 
           <div className="text-sm font-medium">
@@ -74,26 +77,26 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
           </div>
 
           <Button
+            size="icon"
             variant="outline"
-            className="size-8 p-0"
             onClick={() => {
               table.nextPage()
             }}
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to next page</span>
-            <IconChevronRight className="size-4" />
+            <ChevronRightIcon className="size-4" />
           </Button>
           <Button
+            size="icon"
             variant="outline"
-            className="hidden size-8 p-0 sm:flex"
             onClick={() => {
               table.setPageIndex(table.getPageCount() - 1)
             }}
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to last page</span>
-            <IconChevronRightPipe className="size-4" />
+            <ChevronLastIcon className="size-4" />
           </Button>
         </div>
       </div>
