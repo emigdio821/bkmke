@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
 import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { areModificationsEnabled } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { Button } from '@/components/ui/button'
 import {
@@ -62,24 +63,29 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
             </DropdownMenuItem>
           }
         />
-        <DropdownMenuSeparator />
-        <AlertActionDialog
-          destructive
-          title="Delete tag?"
-          message="It will also unlik all bookmarks related to this tag. This action cannot be undone."
-          action={async () => await handleDeleteFolder(tag.id)}
-          trigger={
-            <DropdownMenuItem
-              variant="destructive"
-              onSelect={(e) => {
-                e.preventDefault()
-              }}
-            >
-              <Trash2Icon className="mr-2 size-4" />
-              Delete
-            </DropdownMenuItem>
-          }
-        />
+        {areModificationsEnabled() && (
+          <>
+            <DropdownMenuSeparator />
+
+            <AlertActionDialog
+              destructive
+              title="Delete tag?"
+              message="It will also unlik all bookmarks related to this tag. This action cannot be undone."
+              action={async () => await handleDeleteFolder(tag.id)}
+              trigger={
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={(e) => {
+                    e.preventDefault()
+                  }}
+                >
+                  <Trash2Icon className="mr-2 size-4" />
+                  Delete
+                </DropdownMenuItem>
+              }
+            />
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )

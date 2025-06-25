@@ -9,6 +9,7 @@ import {
   TAG_ITEMS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { areModificationsEnabled } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { Button } from '@/components/ui/button'
 import {
@@ -82,25 +83,29 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
             </DropdownMenuItem>
           }
         />
-        <DropdownMenuSeparator />
 
-        <AlertActionDialog
-          destructive
-          title="Delete folder?"
-          message="It will also delete all bookmarks/folders related to this folder. This action cannot be undone."
-          action={async () => await handleDeleteFolder(folder.id)}
-          trigger={
-            <DropdownMenuItem
-              variant="destructive"
-              onSelect={(e) => {
-                e.preventDefault()
-              }}
-            >
-              <Trash2Icon className="size-4" />
-              Delete
-            </DropdownMenuItem>
-          }
-        />
+        {areModificationsEnabled() && (
+          <>
+            <DropdownMenuSeparator />
+            <AlertActionDialog
+              destructive
+              title="Delete folder?"
+              message="It will also delete all bookmarks/folders related to this folder. This action cannot be undone."
+              action={async () => await handleDeleteFolder(folder.id)}
+              trigger={
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={(e) => {
+                    e.preventDefault()
+                  }}
+                >
+                  <Trash2Icon className="size-4" />
+                  Delete
+                </DropdownMenuItem>
+              }
+            />
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )

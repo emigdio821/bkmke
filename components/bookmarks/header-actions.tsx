@@ -2,6 +2,7 @@ import type { Bookmark } from '@/types'
 import type { Table } from '@tanstack/react-table'
 import { FolderIcon, TagIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
+import { areModificationsEnabled } from '@/lib/utils'
 import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -37,30 +38,32 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
     <div className="flex items-center justify-end space-x-2">
       {selectedRows.length > 0 && (
         <>
-          <Tooltip>
-            <AlertActionDialog
-              destructive
-              title="Delete selected bookmarks?"
-              message={
-                <>
-                  <div>
-                    You are about to remove <span className="font-semibold">{selectedRows.length}</span> bookmarks.
-                  </div>
-                  {progress > 0 && <Progress className="mt-4" value={progress} />}
-                </>
-              }
-              action={async () => await handleRemoveBks()}
-              trigger={
-                <TooltipTrigger asChild>
-                  <Button size="icon" type="button" variant="outline">
-                    <Trash2Icon className="size-4" />
-                    <span className="sr-only">Delete selected items</span>
-                  </Button>
-                </TooltipTrigger>
-              }
-            />
-            <TooltipContent>Delete selected items</TooltipContent>
-          </Tooltip>
+          {areModificationsEnabled() && (
+            <Tooltip>
+              <AlertActionDialog
+                destructive
+                title="Delete selected bookmarks?"
+                message={
+                  <>
+                    <div>
+                      You are about to remove <span className="font-semibold">{selectedRows.length}</span> bookmarks.
+                    </div>
+                    {progress > 0 && <Progress className="mt-4" value={progress} />}
+                  </>
+                }
+                action={async () => await handleRemoveBks()}
+                trigger={
+                  <TooltipTrigger asChild>
+                    <Button size="icon" type="button" variant="outline">
+                      <Trash2Icon className="size-4" />
+                      <span className="sr-only">Delete selected items</span>
+                    </Button>
+                  </TooltipTrigger>
+                }
+              />
+              <TooltipContent>Delete selected items</TooltipContent>
+            </Tooltip>
+          )}
 
           <Tooltip>
             <UpdateTagsDialog
