@@ -30,7 +30,10 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
             <BookmarkDetailsDialog
               bookmark={bookmark}
               trigger={
-                <Button variant="link" className="text-foreground line-clamp-2 shrink text-left whitespace-normal">
+                <Button
+                  variant="link"
+                  className="text-foreground line-clamp-2 shrink text-left break-all whitespace-normal"
+                >
                   {bookmark.name}
                 </Button>
               }

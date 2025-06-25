@@ -17,7 +17,10 @@ export function Navbar() {
                 <MenuIcon className="size-4" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="flex h-full flex-col justify-between gap-0 px-0 py-4 sm:w-72">
+            <DialogContent
+              showCloseButton
+              className="flex h-full flex-col justify-between gap-0 overflow-hidden px-0 py-4 sm:w-72"
+            >
               <DialogTitle className="sr-only">Navigation menu</DialogTitle>
               <NavContent />
             </DialogContent>
