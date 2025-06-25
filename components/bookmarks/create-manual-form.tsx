@@ -196,22 +196,7 @@ export function CreateManualForm() {
               render={({ field }) => {
                 return (
                   <FormItem className="grow">
-                    <div className="flex h-3.5 items-center gap-2">
-                      <FormLabel htmlFor="select-folder-create-bk-manual-form">Folder</FormLabel>
-                      {field.value && (
-                        <>
-                          <span className="text-muted-foreground"> · </span>
-                          <Button
-                            variant="link"
-                            onClick={() => {
-                              form.setValue('folderId', '')
-                            }}
-                          >
-                            Clear selection
-                          </Button>
-                        </>
-                      )}
-                    </div>
+                    <FormLabel htmlFor="select-folder-create-bk-manual-form">Folder</FormLabel>
                     {foldersLoading ? (
                       <Skeleton className="h-9" />
                     ) : (
@@ -219,7 +204,12 @@ export function CreateManualForm() {
                         {folders && (
                           <div>
                             <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                              <SelectTrigger id="select-folder-create-bk-manual-form" className="w-full">
+                              <SelectTrigger
+                                className="w-full"
+                                showClearBtn={!!field.value}
+                                id="select-folder-create-bk-manual-form"
+                                onClear={() => form.setValue('folderId', '')}
+                              >
                                 <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
                               </SelectTrigger>
                               <SelectContent>

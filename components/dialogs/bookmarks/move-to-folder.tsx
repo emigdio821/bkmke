@@ -131,20 +131,14 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
             folders &&
             folders.length > 0 && (
               <div className="space-y-2">
-                <div className="flex h-3.5 items-center gap-2">
-                  <Label htmlFor="select-folder">Folder</Label>
-                  {selectValue && (
-                    <>
-                      <span className="text-muted-foreground"> · </span>
-                      <Button variant="plain" onClick={() => setSelectValue('')}>
-                        Clear selection
-                      </Button>
-                    </>
-                  )}
-                </div>
-
+                <Label htmlFor="folder-select-move-to-folder-form">Folder</Label>
                 <Select value={selectValue} onValueChange={setSelectValue}>
-                  <SelectTrigger id="select-folder" className="w-full">
+                  <SelectTrigger
+                    className="w-full"
+                    showClearBtn={!!selectValue}
+                    onClear={() => setSelectValue('')}
+                    id="folder-select-move-to-folder-form"
+                  >
                     <SelectValue placeholder="Select folder" />
                   </SelectTrigger>
                   <SelectContent>

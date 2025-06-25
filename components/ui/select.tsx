@@ -1,8 +1,9 @@
 'use client'
 
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon, XIcon } from 'lucide-react'
 import { Select as SelectPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
+import { Button } from './button'
 
 function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />
@@ -20,25 +21,46 @@ function SelectTrigger({
   className,
   size = 'default',
   children,
+  onClear,
+  showClearBtn,
   ...props
 }: SelectPrimitive.SelectTriggerProps & {
   size?: 'sm' | 'default'
+  showClearBtn?: boolean
+  onClear?: () => void
 }) {
   return (
-    <SelectPrimitive.Trigger
-      data-slot="select-trigger"
-      data-size={size}
-      className={cn(
-        "data-[state=open]:bg-accent data-[state=open]:dark:bg-input/50 border-input hover:bg-accent data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[background,color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className,
+    <div className="relative">
+      <SelectPrimitive.Trigger
+        data-slot="select-trigger"
+        data-size={size}
+        className={cn(
+          "data-[state=open]:bg-accent data-[state=open]:dark:bg-input/50 border-input hover:bg-accent data-[placeholder]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[background,color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+          className,
+        )}
+        {...props}
+      >
+        {children}
+        <SelectPrimitive.Icon asChild>
+          <ChevronDownIcon className="text-muted-foreground size-4" />
+        </SelectPrimitive.Icon>
+      </SelectPrimitive.Trigger>
+      {showClearBtn && (
+        <Button
+          size="icon"
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onClear?.()
+          }}
+          variant="unstyled"
+          aria-label="Clear value"
+          className="text-muted-foreground hover:text-foreground absolute inset-y-0 end-8 focus:z-10"
+        >
+          <XIcon className="size-4" />
+        </Button>
       )}
-      {...props}
-    >
-      {children}
-      <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="text-muted-foreground size-4" />
-      </SelectPrimitive.Icon>
-    </SelectPrimitive.Trigger>
+    </div>
   )
 }
 

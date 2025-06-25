@@ -103,24 +103,19 @@ export function CreateAutomaticForm() {
               render={({ field }) => {
                 return (
                   <FormItem className="grow">
-                    <div className="flex h-3.5 items-center gap-2">
-                      <FormLabel htmlFor="create-automatic-bk-folder">Folder</FormLabel>
-                      {field.value && (
-                        <>
-                          <span className="text-muted-foreground"> · </span>
-                          <Button variant="plain" onClick={() => form.setValue('folderId', '')}>
-                            Clear selection
-                          </Button>
-                        </>
-                      )}
-                    </div>
+                    <FormLabel htmlFor="create-automatic-bk-folder">Folder</FormLabel>
                     {foldersLoading ? (
                       <Skeleton className="h-9" />
                     ) : (
                       <FormControl>
                         {folders && (
                           <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                            <SelectTrigger id="create-automatic-bk-folder" className="w-full">
+                            <SelectTrigger
+                              className="w-full"
+                              showClearBtn={!!field.value}
+                              id="create-automatic-bk-folder"
+                              onClear={() => form.setValue('folderId', '')}
+                            >
                               <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
                             </SelectTrigger>
                             <SelectContent>

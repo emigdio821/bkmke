@@ -269,22 +269,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
                     render={({ field }) => {
                       return (
                         <FormItem className="grow">
-                          <FormLabel>
-                            Folder
-                            {field.value && (
-                              <>
-                                <span className="text-muted-foreground"> · </span>
-                                <Button
-                                  variant="link"
-                                  onClick={() => {
-                                    form.setValue('folderId', '')
-                                  }}
-                                >
-                                  Clear selection
-                                </Button>
-                              </>
-                            )}
-                          </FormLabel>
+                          <FormLabel htmlFor="folder-select-import-bk-form">Folder</FormLabel>
                           {foldersLoading ? (
                             <Skeleton className="h-9" />
                           ) : (
@@ -292,7 +277,12 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
                               {folders && (
                                 <div>
                                   <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                                    <SelectTrigger className="w-full">
+                                    <SelectTrigger
+                                      className="w-full"
+                                      showClearBtn={!!field.value}
+                                      id="folder-select-import-bk-form"
+                                      onClear={() => form.setValue('folderId', '')}
+                                    >
                                       <SelectValue
                                         placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'}
                                       />
