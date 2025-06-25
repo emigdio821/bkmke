@@ -1,14 +1,7 @@
 import { useRef, useState } from 'react'
 import type { Bookmark } from '@/types'
-import {
-  IconBookmarkPlus,
-  IconCircleX,
-  IconFileImport,
-  IconLayoutDashboard,
-  IconList,
-  IconPlus,
-} from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
+import { BookmarkPlusIcon, FileUpIcon, LayoutDashboardIcon, PlusIcon, TableIcon, XIcon } from 'lucide-react'
 import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { useDebounceFn } from '@/hooks/use-debounce-fn'
 import { Button } from '@/components/ui/button'
@@ -22,7 +15,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
-import { DataTableColumnFilter } from '@/components/data-table/column-filter'
 import { MasonryFilter } from '@/components/data-table/masonry-filter'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
@@ -58,6 +50,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
           type="search"
           ref={searchRef}
           value={inputValue}
+          name="search-bookmarks"
           className="peer ps-9 pe-9"
           placeholder="Search by name or description"
           onChange={(event) => {
@@ -75,17 +68,17 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
             onClick={handleClearInput}
             className="text-muted-foreground hover:text-foreground absolute inset-y-0 end-0 transition-colors focus:z-10"
           >
-            <IconCircleX size={16} strokeWidth={2} aria-hidden />
+            <XIcon className="size-4" />
           </Button>
         )}
       </div>
       <div className="flex w-full flex-wrap items-center justify-center gap-2 md:flex-nowrap md:justify-between">
         <div className="flex items-center gap-2">
-          {isMasonryLayout ? <MasonryFilter table={table} /> : <DataTableColumnFilter table={table} />}
+          {isMasonryLayout && <MasonryFilter table={table} />}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="outline" type="button">
-                {isMasonryLayout ? <IconLayoutDashboard className="size-4" /> : <IconList className="size-4" />}
+                {isMasonryLayout ? <LayoutDashboardIcon className="size-4" /> : <TableIcon className="size-4" />}
                 <span className="sr-only">Layout</span>
               </Button>
             </DropdownMenuTrigger>
@@ -93,11 +86,9 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
               <DropdownMenuLabel>Layout</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem onSelect={() => updateLayout('table')} checked={layout === 'table'}>
-                <IconList className="mr-2 size-4" />
                 Table
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem onSelect={() => updateLayout('masonry')} checked={isMasonryLayout}>
-                <IconLayoutDashboard className="mr-2 size-4" />
                 Masonry
               </DropdownMenuCheckboxItem>
             </DropdownMenuContent>
@@ -105,7 +96,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" type="button">
-                <IconPlus className="size-4" />
+                <PlusIcon className="size-4" />
                 <span className="sr-only">Bookmarks actions</span>
               </Button>
             </DropdownMenuTrigger>
@@ -115,7 +106,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
               <CreateBookmarkDialog
                 trigger={
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    <IconBookmarkPlus className="mr-2 size-4" />
+                    <BookmarkPlusIcon className="size-4" />
                     Create
                   </DropdownMenuItem>
                 }
@@ -128,7 +119,7 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
                       e.preventDefault()
                     }}
                   >
-                    <IconFileImport className="mr-2 size-4" />
+                    <FileUpIcon className="size-4" />
                     Import
                   </DropdownMenuItem>
                 }

@@ -3,13 +3,13 @@
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
 import type { ColumnDef } from '@tanstack/react-table'
-import { HashIcon } from 'lucide-react'
 import { simplifiedURL } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table/column-header'
 import { BookmarkDetailsDialog } from '@/components/dialogs/bookmarks/details'
+import { Badge } from '../ui/badge'
 import { RowActions } from './row-actions'
 import { ToggleFavBtn } from './toggle-fav-btn'
 
@@ -99,10 +99,29 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       const url = row.original.url
 
       return (
-        <Button asChild variant="link" className="block max-w-48 truncate">
+        <Button asChild variant="link" className="inline-block max-w-48 truncate">
           <a href={url} target="_blank" rel="noreferrer">
             {simplifiedURL(url)}
           </a>
+        </Button>
+      )
+    },
+  },
+  {
+    accessorKey: 'folder_id',
+    meta: {
+      title: 'Folder',
+    },
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Folder" />,
+    cell: ({ row }) => {
+      const bookmark = row.original
+      const folderName = bookmark.folder?.name
+
+      if (!folderName) return null
+
+      return (
+        <Button variant="link" asChild>
+          <Link href={`/folders/${bookmark.folder_id}`}>{folderName}</Link>
         </Button>
       )
     },
@@ -130,33 +149,11 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       return (
         <div className="flex max-w-40 flex-1 flex-wrap items-center gap-x-1">
           {tags.map((tagItem) => (
-            <Button key={`${tagItem.id}-tag-table-item`} variant="link" asChild>
-              <Link href={`/tags/${tagItem.tag?.id}`}>
-                <HashIcon className="size-4" />
-                {tagItem.tag?.name || ''}
-              </Link>
-            </Button>
+            <Badge key={`${tagItem.id}-tag-table-item`} variant="outline" asChild>
+              <Link href={`/tags/${tagItem.tag?.id}`}>{tagItem.tag?.name || ''}</Link>
+            </Badge>
           ))}
         </div>
-      )
-    },
-  },
-  {
-    accessorKey: 'folder_id',
-    meta: {
-      title: 'Folder',
-    },
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Folder" />,
-    cell: ({ row }) => {
-      const bookmark = row.original
-      const folderName = bookmark.folder?.name
-
-      if (!folderName) return null
-
-      return (
-        <Button variant="link" asChild>
-          <Link href={`/folders/${bookmark.folder_id}`}>{folderName}</Link>
-        </Button>
       )
     },
   },
@@ -165,8 +162,8 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center justify-end space-x-1">
-          <ToggleFavBtn bookmark={row.original} />
-          <RowActions bookmark={row.original} />
+          <ToggleFavBtn bookmark={row.original} className="hover:bg-accent-foreground/10" />
+          <RowActions bookmark={row.original} className="hover:bg-accent-foreground/10" />
         </div>
       )
     },

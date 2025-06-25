@@ -1,5 +1,5 @@
-import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Slot as SlotPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
@@ -13,10 +13,10 @@ const buttonVariants = cva(
         outline:
           'bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-xs',
-        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         underline: 'text-primary underline underline-offset-2 hover:no-underline',
-        plain: 'transition-opacity hover:opacity-80',
+        plain: 'hover:opacity-80',
         unstyled: '',
       },
       size: {
@@ -40,7 +40,7 @@ type ButtonProps = React.ComponentProps<'button'> &
   }
 
 function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
-  const Comp = asChild ? Slot : 'button'
+  const Comp = asChild ? SlotPrimitive.Slot : 'button'
   const flatVariants = ['link', 'underline', 'unstyled', 'plain']
   const btnSize = size || (variant && flatVariants.includes(variant) ? 'flat' : size)
 

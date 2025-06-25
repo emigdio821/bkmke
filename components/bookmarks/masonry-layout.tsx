@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import { IconExternalLink, IconFolder, IconHash, IconTag, IconWorld } from '@tabler/icons-react'
 import type { Row, Table } from '@tanstack/react-table'
+import { ExternalLinkIcon, FolderIcon, HashIcon, TagIcon } from 'lucide-react'
 import { simplifiedURL } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -20,22 +20,17 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
 
   return (
     <>
-      <Card
-        data-selected={row.getIsSelected()}
-        className="focus-visible:outline-ring data-[selected=true]:bg-subtle outline-hidden focus-visible:outline-2 focus-visible:outline-offset-1"
-      >
+      <Card data-selected={row.getIsSelected()} className="data-[selected=true]:bg-muted">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <Avatar className="size-4 rounded-[4px]">
+            <Avatar className="size-4">
               <AvatarImage src={ogInfo?.faviconUrl} />
-              <AvatarFallback className="rounded-[inherit]">
-                <IconWorld className="text-muted-foreground size-4" />
-              </AvatarFallback>
+              <AvatarFallback />
             </Avatar>
             <BookmarkDetailsDialog
               bookmark={bookmark}
               trigger={
-                <Button variant="link" className="text-foreground line-clamp-2 text-left whitespace-normal">
+                <Button variant="link" className="text-foreground line-clamp-2 shrink text-left whitespace-normal">
                   {bookmark.name}
                 </Button>
               }
@@ -47,7 +42,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
         </CardHeader>
         <CardContent className="relative text-sm">
           <div className="flex items-center space-x-2">
-            <IconExternalLink className="size-4" />
+            <ExternalLinkIcon className="text-muted-foreground size-4" />
             <Button asChild variant="link" className="block truncate">
               <a href={bookmark.url} target="_blank" rel="noreferrer">
                 {simplifiedURL(bookmark.url)}
@@ -57,12 +52,12 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
 
           {bookmark.tag_items.length > 0 && (
             <div className="flex items-center space-x-2">
-              <IconTag className="size-4" />
+              <TagIcon className="text-muted-foreground size-4" />
               <div className="flex flex-1 flex-wrap items-center gap-x-1">
                 {bookmark.tag_items.map((tagItem) => (
                   <Button key={`${tagItem.id}-bk-details-tag`} variant="link" asChild>
                     <Link href={`/tags/${tagItem.tag?.id}`}>
-                      <IconHash className="size-4" />
+                      <HashIcon className="size-4" />
                       {tagItem.tag?.name || ''}
                     </Link>
                   </Button>
@@ -73,7 +68,7 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
 
           {bookmark.folder && (
             <div className="flex items-center space-x-2">
-              <IconFolder className="size-4" />
+              <FolderIcon className="text-muted-foreground size-4" />
               <Button asChild variant="link">
                 <Link href={`/folders/${bookmark.folder_id}`}>{bookmark.folder.name}</Link>
               </Button>

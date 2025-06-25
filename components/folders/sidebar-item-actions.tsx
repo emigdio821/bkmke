@@ -1,4 +1,4 @@
-import { IconDots, IconFolderPlus, IconPencil, IconTrash } from '@tabler/icons-react'
+import { Edit2Icon, EllipsisIcon, FolderPlusIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
 import {
@@ -50,7 +50,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
       <DropdownMenuTrigger asChild>
         <Button size="icon" type="button" variant="ghost">
           <span className="sr-only">Open folders actions</span>
-          <IconDots className="size-4" />
+          <EllipsisIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-52">
@@ -63,7 +63,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
                 e.preventDefault()
               }}
             >
-              <IconPencil className="mr-2 size-4" />
+              <Edit2Icon className="size-4" />
               Edit
             </DropdownMenuItem>
           }
@@ -77,7 +77,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
                 e.preventDefault()
               }}
             >
-              <IconFolderPlus className="mr-2 size-4" />
+              <FolderPlusIcon className="size-4" />
               Create folder
             </DropdownMenuItem>
           }
@@ -96,7 +96,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
                 e.preventDefault()
               }}
             >
-              <IconTrash className="mr-2 size-4" />
+              <Trash2Icon className="size-4" />
               Delete
             </DropdownMenuItem>
           }

@@ -2,8 +2,8 @@
 
 import type { OGInfo } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconPlus } from '@tabler/icons-react'
 import axios from 'axios'
+import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -242,7 +242,7 @@ export function CreateManualForm() {
             <CreateFolderDialog
               trigger={
                 <Button size="icon" type="button">
-                  <IconPlus className="size-4" />
+                  <PlusIcon className="size-4" />
                 </Button>
               }
             />
@@ -277,7 +277,7 @@ export function CreateManualForm() {
             <CreateTagDialog
               trigger={
                 <Button size="icon" type="button">
-                  <IconPlus className="size-4" />
+                  <PlusIcon className="size-4" />
                 </Button>
               }
             />
@@ -303,7 +303,7 @@ export function CreateManualForm() {
 
       <DialogFooter>
         <DialogClose asChild>
-          <Button type="button" variant="ghost">
+          <Button type="button" variant="outline">
             Cancel
           </Button>
         </DialogClose>

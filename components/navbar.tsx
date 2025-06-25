@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { IconMenu } from '@tabler/icons-react'
+import { MenuIcon } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -14,13 +14,10 @@ export function Navbar() {
           <Dialog>
             <DialogTrigger className="lg:hidden" asChild>
               <Button variant="outline" size="icon">
-                <IconMenu className="size-4" />
+                <MenuIcon className="size-4" />
               </Button>
             </DialogTrigger>
-            <DialogContent
-              side="left"
-              className="bg-subtle flex h-full flex-col justify-between gap-0 px-0 py-4 sm:w-72"
-            >
+            <DialogContent className="flex h-full flex-col justify-between gap-0 px-0 py-4 sm:w-72">
               <DialogTitle className="sr-only">Navigation menu</DialogTitle>
               <NavContent />
             </DialogContent>

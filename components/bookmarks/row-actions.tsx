@@ -1,17 +1,17 @@
 import { startTransition } from 'react'
 import type { Bookmark } from '@/types'
 import {
-  IconCopy,
-  IconDots,
-  IconExternalLink,
-  IconFolderShare,
-  IconHeart,
-  IconHeartOff,
-  IconId,
-  IconPencil,
-  IconTags,
-  IconTrash,
-} from '@tabler/icons-react'
+  CopyIcon,
+  EllipsisIcon,
+  ExternalLinkIcon,
+  FolderIcon,
+  HeartIcon,
+  HeartOffIcon,
+  PencilIcon,
+  TagIcon,
+  TextIcon,
+  Trash2Icon,
+} from 'lucide-react'
 import { toast } from 'sonner'
 import { areModificationsEnabled, handleCopyToClipboard } from '@/lib/utils'
 import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
@@ -62,7 +62,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
         <DropdownMenuTrigger asChild>
           <Button size="icon" variant="ghost" {...props}>
             <span className="sr-only">Open row actions</span>
-            <IconDots className="size-4" />
+            <EllipsisIcon className="size-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="max-w-52">
@@ -72,14 +72,14 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
             bookmark={bookmark}
             trigger={
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                <IconPencil className="mr-2 size-4" />
+                <PencilIcon className="size-4" />
                 Edit
               </DropdownMenuItem>
             }
           />
           <DropdownMenuItem asChild>
             <a href={bookmark.url} target="_blank" rel="noreferrer">
-              <IconExternalLink className="mr-2 size-4" />
+              <ExternalLinkIcon className="size-4" />
               Open
             </a>
           </DropdownMenuItem>
@@ -92,21 +92,21 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
                     e.preventDefault()
                   }}
                 >
-                  <IconId className="mr-2 size-4" />
+                  <TextIcon className="size-4" />
                   Details
                 </DropdownMenuItem>
               }
             />
           )}
           <DropdownMenuItem onSelect={() => handleCopyToClipboard(bookmark.url, 'URL copied')}>
-            <IconCopy className="mr-2 size-4" />
+            <CopyIcon className="size-4" />
             Copy URL
           </DropdownMenuItem>
           <UpdateTagsDialog
             bookmark={bookmark}
             trigger={
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                <IconTags className="mr-2 size-4" />
+                <TagIcon className="size-4" />
                 Update tags
               </DropdownMenuItem>
             }
@@ -115,7 +115,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
             bookmark={bookmark}
             trigger={
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                <IconFolderShare className="mr-2 size-4" />
+                <FolderIcon className="size-4" />
                 Move to folder
               </DropdownMenuItem>
             }
@@ -124,12 +124,12 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
             <DropdownMenuItem onSelect={() => startTransition(handleToggleFavorite)}>
               {optimisticBk.is_favorite ? (
                 <>
-                  <IconHeartOff className="mr-2 size-4" />
+                  <HeartOffIcon className="size-4" />
                   Remove from favorites
                 </>
               ) : (
                 <>
-                  <IconHeart className="mr-2 size-4" />
+                  <HeartIcon className="size-4" />
                   Add to favorites
                 </>
               )}
@@ -144,7 +144,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
                 action={async () => await handleRemoveBk()}
                 trigger={
                   <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
-                    <IconTrash className="mr-2 size-4" />
+                    <Trash2Icon className="size-4" />
                     Delete
                   </DropdownMenuItem>
                 }

@@ -1,4 +1,4 @@
-import { IconDots, IconInputSearch, IconTag } from '@tabler/icons-react'
+import { EllipsisIcon, SearchIcon, TagIcon } from 'lucide-react'
 import type { Tables } from '@/types/database.types'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,7 +21,7 @@ export function SidebarTagsActions({ tags }: SidebarFoldersActionsProps) {
       <DropdownMenuTrigger asChild>
         <Button size="icon" type="button" variant="ghost">
           <span className="sr-only">Open tags actions</span>
-          <IconDots className="size-4" />
+          <EllipsisIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -34,14 +34,14 @@ export function SidebarTagsActions({ tags }: SidebarFoldersActionsProps) {
                 e.preventDefault()
               }}
             >
-              <IconTag className="mr-2 size-4" />
+              <TagIcon className="size-4" />
               Create
             </DropdownMenuItem>
           }
         />
         {tags.length > 100 && (
           <DropdownMenuItem disabled>
-            <IconInputSearch className="text-muted-foreground mr-2 size-4" />
+            <SearchIcon className="text-muted-foreground size-4" />
             Toggle search
           </DropdownMenuItem>
         )}

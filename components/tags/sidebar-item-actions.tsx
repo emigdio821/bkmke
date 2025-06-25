@@ -1,4 +1,4 @@
-import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
+import { Edit2Icon, EllipsisIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
 import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
@@ -43,7 +43,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
       <DropdownMenuTrigger asChild>
         <Button size="icon" type="button" variant="ghost">
           <span className="sr-only">Open tag actions</span>
-          <IconDots className="size-4" />
+          <EllipsisIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-52">
@@ -57,11 +57,12 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
                 e.preventDefault()
               }}
             >
-              <IconPencil className="mr-2 size-4" />
+              <Edit2Icon className="size-4" />
               Edit
             </DropdownMenuItem>
           }
         />
+        <DropdownMenuSeparator />
         <AlertActionDialog
           destructive
           title="Delete tag?"
@@ -74,7 +75,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
                 e.preventDefault()
               }}
             >
-              <IconTrash className="mr-2 size-4" />
+              <Trash2Icon className="mr-2 size-4" />
               Delete
             </DropdownMenuItem>
           }

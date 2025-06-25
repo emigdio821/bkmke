@@ -1,6 +1,6 @@
 import type { Bookmark } from '@/types'
-import { IconArrowDown, IconArrowsSort, IconArrowUp } from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
+import { ArrowDownIcon, ArrowDownUpIcon, ArrowUpIcon, CheckCheckIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -22,7 +22,7 @@ export function MasonryFilter({ table }: { table: Table<Bookmark> }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="outline">
-          <IconArrowsSort className="size-4" />
+          <ArrowDownUpIcon className="size-4" />
           <span className="sr-only">Masonry filters</span>
         </Button>
       </DropdownMenuTrigger>
@@ -37,20 +37,20 @@ export function MasonryFilter({ table }: { table: Table<Bookmark> }) {
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   {column.getIsSorted() === 'desc' ? (
-                    <IconArrowDown className="mr-2 size-4" />
+                    <ArrowDownIcon className="mr-2 size-4" />
                   ) : (
-                    column.getIsSorted() === 'asc' && <IconArrowUp className="mr-2 size-4" />
+                    column.getIsSorted() === 'asc' && <ArrowUpIcon className="mr-2 size-4" />
                   )}
                   {meta?.title || column.id}
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
                     <DropdownMenuItem onSelect={() => column.toggleSorting(false)}>
-                      <IconArrowUp className="mr-2 size-4" />
+                      <ArrowUpIcon className="size-4" />
                       Asc
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => column.toggleSorting(true)}>
-                      <IconArrowDown className="mr-2 size-4" />
+                      <ArrowDownIcon className="size-4" />
                       Desc
                     </DropdownMenuItem>
                   </DropdownMenuSubContent>
@@ -60,7 +60,8 @@ export function MasonryFilter({ table }: { table: Table<Bookmark> }) {
           )
         })}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="justify-center" onSelect={() => table.toggleAllPageRowsSelected(!isAllSelected)}>
+        <DropdownMenuItem onSelect={() => table.toggleAllPageRowsSelected(!isAllSelected)}>
+          <CheckCheckIcon className="size-4" />
           {isAllSelected ? 'Clear selected' : 'Select all'}
         </DropdownMenuItem>
       </DropdownMenuContent>

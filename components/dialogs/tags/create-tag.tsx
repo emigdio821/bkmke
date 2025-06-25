@@ -103,7 +103,7 @@ export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="ghost">
+                <Button type="button" variant="outline">
                   Cancel
                 </Button>
               </DialogClose>

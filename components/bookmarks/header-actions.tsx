@@ -1,6 +1,6 @@
 import type { Bookmark } from '@/types'
-import { IconFolderShare, IconTags, IconTrash } from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
+import { FolderIcon, TagIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
 import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
 import { Button } from '@/components/ui/button'
@@ -53,7 +53,7 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
               trigger={
                 <TooltipTrigger asChild>
                   <Button size="icon" type="button" variant="outline">
-                    <IconTrash className="size-4" />
+                    <Trash2Icon className="size-4" />
                     <span className="sr-only">Delete selected items</span>
                   </Button>
                 </TooltipTrigger>
@@ -68,7 +68,7 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
               trigger={
                 <TooltipTrigger asChild>
                   <Button size="icon" type="button" variant="outline">
-                    <IconTags className="size-4" />
+                    <TagIcon className="size-4" />
                     <span className="sr-only">Update tags</span>
                   </Button>
                 </TooltipTrigger>
@@ -83,7 +83,7 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
               trigger={
                 <TooltipTrigger asChild>
                   <Button size="icon" type="button" variant="outline">
-                    <IconFolderShare className="size-4" />
+                    <FolderIcon className="size-4" />
                     <span className="sr-only">Move to folder</span>
                   </Button>
                 </TooltipTrigger>

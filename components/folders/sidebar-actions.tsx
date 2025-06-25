@@ -1,4 +1,4 @@
-import { IconDots, IconFolderPlus, IconInputSearch } from '@tabler/icons-react'
+import { EllipsisIcon, FolderPlusIcon, SearchIcon } from 'lucide-react'
 import type { Tables } from '@/types/database.types'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,7 +21,7 @@ export function SidebarFoldersActions({ folders }: SidebarFoldersActionsProps) {
       <DropdownMenuTrigger asChild>
         <Button size="icon" type="button" variant="ghost">
           <span className="sr-only">Open folders actions</span>
-          <IconDots className="size-4" />
+          <EllipsisIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -34,7 +34,7 @@ export function SidebarFoldersActions({ folders }: SidebarFoldersActionsProps) {
                 e.preventDefault()
               }}
             >
-              <IconFolderPlus className="mr-2 size-4" />
+              <FolderPlusIcon className="size-4" />
               Create
             </DropdownMenuItem>
           }
@@ -42,7 +42,7 @@ export function SidebarFoldersActions({ folders }: SidebarFoldersActionsProps) {
 
         {folders.length > 100 && (
           <DropdownMenuItem disabled>
-            <IconInputSearch className="mr-2 size-4" />
+            <SearchIcon className="size-4" />
             Toggle search
           </DropdownMenuItem>
         )}

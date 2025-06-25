@@ -127,7 +127,7 @@ export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDial
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="ghost">
+                <Button type="button" variant="outline">
                   Cancel
                 </Button>
               </DialogClose>

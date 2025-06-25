@@ -1,20 +1,20 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import {
-  IconBookmarkPlus,
-  IconBookmarks,
-  IconFileImport,
-  IconFolderPlus,
-  IconLogout,
-  IconMoonStars,
-  IconReload,
-  IconSelector,
-  IconSettings,
-  IconSun,
-  IconTag,
-} from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
+import {
+  BookmarkIcon,
+  BookmarkPlusIcon,
+  ChevronsUpDownIcon,
+  FileUpIcon,
+  FolderPlusIcon,
+  LogOutIcon,
+  MoonIcon,
+  RotateCwIcon,
+  SettingsIcon,
+  SunIcon,
+  TagIcon,
+} from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { toast } from 'sonner'
 import { useProfileStore } from '@/lib/stores/profile'
@@ -76,7 +76,7 @@ export function UserProfileDropdown() {
   if (error || !profile)
     return (
       <Button variant="outline" onClick={() => refetch()}>
-        <IconReload size={16} className="mr-2" />
+        <RotateCwIcon className="size-4" />
         Refetch profile data
       </Button>
     )
@@ -96,18 +96,18 @@ export function UserProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="bg-subtle justify-between gap-2">
+        <Button variant="outline" className="justify-between gap-2">
           <span title={getProfileName()} className="max-w-40 truncate">
             {getProfileName()}
           </span>
-          <IconSelector size={16} className="text-muted-foreground" />
+          <ChevronsUpDownIcon className="text-muted-foreground size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="sm:w-(--radix-dropdown-menu-trigger-width)">
         <CreateFolderDialog
           trigger={
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <IconFolderPlus size={16} className="mr-2" />
+              <FolderPlusIcon className="size-4" />
               Create folder
             </DropdownMenuItem>
           }
@@ -116,7 +116,7 @@ export function UserProfileDropdown() {
         <CreateTagDialog
           trigger={
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <IconTag className="mr-2 size-4" />
+              <TagIcon className="size-4" />
               Create tag
             </DropdownMenuItem>
           }
@@ -125,15 +125,15 @@ export function UserProfileDropdown() {
         <DropdownMenuGroup>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              <IconBookmarks className="mr-2 size-4" />
-              <span className="mr-2">Bookmarks</span>
+              <BookmarkIcon className="text-muted-foreground mr-2 size-4" />
+              Bookmarks
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <CreateBookmarkDialog
                   trigger={
                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                      <IconBookmarkPlus className="mr-2 size-4" />
+                      <BookmarkPlusIcon className="size-4" />
                       Create
                     </DropdownMenuItem>
                   }
@@ -142,7 +142,7 @@ export function UserProfileDropdown() {
                 <ImportBookmarksDialog
                   trigger={
                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                      <IconFileImport className="mr-2 size-4" />
+                      <FileUpIcon className="size-4" />
                       Import
                     </DropdownMenuItem>
                   }
@@ -155,8 +155,8 @@ export function UserProfileDropdown() {
         <DropdownMenuGroup>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              <IconMoonStars className="hidden size-4 dark:block" />
-              <IconSun className="size-4 dark:hidden" />
+              <MoonIcon className="text-muted-foreground hidden size-4 dark:block" />
+              <SunIcon className="text-muted-foreground size-4 dark:hidden" />
               <span className="ml-2">Appearance</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
@@ -176,12 +176,12 @@ export function UserProfileDropdown() {
         </DropdownMenuGroup>
         <DropdownMenuItem asChild>
           <Link href="/settings">
-            <IconSettings className="mr-2 size-4" />
+            <SettingsIcon className="size-4" />
             Settings
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={handleLogOut}>
-          <IconLogout className="mr-2 size-4" />
+          <LogOutIcon className="size-4" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

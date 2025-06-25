@@ -360,7 +360,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="ghost">
+            <Button type="button" variant="outline">
               Cancel
             </Button>
           </DialogClose>

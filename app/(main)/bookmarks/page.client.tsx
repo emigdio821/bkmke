@@ -1,6 +1,6 @@
 'use client'
 
-import { IconBookmarkPlus, IconBookmarksOff, IconBug, IconFileImport, IconReload } from '@tabler/icons-react'
+import { BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
 import { useBookmarks } from '@/hooks/bookmarks/use-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -21,14 +21,14 @@ export function BookmarksClientPage() {
       <Card>
         <CardHeader className="flex flex-col items-center justify-center">
           <CardTitle className="mb-4">
-            <IconBug size={24} />
+            <BugIcon className="size-6" />
           </CardTitle>
           <Heading>Error</Heading>
-          <CardDescription className="text-center">Unable to fetch bookmarks at this time, try again.</CardDescription>
+          <CardDescription>Unable to fetch bookmarks at this time, try again.</CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
           <Button variant="outline">
-            <IconReload className="mr-2 size-4" />
+            <RotateCwIcon className="size-4" />
             Refetch
           </Button>
         </CardFooter>
@@ -44,16 +44,16 @@ export function BookmarksClientPage() {
           <Card>
             <CardHeader className="flex flex-col items-center justify-center gap-2">
               <CardTitle className="mb-4">
-                <IconBookmarksOff size={24} />
+                <WindIcon className="size-6" />
               </CardTitle>
               <Heading>Emtpy</Heading>
               <CardDescription className="text-center">You have no bookmarks yet.</CardDescription>
             </CardHeader>
-            <CardFooter className="justify-center">
+            <CardFooter className="justify-center gap-2">
               <CreateBookmarkDialog
                 trigger={
                   <Button variant="outline">
-                    <IconBookmarkPlus size={16} className="mr-2" />
+                    <BookmarkPlusIcon className="size-4" />
                     Create
                   </Button>
                 }
@@ -62,7 +62,7 @@ export function BookmarksClientPage() {
               <ImportBookmarksDialog
                 trigger={
                   <Button variant="outline">
-                    <IconFileImport size={16} className="mr-2" />
+                    <FileUpIcon className="size-4" />
                     Import
                   </Button>
                 }

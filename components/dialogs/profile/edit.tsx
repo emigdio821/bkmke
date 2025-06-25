@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react'
 import type { UserProfile } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconUser } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -91,7 +90,7 @@ export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) 
       }}
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent side="right" className="sm:max-w-sm">
+      <DialogContent>
         <DialogHeader className="space-y-0">
           <DialogTitle>Edit profile</DialogTitle>
         </DialogHeader>
@@ -99,9 +98,7 @@ export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) 
         <div className="overflow-y-auto p-4">
           <Avatar className="mb-4 size-16">
             <AvatarImage src={form.getValues('avatarUrl') || profile.avatar_url || ''} />
-            <AvatarFallback>
-              <IconUser size={14} />
-            </AvatarFallback>
+            <AvatarFallback />
           </Avatar>
           <Form {...form}>
             <form ref={formRef} id="update-profile-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -165,7 +162,7 @@ export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) 
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="ghost">
+            <Button type="button" variant="outline">
               Cancel
             </Button>
           </DialogClose>

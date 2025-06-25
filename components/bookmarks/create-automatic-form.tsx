@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconPlus } from '@tabler/icons-react'
+import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -107,8 +107,8 @@ export function CreateAutomaticForm() {
               control={form.control}
               render={({ field }) => {
                 return (
-                  <FormItem className="grow">
-                    <FormLabel>
+                  <FormItem id="create-automatic-bk-folder" className="grow">
+                    <FormLabel className="self-start">
                       Folder
                       {field.value && (
                         <>
@@ -124,16 +124,14 @@ export function CreateAutomaticForm() {
                     ) : (
                       <FormControl>
                         {folders && (
-                          <div>
-                            <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <FolderSelectItems folders={folders} />
-                              </SelectContent>
-                            </Select>
-                          </div>
+                          <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
+                            <SelectTrigger id="create-automatic-bk-folder" className="w-full">
+                              <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <FolderSelectItems folders={folders} />
+                            </SelectContent>
+                          </Select>
                         )}
                       </FormControl>
                     )}
@@ -145,7 +143,7 @@ export function CreateAutomaticForm() {
             <CreateFolderDialog
               trigger={
                 <Button size="icon" type="button">
-                  <IconPlus className="size-4" />
+                  <PlusIcon className="size-4" />
                 </Button>
               }
             />
@@ -181,7 +179,7 @@ export function CreateAutomaticForm() {
             <CreateTagDialog
               trigger={
                 <Button size="icon" type="button">
-                  <IconPlus className="size-4" />
+                  <PlusIcon className="size-4" />
                 </Button>
               }
             />
@@ -207,7 +205,7 @@ export function CreateAutomaticForm() {
 
       <DialogFooter>
         <DialogClose asChild>
-          <Button type="button" variant="ghost">
+          <Button type="button" variant="outline">
             Cancel
           </Button>
         </DialogClose>

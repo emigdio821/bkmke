@@ -2,8 +2,9 @@
 
 import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
-import { IconCalendarMonth, IconExternalLink, IconFolder, IconHash, IconTag } from '@tabler/icons-react'
+import { CalendarIcon, ExternalLinkIcon, FolderIcon, TagIcon } from 'lucide-react'
 import { formatDateFromString, simplifiedURL } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -39,9 +40,9 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
         </DialogHeader>
         {!bookmark.description && <DialogDescription className="sr-only">Details dialog</DialogDescription>}
 
-        <div className="overflow-y-auto p-4">
-          <div className="flex items-center space-x-2">
-            <IconExternalLink className="size-4" />
+        <div className="overflow-y-auto">
+          <div className="flex items-center gap-2">
+            <ExternalLinkIcon className="text-muted-foreground size-4" />
             <Button asChild variant="link" className="block truncate">
               <a href={bookmark.url} target="_blank" rel="noreferrer">
                 {simplifiedURL(bookmark.url)}
@@ -49,33 +50,30 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
             </Button>
           </div>
 
-          {bookmark.tag_items.length > 0 && (
-            <div className="flex items-center space-x-2">
-              <IconTag className="size-4" />
-              <div className="flex flex-1 flex-wrap items-center gap-x-1">
-                {bookmark.tag_items.map((tagItem) => (
-                  <Button key={`${tagItem.id}-bk-details-tag`} variant="link" asChild>
-                    <Link href={`/tags/${tagItem.tag?.id}`}>
-                      <IconHash className="size-4" />
-                      {tagItem.tag?.name || ''}
-                    </Link>
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
-
           {bookmark.folder && (
             <div className="flex items-center space-x-2">
-              <IconFolder className="size-4" />
+              <FolderIcon className="text-muted-foreground size-4" />
               <Button asChild variant="link">
                 <Link href={`/folders/${bookmark.folder_id}`}>{bookmark.folder.name}</Link>
               </Button>
             </div>
           )}
 
+          {bookmark.tag_items.length > 0 && (
+            <div className="flex items-center space-x-2">
+              <TagIcon className="text-muted-foreground size-4" />
+              <div className="flex flex-1 flex-wrap items-center gap-1">
+                {bookmark.tag_items.map((tagItem) => (
+                  <Badge key={`${tagItem.id}-bk-details-tag`} variant="outline" asChild>
+                    <Link href={`/tags/${tagItem.tag?.id}`}>{tagItem.tag?.name || ''}</Link>
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center space-x-2">
-            <IconCalendarMonth className="size-4" />
+            <CalendarIcon className="text-muted-foreground size-4" />
             <span className="text-muted-foreground text-sm">{formatDateFromString(bookmark.created_at)}</span>
           </div>
 

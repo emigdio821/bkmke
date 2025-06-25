@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { IconBookmarkPlus, IconBookmarks, IconBug, IconFileImport, IconReload, IconTagOff } from '@tabler/icons-react'
+import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCw, WindIcon } from 'lucide-react'
 import { useTagItems } from '@/hooks/tags/use-tag-items'
 import { useTags } from '@/hooks/tags/use-tags'
 import { Button } from '@/components/ui/button'
@@ -22,9 +22,9 @@ export function TagitemsClientPage({ id }: { id: string }) {
   if (error || tagError)
     return (
       <Card>
-        <CardHeader className="flex flex-col items-center justify-center gap-2">
+        <CardHeader className="flex flex-col items-center justify-center">
           <CardTitle className="mb-2">
-            <IconBug size={24} />
+            <BugIcon className="size-6" />
           </CardTitle>
           <Heading>Error</Heading>
           <CardDescription className="text-center">
@@ -33,7 +33,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
         </CardHeader>
         <CardFooter className="justify-center">
           <Button variant="outline">
-            <IconReload className="mr-2 size-4" />
+            <RotateCw className="size-4" />
             Refetch
           </Button>
         </CardFooter>
@@ -53,48 +53,46 @@ export function TagitemsClientPage({ id }: { id: string }) {
         {isLoading ? (
           <Loader msg="Fetching tag bookmarks" />
         ) : (
-          <>
-            {tagItems &&
-              (tagItems.length > 0 ? (
-                <DataTable columns={columns} data={tagItems} />
-              ) : (
-                <Card>
-                  <CardHeader className="flex flex-col items-center justify-center gap-2">
-                    <CardTitle className="mb-2">
-                      <IconTagOff size={24} />
-                    </CardTitle>
-                    <Heading>Emtpy</Heading>
-                    <CardDescription className="text-center">This tag does not contain items yet.</CardDescription>
-                  </CardHeader>
-                  <CardFooter className="justify-center">
-                    <Button variant="outline" asChild>
-                      <Link href="/">
-                        <IconBookmarks size={16} className="mr-2" />
-                        Bookmarks
-                      </Link>
+          tagItems &&
+          (tagItems.length > 0 ? (
+            <DataTable columns={columns} data={tagItems} />
+          ) : (
+            <Card>
+              <CardHeader className="flex flex-col items-center justify-center gap-2">
+                <CardTitle className="mb-2">
+                  <WindIcon className="size-6" />
+                </CardTitle>
+                <Heading>Emtpy</Heading>
+                <CardDescription className="text-center">This tag does not contain items yet.</CardDescription>
+              </CardHeader>
+              <CardFooter className="justify-center gap-2">
+                <Button variant="outline" asChild>
+                  <Link href="/">
+                    <BookmarkIcon className="size-4" />
+                    Bookmarks
+                  </Link>
+                </Button>
+
+                <CreateBookmarkDialog
+                  trigger={
+                    <Button variant="outline">
+                      <BookmarkPlusIcon className="size-4" />
+                      Create
                     </Button>
+                  }
+                />
 
-                    <CreateBookmarkDialog
-                      trigger={
-                        <Button variant="outline">
-                          <IconBookmarkPlus size={16} className="mr-2" />
-                          Create
-                        </Button>
-                      }
-                    />
-
-                    <ImportBookmarksDialog
-                      trigger={
-                        <Button variant="outline">
-                          <IconFileImport size={16} className="mr-2" />
-                          Import
-                        </Button>
-                      }
-                    />
-                  </CardFooter>
-                </Card>
-              ))}
-          </>
+                <ImportBookmarksDialog
+                  trigger={
+                    <Button variant="outline">
+                      <FileUpIcon className="size-4" />
+                      Import
+                    </Button>
+                  }
+                />
+              </CardFooter>
+            </Card>
+          ))
         )}
       </div>
     </>

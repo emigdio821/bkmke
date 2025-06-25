@@ -1,11 +1,11 @@
-import type { TablerIcon } from '@tabler/icons-react'
+import type { LucideIcon } from 'lucide-react'
 import type { Tables } from './database.types'
 
 export interface NavMenu {
   href?: string
   label: string
   active: boolean
-  icon?: TablerIcon
+  icon?: LucideIcon
   submenus: NavMenu[]
   itemCount?: number
   actions?: React.ReactNode

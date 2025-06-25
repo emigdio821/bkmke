@@ -128,7 +128,7 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="ghost">
+                <Button type="button" variant="outline">
                   Cancel
                 </Button>
               </DialogClose>

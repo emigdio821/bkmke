@@ -27,7 +27,7 @@ export function CreateBookmarkDialog({ trigger }: { trigger: React.ReactNode }) 
       }}
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent side="right">
+      <DialogContent>
         <DialogHeader className="space-y-0">
           <DialogTitle>Create bookmark</DialogTitle>
           <DialogDescription className="sr-only">Create bookmark dialog</DialogDescription>

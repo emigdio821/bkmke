@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconPlus, IconTrash, IconUpload } from '@tabler/icons-react'
+import { FileUpIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -212,7 +212,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
 
                   <div
                     className={cn(
-                      'outline-ring hover:bg-subtle flex h-28 w-full items-center justify-center rounded-md border border-dashed p-6 outline-hidden outline-offset-2 transition-colors focus-visible:outline-2',
+                      'outline-ring hover:bg-muted flex h-28 w-full items-center justify-center rounded-md border border-dashed p-6 outline-hidden outline-offset-2 transition-colors focus-visible:outline-2',
                       {
                         'bg-accent': isDragActive,
                         'border-destructive': form.formState.errors.bookmarks,
@@ -222,7 +222,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
                   >
                     <input {...getInputProps()} />
                     <div className="flex flex-col items-center">
-                      <IconUpload className="size-4" />
+                      <FileUpIcon className="text-muted-foreground size-4" />
                       <p className="text-muted-foreground text-sm">Drop your file here, or click to select it.</p>
                     </div>
                   </div>
@@ -237,7 +237,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
                             <span className="text-muted-foreground">{formatBytes(file.size)}</span>
                           </p>
                           <Button size="icon" variant="ghost" onClick={handleRemoveFile}>
-                            <IconTrash className="size-4" />
+                            <Trash2Icon className="size-4" />
                             <span className="sr-only">Remove file</span>
                           </Button>
                         </span>
@@ -256,7 +256,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
                       <FormItem>
                         <FormLabel>Bookmarks</FormLabel>
                         <FormControl>
-                          <Textarea {...field} className="max-h-80 min-h-[88px]" />
+                          <Textarea {...field} className="max-h-80 min-h-[90px]" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -320,7 +320,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
                     <CreateFolderDialog
                       trigger={
                         <Button size="icon" type="button">
-                          <IconPlus className="size-4" />
+                          <PlusIcon className="size-4" />
                         </Button>
                       }
                     />
@@ -356,7 +356,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
                     <CreateTagDialog
                       trigger={
                         <Button size="icon" type="button">
-                          <IconPlus className="size-4" />
+                          <PlusIcon className="size-4" />
                         </Button>
                       }
                     />
@@ -371,7 +371,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="ghost">
+            <Button type="button" variant="outline">
               Cancel
             </Button>
           </DialogClose>

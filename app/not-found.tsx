@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next/types'
-import { IconGhost3 } from '@tabler/icons-react'
+import { GhostIcon } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -32,7 +32,7 @@ export default function NotFound() {
         <Card className="mx-auto w-full max-w-sm">
           <CardHeader>
             <CardTitle className="text-center text-4xl font-extrabold">
-              <IconGhost3 size={32} className="text-muted-foreground mx-auto mb-2" />
+              <GhostIcon className="text-muted-foreground mx-auto mb-2 size-8" />
               404
             </CardTitle>
           </CardHeader>

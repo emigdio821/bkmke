@@ -1,6 +1,6 @@
 import { usePathname } from 'next/navigation'
 import type { Folder, NavMenu } from '@/types'
-import { IconFolder, IconFolderPlus, IconFolders, IconReload } from '@tabler/icons-react'
+import { FolderIcon, FolderPlusIcon, RotateCwIcon } from 'lucide-react'
 import { useFolders } from '@/hooks/folders/use-folders'
 import { Button } from '@/components/ui/button'
 import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
@@ -18,7 +18,7 @@ export function FoldersNavItems() {
   if (error) {
     return (
       <Button onClick={() => refetch()} variant="ghost" className="w-full justify-start">
-        <IconReload className="mr-2 size-4" />
+        <RotateCwIcon className="size-4" />
         Refresh folders
       </Button>
     )
@@ -30,7 +30,7 @@ export function FoldersNavItems() {
       label: folder.name,
       actions: <SidebarItemActions folder={folder} />,
       active: pathname === `/folders/${folder.id}`,
-      icon: IconFolder,
+      icon: FolderIcon,
       itemCount: folder.items[0].count,
       submenus: folder.children.length > 0 ? buildSubmenus(folder.children) : [],
     }))
@@ -42,7 +42,7 @@ export function FoldersNavItems() {
         <CreateFolderDialog
           trigger={
             <Button type="button" variant="ghost" className="w-full justify-start">
-              <IconFolderPlus className="mr-2 size-4" />
+              <FolderPlusIcon className="size-4" />
               Create folder
             </Button>
           }
@@ -53,7 +53,7 @@ export function FoldersNavItems() {
             {
               label: 'Folders',
               active: pathname.startsWith('/folders'),
-              icon: IconFolders,
+              icon: FolderIcon,
               itemCount: folders.length,
               actions: <SidebarFoldersActions folders={folders} />,
               submenus: buildSubmenus(folders),
