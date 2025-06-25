@@ -249,9 +249,7 @@ export function CreateManualForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <div className="flex">
-                    <FormLabel>Tags</FormLabel>
-                  </div>
+                  <FormLabel>Tags</FormLabel>
                   {tagsLoading ? (
                     <Skeleton className="h-9" />
                   ) : (

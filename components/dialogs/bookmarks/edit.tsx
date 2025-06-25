@@ -254,9 +254,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="grow">
-                    <div className="flex">
-                      <FormLabel>Tags</FormLabel>
-                    </div>
+                    <FormLabel>Tags</FormLabel>
                     {tagsLoading ? (
                       <Skeleton className="h-9" />
                     ) : (

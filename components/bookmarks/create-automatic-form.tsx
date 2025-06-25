@@ -102,9 +102,9 @@ export function CreateAutomaticForm() {
               control={form.control}
               render={({ field }) => {
                 return (
-                  <FormItem id="create-automatic-bk-folder" className="grow">
+                  <FormItem className="grow">
                     <div className="flex h-3.5 items-center gap-2">
-                      <FormLabel>Folder</FormLabel>
+                      <FormLabel htmlFor="create-automatic-bk-folder">Folder</FormLabel>
                       {field.value && (
                         <>
                           <span className="text-muted-foreground"> · </span>
@@ -120,7 +120,7 @@ export function CreateAutomaticForm() {
                       <FormControl>
                         {folders && (
                           <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                            <SelectTrigger id="create-automatic-bk-folder-form-item" className="w-full">
+                            <SelectTrigger id="create-automatic-bk-folder" className="w-full">
                               <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
                             </SelectTrigger>
                             <SelectContent>
@@ -150,9 +150,7 @@ export function CreateAutomaticForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <div className="flex">
-                    <FormLabel>Tags</FormLabel>
-                  </div>
+                  <FormLabel>Tags</FormLabel>
                   {tagsLoading ? (
                     <Skeleton className="h-9" />
                   ) : (
@@ -186,7 +184,7 @@ export function CreateAutomaticForm() {
             name="isFavorite"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between space-y-0 rounded-md border p-3 shadow-xs">
+              <FormItem className="flex flex-row items-center justify-between rounded-md border p-3 shadow-xs">
                 <div>
                   <FormLabel>Favorite</FormLabel>
                   <FormDescription>Add this bookmark to the favorites list.</FormDescription>
