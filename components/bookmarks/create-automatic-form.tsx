@@ -78,16 +78,11 @@ export function CreateAutomaticForm() {
 
   return (
     <>
+      <p className="text-muted-foreground mb-2 text-center text-sm sm:text-left">
+        Add the URL and everything will be filled automatically, except for the tags and/or folder.
+      </p>
       <Form {...form}>
-        <form
-          id="create-auto-bk-form"
-          className="space-y-4 overflow-y-auto p-4 pt-0"
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
-          <p className="text-muted-foreground text-center text-sm sm:text-left">
-            Add the URL and everything will be filled automatically, except for the tags and/or folder.
-          </p>
-
+        <form id="create-auto-bk-form" className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             name="url"
             control={form.control}
@@ -108,24 +103,24 @@ export function CreateAutomaticForm() {
               render={({ field }) => {
                 return (
                   <FormItem id="create-automatic-bk-folder" className="grow">
-                    <FormLabel className="self-start">
-                      Folder
+                    <div className="flex h-3.5 items-center gap-2">
+                      <FormLabel>Folder</FormLabel>
                       {field.value && (
                         <>
                           <span className="text-muted-foreground"> · </span>
-                          <Button variant="link" onClick={() => form.setValue('folderId', '')}>
+                          <Button variant="plain" onClick={() => form.setValue('folderId', '')}>
                             Clear selection
                           </Button>
                         </>
                       )}
-                    </FormLabel>
+                    </div>
                     {foldersLoading ? (
                       <Skeleton className="h-9" />
                     ) : (
                       <FormControl>
                         {folders && (
                           <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                            <SelectTrigger id="create-automatic-bk-folder" className="w-full">
+                            <SelectTrigger id="create-automatic-bk-folder-form-item" className="w-full">
                               <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
                             </SelectTrigger>
                             <SelectContent>
@@ -155,7 +150,9 @@ export function CreateAutomaticForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Tags</FormLabel>
+                  <div className="flex">
+                    <FormLabel>Tags</FormLabel>
+                  </div>
                   {tagsLoading ? (
                     <Skeleton className="h-9" />
                   ) : (
@@ -203,7 +200,7 @@ export function CreateAutomaticForm() {
         </form>
       </Form>
 
-      <DialogFooter>
+      <DialogFooter className="mt-4">
         <DialogClose asChild>
           <Button type="button" variant="outline">
             Cancel

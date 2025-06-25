@@ -40,7 +40,7 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
         </DialogHeader>
         {!bookmark.description && <DialogDescription className="sr-only">Details dialog</DialogDescription>}
 
-        <div className="overflow-y-auto">
+        <div>
           <div className="flex items-center gap-2">
             <ExternalLinkIcon className="text-muted-foreground size-4" />
             <Button asChild variant="link" className="block truncate">

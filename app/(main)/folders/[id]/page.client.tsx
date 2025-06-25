@@ -7,7 +7,7 @@ import { useFolderItems } from '@/hooks/folders/use-folder-items'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Heading } from '@/components/ui/typography'
+import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
@@ -26,7 +26,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
           <CardTitle className="mb-4">
             <BugIcon className="size-6" />
           </CardTitle>
-          <Heading>Error</Heading>
+          <TypographyH4>Error</TypographyH4>
           <CardDescription className="text-center">
             Unable to fetch this folder at this time, try again or check if the folder still exists.
           </CardDescription>
@@ -54,7 +54,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
       ) : (
         folder && (
           <>
-            <Heading className="mb-4">{folder[0]?.name || 'Folder items'}</Heading>
+            <TypographyH4 className="mb-4">{folder[0]?.name || 'Folder items'}</TypographyH4>
             {folder[0]?.description && <p className="text-muted-foreground text-sm">{folder[0].description}</p>}
           </>
         )
@@ -72,7 +72,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
                 <CardTitle className="mb-2">
                   <WindIcon className="size-6" />
                 </CardTitle>
-                <Heading>Emtpy</Heading>
+                <TypographyH4>Emtpy</TypographyH4>
                 <CardDescription className="text-center">This folder does not contain items yet.</CardDescription>
               </CardHeader>
               <CardFooter className="justify-center gap-2">

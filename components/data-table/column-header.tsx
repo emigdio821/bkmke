@@ -22,7 +22,7 @@ export function DataTableColumnHeader<TData, TValue>({
     <div className={cn('flex items-center space-x-2', className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="plain" className="[&_svg:not([class*='text-'])]:text-muted-foreground h-8">
+          <Button variant="plain" className="[&_svg:not([class*='text-'])]:text-muted-foreground h-auto">
             <span>{title}</span>
             {column.getIsSorted() === 'desc' ? (
               <ArrowDownIcon className="size-4" />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import type { UserProfile } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
@@ -36,7 +36,6 @@ export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) 
   const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
   const queryClient = useQueryClient()
-  const formRef = useRef<HTMLFormElement>(null)
 
   const form = useForm<z.infer<typeof editUserSchema>>({
     shouldUnregister: true,
@@ -95,71 +94,71 @@ export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) 
           <DialogTitle>Edit profile</DialogTitle>
         </DialogHeader>
         <DialogDescription className="sr-only">Make changes to your profile here.</DialogDescription>
-        <div className="overflow-y-auto p-4">
-          <Avatar className="mb-4 size-16">
-            <AvatarImage src={form.getValues('avatarUrl') || profile.avatar_url || ''} />
-            <AvatarFallback />
-          </Avatar>
-          <Form {...form}>
-            <form ref={formRef} id="update-profile-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="avatarUrl"
-                render={({ field }) => (
-                  <FormItem>
-                    <div>
-                      <FormLabel>Avatar URL</FormLabel>
-                      <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
-                    </div>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First name</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last name</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input type="password" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </form>
-          </Form>
-        </div>
+
+        <Avatar className="mb-4 size-16">
+          <AvatarImage src={form.getValues('avatarUrl') || profile.avatar_url || ''} />
+          <AvatarFallback />
+        </Avatar>
+        <Form {...form}>
+          <form id="update-profile-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="avatarUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <div>
+                    <FormLabel>Avatar URL</FormLabel>
+                    <FormDescription>Copy and pase the URL of the desired image.</FormDescription>
+                  </div>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" variant="outline">

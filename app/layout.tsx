@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist } from 'next/font/google'
 import { siteConfig } from '@/config/site'
 import { cn } from '@/lib/utils'
 import { Providers } from '@/components/providers'
@@ -12,12 +12,6 @@ interface RootLayoutProps {
 const fontSans = Geist({
   subsets: ['latin'],
   variable: '--font-sans',
-  preload: true,
-})
-
-const fontMono = Geist_Mono({
-  subsets: ['latin'],
-  variable: '--font-mono',
   preload: true,
 })
 
@@ -50,7 +44,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={cn('antialiased', fontSans.className, fontSans.variable, fontMono.variable)}>
+      <body className={cn('antialiased', fontSans.className, fontSans.variable)}>
         <Providers>
           <main className="relative flex min-h-dvh flex-col">{children}</main>
         </Providers>

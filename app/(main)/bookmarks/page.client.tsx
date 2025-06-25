@@ -4,7 +4,7 @@ import { BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'l
 import { useBookmarks } from '@/hooks/bookmarks/use-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Heading } from '@/components/ui/typography'
+import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
@@ -23,7 +23,7 @@ export function BookmarksClientPage() {
           <CardTitle className="mb-4">
             <BugIcon className="size-6" />
           </CardTitle>
-          <Heading>Error</Heading>
+          <TypographyH4>Error</TypographyH4>
           <CardDescription>Unable to fetch bookmarks at this time, try again.</CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
@@ -46,7 +46,7 @@ export function BookmarksClientPage() {
               <CardTitle className="mb-4">
                 <WindIcon className="size-6" />
               </CardTitle>
-              <Heading>Emtpy</Heading>
+              <TypographyH4>Emtpy</TypographyH4>
               <CardDescription className="text-center">You have no bookmarks yet.</CardDescription>
             </CardHeader>
             <CardFooter className="justify-center gap-2">

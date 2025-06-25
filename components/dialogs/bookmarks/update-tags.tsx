@@ -147,13 +147,13 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
           <DialogDescription className="break-words">{bookmarkName}</DialogDescription>
         </DialogHeader>
 
-        <div className="overflow-y-auto p-4">
+        <div>
           {tagsLoading ? (
             <Skeleton className="h-9 w-full" />
           ) : (
-            <div className="space-y-2">
-              <div>
-                <Label htmlFor="select-tags">Tags</Label>
+            <>
+              <div className="flex h-8 items-center gap-2">
+                <Label htmlFor="select-tags">Folder</Label>
               </div>
               {tags && (
                 <MultiSelect
@@ -165,7 +165,7 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
                   options={tags.map((tag) => ({ value: `${tag.id}`, label: tag.name }))}
                 />
               )}
-            </div>
+            </>
           )}
 
           {progress > 0 && <Progress value={progress} />}

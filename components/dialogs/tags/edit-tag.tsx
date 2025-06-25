@@ -82,47 +82,47 @@ export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
 
         <Form {...form}>
           <form
+            id="edit-tag-form"
+            className="space-y-4"
             onSubmit={(e) => {
               e.stopPropagation()
               void form.handleSubmit(onSubmit)(e)
             }}
           >
-            <div className="space-y-4 overflow-y-auto p-4">
-              <FormField
-                name="name"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder={tag.name} maxLength={MAX_NAME_LENGTH} {...field} />
-                    </FormControl>
-                    <div className="flex items-center justify-between">
-                      <FormMessage />
-                      <div className="text-muted-foreground flex-auto text-right text-xs tabular-nums">
-                        {MAX_NAME_LENGTH - field.value.length} characters left
-                      </div>
+            <FormField
+              name="name"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder={tag.name} maxLength={MAX_NAME_LENGTH} {...field} />
+                  </FormControl>
+                  <div className="flex items-center justify-between">
+                    <FormMessage />
+                    <div className="text-muted-foreground flex-auto text-right text-xs tabular-nums">
+                      {MAX_NAME_LENGTH - field.value.length} characters left
                     </div>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  Cancel
-                </Button>
-              </DialogClose>
-              {areModificationsEnabled() && (
-                <Button type="submit" disabled={form.formState.isSubmitting}>
-                  <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
-                  {form.formState.isSubmitting && <Spinner className="absolute" />}
-                </Button>
+                  </div>
+                </FormItem>
               )}
-            </DialogFooter>
+            />
           </form>
         </Form>
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
+          {areModificationsEnabled() && (
+            <Button type="submit" form="edit-tag-form" disabled={form.formState.isSubmitting}>
+              <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
+              {form.formState.isSubmitting && <Spinner className="absolute" />}
+            </Button>
+          )}
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

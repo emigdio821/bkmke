@@ -7,7 +7,7 @@ import { useTags } from '@/hooks/tags/use-tags'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Heading } from '@/components/ui/typography'
+import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
@@ -26,7 +26,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
           <CardTitle className="mb-2">
             <BugIcon className="size-6" />
           </CardTitle>
-          <Heading>Error</Heading>
+          <TypographyH4>Error</TypographyH4>
           <CardDescription className="text-center">
             Unable to fetch this tag at this time, try again or check if the tag still exists.
           </CardDescription>
@@ -47,7 +47,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
           <Skeleton className="h-3 w-28" />
         </div>
       ) : (
-        <Heading>{tag?.[0]?.name || 'Tag items'}</Heading>
+        <TypographyH4>{tag?.[0]?.name || 'Tag items'}</TypographyH4>
       )}
       <div className="mt-4">
         {isLoading ? (
@@ -62,7 +62,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
                 <CardTitle className="mb-2">
                   <WindIcon className="size-6" />
                 </CardTitle>
-                <Heading>Emtpy</Heading>
+                <TypographyH4>Emtpy</TypographyH4>
                 <CardDescription className="text-center">This tag does not contain items yet.</CardDescription>
               </CardHeader>
               <CardFooter className="justify-center gap-2">

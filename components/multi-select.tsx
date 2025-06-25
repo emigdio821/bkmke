@@ -56,7 +56,7 @@ export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TD
           type="button"
           variant="outline"
           disabled={options.length === 0}
-          className="w-full justify-start px-3 font-normal"
+          className="w-full justify-start gap-0.5 px-3 font-normal"
         >
           {options.length === 0 ? (
             <span className="text-muted-foreground">{emptyText || 'Empty data'}</span>
@@ -66,7 +66,7 @@ export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TD
               {selectedValues.length > 0 && (
                 <>
                   <div className="bg-border mx-2 h-4 w-px" />
-                  <Badge>{selectedValues.length}</Badge>
+                  <Badge variant="outline">{selectedValues.length}</Badge>
                 </>
               )}
             </>
@@ -87,11 +87,11 @@ export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TD
                   <CommandItem key={option.value} onSelect={() => handleSelect(option.value)}>
                     <div
                       className={cn(
-                        'mr-2 flex size-4 items-center justify-center rounded-[4px] border',
+                        'border-input flex size-4 items-center justify-center rounded-[4px] border',
                         isSelected ? 'bg-primary text-primary-foreground' : '[&_svg]:invisible',
                       )}
                     >
-                      <CheckIcon className="size-4" />
+                      <CheckIcon className="text-primary-foreground size-3.5" />
                     </div>
                     {option.icon && <option.icon className="text-muted-foreground mr-2 size-4" />}
                     <span>{option.label}</span>

@@ -4,7 +4,7 @@ import { siteConfig } from '@/config/site'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { NavContent } from './navigation/nav-content'
-import { Heading } from './ui/typography'
+import { TypographyH4 } from './ui/typography'
 
 export function Navbar() {
   return (
@@ -24,7 +24,7 @@ export function Navbar() {
           </Dialog>
 
           <Link href="/" className="truncate font-semibold">
-            <Heading>{siteConfig.name}</Heading>
+            <TypographyH4>{siteConfig.name}</TypographyH4>
           </Link>
         </div>
       </div>

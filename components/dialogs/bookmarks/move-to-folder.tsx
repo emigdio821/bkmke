@@ -124,24 +124,19 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
           <DialogDescription className="break-words">{bookmarkName}</DialogDescription>
         </DialogHeader>
 
-        <div className="overflow-y-auto">
+        <div className="space-y-4">
           {foldersLoading ? (
             <Skeleton className="h-9 w-full" />
           ) : (
             folders &&
             folders.length > 0 && (
-              <>
-                <div className="flex h-8 items-center gap-2">
+              <div className="space-y-2">
+                <div className="flex h-3.5 items-center gap-2">
                   <Label htmlFor="select-folder">Folder</Label>
                   {selectValue && (
                     <>
                       <span className="text-muted-foreground"> · </span>
-                      <Button
-                        variant="link"
-                        onClick={() => {
-                          setSelectValue('')
-                        }}
-                      >
+                      <Button variant="plain" onClick={() => setSelectValue('')}>
                         Clear selection
                       </Button>
                     </>
@@ -156,7 +151,7 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
                     <FolderSelectItems folders={folders} />
                   </SelectContent>
                 </Select>
-              </>
+              </div>
             )
           )}
 

@@ -130,11 +130,7 @@ export function CreateManualForm() {
   return (
     <>
       <Form {...form}>
-        <form
-          id="create-manual-bk-form"
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 overflow-y-auto p-4 pt-0"
-        >
+        <form id="create-manual-bk-form" className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <p className="text-muted-foreground text-center text-sm sm:text-left">
             Create your bookmark by adding the details by yourself.
           </p>
@@ -200,8 +196,8 @@ export function CreateManualForm() {
               render={({ field }) => {
                 return (
                   <FormItem className="grow">
-                    <FormLabel>
-                      Folder
+                    <div className="flex h-3.5 items-center gap-2">
+                      <FormLabel htmlFor="select-folder-create-bk-manual-form">Folder</FormLabel>
                       {field.value && (
                         <>
                           <span className="text-muted-foreground"> · </span>
@@ -215,7 +211,7 @@ export function CreateManualForm() {
                           </Button>
                         </>
                       )}
-                    </FormLabel>
+                    </div>
                     {foldersLoading ? (
                       <Skeleton className="h-9" />
                     ) : (
@@ -223,7 +219,7 @@ export function CreateManualForm() {
                         {folders && (
                           <div>
                             <Select onValueChange={field.onChange} value={field.value} disabled={!folders.length}>
-                              <SelectTrigger className="w-full">
+                              <SelectTrigger id="select-folder-create-bk-manual-form" className="w-full">
                                 <SelectValue placeholder={folders.length > 0 ? 'Select folder' : 'No folders yet'} />
                               </SelectTrigger>
                               <SelectContent>
@@ -253,7 +249,9 @@ export function CreateManualForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Tags</FormLabel>
+                  <div className="flex">
+                    <FormLabel>Tags</FormLabel>
+                  </div>
                   {tagsLoading ? (
                     <Skeleton className="h-9" />
                   ) : (
@@ -301,7 +299,7 @@ export function CreateManualForm() {
         </form>
       </Form>
 
-      <DialogFooter>
+      <DialogFooter className="mt-4">
         <DialogClose asChild>
           <Button type="button" variant="outline">
             Cancel

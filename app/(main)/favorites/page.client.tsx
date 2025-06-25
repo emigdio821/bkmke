@@ -5,7 +5,7 @@ import { BookmarkIcon, BookmarkPlusIcon, BugIcon, RotateCwIcon, WindIcon } from 
 import { useFavoriteBookmarks } from '@/hooks/bookmarks/use-favorite-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Heading } from '@/components/ui/typography'
+import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
@@ -23,7 +23,7 @@ export function FavoritesClientPage() {
           <CardTitle className="mb-4">
             <BugIcon className="size-6" />
           </CardTitle>
-          <Heading>Error</Heading>
+          <TypographyH4>Error</TypographyH4>
           <CardDescription className="text-center">
             Unable to fetch favorite bookmarks at this time, try again.
           </CardDescription>
@@ -48,7 +48,7 @@ export function FavoritesClientPage() {
               <CardTitle className="mb-2">
                 <WindIcon className="size-6" />
               </CardTitle>
-              <Heading>Emtpy</Heading>
+              <TypographyH4>Emtpy</TypographyH4>
               <CardDescription className="text-center">You have no favorite bookmarks yet.</CardDescription>
             </CardHeader>
             <CardFooter className="justify-center gap-2">
