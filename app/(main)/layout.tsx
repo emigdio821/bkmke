@@ -1,6 +1,3 @@
-// import { Navbar } from '@/components/navbar'
-// import { Sidebar } from '@/components/navigation/sidebar'
-
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
 

@@ -28,7 +28,3 @@ export function SettingsProfileSkeleton() {
     </Card>
   )
 }
-
-export function NavItemsSkeleton() {
-  return <Skeleton className="size-9 w-full" />
-}
