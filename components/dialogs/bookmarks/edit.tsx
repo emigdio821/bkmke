@@ -17,10 +17,11 @@ import {
 } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { areModificationsEnabled, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/folders/use-folders'
 import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -48,6 +49,7 @@ interface EditBookmarkDialogProps {
 }
 
 export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProps) {
+  const modEnabled = useModEnabled()
   const [openDialog, setOpenDialog] = useState(false)
   const { invalidateQueries } = useInvalidateQueries()
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
@@ -354,7 +356,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
               Cancel
             </Button>
           </DialogClose>
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <Button type="submit" form="edit-bk-form" disabled={form.formState.isSubmitting}>
               <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
               {form.formState.isSubmitting && <Spinner className="absolute" />}

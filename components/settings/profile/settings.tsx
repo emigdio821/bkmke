@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { RotateCwIcon } from 'lucide-react'
 import { PROFILE_QUERY } from '@/lib/constants'
 import { useProfileStore } from '@/lib/stores/profile'
-import { areModificationsEnabled } from '@/lib/utils'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -12,6 +12,7 @@ import { EditProfileDialog } from '@/components/dialogs/profile/edit'
 import { SettingsProfileSkeleton } from '@/components/skeletons'
 
 export function ProfileSettings() {
+  const modEnabled = useModEnabled()
   const queryClient = useQueryClient()
   const profile = useProfileStore((state) => state.profile)
   const isProfileLoading = useProfileStore((state) => state.isLoading)
@@ -69,7 +70,7 @@ export function ProfileSettings() {
         )}
       </CardContent>
 
-      {profile && areModificationsEnabled() && (
+      {profile && modEnabled && (
         <CardFooter>
           <EditProfileDialog
             profile={profile}

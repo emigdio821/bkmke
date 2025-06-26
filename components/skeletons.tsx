@@ -6,15 +6,15 @@ export function SettingsProfileSkeleton() {
     <Card>
       <CardHeader>
         <CardTitle>
-          <Skeleton className="my-2 h-2 w-14" />
+          <Skeleton className="my-1.5 h-2 w-14" />
         </CardTitle>
         <div>
-          <Skeleton className="my-1.5 h-2 w-44" />
+          <Skeleton className="my-1 h-2 w-44" />
         </div>
       </CardHeader>
       <CardContent className="flex flex-col items-start justify-between gap-2 sm:flex-row">
         <div className="flex items-center space-x-2">
-          <Skeleton className="size-16 rounded-full" />
+          <Skeleton className="size-16 rounded-lg" />
           <div>
             <Skeleton className="mb-2 h-2 w-32" />
             <Skeleton className="my-2 h-2 w-40" />
@@ -27,8 +27,4 @@ export function SettingsProfileSkeleton() {
       </CardFooter>
     </Card>
   )
-}
-
-export function NavItemsSkeleton() {
-  return <Skeleton className="size-9 w-full" />
 }

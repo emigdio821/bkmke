@@ -9,8 +9,9 @@ import type { Tables } from '@/types/database.types'
 import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDERS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { areModificationsEnabled, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -33,6 +34,7 @@ interface EditFolderDialogProps {
 }
 
 export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
+  const modEnabled = useModEnabled()
   const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -134,7 +136,7 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
               Cancel
             </Button>
           </DialogClose>
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <Button type="submit" form="edit-folder-form" disabled={form.formState.isSubmitting}>
               <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
               {form.formState.isSubmitting && <Spinner className="absolute" />}

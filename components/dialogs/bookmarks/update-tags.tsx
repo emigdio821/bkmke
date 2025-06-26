@@ -10,9 +10,10 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { areModificationsEnabled, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -47,6 +48,7 @@ type UpdateTagsDialogProps = (SingleBookmark | MultipleBookmarks) & {
 let completedCount = 0
 
 export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDialogProps) {
+  const modEnabled = useModEnabled()
   const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
   const [isLoading, setLoading] = useState(false)
@@ -177,7 +179,7 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
               Cancel
             </Button>
           </DialogClose>
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <Button
               type="button"
               disabled={isLoading}

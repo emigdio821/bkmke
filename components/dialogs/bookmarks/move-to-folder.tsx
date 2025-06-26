@@ -9,9 +9,10 @@ import {
   TAG_ITEMS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { areModificationsEnabled, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/folders/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -51,6 +52,7 @@ const messages = {
 let completedCount = 0
 
 export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolderDialogProps) {
+  const modEnabled = useModEnabled()
   const supabase = createClient()
   const [openDialog, setOpenDialog] = useState(false)
   const initialFolderId =
@@ -158,7 +160,7 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
               Cancel
             </Button>
           </DialogClose>
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <Button
               type="button"
               disabled={isLoading}

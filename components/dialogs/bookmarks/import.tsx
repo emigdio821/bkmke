@@ -18,10 +18,11 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { importBookmarksSchema } from '@/lib/schemas/form'
-import { areModificationsEnabled, cn, formatBytes } from '@/lib/utils'
+import { cn, formatBytes } from '@/lib/utils'
 import { useFolders } from '@/hooks/folders/use-folders'
 import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -54,6 +55,7 @@ const messages = {
 let completedCount = 0
 
 export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode }) {
+  const modEnabled = useModEnabled()
   const [openDialog, setOpenDialog] = useState(false)
   const { data: tags, isLoading: tagsLoading } = useTags()
   const { data: folders, isLoading: foldersLoading } = useFolders()
@@ -357,7 +359,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
               Cancel
             </Button>
           </DialogClose>
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <Button type="submit" form="import-bk-form" disabled={form.formState.isSubmitting}>
               <span className={cn(form.formState.isSubmitting && 'invisible')}>Import</span>
               {form.formState.isSubmitting && <Spinner className="absolute" />}

@@ -1,8 +1,8 @@
 import { startTransition } from 'react'
 import type { Bookmark } from '@/types'
 import { HeartIcon, HeartOffIcon } from 'lucide-react'
-import { areModificationsEnabled } from '@/lib/utils'
 import { useToggleFavorite } from '@/hooks/bookmarks/use-toggle-favorite'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button, type ButtonProps } from '@/components/ui/button'
 
 interface ToggleFavBtnProps extends ButtonProps {
@@ -10,9 +10,10 @@ interface ToggleFavBtnProps extends ButtonProps {
 }
 
 export function ToggleFavBtn({ bookmark, ...props }: ToggleFavBtnProps) {
+  const modEnabled = useModEnabled()
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
 
-  if (!areModificationsEnabled()) return null
+  if (!modEnabled) return null
 
   return (
     <Button size="icon" variant="ghost" onClick={() => startTransition(handleToggleFavorite)} {...props}>

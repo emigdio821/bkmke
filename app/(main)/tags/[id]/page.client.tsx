@@ -43,13 +43,13 @@ export function TagitemsClientPage({ id }: { id: string }) {
   return (
     <>
       {tagLoading ? (
-        <div className="flex h-[18px] items-center">
+        <div className="flex h-7 items-center">
           <Skeleton className="h-3 w-28" />
         </div>
       ) : (
         <TypographyH4>{tag?.[0]?.name || 'Tag items'}</TypographyH4>
       )}
-      <div className="mt-4">
+      <div>
         {isLoading ? (
           <Loader msg="Fetching tag bookmarks" />
         ) : (

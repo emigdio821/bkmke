@@ -15,10 +15,8 @@ export default async function SettingsPage() {
   return (
     <>
       <TypographyH4>Settings</TypographyH4>
-      <div className="mt-4 space-y-4">
-        <ProfileSettings />
-        <ExportBookmarks />
-      </div>
+      <ProfileSettings />
+      <ExportBookmarks />
     </>
   )
 }

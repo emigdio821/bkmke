@@ -8,8 +8,9 @@ import type { z } from 'zod'
 import { MAX_NAME_LENGTH, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { areModificationsEnabled, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -26,6 +27,7 @@ import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/spinner'
 
 export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
+  const modEnabled = useModEnabled()
   const supabase = createClient()
   const [openDialog, setOpenDialog] = useState(false)
   const { invalidateQueries } = useInvalidateQueries()
@@ -109,7 +111,7 @@ export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
               Cancel
             </Button>
           </DialogClose>
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <Button type="submit" form="create-tag-form" disabled={form.formState.isSubmitting}>
               <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
               {form.formState.isSubmitting && <Spinner className="absolute" />}

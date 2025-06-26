@@ -147,7 +147,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       if (tags.length === 0) return null
 
       return (
-        <div className="flex max-w-40 flex-1 flex-wrap items-center gap-x-1">
+        <div className="flex max-w-40 flex-1 flex-wrap items-center gap-1">
           {tags.map((tagItem) => (
             <Badge key={`${tagItem.id}-tag-table-item`} variant="outline" asChild>
               <Link href={`/tags/${tagItem.tag?.id}`}>{tagItem.tag?.name || ''}</Link>
@@ -162,11 +162,8 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center justify-end space-x-1">
-          <ToggleFavBtn bookmark={row.original} className="hover:bg-accent-foreground/10" />
-          <RowActions
-            bookmark={row.original}
-            className="hover:bg-accent-foreground/10 data-[state=open]:bg-accent-foreground/10"
-          />
+          <ToggleFavBtn bookmark={row.original} className="hover:bg-highlight" />
+          <RowActions bookmark={row.original} className="hover:bg-highlight data-[state=open]:bg-highlight" />
         </div>
       )
     },
