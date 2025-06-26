@@ -44,22 +44,22 @@ export function FolderItemsClientPage({ id }: { id: string }) {
     <>
       {folderLoading ? (
         <div>
-          <div className="flex h-[18px] items-center">
+          <div className="flex h-7 items-center">
             <Skeleton className="h-3 w-28" />
           </div>
-          <div className="mt-4 flex h-5 items-center">
+          <div className="flex h-5 items-center">
             <Skeleton className="h-2 w-36" />
           </div>
         </div>
       ) : (
         folder && (
-          <>
-            <TypographyH4 className="mb-4">{folder[0]?.name || 'Folder items'}</TypographyH4>
+          <div>
+            <TypographyH4>{folder[0]?.name || 'Folder items'}</TypographyH4>
             {folder[0]?.description && <p className="text-muted-foreground text-sm">{folder[0].description}</p>}
-          </>
+          </div>
         )
       )}
-      <div className="mt-4">
+      <div>
         {isLoading ? (
           <Loader msg="Fetching folder bookmarks" />
         ) : (

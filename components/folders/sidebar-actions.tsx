@@ -1,4 +1,4 @@
-import { EllipsisIcon, FolderPlusIcon, SearchIcon } from 'lucide-react'
+import { FolderPlusIcon, MoreHorizontalIcon, SearchIcon } from 'lucide-react'
 import type { Tables } from '@/types/database.types'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,7 +21,7 @@ export function SidebarFoldersActions({ folders }: SidebarFoldersActionsProps) {
       <DropdownMenuTrigger asChild>
         <Button size="icon" type="button" variant="ghost">
           <span className="sr-only">Open folders actions</span>
-          <EllipsisIcon className="size-4" />
+          <MoreHorizontalIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

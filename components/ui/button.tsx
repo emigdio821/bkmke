@@ -17,7 +17,7 @@ const buttonVariants = cva(
         ghost: 'data-[state=open]:bg-accent hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         underline: 'text-primary underline underline-offset-2 hover:no-underline',
-        plain: 'hover:opacity-80 data-[state=open]:opacity-80',
+        plain: 'hover:opacity-80',
         unstyled: '',
       },
       size: {

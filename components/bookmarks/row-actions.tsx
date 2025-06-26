@@ -2,11 +2,11 @@ import { startTransition } from 'react'
 import type { Bookmark } from '@/types'
 import {
   CopyIcon,
-  EllipsisIcon,
   ExternalLinkIcon,
   FolderIcon,
   HeartIcon,
   HeartOffIcon,
+  MoreHorizontalIcon,
   PencilIcon,
   TagIcon,
   TextIcon,
@@ -62,7 +62,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
         <DropdownMenuTrigger asChild>
           <Button size="icon" variant="ghost" {...props}>
             <span className="sr-only">Open row actions</span>
-            <EllipsisIcon className="size-4" />
+            <MoreHorizontalIcon className="size-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="max-w-52">

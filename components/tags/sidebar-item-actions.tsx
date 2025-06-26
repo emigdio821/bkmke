@@ -1,4 +1,4 @@
-import { Edit2Icon, EllipsisIcon, Trash2Icon } from 'lucide-react'
+import { Edit2Icon, MoreHorizontalIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
 import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
@@ -44,7 +44,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
       <DropdownMenuTrigger asChild>
         <Button size="icon" type="button" variant="ghost">
           <span className="sr-only">Open tag actions</span>
-          <EllipsisIcon className="size-4" />
+          <MoreHorizontalIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-52">

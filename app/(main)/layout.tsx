@@ -1,5 +1,8 @@
-import { Navbar } from '@/components/navbar'
-import { Sidebar } from '@/components/navigation/sidebar'
+// import { Navbar } from '@/components/navbar'
+// import { Sidebar } from '@/components/navigation/sidebar'
+
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { AppSidebar } from '@/components/app-sidebar'
 
 interface MainLayoutProps {
   children: React.ReactNode
@@ -7,13 +10,11 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="grid-cols-[288px_1fr] gap-4 lg:grid">
-      <div />
-      <Navbar />
-      <Sidebar />
-      <div className="flex gap-4 p-4 lg:pl-0">
-        <section className="mx-auto w-full lg:max-w-4xl">{children}</section>
-      </div>
-    </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <div className="flex w-full flex-1 flex-col gap-4 p-4 xl:mx-auto xl:max-w-5xl">{children}</div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

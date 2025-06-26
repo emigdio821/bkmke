@@ -1,4 +1,4 @@
-import { Edit2Icon, EllipsisIcon, FolderPlusIcon, Trash2Icon } from 'lucide-react'
+import { Edit2Icon, FolderPlusIcon, MoreHorizontalIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
 import {
@@ -51,7 +51,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
       <DropdownMenuTrigger asChild>
         <Button size="icon" type="button" variant="ghost">
           <span className="sr-only">Open folders actions</span>
-          <EllipsisIcon className="size-4" />
+          <MoreHorizontalIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-52">
