@@ -9,7 +9,3 @@
 - [Next.js](https://nextjs.org/) - React framework.
 - [Supabase](https://supabase.com/) - Auth and database.
 - [Vercel](https://vercel.com/) - Hosting.
-
-#### Preview
-
-<img src="./public/images/bkmke-preview.png" alt="bkmke - preview" width="1000px" height="auto" />
