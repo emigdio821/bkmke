@@ -14,7 +14,7 @@ export default async function BookmarksPage() {
   return (
     <>
       <TypographyH4>Bookmarks</TypographyH4>
-      <div className="mt-4">
+      <div>
         <BookmarksClientPage />
       </div>
     </>

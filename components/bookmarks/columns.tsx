@@ -162,11 +162,8 @@ export const columns: Array<ColumnDef<Bookmark>> = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center justify-end space-x-1">
-          <ToggleFavBtn bookmark={row.original} className="hover:bg-accent-foreground/10" />
-          <RowActions
-            bookmark={row.original}
-            className="hover:bg-accent-foreground/10 data-[state=open]:bg-accent-foreground/10"
-          />
+          <ToggleFavBtn bookmark={row.original} className="hover:bg-highlight" />
+          <RowActions bookmark={row.original} className="hover:bg-highlight data-[state=open]:bg-highlight" />
         </div>
       )
     },

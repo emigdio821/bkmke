@@ -2,8 +2,8 @@ import type { Bookmark } from '@/types'
 import type { Table } from '@tanstack/react-table'
 import { FolderIcon, TagIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
-import { areModificationsEnabled } from '@/lib/utils'
 import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -12,6 +12,7 @@ import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folde
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 
 export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
+  const modEnabled = useModEnabled()
   const selectedRows = table.getSelectedRowModel().rows
   const { handleRemoveBookmarks, progress, errors } = useRemoveBookmarks()
 
@@ -38,7 +39,7 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
     <div className="flex items-center justify-end space-x-2">
       {selectedRows.length > 0 && (
         <>
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <Tooltip>
               <AlertActionDialog
                 destructive

@@ -3,22 +3,27 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { BookmarkIcon, HeartIcon } from 'lucide-react'
+import { useNavItemsCount } from '@/hooks/use-nav-items-count'
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar'
-import { NavFolders } from './navs/nav-folders'
+import { NavFolders } from './navs/folders/nav-folders'
 import { NavTags } from './navs/nav-tags'
 import { NavUser } from './navs/nav-user'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
+  const { data: navItemsCount } = useNavItemsCount()
+  const favsCount = navItemsCount?.favoritesCount
+  const bksCount = navItemsCount?.bookmarksCount
 
   return (
     <Sidebar {...props}>
@@ -46,6 +51,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <span>Favorites</span>
               </Link>
             </SidebarMenuButton>
+            {favsCount && <SidebarMenuBadge>{favsCount}</SidebarMenuBadge>}
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton isActive={pathname === '/'} asChild>
@@ -54,6 +60,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <span>Bookmarks</span>
               </Link>
             </SidebarMenuButton>
+            {bksCount && <SidebarMenuBadge>{bksCount}</SidebarMenuBadge>}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

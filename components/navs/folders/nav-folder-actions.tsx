@@ -1,6 +1,6 @@
+import type { Folder } from '@/types'
 import { Edit2Icon, FolderPlusIcon, MoreHorizontalIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
-import type { Tables } from '@/types/database.types'
 import {
   BOOKMARKS_QUERY,
   FAV_BOOKMARKS_QUERY,
@@ -11,7 +11,6 @@ import {
 import { createClient } from '@/lib/supabase/client'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,11 +19,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { SidebarMenuAction } from '@/components/ui/sidebar'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
 import { EditFolderDialog } from '@/components/dialogs/folders/edit-folder'
 
-export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
+interface NavFolderActionsProps {
+  folder: Folder
+  className?: string
+}
+
+export function NavFolderActions({ folder, className }: NavFolderActionsProps) {
   const modEnabled = useModEnabled()
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -50,41 +55,31 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" type="button" variant="ghost">
-          <span className="sr-only">Open folders actions</span>
-          <MoreHorizontalIcon className="size-4" />
-        </Button>
+        <SidebarMenuAction className={className}>
+          <MoreHorizontalIcon />
+        </SidebarMenuAction>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="max-w-52">
+      <DropdownMenuContent>
         <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 break-words">{folder.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <EditFolderDialog
+          folder={folder}
           trigger={
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault()
-              }}
-            >
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <Edit2Icon className="size-4" />
               Edit
             </DropdownMenuItem>
           }
-          folder={folder}
         />
         <CreateFolderDialog
           parentFolderId={folder.id}
           trigger={
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault()
-              }}
-            >
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <FolderPlusIcon className="size-4" />
               Create folder
             </DropdownMenuItem>
           }
         />
-
         {modEnabled && (
           <>
             <DropdownMenuSeparator />
@@ -94,12 +89,7 @@ export function SidebarItemActions({ folder }: { folder: Tables<'folders'> }) {
               message="It will also delete all bookmarks/folders related to this folder. This action cannot be undone."
               action={async () => await handleDeleteFolder(folder.id)}
               trigger={
-                <DropdownMenuItem
-                  variant="destructive"
-                  onSelect={(e) => {
-                    e.preventDefault()
-                  }}
-                >
+                <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
                   <Trash2Icon className="size-4" />
                   Delete
                 </DropdownMenuItem>

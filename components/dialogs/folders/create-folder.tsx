@@ -9,7 +9,8 @@ import type { z } from 'zod'
 import { FOLDERS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { areModificationsEnabled, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -32,6 +33,7 @@ interface CreateFolderDialogProps {
 }
 
 export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDialogProps) {
+  const modEnabled = useModEnabled()
   const [openDialog, setOpenDialog] = useState(false)
   const queryClient = useQueryClient()
   const supabase = createClient()
@@ -133,7 +135,7 @@ export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDial
               Cancel
             </Button>
           </DialogClose>
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <Button type="submit" form="create-folder-form" disabled={form.formState.isSubmitting}>
               <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
               {form.formState.isSubmitting && <Spinner className="absolute" />}

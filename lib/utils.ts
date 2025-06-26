@@ -2,7 +2,6 @@ import { clsx, type ClassValue } from 'clsx'
 import { toast } from 'sonner'
 import { twMerge } from 'tailwind-merge'
 import { siteConfig } from '@/config/site'
-import { useProfileStore } from './stores/profile'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -84,16 +83,4 @@ export function formatBytes(
 
 export function truncateString(str: string, size: number) {
   return `${str.slice(0, size)}...`
-}
-
-export function areModificationsEnabled() {
-  const profile = useProfileStore.getState().profile
-
-  if (!profile) return false
-
-  if (profile.user_role === 'admin' || profile.user_role === 'pro') {
-    return true
-  }
-
-  return false
 }

@@ -16,8 +16,9 @@ import {
 } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { areModificationsEnabled, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -39,6 +40,7 @@ interface EditTagDialogProps {
 }
 
 export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
+  const modEnabled = useModEnabled()
   const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
@@ -116,7 +118,7 @@ export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
               Cancel
             </Button>
           </DialogClose>
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <Button type="submit" form="edit-tag-form" disabled={form.formState.isSubmitting}>
               <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
               {form.formState.isSubmitting && <Spinner className="absolute" />}

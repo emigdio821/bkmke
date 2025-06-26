@@ -3,8 +3,8 @@ import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
 import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { areModificationsEnabled } from '@/lib/utils'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -18,6 +18,7 @@ import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { EditTagDialog } from '@/components/dialogs/tags/edit-tag'
 
 export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
+  const modEnabled = useModEnabled()
   const { invalidateQueries } = useInvalidateQueries()
 
   async function handleDeleteFolder(id: string) {
@@ -63,7 +64,7 @@ export function SidebarItemActions({ tag }: { tag: Tables<'tags'> }) {
             </DropdownMenuItem>
           }
         />
-        {areModificationsEnabled() && (
+        {modEnabled && (
           <>
             <DropdownMenuSeparator />
 

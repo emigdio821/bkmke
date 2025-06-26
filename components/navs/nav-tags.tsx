@@ -7,9 +7,10 @@ import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
 import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
-import { areModificationsEnabled, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import {
   SidebarGroup,
   SidebarGroupAction,
@@ -35,6 +36,7 @@ import {
 } from '../ui/dropdown-menu'
 
 export function NavTags() {
+  const modEnabled = useModEnabled()
   const pathname = usePathname()
   const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading, error, refetch } = useTags()
@@ -72,7 +74,7 @@ export function NavTags() {
       <SidebarGroupContent>
         <SidebarMenu>
           {isLoading &&
-            Array.from(Array(4).keys()).map((n) => <SidebarMenuSkeleton key={`${n}-tags-skeleton`} showIcon />)}
+            Array.from(Array(8).keys()).map((n) => <SidebarMenuSkeleton key={`${n}-tags-skeleton`} showIcon />)}
           {error && (
             <SidebarMenuButton onClick={() => refetch()}>
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -112,7 +114,7 @@ export function NavTags() {
                       </DropdownMenuItem>
                     }
                   />
-                  {areModificationsEnabled() && (
+                  {modEnabled && (
                     <>
                       <DropdownMenuSeparator />
                       <AlertActionDialog

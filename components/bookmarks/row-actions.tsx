@@ -13,9 +13,10 @@ import {
   Trash2Icon,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { areModificationsEnabled, handleCopyToClipboard } from '@/lib/utils'
+import { handleCopyToClipboard } from '@/lib/utils'
 import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
 import { useToggleFavorite } from '@/hooks/bookmarks/use-toggle-favorite'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button, type ButtonProps } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -37,6 +38,7 @@ interface RowActionsProps extends ButtonProps {
 }
 
 export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps) {
+  const modEnabled = useModEnabled()
   const { handleRemoveBookmarks } = useRemoveBookmarks()
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
 
@@ -120,7 +122,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
               </DropdownMenuItem>
             }
           />
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <DropdownMenuItem onSelect={() => startTransition(handleToggleFavorite)}>
               {optimisticBk.is_favorite ? (
                 <>
@@ -135,7 +137,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
               )}
             </DropdownMenuItem>
           )}
-          {areModificationsEnabled() && (
+          {modEnabled && (
             <>
               <DropdownMenuSeparator />
               <AlertActionDialog

@@ -21,10 +21,11 @@ import {
 import { createManualBookmarkSchema } from '@/lib/schemas/form'
 import { useDialogStore } from '@/lib/stores/dialog'
 import { createClient } from '@/lib/supabase/client'
-import { areModificationsEnabled, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useFolders } from '@/hooks/folders/use-folders'
 import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -40,6 +41,7 @@ import { MultiSelect } from '@/components/multi-select'
 import { Spinner } from '@/components/spinner'
 
 export function CreateManualForm() {
+  const modEnabled = useModEnabled()
   const toggleDialog = useDialogStore((state) => state.toggle)
   const toggleDialogLoading = useDialogStore((state) => state.toggleLoading)
 
@@ -293,7 +295,7 @@ export function CreateManualForm() {
             Cancel
           </Button>
         </DialogClose>
-        {areModificationsEnabled() && (
+        {modEnabled && (
           <Button type="submit" form="create-manual-bk-form" disabled={form.formState.isSubmitting}>
             <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
             {form.formState.isSubmitting && <Spinner className="absolute" />}

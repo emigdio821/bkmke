@@ -5,7 +5,7 @@ export default function FavoritesPage() {
   return (
     <>
       <TypographyH4>Favorites</TypographyH4>
-      <div className="mt-4">
+      <div>
         <FavoritesClientPage />
       </div>
     </>
