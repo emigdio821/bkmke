@@ -187,7 +187,7 @@ function Sidebar({
 
   return (
     <div
-      className="group peer text-sidebar-foreground hidden lg:block"
+      className="group peer text-sidebar-foreground hidden data-[side=right]:order-last md:block"
       data-state={state}
       data-collapsible={state === 'collapsed' ? collapsible : ''}
       data-variant={variant}
@@ -198,7 +198,7 @@ function Sidebar({
       <div
         data-slot="sidebar-gap"
         className={cn(
-          'relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear',
+          'relative w-(--sidebar-width) bg-transparent transition-[width] duration-300 ease-in-out',
           'group-data-[collapsible=offcanvas]:w-0',
           'group-data-[side=right]:rotate-180',
           variant === 'floating' || variant === 'inset'
@@ -209,10 +209,10 @@ function Sidebar({
       <div
         data-slot="sidebar-container"
         className={cn(
-          'fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex',
+          'fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width,margin] duration-[.3s,.3s,.3s,.15s] ease-in-out md:flex',
           side === 'left'
-            ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
-            : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
+            ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] not-group-data-[collapsible=icon]:has-[[data-slot=sidebar-rail]:hover]:-ms-2 group-data-[collapsible=offcanvas]:has-[[data-slot=sidebar-rail]:hover]:ms-2'
+            : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)] not-group-data-[collapsible=icon]:has-[[data-slot=sidebar-rail]:hover]:-me-2 group-data-[collapsible=offcanvas]:has-[[data-slot=sidebar-rail]:hover]:me-2',
           // Adjust the padding for floating and inset variants.
           variant === 'floating' || variant === 'inset'
             ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]'
@@ -255,28 +255,39 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
   )
 }
 
-function SidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
-  const { toggleSidebar } = useSidebar()
+function SidebarRail({
+  className,
+  side = 'left',
+  ...props
+}: React.ComponentProps<'button'> & { side?: 'left' | 'right' }) {
+  const { toggleSidebar, state } = useSidebar()
 
   return (
-    <button
-      data-sidebar="rail"
-      data-slot="sidebar-rail"
-      aria-label="Toggle Sidebar"
-      tabIndex={-1}
-      onClick={toggleSidebar}
-      title="Toggle Sidebar"
-      className={cn(
-        'hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex',
-        'in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize',
-        '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
-        'hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full',
-        '[[data-side=left][data-collapsible=offcanvas]_&]:-right-2',
-        '[[data-side=right][data-collapsible=offcanvas]_&]:-left-2',
-        className,
-      )}
-      {...props}
-    />
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          data-sidebar="rail"
+          data-slot="sidebar-rail"
+          aria-label="Toggle Sidebar"
+          tabIndex={-1}
+          onClick={toggleSidebar}
+          title="Toggle Sidebar"
+          className={cn(
+            'fixed top-1/2 h-20 w-8 -translate-y-1/2 cursor-pointer transition-[left,right,translate] duration-300 ease-in-out group-data-[state=collapsed]:translate-x-0 in-data-[side=left]:left-(--sidebar-width) in-data-[side=left]:-translate-x-2 in-data-[side=left]:group-data-[collapsible=icon]:left-(--sidebar-width-icon) in-data-[side=left]:group-data-[collapsible=offcanvas]:left-0 in-data-[side=right]:right-(--sidebar-width) in-data-[side=right]:translate-x-2 in-data-[side=right]:group-data-[collapsible=icon]:right-(--sidebar-width-icon) in-data-[side=right]:group-data-[collapsible=offcanvas]:right-0 max-md:hidden',
+            className,
+          )}
+          {...props}
+        >
+          <div
+            aria-hidden
+            className="before:bg-muted-foreground after:bg-muted-foreground pointer-events-none h-6 w-4 opacity-50 transition-all ease-in-out group-data-[state=collapsed]:translate-x-0 before:absolute before:top-[calc(50%-7px)] before:h-[9px] before:w-0.5 before:rounded-full before:transition-all after:absolute after:bottom-[calc(50%-7px)] after:h-[9px] after:w-0.5 after:rounded-full after:transition-all in-data-[side=left]:translate-x-2 in-data-[side=left]:before:left-[calc(50%-1px)] in-data-[side=left]:after:left-[calc(50%-1px)] in-data-[side=right]:ml-auto in-data-[side=right]:-translate-x-2 in-data-[side=right]:before:left-[calc(50%+1)] in-data-[side=right]:after:left-[calc(50%+1)] in-[[data-slot=sidebar-rail]:hover]:opacity-100 in-data-[side=left]:in-[[data-slot=sidebar-rail]:hover]:translate-x-1 group-data-[state=collapsed]:in-data-[side=left]:in-[[data-slot=sidebar-rail]:hover]:translate-x-3 group-data-[state=collapsed]:group-data-[collapsible=icon]:in-data-[side=left]:in-[[data-slot=sidebar-rail]:hover]:translate-x-1 in-data-[side=left]:in-[[data-slot=sidebar-rail]:hover]:before:rotate-45 group-data-[state=collapsed]:in-data-[side=left]:in-[[data-slot=sidebar-rail]:hover]:before:-rotate-45 in-data-[side=left]:in-[[data-slot=sidebar-rail]:hover]:after:-rotate-45 group-data-[state=collapsed]:in-data-[side=left]:in-[[data-slot=sidebar-rail]:hover]:after:rotate-45 in-data-[side=right]:in-[[data-slot=sidebar-rail]:hover]:-translate-x-1 group-data-[state=collapsed]:in-data-[side=right]:in-[[data-slot=sidebar-rail]:hover]:-translate-x-3 group-data-[state=collapsed]:group-data-[collapsible=icon]:in-data-[side=right]:in-[[data-slot=sidebar-rail]:hover]:-translate-x-1 in-data-[side=right]:in-[[data-slot=sidebar-rail]:hover]:before:-rotate-45 group-data-[state=collapsed]:in-data-[side=right]:in-[[data-slot=sidebar-rail]:hover]:before:rotate-45 in-data-[side=right]:in-[[data-slot=sidebar-rail]:hover]:after:rotate-45 group-data-[state=collapsed]:in-data-[side=right]:in-[[data-slot=sidebar-rail]:hover]:after:-rotate-45"
+          />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side={side === 'right' ? 'left' : 'right'} className="[&_span]:hidden">
+        {state === 'collapsed' ? 'Expand' : 'Collapse'}
+      </TooltipContent>
+    </Tooltip>
   )
 }
 
@@ -375,7 +386,7 @@ function SidebarGroupLabel({
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        'text-sidebar-foreground/70 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0',
+        'text-sidebar-foreground/70 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-300 ease-in-out focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0',
         'group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0',
         className,
       )}
@@ -569,17 +580,10 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<'div'> & {
   showIcon?: boolean
 }) {
-  // const [mounted, setMounted] = React.useState(false)
   // Random width between 50 to 90%.
   // const width = React.useMemo(() => {
   //   return `${Math.floor(Math.random() * 40) + 50}%`
   // }, [])
-
-  // React.useEffect(() => {
-  //   setMounted(true)
-  // }, [])
-
-  // if (!mounted) return null
 
   return (
     <div
@@ -648,7 +652,7 @@ function SidebarMenuSubButton({
       data-size={size}
       data-active={isActive}
       className={cn(
-        'group-has-data-[sidebar=menu-action]/menu-sub-item:pr-8',
+        'peer/menu-button group-has-data-[sidebar=menu-action]/menu-sub-item:pr-8',
         'focus-visible:border-ring focus-visible:ring-ring/50 text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&>svg]:text-sidebar-accent-foreground flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden transition-all focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
         'data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground',
         size === 'sm' && 'text-xs',

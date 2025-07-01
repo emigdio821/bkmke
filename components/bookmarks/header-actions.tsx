@@ -47,7 +47,7 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
                 message={
                   <>
                     <div>
-                      You are about to remove <span className="font-semibold">{selectedRows.length}</span> bookmarks.
+                      Selected bookmarks: <span className="font-semibold">{selectedRows.length}</span>
                     </div>
                     {progress > 0 && <Progress className="mt-4" value={progress} />}
                   </>
