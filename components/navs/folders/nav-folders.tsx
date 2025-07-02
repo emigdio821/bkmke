@@ -35,7 +35,7 @@ export function NavFolders() {
             </SidebarGroupAction>
           }
         />
-        <CollapsibleContent asChild>
+        <CollapsibleContent className="pt-1" asChild>
           <SidebarGroupContent>
             <SidebarMenu>
               {isLoading &&

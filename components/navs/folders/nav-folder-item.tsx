@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { Folder } from '@/types'
@@ -23,9 +24,24 @@ export function NavFolderItem({ folder }: FolderItemProps) {
   const pathname = usePathname()
   const isActive = pathname === `/folders/${folder.id}`
 
+  const isSubFolderActive = useCallback(
+    (subFolders: Folder[]): boolean => {
+      return subFolders.some((subFolder) => {
+        if (pathname === `/folders/${subFolder.id}`) return true
+
+        if (subFolder.children.length > 0) {
+          return isSubFolderActive(subFolder.children)
+        }
+
+        return false
+      })
+    },
+    [pathname],
+  )
+
   if (folder.children.length > 0) {
     return (
-      <Collapsible key={folder.id} defaultOpen={isActive} className="group/collapsible">
+      <Collapsible key={folder.id} defaultOpen={isSubFolderActive([folder])} className="group/collapsible">
         <SidebarMenuItem>
           <CollapsibleTrigger asChild>
             <SidebarMenuAction
