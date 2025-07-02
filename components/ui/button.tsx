@@ -9,14 +9,13 @@ const buttonVariants = cva(
       variant: {
         default: 'data-[state=open]:bg-primary/90 bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs',
         destructive:
-          'bg-destructive hover:bg-destructive/90 dark:hover:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 text-foreground shadow-xs',
+          'bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 dark:hover:bg-destructive/80 text-foreground shadow-xs',
         outline:
           'data-[state=open]:bg-accent data-[state=open]:dark:bg-input/50 bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs',
         secondary:
           'data-[state=open]:bg-secondary/80 bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-xs',
         ghost: 'data-[state=open]:bg-accent hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
-        underline: 'text-primary underline underline-offset-2 hover:no-underline',
+        link: 'text-primary hover:underline',
         plain: 'hover:opacity-80',
         unstyled: '',
       },
@@ -25,7 +24,7 @@ const buttonVariants = cva(
         sm: 'h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5',
         lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
         icon: 'size-9',
-        flat: 'p-0',
+        flat: 'h-auto p-0',
       },
     },
     defaultVariants: {
@@ -42,7 +41,7 @@ type ButtonProps = React.ComponentProps<'button'> &
 
 function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
   const Comp = asChild ? SlotPrimitive.Slot : 'button'
-  const flatVariants = ['link', 'underline', 'unstyled', 'plain']
+  const flatVariants = ['link', 'unstyled', 'plain']
   const btnSize = size || (variant && flatVariants.includes(variant) ? 'flat' : size)
 
   return <Comp className={cn(buttonVariants({ variant, size: btnSize, className }))} {...props} />

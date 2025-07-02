@@ -2,7 +2,15 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Edit2Icon, HashIcon, MoreHorizontalIcon, PlusIcon, RotateCwIcon, Trash2Icon } from 'lucide-react'
+import {
+  ChevronDownIcon,
+  Edit2Icon,
+  HashIcon,
+  MoreHorizontalIcon,
+  PlusIcon,
+  RotateCwIcon,
+  Trash2Icon,
+} from 'lucide-react'
 import { toast } from 'sonner'
 import type { Tables } from '@/types/database.types'
 import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
@@ -26,6 +34,7 @@ import {
 import { AlertActionDialog } from '../dialogs/alert-action'
 import { CreateTagDialog } from '../dialogs/tags/create-tag'
 import { EditTagDialog } from '../dialogs/tags/edit-tag'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -61,82 +70,95 @@ export function NavTags() {
   }
 
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Tags</SidebarGroupLabel>
-      <CreateTagDialog
-        trigger={
-          <SidebarGroupAction title="Create tag">
-            <PlusIcon />
-            <span className="sr-only">Create tag</span>
-          </SidebarGroupAction>
-        }
-      />
-      <SidebarGroupContent>
-        <SidebarMenu>
-          {isLoading &&
-            Array.from(Array(8).keys()).map((n) => <SidebarMenuSkeleton key={`${n}-tags-skeleton`} showIcon />)}
-          {error && (
-            <SidebarMenuButton onClick={() => refetch()}>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">Refetch folders</span>
-              </div>
-              <RotateCwIcon className="ml-auto size-4" />
-            </SidebarMenuButton>
-          )}
-          {tags?.map((tag) => (
-            <SidebarMenuItem key={tag.id}>
-              <SidebarMenuButton
-                asChild
-                isActive={pathname === `/tags/${tag.id}`}
-                className={cn(tag.items[0].count > 0 && 'group-has-data-[sidebar=menu-action]/menu-item:pr-16')}
-              >
-                <Link href={`/tags/${tag.id}`}>
-                  <HashIcon className="size-4" />
-                  <span>{tag.name}</span>
-                </Link>
-              </SidebarMenuButton>
-              {tag.items[0].count > 0 && <SidebarMenuBadge className="right-8">{tag.items[0].count}</SidebarMenuBadge>}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuAction>
-                    <MoreHorizontalIcon />
-                  </SidebarMenuAction>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 break-words">{tag.name}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <EditTagDialog
-                    tag={tag}
-                    trigger={
-                      <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                        <Edit2Icon className="size-4" />
-                        Edit
-                      </DropdownMenuItem>
-                    }
-                  />
-                  {modEnabled && (
-                    <>
+    <Collapsible defaultOpen className="group/collapsible">
+      <SidebarGroup>
+        <SidebarGroupLabel className="hover:opacity-80" asChild>
+          <CollapsibleTrigger>
+            <ChevronDownIcon className="mr-2 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+            Tags
+          </CollapsibleTrigger>
+        </SidebarGroupLabel>
+        <CreateTagDialog
+          trigger={
+            <SidebarGroupAction title="Create tag">
+              <PlusIcon />
+              <span className="sr-only">Create tag</span>
+            </SidebarGroupAction>
+          }
+        />
+        <CollapsibleContent asChild>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {isLoading &&
+                Array.from(Array(4).keys()).map((n) => <SidebarMenuSkeleton key={`${n}-tags-skeleton`} showIcon />)}
+              {error && (
+                <SidebarMenuButton onClick={() => refetch()}>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-medium">Refetch folders</span>
+                  </div>
+                  <RotateCwIcon className="ml-auto size-4" />
+                </SidebarMenuButton>
+              )}
+              {tags?.map((tag) => (
+                <SidebarMenuItem key={tag.id}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === `/tags/${tag.id}`}
+                    className={cn(tag.items[0].count > 0 && 'group-has-data-[sidebar=menu-action]/menu-item:pr-16')}
+                  >
+                    <Link href={`/tags/${tag.id}`}>
+                      <HashIcon className="size-4" />
+                      <span>{tag.name}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                  {tag.items[0].count > 0 && (
+                    <SidebarMenuBadge className="right-8">{tag.items[0].count}</SidebarMenuBadge>
+                  )}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <SidebarMenuAction>
+                        <MoreHorizontalIcon />
+                      </SidebarMenuAction>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 break-words">
+                        {tag.name}
+                      </DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <AlertActionDialog
-                        destructive
-                        title="Delete tag?"
-                        message="It will also unlik all bookmarks related to this tag. This action cannot be undone."
-                        action={async () => await handleDeleteTag(tag)}
+                      <EditTagDialog
+                        tag={tag}
                         trigger={
-                          <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
-                            <Trash2Icon className="size-4" />
-                            Delete
+                          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                            <Edit2Icon className="size-4" />
+                            Edit
                           </DropdownMenuItem>
                         }
                       />
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
+                      {modEnabled && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <AlertActionDialog
+                            destructive
+                            title="Delete tag?"
+                            message="It will also unlik all bookmarks related to this tag. This action cannot be undone."
+                            action={async () => await handleDeleteTag(tag)}
+                            trigger={
+                              <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
+                                <Trash2Icon className="size-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            }
+                          />
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </CollapsibleContent>
+      </SidebarGroup>
+    </Collapsible>
   )
 }
