@@ -1,21 +1,14 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useRef } from 'react'
 
 export function useDebounceFn<T extends (...args: never[]) => void>(fn: T, delay = 300) {
-  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout>(null)
 
   const debouncedFn = useCallback(
     (...args: Parameters<T>) => {
-      if (timer) {
-        clearTimeout(timer)
-      }
-
-      const newTimer = setTimeout(() => {
-        fn(...args)
-      }, delay)
-
-      setTimer(newTimer)
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      timeoutRef.current = setTimeout(() => fn(...args), delay)
     },
-    [fn, delay, timer],
+    [fn, delay],
   )
 
   return debouncedFn

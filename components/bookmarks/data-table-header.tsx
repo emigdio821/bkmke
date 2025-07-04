@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import type { Bookmark } from '@/types'
 import type { Table } from '@tanstack/react-table'
 import { BookmarkPlusIcon, FileUpIcon, LayoutDashboardIcon, PlusIcon, TableIcon, XIcon } from 'lucide-react'
+import { parseAsString, useQueryState } from 'nuqs'
 import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { useDebounceFn } from '@/hooks/use-debounce-fn'
 import { Button } from '@/components/ui/button'
@@ -21,27 +22,39 @@ import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { DataTableHeaderActions } from './header-actions'
 
 export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
-  const [inputValue, setInputValue] = useState('')
+  const [search, setSearch] = useQueryState('search', parseAsString.withDefault(''))
   const searchRef = useRef<HTMLInputElement>(null)
   const layout = useTableLayoutStore((state) => state.layout)
   const updateLayout = useTableLayoutStore((state) => state.update)
   const isMasonryLayout = layout === 'masonry'
-
   const debouncedFilter = useDebounceFn(handleSearchFilter)
+  const isFirstRender = useRef(true)
+
+  const filterTable = useCallback(
+    (value: string) => {
+      table.getColumn('name')?.setFilterValue(value)
+    },
+    [table],
+  )
 
   function handleSearchFilter(value: string) {
     filterTable(value)
   }
 
   function handleClearInput() {
-    setInputValue('')
+    setSearch('')
     filterTable('')
     searchRef.current?.focus()
   }
 
-  function filterTable(value: string) {
-    table.getColumn('name')?.setFilterValue(value)
-  }
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      filterTable(search)
+    } else {
+      debouncedFilter(search)
+    }
+  }, [search, filterTable, debouncedFilter])
 
   return (
     <div className="mb-4 flex flex-col-reverse items-center gap-2 md:flex-row">
@@ -49,17 +62,13 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
         <Input
           type="search"
           ref={searchRef}
-          value={inputValue}
+          value={search}
           name="search-bookmarks"
           className="peer ps-9 pe-9"
           placeholder="Search by name or description"
-          onChange={(event) => {
-            const value = event.target.value
-            setInputValue(value)
-            debouncedFilter(value)
-          }}
+          onChange={(event) => setSearch(event.target.value)}
         />
-        {inputValue && (
+        {search && (
           <Button
             size="icon"
             type="button"

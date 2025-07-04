@@ -32,7 +32,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
               <Link href="/">
-                <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                <div className="bg-highlight text-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   bk
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
