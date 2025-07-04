@@ -11,6 +11,7 @@ import {
 } from '@tanstack/react-table'
 import type { ColumnDef, ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table'
 import { useTableLayoutStore } from '@/lib/stores/table-layout'
+import { useQueryPagination } from '@/hooks/table/use-query-pagination'
 import { DataTablePagination } from '@/components/data-table/pagination'
 import { DataTableHeaders } from './data-table-header'
 import { MasonryLayout } from './masonry-layout'
@@ -27,10 +28,18 @@ export function DataTable({ columns, data }: DataTableProps) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const layout = useTableLayoutStore((state) => state.layout)
+  const [{ pageIndex, pageSize }, setPagination] = useQueryPagination()
 
   const table = useReactTable({
     data,
     columns,
+    onPaginationChange: (updater) => {
+      const newPagination = typeof updater === 'function' ? updater({ pageIndex, pageSize }) : updater
+      setPagination({
+        pageIndex: newPagination.pageIndex,
+        pageSize: newPagination.pageSize,
+      })
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -42,7 +51,8 @@ export function DataTable({ columns, data }: DataTableProps) {
     autoResetPageIndex: false,
     initialState: {
       pagination: {
-        pageSize: 12,
+        pageIndex,
+        pageSize,
       },
     },
     state: {
@@ -50,6 +60,10 @@ export function DataTable({ columns, data }: DataTableProps) {
       rowSelection,
       columnFilters,
       columnVisibility,
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
     },
   })
 
