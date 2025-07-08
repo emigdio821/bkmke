@@ -27,19 +27,23 @@ export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
   const layout = useTableLayoutStore((state) => state.layout)
   const updateLayout = useTableLayoutStore((state) => state.update)
   const isMasonryLayout = layout === 'masonry'
-  const debouncedFilter = useDebounceFn(handleSearchFilter)
   const isFirstRender = useRef(true)
 
   const filterTable = useCallback(
     (value: string) => {
       table.getColumn('name')?.setFilterValue(value)
     },
-    [table],
+    [table.getColumn],
   )
 
-  function handleSearchFilter(value: string) {
-    filterTable(value)
-  }
+  const handleSearchFilter = useCallback(
+    (value: string) => {
+      filterTable(value)
+    },
+    [filterTable],
+  )
+
+  const debouncedFilter = useDebounceFn(handleSearchFilter)
 
   function handleClearInput() {
     setSearch('')
