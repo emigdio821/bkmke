@@ -80,7 +80,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
             />
 
             {bookmark.description && (
-              <p className="text-muted-foreground line-clamp-1 w-full text-xs break-words" title={bookmark.description}>
+              <p className="text-muted-foreground w-full truncate text-xs" title={bookmark.description}>
                 {bookmark.description}
               </p>
             )}
@@ -120,9 +120,9 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       if (!folderName) return null
 
       return (
-        <Button variant="link" asChild>
+        <Badge variant="outline" asChild>
           <Link href={`/folders/${bookmark.folder_id}`}>{folderName}</Link>
-        </Button>
+        </Badge>
       )
     },
   },

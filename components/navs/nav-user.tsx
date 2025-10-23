@@ -7,11 +7,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import {
   BookmarkIcon,
   BookmarkPlusIcon,
+  ChevronsUpDownIcon,
   FileUpIcon,
   FolderPlusIcon,
   LogOutIcon,
   MoonIcon,
-  MoreHorizontalIcon,
   RotateCwIcon,
   SettingsIcon,
   SunIcon,
@@ -103,7 +103,7 @@ export function NavUser() {
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{profile.first_name}</span>
               </div>
-              <MoreHorizontalIcon className="ml-auto size-4" />
+              <ChevronsUpDownIcon className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="sm:w-(--radix-dropdown-menu-trigger-width)" align="start">

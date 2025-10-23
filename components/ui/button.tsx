@@ -15,7 +15,7 @@ const buttonVariants = cva(
         secondary:
           'data-[state=open]:bg-secondary/80 bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-xs',
         ghost: 'data-[state=open]:bg-accent hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary hover:underline',
+        link: 'text-primary rounded-none underline-offset-2 hover:underline focus-visible:rounded-md',
         plain: 'hover:opacity-80',
         unstyled: '',
       },
