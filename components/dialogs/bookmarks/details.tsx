@@ -35,7 +35,7 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
         <DialogHeader>
           <DialogTitle>{bookmark.name}</DialogTitle>
           {bookmark.description && (
-            <DialogDescription className="line-clamp-2 break-words">{bookmark.description}</DialogDescription>
+            <DialogDescription className="line-clamp-2 wrap-break-word">{bookmark.description}</DialogDescription>
           )}
         </DialogHeader>
         {!bookmark.description && <DialogDescription className="sr-only">Details dialog</DialogDescription>}

@@ -68,7 +68,7 @@ export const columns: Array<ColumnDef<Bookmark>> = [
             trigger={
               <Button variant="link" className="text-foreground block max-w-64 flex-auto overflow-hidden">
                 <div className="flex items-center space-x-2">
-                  <Avatar className="size-4">
+                  <Avatar className="size-4 rounded-none">
                     <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
                     <AvatarFallback />
                   </Avatar>

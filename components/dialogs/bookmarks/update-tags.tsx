@@ -146,7 +146,7 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
       >
         <DialogHeader>
           <DialogTitle>Update tags</DialogTitle>
-          <DialogDescription className="break-words">{bookmarkName}</DialogDescription>
+          <DialogDescription className="wrap-break-word">{bookmarkName}</DialogDescription>
         </DialogHeader>
 
         <div>

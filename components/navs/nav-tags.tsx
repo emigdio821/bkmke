@@ -123,7 +123,7 @@ export function NavTags() {
                       </SidebarMenuAction>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 break-words">
+                      <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 wrap-break-word">
                         {tag.name}
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />

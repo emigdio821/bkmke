@@ -57,7 +57,6 @@ function InputGroupAddon({
   ...props
 }: React.ComponentProps<'fieldset'> & VariantProps<typeof inputGroupAddonVariants>) {
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: TODO improve accessibility
     <fieldset
       data-slot="input-group-addon"
       data-align={align}

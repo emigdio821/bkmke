@@ -8,7 +8,11 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "error",
-        "noUnusedImports": "error"
+        "noUnusedImports": "error",
+        "useUniqueElementIds": "off"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "off"
       },
       "suspicious": {
         "noUnknownAtRules": "off"

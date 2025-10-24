@@ -33,7 +33,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
                 table.setPageSize(Number(value))
               }}
             >
-              <SelectTrigger className="h-8 w-[70px]" id="table-pagination-select">
+              <SelectTrigger size="sm" className="w-[70px]" id="table-pagination-select">
                 <SelectValue placeholder={table.getState().pagination.pageSize} />
               </SelectTrigger>
               <SelectContent side="top" align="end">
@@ -49,7 +49,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
 
         <div className="flex items-center space-x-2">
           <Button
-            size="icon"
+            size="icon-sm"
             variant="outline"
             onClick={() => {
               table.setPageIndex(0)
@@ -60,7 +60,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
             <ChevronFirstIcon className="size-4" />
           </Button>
           <Button
-            size="icon"
+            size="icon-sm"
             variant="outline"
             onClick={() => {
               table.previousPage()
@@ -77,7 +77,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
           </div>
 
           <Button
-            size="icon"
+            size="icon-sm"
             variant="outline"
             onClick={() => {
               table.nextPage()
@@ -88,7 +88,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
             <ChevronRightIcon className="size-4" />
           </Button>
           <Button
-            size="icon"
+            size="icon-sm"
             variant="outline"
             onClick={() => {
               table.setPageIndex(table.getPageCount() - 1)

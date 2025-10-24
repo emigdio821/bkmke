@@ -16,8 +16,8 @@ export function ToggleFavBtn({ bookmark, ...props }: ToggleFavBtnProps) {
   if (!modEnabled) return null
 
   return (
-    <Button size="icon" variant="ghost" onClick={() => startTransition(handleToggleFavorite)} {...props}>
-      {optimisticBk.is_favorite ? <HeartIcon className="size-4" /> : <HeartOffIcon className="size-4" />}
+    <Button size="icon-sm" variant="ghost" onClick={() => startTransition(handleToggleFavorite)} {...props}>
+      {!optimisticBk.is_favorite ? <HeartIcon className="size-4" /> : <HeartOffIcon className="size-4" />}
       <span className="sr-only">Toggle favorite status</span>
     </Button>
   )

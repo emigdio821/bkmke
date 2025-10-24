@@ -123,7 +123,7 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
       >
         <DialogHeader>
           <DialogTitle>Move to folder</DialogTitle>
-          <DialogDescription className="break-words">{bookmarkName}</DialogDescription>
+          <DialogDescription className="wrap-break-word">{bookmarkName}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
