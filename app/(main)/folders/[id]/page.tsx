@@ -19,9 +19,5 @@ export async function generateMetadata(props: FolderItemsProps) {
 export default async function FolderItemsPage(props: FolderItemsProps) {
   const params = await props.params
 
-  return (
-    <>
-      <FolderItemsClientPage id={params.id} />
-    </>
-  )
+  return <FolderItemsClientPage id={params.id} />
 }

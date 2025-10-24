@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Bookmark } from '@/types'
 import {
   getCoreRowModel,
@@ -12,6 +12,8 @@ import {
 import type { ColumnDef, ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table'
 import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { useQueryPagination } from '@/hooks/table/use-query-pagination'
+import { useDebounceFn } from '@/hooks/use-debounce-fn'
+import { useGlobalSearch } from '@/hooks/use-global-search'
 import { DataTablePagination } from '@/components/data-table/pagination'
 import { DataTableHeaders } from './data-table-header'
 import { MasonryLayout } from './masonry-layout'
@@ -29,6 +31,8 @@ export function DataTable({ columns, data }: DataTableProps) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const layout = useTableLayoutStore((state) => state.layout)
   const [{ pageIndex, pageSize }, setPagination] = useQueryPagination()
+  const [search] = useGlobalSearch()
+  const isFirstRender = useRef(true)
 
   const table = useReactTable({
     data,
@@ -67,12 +71,35 @@ export function DataTable({ columns, data }: DataTableProps) {
     },
   })
 
+  const filterTable = useCallback(
+    (value: string) => {
+      table.getColumn('name')?.setFilterValue(value)
+    },
+    [table.getColumn, table],
+  )
+
+  const handleSearchFilter = useCallback(
+    (value: string) => {
+      filterTable(value)
+    },
+    [filterTable],
+  )
+
+  const debouncedFilter = useDebounceFn(handleSearchFilter)
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      filterTable(search)
+    } else {
+      debouncedFilter(search)
+    }
+  }, [search, filterTable, debouncedFilter])
+
   return (
     <>
       <DataTableHeaders table={table} />
-      <div className="mb-4">
-        {layout === 'masonry' ? <MasonryLayout table={table} /> : <TableLayout table={table} />}
-      </div>
+      {layout === 'masonry' ? <MasonryLayout table={table} /> : <TableLayout table={table} />}
       <DataTablePagination table={table} />
     </>
   )

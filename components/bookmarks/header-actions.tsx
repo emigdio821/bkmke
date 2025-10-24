@@ -35,68 +35,66 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
     }
   }
 
+  if (selectedRows.length === 0) return null
+
   return (
     <div className="flex items-center justify-end space-x-2">
-      {selectedRows.length > 0 && (
-        <>
-          {modEnabled && (
-            <Tooltip>
-              <AlertActionDialog
-                destructive
-                title="Delete selected bookmarks?"
-                message={
-                  <>
-                    <div>
-                      Selected bookmarks: <span className="font-semibold">{selectedRows.length}</span>
-                    </div>
-                    {progress > 0 && <Progress className="mt-4" value={progress} />}
-                  </>
-                }
-                action={async () => await handleRemoveBks()}
-                trigger={
-                  <TooltipTrigger asChild>
-                    <Button size="icon" type="button" variant="outline">
-                      <Trash2Icon className="size-4" />
-                      <span className="sr-only">Delete selected items</span>
-                    </Button>
-                  </TooltipTrigger>
-                }
-              />
-              <TooltipContent>Delete selected items</TooltipContent>
-            </Tooltip>
-          )}
-
-          <Tooltip>
-            <UpdateTagsDialog
-              bookmarks={selectedRows.map((row) => row.original)}
-              trigger={
-                <TooltipTrigger asChild>
-                  <Button size="icon" type="button" variant="outline">
-                    <TagIcon className="size-4" />
-                    <span className="sr-only">Update tags</span>
-                  </Button>
-                </TooltipTrigger>
-              }
-            />
-            <TooltipContent>Update tags</TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <MoveToFolderDialog
-              bookmarks={selectedRows.map((row) => row.original)}
-              trigger={
-                <TooltipTrigger asChild>
-                  <Button size="icon" type="button" variant="outline">
-                    <FolderIcon className="size-4" />
-                    <span className="sr-only">Move to folder</span>
-                  </Button>
-                </TooltipTrigger>
-              }
-            />
-            <TooltipContent>Move to folder</TooltipContent>
-          </Tooltip>
-        </>
+      {modEnabled && (
+        <Tooltip>
+          <AlertActionDialog
+            destructive
+            title="Delete selected bookmarks?"
+            message={
+              <>
+                <div>
+                  Selected bookmarks: <span className="font-semibold">{selectedRows.length}</span>
+                </div>
+                {progress > 0 && <Progress className="mt-4" value={progress} />}
+              </>
+            }
+            action={async () => await handleRemoveBks()}
+            trigger={
+              <TooltipTrigger asChild>
+                <Button size="icon" type="button" variant="outline">
+                  <Trash2Icon className="size-4" />
+                  <span className="sr-only">Delete selected items</span>
+                </Button>
+              </TooltipTrigger>
+            }
+          />
+          <TooltipContent>Delete selected items</TooltipContent>
+        </Tooltip>
       )}
+
+      <Tooltip>
+        <UpdateTagsDialog
+          bookmarks={selectedRows.map((row) => row.original)}
+          trigger={
+            <TooltipTrigger asChild>
+              <Button size="icon" type="button" variant="outline">
+                <TagIcon className="size-4" />
+                <span className="sr-only">Update tags</span>
+              </Button>
+            </TooltipTrigger>
+          }
+        />
+        <TooltipContent>Update tags</TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <MoveToFolderDialog
+          bookmarks={selectedRows.map((row) => row.original)}
+          trigger={
+            <TooltipTrigger asChild>
+              <Button size="icon" type="button" variant="outline">
+                <FolderIcon className="size-4" />
+                <span className="sr-only">Move to folder</span>
+              </Button>
+            </TooltipTrigger>
+          }
+        />
+        <TooltipContent>Move to folder</TooltipContent>
+      </Tooltip>
     </div>
   )
 }

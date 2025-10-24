@@ -1,12 +1,13 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
 import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
+import { useHeaderTitleStore } from '@/lib/stores/header-title'
 import { useFolder } from '@/hooks/folders/use-folder'
 import { useFolderItems } from '@/hooks/folders/use-folder-items'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
 import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
@@ -18,6 +19,18 @@ export function FolderItemsClientPage({ id }: { id: string }) {
   const folderId = id
   const { data: folderItems, isLoading, error } = useFolderItems(folderId)
   const { data: folder, isLoading: folderLoading, error: folderError } = useFolder(folderId)
+  const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
+  const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
+
+  useEffect(() => {
+    if (folder) {
+      updateHeaderTitle(folder[0]?.name || 'Folder items')
+    }
+  }, [folder, updateHeaderTitle])
+
+  useEffect(() => {
+    setLoadingHeaderTitle(folderLoading)
+  }, [folderLoading, setLoadingHeaderTitle])
 
   if (error || folderError)
     return (
@@ -41,70 +54,51 @@ export function FolderItemsClientPage({ id }: { id: string }) {
     )
 
   return (
-    <>
-      {folderLoading ? (
-        <div>
-          <div className="flex h-7 items-center">
-            <Skeleton className="h-3 w-28" />
-          </div>
-          <div className="flex h-5 items-center">
-            <Skeleton className="h-2 w-36" />
-          </div>
-        </div>
+    <div>
+      {isLoading ? (
+        <Loader msg="Fetching folder bookmarks" />
       ) : (
-        folder && (
-          <div>
-            <TypographyH4>{folder[0]?.name || 'Folder items'}</TypographyH4>
-            {folder[0]?.description && <p className="text-muted-foreground text-sm">{folder[0].description}</p>}
-          </div>
-        )
-      )}
-      <div>
-        {isLoading ? (
-          <Loader msg="Fetching folder bookmarks" />
+        folderItems &&
+        (folderItems.length > 0 ? (
+          <DataTable columns={columns} data={folderItems} />
         ) : (
-          folderItems &&
-          (folderItems.length > 0 ? (
-            <DataTable columns={columns} data={folderItems} />
-          ) : (
-            <Card>
-              <CardHeader className="flex flex-col items-center justify-center gap-2">
-                <CardTitle className="mb-2">
-                  <WindIcon className="size-6" />
-                </CardTitle>
-                <TypographyH4>Emtpy</TypographyH4>
-                <CardDescription className="text-center">This folder does not contain items yet.</CardDescription>
-              </CardHeader>
-              <CardFooter className="justify-center gap-2">
-                <Button variant="outline" asChild>
-                  <Link href="/">
-                    <BookmarkIcon className="size-4" />
-                    Bookmarks
-                  </Link>
-                </Button>
+          <Card>
+            <CardHeader className="flex flex-col items-center justify-center gap-2">
+              <CardTitle className="mb-2">
+                <WindIcon className="size-6" />
+              </CardTitle>
+              <TypographyH4>Emtpy</TypographyH4>
+              <CardDescription className="text-center">This folder does not contain items yet.</CardDescription>
+            </CardHeader>
+            <CardFooter className="justify-center gap-2">
+              <Button variant="outline" asChild>
+                <Link href="/">
+                  <BookmarkIcon className="size-4" />
+                  Bookmarks
+                </Link>
+              </Button>
 
-                <CreateBookmarkDialog
-                  trigger={
-                    <Button variant="outline">
-                      <BookmarkPlusIcon className="size-4" />
-                      Create
-                    </Button>
-                  }
-                />
+              <CreateBookmarkDialog
+                trigger={
+                  <Button variant="outline">
+                    <BookmarkPlusIcon className="size-4" />
+                    Create
+                  </Button>
+                }
+              />
 
-                <ImportBookmarksDialog
-                  trigger={
-                    <Button variant="outline">
-                      <FileUpIcon className="size-4" />
-                      Import
-                    </Button>
-                  }
-                />
-              </CardFooter>
-            </Card>
-          ))
-        )}
-      </div>
-    </>
+              <ImportBookmarksDialog
+                trigger={
+                  <Button variant="outline">
+                    <FileUpIcon className="size-4" />
+                    Import
+                  </Button>
+                }
+              />
+            </CardFooter>
+          </Card>
+        ))
+      )}
+    </div>
   )
 }
