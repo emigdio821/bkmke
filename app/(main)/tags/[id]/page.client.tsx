@@ -17,7 +17,7 @@ import { Loader } from '@/components/loader'
 
 export function TagitemsClientPage({ id }: { id: string }) {
   const tagId = id
-  const { data: tagItems, isLoading, error } = useTagItems(tagId)
+  const { data: tagItems, isLoading, refetch, error } = useTagItems(tagId)
   const { data: tag, isLoading: tagLoading, error: tagError } = useTags(tagId)
   const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
   const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
@@ -45,7 +45,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
           </CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
-          <Button variant="outline">
+          <Button type="button" variant="outline" onClick={() => refetch()}>
             <RotateCw className="size-4" />
             Refetch
           </Button>
@@ -54,13 +54,13 @@ export function TagitemsClientPage({ id }: { id: string }) {
     )
 
   return (
-    <div>
+    <>
       {isLoading ? (
         <Loader msg="Fetching tag bookmarks" />
       ) : (
         tagItems &&
         (tagItems.length > 0 ? (
-          <DataTable columns={columns} data={tagItems} />
+          <DataTable columns={columns} data={tagItems} refetch={refetch} />
         ) : (
           <Card>
             <CardHeader className="flex flex-col items-center justify-center gap-2">
@@ -99,6 +99,6 @@ export function TagitemsClientPage({ id }: { id: string }) {
           </Card>
         ))
       )}
-    </div>
+    </>
   )
 }

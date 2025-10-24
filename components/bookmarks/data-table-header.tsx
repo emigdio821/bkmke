@@ -4,14 +4,19 @@ import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { MasonryFilter } from '@/components/data-table/masonry-filter'
 import { DataTableHeaderActions } from './header-actions'
 
-export function DataTableHeaders({ table }: { table: Table<Bookmark> }) {
+interface DataTableHeadersProps {
+  table: Table<Bookmark>
+  refetch: () => void
+}
+
+export function DataTableHeaders({ table, refetch }: DataTableHeadersProps) {
   const layout = useTableLayoutStore((state) => state.layout)
   const isMasonryLayout = layout === 'masonry'
 
   return (
-    <>
+    <section className="flex justify-end gap-2">
+      <DataTableHeaderActions table={table} refetch={refetch} />
       {isMasonryLayout && <MasonryFilter table={table} />}
-      <DataTableHeaderActions table={table} />
-    </>
+    </section>
   )
 }

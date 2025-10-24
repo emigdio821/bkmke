@@ -22,9 +22,10 @@ import { TableLayout } from './table-layout'
 interface DataTableProps {
   columns: Array<ColumnDef<Bookmark>>
   data: Bookmark[]
+  refetch: () => void
 }
 
-export function DataTable({ columns, data }: DataTableProps) {
+export function DataTable({ columns, data, refetch }: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [rowSelection, setRowSelection] = useState({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -98,7 +99,7 @@ export function DataTable({ columns, data }: DataTableProps) {
 
   return (
     <>
-      <DataTableHeaders table={table} />
+      <DataTableHeaders table={table} refetch={refetch} />
       {layout === 'masonry' ? <MasonryLayout table={table} /> : <TableLayout table={table} />}
       <DataTablePagination table={table} />
     </>

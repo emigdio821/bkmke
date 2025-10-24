@@ -12,7 +12,7 @@ import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { Loader } from '@/components/loader'
 
 export function FavoritesClientPage() {
-  const { data: bookmarks, isLoading, error } = useFavoriteBookmarks()
+  const { data: bookmarks, isLoading, refetch, error } = useFavoriteBookmarks()
 
   if (isLoading) return <Loader msg="Fetching your favorite bookmarks" />
 
@@ -29,7 +29,7 @@ export function FavoritesClientPage() {
           </CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
-          <Button variant="outline">
+          <Button type="button" variant="outline" onClick={() => refetch()}>
             <RotateCwIcon className="size-4" />
             Refetch
           </Button>
@@ -41,7 +41,7 @@ export function FavoritesClientPage() {
     <>
       {bookmarks &&
         (bookmarks.length > 0 ? (
-          <DataTable columns={columns} data={bookmarks} />
+          <DataTable columns={columns} data={bookmarks} refetch={refetch} />
         ) : (
           <Card>
             <CardHeader className="flex flex-col items-center justify-center gap-2">

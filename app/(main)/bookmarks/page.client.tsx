@@ -12,7 +12,7 @@ import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
 export function BookmarksClientPage() {
-  const { data: bookmarks, isLoading, error } = useBookmarks()
+  const { data: bookmarks, isLoading, refetch, error } = useBookmarks()
 
   if (isLoading) return <Loader msg="Fetching your bookmarks" />
 
@@ -27,7 +27,7 @@ export function BookmarksClientPage() {
           <CardDescription>Unable to fetch bookmarks at this time, try again.</CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
-          <Button variant="outline">
+          <Button type="button" variant="outline" onClick={() => refetch()}>
             <RotateCwIcon className="size-4" />
             Refetch
           </Button>
@@ -39,7 +39,7 @@ export function BookmarksClientPage() {
     <>
       {bookmarks &&
         (bookmarks.length > 0 ? (
-          <DataTable columns={columns} data={bookmarks} />
+          <DataTable columns={columns} data={bookmarks} refetch={refetch} />
         ) : (
           <Card>
             <CardHeader className="flex flex-col items-center justify-center gap-2">

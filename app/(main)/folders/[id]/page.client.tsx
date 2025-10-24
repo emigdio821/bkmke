@@ -17,7 +17,7 @@ import { Loader } from '@/components/loader'
 
 export function FolderItemsClientPage({ id }: { id: string }) {
   const folderId = id
-  const { data: folderItems, isLoading, error } = useFolderItems(folderId)
+  const { data: folderItems, isLoading, refetch, error } = useFolderItems(folderId)
   const { data: folder, isLoading: folderLoading, error: folderError } = useFolder(folderId)
   const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
   const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
@@ -45,7 +45,7 @@ export function FolderItemsClientPage({ id }: { id: string }) {
           </CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
-          <Button variant="outline">
+          <Button type="button" variant="outline" onClick={() => refetch()}>
             <RotateCwIcon className="size-4" />
             Refetch
           </Button>
@@ -54,13 +54,13 @@ export function FolderItemsClientPage({ id }: { id: string }) {
     )
 
   return (
-    <div>
+    <>
       {isLoading ? (
         <Loader msg="Fetching folder bookmarks" />
       ) : (
         folderItems &&
         (folderItems.length > 0 ? (
-          <DataTable columns={columns} data={folderItems} />
+          <DataTable columns={columns} data={folderItems} refetch={refetch} />
         ) : (
           <Card>
             <CardHeader className="flex flex-col items-center justify-center gap-2">
@@ -99,6 +99,6 @@ export function FolderItemsClientPage({ id }: { id: string }) {
           </Card>
         ))
       )}
-    </div>
+    </>
   )
 }

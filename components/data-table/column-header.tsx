@@ -1,8 +1,14 @@
 import type { Column } from '@tanstack/react-table'
-import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
+import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon, EraserIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>
@@ -18,15 +24,18 @@ export function DataTableColumnHeader<TData, TValue>({
     return <div className={cn(className)}>{title}</div>
   }
 
+  const descSorted = column.getIsSorted() === 'desc'
+  const ascSorted = column.getIsSorted() === 'asc'
+
   return (
     <div className={cn('flex items-center space-x-2', className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="sm" className="[&_svg:not([class*='text-'])]:text-muted-foreground">
             <span>{title}</span>
-            {column.getIsSorted() === 'desc' ? (
+            {descSorted ? (
               <ArrowDownIcon className="size-4" />
-            ) : column.getIsSorted() === 'asc' ? (
+            ) : ascSorted ? (
               <ArrowUpIcon className="size-4" />
             ) : (
               <ChevronsUpDownIcon className="size-4" />
@@ -35,6 +44,7 @@ export function DataTableColumnHeader<TData, TValue>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem
+            disabled={ascSorted}
             onSelect={() => {
               column.toggleSorting(false)
             }}
@@ -43,6 +53,7 @@ export function DataTableColumnHeader<TData, TValue>({
             Asc
           </DropdownMenuItem>
           <DropdownMenuItem
+            disabled={descSorted}
             onSelect={() => {
               column.toggleSorting(true)
             }}
@@ -50,6 +61,19 @@ export function DataTableColumnHeader<TData, TValue>({
             <ArrowDownIcon className="size-4" />
             Desc
           </DropdownMenuItem>
+          {column.getIsSorted() && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={() => {
+                  column.clearSorting()
+                }}
+              >
+                <EraserIcon className="size-4" />
+                Clear sorting
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

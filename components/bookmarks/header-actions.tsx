@@ -1,6 +1,6 @@
 import type { Bookmark } from '@/types'
 import type { Table } from '@tanstack/react-table'
-import { FolderIcon, TagIcon, Trash2Icon } from 'lucide-react'
+import { FolderIcon, RotateCwIcon, TagIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
 import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
@@ -11,7 +11,12 @@ import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 
-export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
+interface DataTableHeaderActionsProps {
+  table: Table<Bookmark>
+  refetch: () => void
+}
+
+export function DataTableHeaderActions({ table, refetch }: DataTableHeaderActionsProps) {
   const modEnabled = useModEnabled()
   const selectedRows = table.getSelectedRowModel().rows
   const { handleRemoveBookmarks, progress, errors } = useRemoveBookmarks()
@@ -35,65 +40,77 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
     }
   }
 
-  if (selectedRows.length === 0) return null
-
   return (
-    <div className="flex items-center justify-end space-x-2">
-      {modEnabled && (
-        <Tooltip>
-          <AlertActionDialog
-            destructive
-            title="Delete selected bookmarks?"
-            message={
-              <>
-                <div>
-                  Selected bookmarks: <span className="font-semibold">{selectedRows.length}</span>
-                </div>
-                {progress > 0 && <Progress className="mt-4" value={progress} />}
-              </>
-            }
-            action={async () => await handleRemoveBks()}
-            trigger={
-              <TooltipTrigger asChild>
-                <Button size="icon" type="button" variant="outline">
-                  <Trash2Icon className="size-4" />
-                  <span className="sr-only">Delete selected items</span>
-                </Button>
-              </TooltipTrigger>
-            }
-          />
-          <TooltipContent>Delete selected items</TooltipContent>
-        </Tooltip>
+    <div className="flex items-center gap-2">
+      {selectedRows.length > 0 && (
+        <>
+          {modEnabled && (
+            <Tooltip>
+              <AlertActionDialog
+                destructive
+                title="Delete selected bookmarks?"
+                message={
+                  <>
+                    <div>
+                      Selected bookmarks: <span className="font-semibold">{selectedRows.length}</span>
+                    </div>
+                    {progress > 0 && <Progress className="mt-4" value={progress} />}
+                  </>
+                }
+                action={async () => await handleRemoveBks()}
+                trigger={
+                  <TooltipTrigger asChild>
+                    <Button size="icon-sm" type="button" variant="outline">
+                      <Trash2Icon className="size-4" />
+                      <span className="sr-only">Delete selected items</span>
+                    </Button>
+                  </TooltipTrigger>
+                }
+              />
+              <TooltipContent>Delete selected items</TooltipContent>
+            </Tooltip>
+          )}
+
+          <Tooltip>
+            <UpdateTagsDialog
+              bookmarks={selectedRows.map((row) => row.original)}
+              trigger={
+                <TooltipTrigger asChild>
+                  <Button size="icon-sm" type="button" variant="outline">
+                    <TagIcon className="size-4" />
+                    <span className="sr-only">Update tags</span>
+                  </Button>
+                </TooltipTrigger>
+              }
+            />
+            <TooltipContent>Update tags</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <MoveToFolderDialog
+              bookmarks={selectedRows.map((row) => row.original)}
+              trigger={
+                <TooltipTrigger asChild>
+                  <Button size="icon-sm" type="button" variant="outline">
+                    <FolderIcon className="size-4" />
+                    <span className="sr-only">Move to folder</span>
+                  </Button>
+                </TooltipTrigger>
+              }
+            />
+            <TooltipContent>Move to folder</TooltipContent>
+          </Tooltip>
+        </>
       )}
 
       <Tooltip>
-        <UpdateTagsDialog
-          bookmarks={selectedRows.map((row) => row.original)}
-          trigger={
-            <TooltipTrigger asChild>
-              <Button size="icon" type="button" variant="outline">
-                <TagIcon className="size-4" />
-                <span className="sr-only">Update tags</span>
-              </Button>
-            </TooltipTrigger>
-          }
-        />
-        <TooltipContent>Update tags</TooltipContent>
-      </Tooltip>
-
-      <Tooltip>
-        <MoveToFolderDialog
-          bookmarks={selectedRows.map((row) => row.original)}
-          trigger={
-            <TooltipTrigger asChild>
-              <Button size="icon" type="button" variant="outline">
-                <FolderIcon className="size-4" />
-                <span className="sr-only">Move to folder</span>
-              </Button>
-            </TooltipTrigger>
-          }
-        />
-        <TooltipContent>Move to folder</TooltipContent>
+        <TooltipTrigger asChild>
+          <Button size="icon-sm" type="button" onClick={refetch} variant="outline">
+            <RotateCwIcon className="size-4" />
+            <span className="sr-only">Refetch data</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Refetch data</TooltipContent>
       </Tooltip>
     </div>
   )
