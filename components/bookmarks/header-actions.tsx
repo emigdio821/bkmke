@@ -1,6 +1,6 @@
 import type { Bookmark } from '@/types'
 import type { Table } from '@tanstack/react-table'
-import { FolderIcon, TagIcon, Trash2Icon } from 'lucide-react'
+import { FolderIcon, RotateCwIcon, TagIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
 import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
@@ -11,7 +11,12 @@ import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 
-export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
+interface DataTableHeaderActionsProps {
+  table: Table<Bookmark>
+  refetch: () => void
+}
+
+export function DataTableHeaderActions({ table, refetch }: DataTableHeaderActionsProps) {
   const modEnabled = useModEnabled()
   const selectedRows = table.getSelectedRowModel().rows
   const { handleRemoveBookmarks, progress, errors } = useRemoveBookmarks()
@@ -36,7 +41,7 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
   }
 
   return (
-    <div className="flex items-center justify-end space-x-2">
+    <div className="flex items-center gap-2">
       {selectedRows.length > 0 && (
         <>
           {modEnabled && (
@@ -55,7 +60,7 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
                 action={async () => await handleRemoveBks()}
                 trigger={
                   <TooltipTrigger asChild>
-                    <Button size="icon" type="button" variant="outline">
+                    <Button size="icon-sm" type="button" variant="outline">
                       <Trash2Icon className="size-4" />
                       <span className="sr-only">Delete selected items</span>
                     </Button>
@@ -71,7 +76,7 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
               bookmarks={selectedRows.map((row) => row.original)}
               trigger={
                 <TooltipTrigger asChild>
-                  <Button size="icon" type="button" variant="outline">
+                  <Button size="icon-sm" type="button" variant="outline">
                     <TagIcon className="size-4" />
                     <span className="sr-only">Update tags</span>
                   </Button>
@@ -86,7 +91,7 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
               bookmarks={selectedRows.map((row) => row.original)}
               trigger={
                 <TooltipTrigger asChild>
-                  <Button size="icon" type="button" variant="outline">
+                  <Button size="icon-sm" type="button" variant="outline">
                     <FolderIcon className="size-4" />
                     <span className="sr-only">Move to folder</span>
                   </Button>
@@ -97,6 +102,16 @@ export function DataTableHeaderActions({ table }: { table: Table<Bookmark> }) {
           </Tooltip>
         </>
       )}
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button size="icon-sm" type="button" onClick={refetch} variant="outline">
+            <RotateCwIcon className="size-4" />
+            <span className="sr-only">Refetch data</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Refetch data</TooltipContent>
+      </Tooltip>
     </div>
   )
 }

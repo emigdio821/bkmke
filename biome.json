@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.6/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.7/schema.json",
   "formatter": { "enabled": false },
   "assist": { "actions": { "source": { "organizeImports": "off" } } },
   "linter": {
@@ -8,7 +8,11 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "error",
-        "noUnusedImports": "error"
+        "noUnusedImports": "error",
+        "useUniqueElementIds": "off"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "off"
       },
       "suspicious": {
         "noUnknownAtRules": "off"

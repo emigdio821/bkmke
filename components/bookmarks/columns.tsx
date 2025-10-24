@@ -62,30 +62,28 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       const ogInfo = row.original.og_info as unknown as OGInfo | undefined
 
       return (
-        <>
-          <div className="flex max-w-64 flex-col items-start">
-            <BookmarkDetailsDialog
-              bookmark={bookmark}
-              trigger={
-                <Button variant="link" className="text-foreground block max-w-64 flex-auto overflow-hidden">
-                  <div className="flex items-center space-x-2">
-                    <Avatar className="size-4">
-                      <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
-                      <AvatarFallback />
-                    </Avatar>
-                    <span className="truncate">{bookmark.name}</span>
-                  </div>
-                </Button>
-              }
-            />
+        <div className="flex max-w-64 flex-col items-start">
+          <BookmarkDetailsDialog
+            bookmark={bookmark}
+            trigger={
+              <Button variant="link" className="text-foreground block max-w-64 flex-auto overflow-hidden">
+                <div className="flex items-center space-x-2">
+                  <Avatar className="size-4 rounded-none">
+                    <AvatarImage src={ogInfo?.faviconUrl || ogInfo?.imageUrl} />
+                    <AvatarFallback />
+                  </Avatar>
+                  <span className="truncate">{bookmark.name}</span>
+                </div>
+              </Button>
+            }
+          />
 
-            {bookmark.description && (
-              <p className="text-muted-foreground w-full truncate text-xs" title={bookmark.description}>
-                {bookmark.description}
-              </p>
-            )}
-          </div>
-        </>
+          {bookmark.description && (
+            <p className="text-muted-foreground w-full truncate text-xs" title={bookmark.description}>
+              {bookmark.description}
+            </p>
+          )}
+        </div>
       )
     },
   },

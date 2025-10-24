@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { siteConfig } from '@/config/site'
-import { TypographyH4 } from '@/components/ui/typography'
 import { BookmarksClientPage } from './bookmarks/page.client'
 
 export const metadata: Metadata = {
@@ -10,13 +9,6 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function BookmarksPage() {
-  return (
-    <>
-      <TypographyH4>Bookmarks</TypographyH4>
-      <div>
-        <BookmarksClientPage />
-      </div>
-    </>
-  )
+export default function BookmarksPage() {
+  return <BookmarksClientPage />
 }

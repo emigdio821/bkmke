@@ -13,7 +13,14 @@ interface ProvidersProps {
   children: React.ReactNode
 }
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 export function Providers({ children }: ProvidersProps) {
   return (
@@ -33,7 +40,7 @@ export function Providers({ children }: ProvidersProps) {
               }}
             />
           </TooltipProvider>
-          <ReactQueryDevtools buttonPosition="top-right" />
+          <ReactQueryDevtools />
         </QueryClientProvider>
       </NextThemesProvider>
     </NuqsAdapter>

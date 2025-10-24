@@ -146,7 +146,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit bookmark</DialogTitle>
-          <DialogDescription className="p-0 break-words">{bookmark.name}</DialogDescription>
+          <DialogDescription className="p-0 wrap-break-word">{bookmark.name}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form id="edit-bk-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

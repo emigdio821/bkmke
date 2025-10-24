@@ -84,3 +84,17 @@ export function formatBytes(
 export function truncateString(str: string, size: number) {
   return `${str.slice(0, size)}...`
 }
+
+export function getHeaderTitleFromPath(path: string) {
+  let headerTitle = null
+
+  if (path === '/') {
+    headerTitle = 'Bookmarks'
+  } else if (path === '/favorites') {
+    headerTitle = 'Favorites'
+  } else if (path === '/settings') {
+    headerTitle = 'Settings'
+  }
+
+  return headerTitle
+}

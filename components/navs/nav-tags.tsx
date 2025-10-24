@@ -72,10 +72,12 @@ export function NavTags() {
   return (
     <Collapsible defaultOpen className="group/collapsible">
       <SidebarGroup>
-        <SidebarGroupLabel className="hover:opacity-80" asChild>
-          <CollapsibleTrigger>
-            <ChevronDownIcon className="mr-2 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-            Tags
+        <SidebarGroupLabel asChild>
+          <CollapsibleTrigger asChild>
+            <SidebarMenuButton>
+              <ChevronDownIcon className="transition-transform group-data-[state=open]/collapsible:rotate-180" />
+              Tags
+            </SidebarMenuButton>
           </CollapsibleTrigger>
         </SidebarGroupLabel>
         <CreateTagDialog
@@ -121,7 +123,7 @@ export function NavTags() {
                       </SidebarMenuAction>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 break-words">
+                      <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 wrap-break-word">
                         {tag.name}
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
