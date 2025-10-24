@@ -8,7 +8,7 @@ export function DemoPopover() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="plain">
+        <Button type="button" size="icon-sm" variant="ghost">
           <InfoIcon className="size-4" />
         </Button>
       </PopoverTrigger>

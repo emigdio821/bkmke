@@ -38,7 +38,7 @@ export function AppHeaderActions() {
     <div className="flex items-center gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="outline" type="button">
+          <Button size="icon" type="button" variant="outline">
             {isMasonryLayout ? <LayoutDashboardIcon className="size-4" /> : <TableIcon className="size-4" />}
             <span className="sr-only">Layout</span>
           </Button>

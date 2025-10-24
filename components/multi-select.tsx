@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Column } from '@tanstack/react-table'
-import { CheckIcon, ChevronDownIcon } from 'lucide-react'
+import { CheckCheckIcon, CheckIcon, ChevronDownIcon, EraserIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -33,6 +33,7 @@ interface DataTableFacetedFilterProps<TData, TValue> {
 export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TData, TValue>) {
   const { placeholder, options, onChange, value, emptyText, id, name } = props
   const [selectedValues, setSelectedValues] = useState<string[]>(value || [])
+  const isAllSelected = options.length === selectedValues.length
 
   function updateSelectedValues(newValues: string[]) {
     setSelectedValues(newValues)
@@ -56,7 +57,7 @@ export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TD
           type="button"
           variant="outline"
           disabled={options.length === 0}
-          className="w-full justify-start gap-0.5 px-3 font-normal"
+          className="hover:bg-background data-[state=open]:bg-background data-[state=open]:dark:bg-input/30 w-full justify-start gap-0.5 px-3 font-normal"
         >
           {options.length === 0 ? (
             <span className="text-muted-foreground">{emptyText || 'Empty data'}</span>
@@ -72,7 +73,7 @@ export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TD
             </>
           )}
 
-          <ChevronDownIcon className="text-muted-foreground ml-auto size-4" />
+          <ChevronDownIcon className="text-muted-foreground ml-auto size-4 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-52 p-0" align="start">
@@ -87,7 +88,7 @@ export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TD
                   <CommandItem key={option.value} onSelect={() => handleSelect(option.value)}>
                     <div
                       className={cn(
-                        'border-input flex size-4 items-center justify-center rounded-[4px] border',
+                        'border-input flex size-4 items-center justify-center rounded-sm border',
                         isSelected ? 'bg-primary text-primary-foreground' : '[&_svg]:invisible',
                       )}
                     >
@@ -101,26 +102,30 @@ export function MultiSelect<TData, TValue>(props: DataTableFacetedFilterProps<TD
             </CommandGroup>
             <CommandSeparator />
             <CommandGroup>
-              {selectedValues.length > 0 ? (
+              {selectedValues.length > 0 && !isAllSelected && (
                 <CommandItem
                   onSelect={() => {
                     updateSelectedValues([])
                   }}
-                  className="justify-center text-center"
                 >
-                  Clear selected
-                </CommandItem>
-              ) : (
-                <CommandItem
-                  onSelect={() => {
-                    const allValues = options.map((option) => option.value)
-                    updateSelectedValues(allValues)
-                  }}
-                  className="justify-center text-center"
-                >
-                  Select all
+                  <EraserIcon className="size-4" />
+                  Diselect selection
                 </CommandItem>
               )}
+
+              <CommandItem
+                onSelect={() => {
+                  if (isAllSelected) {
+                    updateSelectedValues([])
+                  } else {
+                    const allValues = options.map((option) => option.value)
+                    updateSelectedValues(allValues)
+                  }
+                }}
+              >
+                {isAllSelected ? <EraserIcon className="size-4" /> : <CheckCheckIcon className="size-4" />}
+                {isAllSelected ? 'Diselect all' : 'Select all'}
+              </CommandItem>
             </CommandGroup>
           </CommandList>
         </Command>

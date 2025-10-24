@@ -1,5 +1,5 @@
-import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Slot as SlotPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
 
 type ButtonProps = React.ComponentProps<'button'> &
@@ -12,13 +12,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        default: 'data-[state=open]:bg-primary/90 bg-primary text-primary-foreground hover:bg-primary/90',
         destructive:
           'bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 text-white',
         outline:
-          'bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+          'data-[state=open]:bg-accent data-[state=open]:dark:bg-input/50 bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs',
+        secondary: 'data-[state=open]:bg-secondary/80 bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost:
+          'data-[state=open]:bg-accent data-[state=open]:dark:bg-accent/50 hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary rounded-none underline-offset-4 hover:underline focus-visible:rounded-md',
       },
       size: {
@@ -39,7 +40,7 @@ const buttonVariants = cva(
 )
 
 function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
-  const Comp = asChild ? Slot : 'button'
+  const Comp = asChild ? SlotPrimitive.Slot : 'button'
   const flatVariants = ['link']
   const btnSize = size || (variant && flatVariants.includes(variant) ? 'flat' : size)
 

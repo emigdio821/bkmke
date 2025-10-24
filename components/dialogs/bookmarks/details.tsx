@@ -40,7 +40,7 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
         </DialogHeader>
         {!bookmark.description && <DialogDescription className="sr-only">Details dialog</DialogDescription>}
 
-        <div>
+        <div className="relative flex flex-col gap-1 text-sm">
           <div className="flex items-center gap-2">
             <ExternalLinkIcon className="text-muted-foreground size-4" />
             <Button asChild variant="link" className="block truncate">
@@ -49,15 +49,6 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
               </a>
             </Button>
           </div>
-
-          {bookmark.folder && (
-            <div className="flex items-center space-x-2">
-              <FolderIcon className="text-muted-foreground size-4" />
-              <Button asChild variant="link">
-                <Link href={`/folders/${bookmark.folder_id}`}>{bookmark.folder.name}</Link>
-              </Button>
-            </div>
-          )}
 
           {bookmark.tag_items.length > 0 && (
             <div className="flex items-center space-x-2">
@@ -69,6 +60,15 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
                   </Badge>
                 ))}
               </div>
+            </div>
+          )}
+
+          {bookmark.folder && (
+            <div className="flex items-center space-x-2">
+              <FolderIcon className="text-muted-foreground size-4" />
+              <Badge variant="outline" asChild>
+                <Link href={`/folders/${bookmark.folder_id}`}>{bookmark.folder.name}</Link>
+              </Badge>
             </div>
           )}
 
