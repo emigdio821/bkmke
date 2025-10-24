@@ -66,7 +66,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
           <MoreHorizontalIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="max-w-52">
+      <DropdownMenuContent align="end" className="max-w-52 min-w-44">
         <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 wrap-break-word">{bookmark.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <EditBookmarkDialog

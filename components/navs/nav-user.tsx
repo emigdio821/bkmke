@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
@@ -19,7 +18,6 @@ import {
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { toast } from 'sonner'
-import { useProfileStore } from '@/lib/stores/profile'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -50,8 +48,6 @@ export function NavUser() {
   const queryClient = useQueryClient()
   const { setTheme, theme } = useTheme()
   const { data: profile, isLoading, error, refetch } = useProfile()
-  const updateProfile = useProfileStore((state) => state.updateProfile)
-  const setLoadingProfile = useProfileStore((state) => state.setLoadingProfile)
 
   async function handleLogOut() {
     const { error } = await supabase.auth.signOut()
@@ -63,16 +59,6 @@ export function NavUser() {
     queryClient.clear()
     router.push('/login')
   }
-
-  useEffect(() => {
-    if (profile) {
-      updateProfile(profile)
-    }
-  }, [profile, updateProfile])
-
-  useEffect(() => {
-    setLoadingProfile(isLoading)
-  }, [isLoading, setLoadingProfile])
 
   if (isLoading) return <Skeleton className="h-8" />
 

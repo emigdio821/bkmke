@@ -1,6 +1,7 @@
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppHeader } from '@/components/app-header'
 import { AppSidebar } from '@/components/app-sidebar'
+import { ProfileInitializer } from '@/components/profile-initializer'
 
 interface MainLayoutProps {
   children: React.ReactNode
@@ -9,6 +10,7 @@ interface MainLayoutProps {
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <SidebarProvider>
+      <ProfileInitializer />
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
