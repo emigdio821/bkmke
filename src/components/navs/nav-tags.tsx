@@ -1,4 +1,4 @@
-import { useLocation } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import {
   ChevronDownIcon,
   Edit2Icon,

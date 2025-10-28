@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
-import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCw, WindIcon } from 'lucide-react'
+import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
 import { useHeaderTitleStore } from '@/lib/stores/header-title'
 import { useTagItems } from '@/hooks/tags/use-tag-items'
 import { useTags } from '@/hooks/tags/use-tags'
@@ -44,7 +44,7 @@ export function TagitemsClientPage({ id }: { id: string }) {
         </CardHeader>
         <CardFooter className="justify-center">
           <Button type="button" variant="outline" onClick={() => refetch()}>
-            <RotateCw className="size-4" />
+            <RotateCwIcon className="size-4" />
             Refetch
           </Button>
         </CardFooter>

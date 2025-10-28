@@ -57,10 +57,8 @@ function RootLayout() {
       <head>
         <HeadContent />
       </head>
-      <body className={cn('antialiased')}>
-        <main className="relative flex min-h-dvh flex-col">
-          <Outlet />
-        </main>
+      <body className={cn('relative flex min-h-dvh flex-col antialiased')}>
+        <Outlet />
 
         <TanStackDevtools
           config={{

@@ -3,19 +3,17 @@ import { useProfileStore } from '@/lib/stores/profile'
 import { useProfile } from '@/hooks/use-profile'
 
 export function ProfileInitializer() {
-  const { data: profile, isLoading } = useProfile()
+  const { data: profile } = useProfile()
   const updateProfile = useProfileStore((state) => state.updateProfile)
   const setLoadingProfile = useProfileStore((state) => state.setLoadingProfile)
 
   useEffect(() => {
     if (profile) {
+      console.log({ profile })
       updateProfile(profile)
+      setLoadingProfile(false)
     }
-  }, [profile, updateProfile])
-
-  useEffect(() => {
-    setLoadingProfile(isLoading)
-  }, [isLoading, setLoadingProfile])
+  }, [profile, updateProfile, setLoadingProfile])
 
   return null
 }

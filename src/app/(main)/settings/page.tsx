@@ -1,14 +1,14 @@
-import type { Metadata } from 'next'
-import { siteConfig } from '@/config/site'
+// import type { Metadata } from 'next'
+// import { siteConfig } from '@/config/site'
 import { ExportBookmarks } from '@/components/settings/export-bookmarks'
 import { ProfileSettings } from '@/components/settings/profile/settings'
 
-export const metadata: Metadata = {
-  title: {
-    default: 'Settings',
-    template: `%s · ${siteConfig.name}`,
-  },
-}
+// export const metadata: Metadata = {
+//   title: {
+//     default: 'Settings',
+//     template: `%s · ${siteConfig.name}`,
+//   },
+// }
 
 export default async function SettingsPage() {
   return (

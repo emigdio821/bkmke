@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
-import { GhostIcon } from 'lucide-react'
+import { GhostIcon, RotateCwIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Footer } from '@/components/footer'
 
 // export const metadata: Metadata = {
@@ -33,11 +33,14 @@ export default function NotFound() {
               <GhostIcon className="text-muted-foreground mx-auto mb-2 size-8" />
               404
             </CardTitle>
+            <CardDescription className="text-center">This page does not exist.</CardDescription>
           </CardHeader>
-          <CardContent className="text-center text-sm">This page does not exist.</CardContent>
-          <CardFooter className="items-center justify-center">
-            <Button className="w-full" asChild>
-              <Link to="/">Back to home</Link>
+          <CardFooter className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <Button className="grow" asChild>
+              <Link to="/">
+                <RotateCwIcon className="size-4" />
+                Start over
+              </Link>
             </Button>
           </CardFooter>
         </Card>
