@@ -30,6 +30,6 @@
         "noUselessElse": "error"
       }
     },
-    "includes": ["**", "!**/.next", "!**/build", "!**/next.config.mjs", "!**/node_modules"]
+    "includes": ["**", "!**/src/routeTree.gen.ts", "!**/build", "!**/node_modules"]
   }
 }
