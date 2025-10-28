@@ -13,6 +13,9 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
+import { Route as AuthenticatedTagsTagIdRouteImport } from './routes/_authenticated/tags.$tagId'
+import { Route as AuthenticatedFoldersFolderIdRouteImport } from './routes/_authenticated/folders.$folderId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -33,35 +36,75 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedTagsTagIdRoute = AuthenticatedTagsTagIdRouteImport.update({
+  id: '/tags/$tagId',
+  path: '/tags/$tagId',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedFoldersFolderIdRoute =
+  AuthenticatedFoldersFolderIdRouteImport.update({
+    id: '/folders/$folderId',
+    path: '/folders/$folderId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
+  '/favorites': typeof AuthenticatedFavoritesRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/': typeof AuthenticatedIndexRoute
+  '/folders/$folderId': typeof AuthenticatedFoldersFolderIdRoute
+  '/tags/$tagId': typeof AuthenticatedTagsTagIdRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/favorites': typeof AuthenticatedFavoritesRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/': typeof AuthenticatedIndexRoute
+  '/folders/$folderId': typeof AuthenticatedFoldersFolderIdRoute
+  '/tags/$tagId': typeof AuthenticatedTagsTagIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/folders/$folderId': typeof AuthenticatedFoldersFolderIdRoute
+  '/_authenticated/tags/$tagId': typeof AuthenticatedTagsTagIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/login' | '/settings' | '/'
+  fullPaths:
+    | '/login'
+    | '/favorites'
+    | '/settings'
+    | '/'
+    | '/folders/$folderId'
+    | '/tags/$tagId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/settings' | '/'
+  to:
+    | '/login'
+    | '/favorites'
+    | '/settings'
+    | '/'
+    | '/folders/$folderId'
+    | '/tags/$tagId'
   id:
     | '__root__'
     | '/_authenticated'
     | '/login'
+    | '/_authenticated/favorites'
     | '/_authenticated/settings'
     | '/_authenticated/'
+    | '/_authenticated/folders/$folderId'
+    | '/_authenticated/tags/$tagId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -99,17 +142,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/favorites': {
+      id: '/_authenticated/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof AuthenticatedFavoritesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tags/$tagId': {
+      id: '/_authenticated/tags/$tagId'
+      path: '/tags/$tagId'
+      fullPath: '/tags/$tagId'
+      preLoaderRoute: typeof AuthenticatedTagsTagIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/folders/$folderId': {
+      id: '/_authenticated/folders/$folderId'
+      path: '/folders/$folderId'
+      fullPath: '/folders/$folderId'
+      preLoaderRoute: typeof AuthenticatedFoldersFolderIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedFoldersFolderIdRoute: typeof AuthenticatedFoldersFolderIdRoute
+  AuthenticatedTagsTagIdRoute: typeof AuthenticatedTagsTagIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedFoldersFolderIdRoute: AuthenticatedFoldersFolderIdRoute,
+  AuthenticatedTagsTagIdRoute: AuthenticatedTagsTagIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

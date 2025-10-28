@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
-import { Link } from '@tanstack/react-router'
+import { getTagDetails } from '@/server-functions/get-tag-details'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
 import { useHeaderTitleStore } from '@/lib/stores/header-title'
 import { useTagItems } from '@/hooks/tags/use-tag-items'
-import { useTags } from '@/hooks/tags/use-tags'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { TypographyH4 } from '@/components/ui/typography'
@@ -13,24 +13,33 @@ import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
-export function TagitemsClientPage({ id }: { id: string }) {
-  const tagId = id
+export const Route = createFileRoute('/_authenticated/tags/$tagId')({
+  component: RouteComponent,
+  loader: async ({ params }) => {
+    const { tagId } = params
+    const tagDetails = await getTagDetails({
+      data: { tagId },
+    })
+
+    return tagDetails
+  },
+})
+
+function RouteComponent() {
+  const { tagId } = Route.useParams()
+  const tagDetails = Route.useLoaderData()
   const { data: tagItems, isLoading, refetch, error } = useTagItems(tagId)
-  const { data: tag, isLoading: tagLoading, error: tagError } = useTags(tagId)
+  const setLoadingTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
   const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
-  const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
 
   useEffect(() => {
-    if (tag) {
-      updateHeaderTitle(tag[0]?.name || 'Tag items')
+    if (tagDetails) {
+      updateHeaderTitle(tagDetails[0]?.name || 'Tag items')
+      setLoadingTitle(false)
     }
-  }, [tag, updateHeaderTitle])
+  }, [tagDetails, updateHeaderTitle, setLoadingTitle])
 
-  useEffect(() => {
-    setLoadingHeaderTitle(tagLoading)
-  }, [tagLoading, setLoadingHeaderTitle])
-
-  if (error || tagError)
+  if (error)
     return (
       <Card>
         <CardHeader className="flex flex-col items-center justify-center">

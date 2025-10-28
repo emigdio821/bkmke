@@ -10,7 +10,7 @@ export interface StoreState {
 
 const storeCreator: StateCreator<StoreState> = (set) => ({
   title: null,
-  isLoading: false,
+  isLoading: true,
   updateTitle: (title) => {
     set(() => ({ title }))
   },

@@ -1,18 +1,22 @@
-import { BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
-import { useBookmarks } from '@/hooks/bookmarks/use-bookmarks'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { BookmarkIcon, BookmarkPlusIcon, BugIcon, RotateCwIcon, WindIcon } from 'lucide-react'
+import { useFavoriteBookmarks } from '@/hooks/bookmarks/use-favorite-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
-import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
-export function BookmarksClientPage() {
-  const { data: bookmarks, isLoading, refetch, error } = useBookmarks()
+export const Route = createFileRoute('/_authenticated/favorites')({
+  component: RouteComponent,
+})
 
-  if (isLoading) return <Loader msg="Fetching your bookmarks" />
+function RouteComponent() {
+  const { data: bookmarks, isLoading, refetch, error } = useFavoriteBookmarks()
+
+  if (isLoading) return <Loader msg="Fetching your favorite bookmarks" />
 
   if (error)
     return (
@@ -22,7 +26,9 @@ export function BookmarksClientPage() {
             <BugIcon className="size-6" />
           </CardTitle>
           <TypographyH4>Error</TypographyH4>
-          <CardDescription>Unable to fetch bookmarks at this time, try again.</CardDescription>
+          <CardDescription className="text-center">
+            Unable to fetch favorite bookmarks at this time, try again.
+          </CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
           <Button type="button" variant="outline" onClick={() => refetch()}>
@@ -41,11 +47,11 @@ export function BookmarksClientPage() {
         ) : (
           <Card>
             <CardHeader className="flex flex-col items-center justify-center gap-2">
-              <CardTitle className="mb-4">
+              <CardTitle className="mb-2">
                 <WindIcon className="size-6" />
               </CardTitle>
               <TypographyH4>Emtpy</TypographyH4>
-              <CardDescription className="text-center">You have no bookmarks yet.</CardDescription>
+              <CardDescription className="text-center">You have no favorite bookmarks yet.</CardDescription>
             </CardHeader>
             <CardFooter className="justify-center gap-2">
               <CreateBookmarkDialog
@@ -57,14 +63,12 @@ export function BookmarksClientPage() {
                 }
               />
 
-              <ImportBookmarksDialog
-                trigger={
-                  <Button variant="outline">
-                    <FileUpIcon className="size-4" />
-                    Import
-                  </Button>
-                }
-              />
+              <Button variant="outline" asChild>
+                <Link to="/">
+                  <BookmarkIcon className="size-4" />
+                  Bookmarks
+                </Link>
+              </Button>
             </CardFooter>
           </Card>
         ))}

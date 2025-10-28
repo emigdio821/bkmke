@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useLocation } from '@tanstack/react-router'
 import { useHeaderTitleStore } from '@/lib/stores/header-title'
 import { getHeaderTitleFromPath } from '@/lib/utils'
@@ -25,7 +25,16 @@ export function AppHeader() {
   const { pathname } = location
   const titleFromPath = getHeaderTitleFromPath(pathname)
   const headerTitle = useHeaderTitleStore((state) => state.title)
+  const updateTitle = useHeaderTitleStore((state) => state.updateTitle)
   const isTitleLoading = useHeaderTitleStore((state) => state.isLoading)
+  const setLoadingTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
+
+  useEffect(() => {
+    if (titleFromPath) {
+      setLoadingTitle(false)
+      updateTitle(titleFromPath)
+    }
+  }, [setLoadingTitle, updateTitle, titleFromPath])
 
   return (
     <header className="bg-background sticky top-0 z-50 flex h-16 w-full items-center border-b">
@@ -33,7 +42,7 @@ export function AppHeader() {
         <SidebarTrigger />
         <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
 
-        {isTitleLoading ? (
+        {isTitleLoading && !titleFromPath ? (
           <Skeleton className="h-7 w-32" />
         ) : (
           <TypographyH4 className="truncate">{titleFromPath || headerTitle}</TypographyH4>

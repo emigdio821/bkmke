@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
-import { Link } from '@tanstack/react-router'
+import { getFolderDetails } from '@/server-functions/get-folder-details'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
 import { useHeaderTitleStore } from '@/lib/stores/header-title'
-import { useFolder } from '@/hooks/folders/use-folder'
+// import { useFolderDetails } from '@/hooks/folders/use-folder-details'
 import { useFolderItems } from '@/hooks/folders/use-folder-items'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -13,24 +14,33 @@ import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
-export function FolderItemsClientPage({ id }: { id: string }) {
-  const folderId = id
-  const { data: folderItems, isLoading, refetch, error } = useFolderItems(folderId)
-  const { data: folder, isLoading: folderLoading, error: folderError } = useFolder(folderId)
+export const Route = createFileRoute('/_authenticated/folders/$folderId')({
+  component: RouteComponent,
+  loader: async ({ params }) => {
+    const { folderId } = params
+    const folderDetails = await getFolderDetails({
+      data: { folderId },
+    })
+
+    return folderDetails
+  },
+})
+
+function RouteComponent() {
+  const { folderId } = Route.useParams()
+  const folderDetails = Route.useLoaderData()
   const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
-  const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
+  const setLoadingTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
+  const { data: folderItems, isLoading, refetch, error } = useFolderItems(folderId)
 
   useEffect(() => {
-    if (folder) {
-      updateHeaderTitle(folder[0]?.name || 'Folder items')
+    if (folderDetails) {
+      updateHeaderTitle(folderDetails[0]?.name || 'Folder items')
+      setLoadingTitle(false)
     }
-  }, [folder, updateHeaderTitle])
+  }, [updateHeaderTitle, folderDetails, setLoadingTitle])
 
-  useEffect(() => {
-    setLoadingHeaderTitle(folderLoading)
-  }, [folderLoading, setLoadingHeaderTitle])
-
-  if (error || folderError)
+  if (error)
     return (
       <Card>
         <CardHeader className="flex flex-col items-center justify-center">

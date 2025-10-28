@@ -1,4 +1,4 @@
-import { getAuthUser } from '@/server-functions/get-user'
+import { getAuthUser } from '@/server-functions/get-auth-user'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppHeader } from '@/components/app-header'

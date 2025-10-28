@@ -9,7 +9,6 @@ export function ProfileInitializer() {
 
   useEffect(() => {
     if (profile) {
-      console.log({ profile })
       updateProfile(profile)
       setLoadingProfile(false)
     }
