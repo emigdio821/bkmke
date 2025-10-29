@@ -6,7 +6,7 @@ const getBaseUrl = () => {
     return window.location.origin
   }
 
-  return import.meta.env.VITE_APP_URL || 'https://bkmke.netlify.app/'
+  return import.meta.env.VITE_APP_URL || 'https://bkmke.netlify.app'
 }
 
 const appUrl = getBaseUrl()
