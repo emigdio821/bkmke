@@ -1,4 +1,4 @@
-const FONT_URL = 'https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap'
+const FONT_URL = 'https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap'
 
 export function createFontLinks() {
   return [

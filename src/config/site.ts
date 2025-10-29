@@ -1,7 +1,16 @@
 const appName = 'bkmke'
 const appDesc = 'bkmke is a simple bookmark manager.'
-const appUrl = 'https://bkmke.vercel.app'
-export const appOgUrl = 'https://bkmke.vercel.app/api/og'
+
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin
+  }
+
+  return import.meta.env.VITE_APP_URL || 'https://bkmke-tanstack-start.vercel.app/'
+}
+
+const appUrl = getBaseUrl()
+export const appOgUrl = `${appUrl}/api/og-img`
 
 export const siteConfig = {
   name: appName,

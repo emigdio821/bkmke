@@ -7,7 +7,7 @@ import { siteConfig } from '@/config/site'
 
 async function loadFontData() {
   try {
-    const fontPath = join(process.cwd(), 'public', 'fonts', 'Figtree-Bold.ttf')
+    const fontPath = join(process.cwd(), 'public', 'fonts', 'Geist-Bold.ttf')
     const fontData = readFileSync(fontPath)
     return fontData.buffer
   } catch (error) {
@@ -16,7 +16,7 @@ async function loadFontData() {
   }
 }
 
-export const Route = createFileRoute('/api/og')({
+export const Route = createFileRoute('/api/og-img')({
   server: {
     handlers: {
       GET: async ({ request }) => {
