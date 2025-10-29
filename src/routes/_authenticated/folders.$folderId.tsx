@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
+import { getFolderDetails } from '@/server-functions/folders'
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
+import { createTitle } from '@/lib/seo'
 import { useHeaderTitleStore } from '@/lib/stores/header-title'
-import { folderDetailsQuery, folderItemsQuery } from '@/lib/tanstack-queries/folders-queries'
+import { folderItemsQuery } from '@/lib/tanstack-queries/folders-queries'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { TypographyH4 } from '@/components/ui/typography'
@@ -14,19 +16,26 @@ import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
 export const Route = createFileRoute('/_authenticated/folders/$folderId')({
-  loader: async ({ params, context }) => {
+  loader: async ({ params }) => {
     const { folderId } = params
-    context.queryClient.ensureQueryData(folderDetailsQuery(folderId))
+    const folderDetails = await getFolderDetails({
+      data: { folderId },
+    })
+
+    return folderDetails
   },
+  head: ({ loaderData }) => ({
+    meta: [{ title: createTitle(loaderData?.[0]?.name || 'Folder items') }],
+  }),
   component: RouteComponent,
   pendingComponent: () => <Loader msg="Fetching folder details" />,
 })
 
 function RouteComponent() {
   const { folderId } = Route.useParams()
+  const folderDetails = Route.useLoaderData()
   const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
   const setLoadingTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
-  const { data: folderDetails } = useSuspenseQuery(folderDetailsQuery(folderId))
   const { data: folderItems, isLoading, refetch, error } = useQuery(folderItemsQuery(folderId))
 
   useEffect(() => {

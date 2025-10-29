@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
+import { createTitle } from '@/lib/seo'
 import { useBookmarks } from '@/hooks/bookmarks/use-bookmarks'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,6 +12,9 @@ import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
 export const Route = createFileRoute('/_authenticated/')({
+  head: () => ({
+    meta: [{ title: createTitle('Bookmarks') }],
+  }),
   component: RouteComponent,
 })
 

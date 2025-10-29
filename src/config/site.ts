@@ -28,28 +28,26 @@ export const siteConfig = {
     icon: ['/favicon.ico'],
     shortcut: '/images/favicon-16x16.png',
     apple: '/images/favicon-apple.png',
-    other: [
-      {
-        url: '/images/favicon-16x16.png',
-        sizes: '16x16',
-        type: 'image/png',
-      },
-      {
-        url: '/images/favicon-32x32.png',
-        sizes: '32x32',
-        type: 'image/png',
-      },
-      {
-        url: '/images/favicon-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        url: '/images/favicon-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-    ],
+    i16: {
+      url: '/images/favicon-16x16.png',
+      sizes: '16x16',
+      type: 'image/png',
+    },
+    i32: {
+      url: '/images/favicon-32x32.png',
+      sizes: '32x32',
+      type: 'image/png',
+    },
+    i192: {
+      url: '/images/favicon-192x192.png',
+      sizes: '192x192',
+      type: 'image/png',
+    },
+    i512: {
+      url: '/images/favicon-512x512.png',
+      sizes: '512x512',
+      type: 'image/png',
+    },
   },
   og: {
     title: appName,
@@ -64,7 +62,7 @@ export const siteConfig = {
     card: 'summary_large_image',
     title: appName,
     description: appDesc,
-    images: [appOgUrl],
+    images: appOgUrl,
     creator: '@emigdio821',
   },
 }

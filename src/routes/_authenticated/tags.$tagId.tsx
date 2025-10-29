@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { getTagDetails } from '@/server-functions/get-tag-details'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
+import { createTitle } from '@/lib/seo'
 import { useHeaderTitleStore } from '@/lib/stores/header-title'
 import { useTagItems } from '@/hooks/tags/use-tag-items'
 import { Button } from '@/components/ui/button'
@@ -22,6 +23,9 @@ export const Route = createFileRoute('/_authenticated/tags/$tagId')({
 
     return tagDetails
   },
+  head: ({ loaderData }) => ({
+    meta: [{ title: createTitle(loaderData?.[0]?.name || 'Tag items') }],
+  }),
   component: RouteComponent,
   pendingComponent: () => <Loader msg="Fetching tag details" />,
 })

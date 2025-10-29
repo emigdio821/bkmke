@@ -1,31 +1,14 @@
 import { Link } from '@tanstack/react-router'
 import { GhostIcon, RotateCwIcon } from 'lucide-react'
+import { createTitle } from '@/lib/seo'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Footer } from '@/components/footer'
 
-// export const metadata: Metadata = {
-//   title: {
-//     default: 'Not found',
-//     template: `%s · ${siteConfig.name}`,
-//   },
-//   description: siteConfig.description,
-//   authors: [
-//     {
-//       name: 'Emigdio Torres',
-//       url: siteConfig.url,
-//     },
-//   ],
-//   creator: 'Emigdio Torres',
-//   icons: siteConfig.icons,
-//   openGraph: siteConfig.og,
-//   metadataBase: new URL(siteConfig.url),
-//   twitter: siteConfig.ogTwitter,
-// }
-
 export default function NotFound() {
   return (
     <>
+      <title>{createTitle('Not found')}</title>
       <section className="p-4">
         <Card className="mx-auto w-full max-w-sm">
           <CardHeader>
