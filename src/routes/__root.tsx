@@ -4,6 +4,7 @@ import { devtools } from '@/integrations/tanstack-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
+import { createFontLinks } from '@/lib/fonts'
 import { createSEOLinks, createSEOMeta } from '@/lib/seo'
 import { cn } from '@/lib/utils'
 import { Providers } from '@/components/providers'
@@ -18,6 +19,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     meta: createSEOMeta(),
     links: [
       ...createSEOLinks(),
+      ...createFontLinks(),
       {
         rel: 'stylesheet',
         href: appCss,

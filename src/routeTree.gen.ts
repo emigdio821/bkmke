@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as ApiOgInfoRouteImport } from './routes/api/og-info'
+import { Route as ApiOgRouteImport } from './routes/api/og'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedTagsTagIdRouteImport } from './routes/_authenticated/tags.$tagId'
@@ -30,6 +32,16 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ApiOgInfoRoute = ApiOgInfoRouteImport.update({
+  id: '/api/og-info',
+  path: '/api/og-info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOgRoute = ApiOgRouteImport.update({
+  id: '/api/og',
+  path: '/api/og',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
@@ -57,6 +69,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/api/og': typeof ApiOgRoute
+  '/api/og-info': typeof ApiOgInfoRoute
   '/': typeof AuthenticatedIndexRoute
   '/folders/$folderId': typeof AuthenticatedFoldersFolderIdRoute
   '/tags/$tagId': typeof AuthenticatedTagsTagIdRoute
@@ -65,6 +79,8 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/api/og': typeof ApiOgRoute
+  '/api/og-info': typeof ApiOgInfoRoute
   '/': typeof AuthenticatedIndexRoute
   '/folders/$folderId': typeof AuthenticatedFoldersFolderIdRoute
   '/tags/$tagId': typeof AuthenticatedTagsTagIdRoute
@@ -75,6 +91,8 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/api/og': typeof ApiOgRoute
+  '/api/og-info': typeof ApiOgInfoRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/folders/$folderId': typeof AuthenticatedFoldersFolderIdRoute
   '/_authenticated/tags/$tagId': typeof AuthenticatedTagsTagIdRoute
@@ -85,6 +103,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/favorites'
     | '/settings'
+    | '/api/og'
+    | '/api/og-info'
     | '/'
     | '/folders/$folderId'
     | '/tags/$tagId'
@@ -93,6 +113,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/favorites'
     | '/settings'
+    | '/api/og'
+    | '/api/og-info'
     | '/'
     | '/folders/$folderId'
     | '/tags/$tagId'
@@ -102,6 +124,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/_authenticated/favorites'
     | '/_authenticated/settings'
+    | '/api/og'
+    | '/api/og-info'
     | '/_authenticated/'
     | '/_authenticated/folders/$folderId'
     | '/_authenticated/tags/$tagId'
@@ -110,6 +134,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ApiOgRoute: typeof ApiOgRoute
+  ApiOgInfoRoute: typeof ApiOgInfoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -134,6 +160,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/og-info': {
+      id: '/api/og-info'
+      path: '/api/og-info'
+      fullPath: '/api/og-info'
+      preLoaderRoute: typeof ApiOgInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/og': {
+      id: '/api/og'
+      path: '/api/og'
+      fullPath: '/api/og'
+      preLoaderRoute: typeof ApiOgRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
@@ -189,6 +229,8 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
+  ApiOgRoute: ApiOgRoute,
+  ApiOgInfoRoute: ApiOgInfoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
