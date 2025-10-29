@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import type { Bookmark, OGInfo } from '@/types'
 import { Link } from '@tanstack/react-router'
 import type { Row, Table } from '@tanstack/react-table'
@@ -61,15 +62,15 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
             <TagIcon className="text-muted-foreground size-4" />
             <div className="flex flex-1 flex-wrap items-center gap-x-1">
               {bookmark.tag_items.map((tagItem) => (
-                <>
+                <Fragment key={`${tagItem.id}-tag-masonry-item`}>
                   {tagItem.tag ? (
-                    <Badge key={`${tagItem.id}-tag-masonry-item`} variant="outline" asChild>
+                    <Badge variant="outline" asChild>
                       <Link to="/tags/$tagId" params={{ tagId: tagItem.tag.id }}>
                         {tagItem.tag?.name || ''}
                       </Link>
                     </Badge>
                   ) : null}
-                </>
+                </Fragment>
               ))}
             </div>
           </div>

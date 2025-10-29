@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import type { Bookmark, OGInfo } from '@/types'
 import { Link } from '@tanstack/react-router'
 import { CalendarIcon, ExternalLinkIcon, FolderIcon, TagIcon } from 'lucide-react'
@@ -53,15 +54,15 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
               <TagIcon className="text-muted-foreground size-4" />
               <div className="flex flex-1 flex-wrap items-center gap-1">
                 {bookmark.tag_items.map((tagItem) => (
-                  <>
+                  <Fragment key={`${tagItem.id}-bk-details-tag`}>
                     {tagItem.tag ? (
-                      <Badge key={`${tagItem.id}-bk-details-tag`} variant="outline" asChild>
+                      <Badge variant="outline" asChild>
                         <Link to="/tags/$tagId" params={{ tagId: tagItem.tag.id }}>
                           {tagItem.tag?.name || ''}
                         </Link>
                       </Badge>
                     ) : null}
-                  </>
+                  </Fragment>
                 ))}
               </div>
             </div>

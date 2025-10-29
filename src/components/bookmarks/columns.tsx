@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import type { Bookmark, OGInfo } from '@/types'
 import { Link } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
@@ -147,15 +148,15 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       return (
         <div className="flex max-w-40 flex-1 flex-wrap items-center gap-1">
           {tags.map((tagItem) => (
-            <>
+            <Fragment key={`${tagItem.id}-tag-table-item`}>
               {tagItem.tag ? (
-                <Badge key={`${tagItem.id}-tag-table-item`} variant="outline" asChild>
+                <Badge variant="outline" asChild>
                   <Link to="/tags/$tagId" params={{ tagId: tagItem.tag.id }}>
                     {tagItem.tag?.name || ''}
                   </Link>
                 </Badge>
               ) : null}
-            </>
+            </Fragment>
           ))}
         </div>
       )
