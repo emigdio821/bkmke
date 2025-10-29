@@ -14,7 +14,7 @@ export default defineConfig({
       projects: ['./tsconfig.json'],
     }),
     tailwindcss(),
-    nitroV2Plugin({ preset: 'node-server' }),
+    nitroV2Plugin(),
     tanstackStart(),
     viteReact(),
   ],

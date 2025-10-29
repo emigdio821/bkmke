@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "start": "node .output/server/index.mjs",
+    "serve": "vite preview",
     "lint": "biome lint",
     "ncu": "npm-check-updates -i",
     "prepare": "husky"
