@@ -53,9 +53,15 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
               <TagIcon className="text-muted-foreground size-4" />
               <div className="flex flex-1 flex-wrap items-center gap-1">
                 {bookmark.tag_items.map((tagItem) => (
-                  <Badge key={`${tagItem.id}-bk-details-tag`} variant="outline" asChild>
-                    <Link to={`/tags/${tagItem.tag?.id}`}>{tagItem.tag?.name || ''}</Link>
-                  </Badge>
+                  <>
+                    {tagItem.tag ? (
+                      <Badge key={`${tagItem.id}-bk-details-tag`} variant="outline" asChild>
+                        <Link to="/tags/$tagId" params={{ tagId: tagItem.tag.id }}>
+                          {tagItem.tag?.name || ''}
+                        </Link>
+                      </Badge>
+                    ) : null}
+                  </>
                 ))}
               </div>
             </div>
@@ -65,7 +71,9 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
             <div className="flex items-center space-x-2">
               <FolderIcon className="text-muted-foreground size-4" />
               <Badge variant="outline" asChild>
-                <Link to={`/folders/${bookmark.folder_id}`}>{bookmark.folder.name}</Link>
+                <Link to="/folders/$folderId" params={{ folderId: bookmark.folder_id || '' }}>
+                  {bookmark.folder.name}
+                </Link>
               </Badge>
             </div>
           )}
@@ -84,8 +92,8 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
 
         <DialogFooter className="flex-row justify-end">
           <div className="flex justify-center gap-2">
-            <ToggleFavBtn bookmark={bookmark} variant="outline" />
-            <RowActions bookmark={bookmark} variant="outline" />
+            <ToggleFavBtn bookmark={bookmark} variant="outline" size="icon" />
+            <RowActions bookmark={bookmark} variant="outline" size="icon" />
           </div>
           <DialogClose asChild>
             <Button type="button">Close</Button>

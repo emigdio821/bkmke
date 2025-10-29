@@ -117,7 +117,9 @@ export const columns: Array<ColumnDef<Bookmark>> = [
 
       return (
         <Badge variant="outline" asChild>
-          <Link to={`/folders/${bookmark.folder_id}`}>{folderName}</Link>
+          <Link to="/folders/$folderId" params={{ folderId: bookmark.folder_id || '' }}>
+            {folderName}
+          </Link>
         </Badge>
       )
     },
@@ -145,9 +147,15 @@ export const columns: Array<ColumnDef<Bookmark>> = [
       return (
         <div className="flex max-w-40 flex-1 flex-wrap items-center gap-1">
           {tags.map((tagItem) => (
-            <Badge key={`${tagItem.id}-tag-table-item`} variant="outline" asChild>
-              <Link to={`/tags/${tagItem.tag?.id}`}>{tagItem.tag?.name || ''}</Link>
-            </Badge>
+            <>
+              {tagItem.tag ? (
+                <Badge key={`${tagItem.id}-tag-table-item`} variant="outline" asChild>
+                  <Link to="/tags/$tagId" params={{ tagId: tagItem.tag.id }}>
+                    {tagItem.tag?.name || ''}
+                  </Link>
+                </Badge>
+              ) : null}
+            </>
           ))}
         </div>
       )

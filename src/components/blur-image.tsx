@@ -11,7 +11,7 @@ export function BlurImage({ alt, ...props }: React.ComponentProps<'img'>) {
         alt={alt}
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className={cn(
-          'rounded-[inherit] object-cover duration-700 ease-in-out',
+          'size-full rounded-[inherit] object-cover duration-700 ease-in-out',
           isLoading ? 'scale-110 blur-2xl grayscale' : 'blur-0 scale-100 grayscale-0',
         )}
         onLoad={() => {

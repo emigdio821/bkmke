@@ -61,9 +61,15 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
             <TagIcon className="text-muted-foreground size-4" />
             <div className="flex flex-1 flex-wrap items-center gap-x-1">
               {bookmark.tag_items.map((tagItem) => (
-                <Badge key={`${tagItem.id}-bk-details-tag`} variant="outline" asChild>
-                  <Link to={`/tags/${tagItem.tag?.id}`}>{tagItem.tag?.name || ''}</Link>
-                </Badge>
+                <>
+                  {tagItem.tag ? (
+                    <Badge key={`${tagItem.id}-tag-masonry-item`} variant="outline" asChild>
+                      <Link to="/tags/$tagId" params={{ tagId: tagItem.tag.id }}>
+                        {tagItem.tag?.name || ''}
+                      </Link>
+                    </Badge>
+                  ) : null}
+                </>
               ))}
             </div>
           </div>
@@ -73,7 +79,9 @@ function CardItem({ bookmark, row }: { bookmark: Bookmark; row: Row<Bookmark> })
           <div className="flex items-center space-x-2">
             <FolderIcon className="text-muted-foreground size-4" />
             <Badge variant="outline" asChild>
-              <Link to={`/folders/${bookmark.folder_id}`}>{bookmark.folder.name}</Link>
+              <Link to="/folders/$folderId" params={{ folderId: bookmark.folder_id || '' }}>
+                {bookmark.folder.name}
+              </Link>
             </Badge>
           </div>
         )}

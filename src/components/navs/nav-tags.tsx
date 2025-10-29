@@ -106,7 +106,7 @@ export function NavTags() {
                     isActive={pathname === `/tags/${tag.id}`}
                     className={cn(tag.items[0].count > 0 && 'group-has-data-[sidebar=menu-action]/menu-item:pr-16')}
                   >
-                    <Link to={`/tags/${tag.id}`}>
+                    <Link to="/tags/$tagId" params={{ tagId: tag.id }}>
                       <HashIcon className="size-4" />
                       <span>{tag.name}</span>
                     </Link>

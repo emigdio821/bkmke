@@ -61,7 +61,7 @@ export function NavFolderItem({ folder }: FolderItemProps) {
             isActive={isActive}
             className={cn(folder.items[0].count > 0 && 'group-has-data-[sidebar=menu-action]/menu-item:pr-16')}
           >
-            <Link to={`/folders/${folder.id}`}>
+            <Link to="/folders/$folderId" params={{ folderId: folder.id }}>
               <FolderIcon className="size-4" />
               <span>{folder.name}</span>
             </Link>
@@ -87,7 +87,7 @@ export function NavFolderItem({ folder }: FolderItemProps) {
                     isActive={pathname === `/folders/${child.id}`}
                     className={cn(folder.items[0].count > 0 && 'group-has-data-[sidebar=menu-action]/menu-item:pr-16')}
                   >
-                    <Link to={`/folders/${child.id}`}>
+                    <Link to="/folders/$folderId" params={{ folderId: child.id }}>
                       <span>{child.name}</span>
                     </Link>
                   </SidebarMenuSubButton>
@@ -112,7 +112,7 @@ export function NavFolderItem({ folder }: FolderItemProps) {
         isActive={isActive}
         className={cn(folder.items[0].count > 0 && 'group-has-data-[sidebar=menu-action]/menu-item:pr-16')}
       >
-        <Link to={`/folders/${folder.id}`}>
+        <Link to="/folders/$folderId" params={{ folderId: folder.id }}>
           <FolderIcon className="size-4" />
           <span>{folder.name}</span>
         </Link>
