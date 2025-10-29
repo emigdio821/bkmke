@@ -3,3 +3,4 @@ node_modules
 .husky
 ./supabase/*
 next-env.d.ts
+routeTree.gen.ts

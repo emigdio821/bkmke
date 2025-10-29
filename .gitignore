@@ -15,6 +15,9 @@
 
 # production
 /build
+/dist
+/.nitro
+/.output
 
 # misc
 .DS_Store
@@ -37,3 +40,9 @@ next-env.d.ts
 
 # supabase
 /supabase
+
+# tanstack
+.tanstack
+
+# netlify
+.netlify
