@@ -1,7 +1,17 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.7/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.2/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
   "formatter": { "enabled": false },
   "assist": { "actions": { "source": { "organizeImports": "off" } } },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {
@@ -13,9 +23,6 @@
       },
       "a11y": {
         "useKeyWithClickEvents": "off"
-      },
-      "suspicious": {
-        "noUnknownAtRules": "off"
       },
       "style": {
         "noParameterAssign": "error",
@@ -29,7 +36,6 @@
         "noInferrableTypes": "error",
         "noUselessElse": "error"
       }
-    },
-    "includes": ["**", "!**/.next", "!**/build", "!**/next.config.mjs", "!**/node_modules"]
+    }
   }
 }
