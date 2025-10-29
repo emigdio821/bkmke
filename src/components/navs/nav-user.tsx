@@ -13,6 +13,7 @@ import {
   SunIcon,
   TagIcon,
 } from 'lucide-react'
+import { useTheme } from 'next-themes'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
@@ -42,7 +43,7 @@ export function NavUser() {
   const navigate = useNavigate()
   const supabase = createClient()
   const queryClient = useQueryClient()
-  const { theme, setTheme } = { theme: 'system', setTheme: (_t: string) => {} } // Placeholder for theme management
+  const { theme, setTheme } = useTheme()
   const { data: profile, isLoading, error, refetch } = useProfile()
 
   async function handleLogOut() {

@@ -4,7 +4,9 @@ import { devtools } from '@/integrations/tanstack-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
+import { siteConfig } from '@/config/site'
 import { cn } from '@/lib/utils'
+import { Providers } from '@/components/providers'
 import appCss from '@/styles/app.css?url'
 
 // export const metadata: Metadata = {
@@ -44,7 +46,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
-      { title: 'TanStack Start Starter' },
+      { title: siteConfig.name },
     ],
     links: [
       {
@@ -64,7 +66,9 @@ function RootLayout() {
         <HeadContent />
       </head>
       <body className={cn('relative flex min-h-dvh flex-col antialiased')}>
-        <Outlet />
+        <Providers>
+          <Outlet />
+        </Providers>
 
         <TanStackDevtools
           config={{
