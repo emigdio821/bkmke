@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useLocation } from '@tanstack/react-router'
 import { useHeaderTitleStore } from '@/lib/stores/header-title'
 import { getHeaderTitleFromPath } from '@/lib/utils'
@@ -11,14 +11,14 @@ import { TypographyH4 } from './ui/typography'
 
 const ACTIONS_DISABLED_PATHS = ['/settings']
 
-function SearchSkeleton() {
-  return (
-    <>
-      <Skeleton className="hidden h-9 w-full max-w-xs min-w-52 sm:flex" />
-      <Skeleton className="size-10 sm:hidden" />
-    </>
-  )
-}
+// function SearchSkeleton() {
+//   return (
+//     <>
+//       <Skeleton className="hidden h-9 w-full max-w-xs min-w-52 sm:flex" />
+//       <Skeleton className="size-10 sm:hidden" />
+//     </>
+//   )
+// }
 
 export function AppHeader() {
   const location = useLocation()
@@ -50,9 +50,7 @@ export function AppHeader() {
 
         {ACTIONS_DISABLED_PATHS.includes(pathname) ? null : (
           <div className="flex w-full flex-1 items-center justify-end gap-2">
-            <Suspense fallback={<SearchSkeleton />}>
-              <AppHeaderSearch />
-            </Suspense>
+            <AppHeaderSearch />
             <AppHeaderActions />
           </div>
         )}

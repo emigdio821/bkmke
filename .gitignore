@@ -16,6 +16,8 @@
 # production
 /build
 /dist
+/.nitro
+/.output
 
 # misc
 .DS_Store
