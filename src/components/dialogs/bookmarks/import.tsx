@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
 import { FileUpIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
 import { useForm } from 'react-hook-form'
@@ -16,8 +17,8 @@ import {
   TAGS_QUERY,
 } from '@/lib/constants'
 import { importBookmarksSchema } from '@/lib/schemas/form'
+import { folderListQuery } from '@/lib/tanstack-queries/folders-queries'
 import { cn, formatBytes } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
 import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
@@ -56,7 +57,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
   const modEnabled = useModEnabled()
   const [openDialog, setOpenDialog] = useState(false)
   const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const [progress, setProgress] = useState(0)
   const { invalidateQueries } = useInvalidateQueries()
   const [dndFiles, setDndFiles] = useState<File[]>([])

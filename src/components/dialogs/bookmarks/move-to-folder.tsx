@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Bookmark } from '@/types'
+import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import {
   BOOKMARKS_QUERY,
@@ -9,8 +10,8 @@ import {
   TAG_ITEMS_QUERY,
 } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { folderListQuery } from '@/lib/tanstack-queries/folders-queries'
 import { cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { Button } from '@/components/ui/button'
@@ -61,7 +62,7 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
   const [isLoading, setLoading] = useState(false)
   const { invalidateQueries } = useInvalidateQueries()
   const [selectValue, setSelectValue] = useState(initialFolderId)
-  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const bookmarkName = bookmark?.name || (bookmarks?.length === 1 ? bookmarks[0].name : 'Multiple bookmarks')
   const [progress, setProgress] = useState(0)
 

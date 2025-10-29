@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { BkOGInfo, Bookmark } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -15,8 +16,8 @@ import {
 } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { folderListQuery } from '@/lib/tanstack-queries/folders-queries'
 import { cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
 import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
@@ -52,7 +53,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
   const { invalidateQueries } = useInvalidateQueries()
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
   const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const supabase = createClient()
   const tagItems = bookmark.tag_items
     .map((item) => item.tag?.id)

@@ -16,7 +16,11 @@ import {
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { CreateBookmarkDialog } from '../dialogs/bookmarks/create'
+import { ImportBookmarksDialog } from '../dialogs/bookmarks/import'
+import { CreateFolderDialog } from '../dialogs/folders/create-folder'
+import { CreateTagDialog } from '../dialogs/tags/create-tag'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -30,19 +34,15 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
-import { CreateBookmarkDialog } from '../dialogs/bookmarks/create'
-import { ImportBookmarksDialog } from '../dialogs/bookmarks/import'
-import { CreateFolderDialog } from '../dialogs/folders/create-folder'
-import { CreateTagDialog } from '../dialogs/tags/create-tag'
+} from '../ui/dropdown-menu'
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar'
 import { Skeleton } from '../ui/skeleton'
 
 export function NavUser() {
-  const theme = 'system'
   const navigate = useNavigate()
   const supabase = createClient()
   const queryClient = useQueryClient()
+  const { theme, setTheme } = { theme: 'system', setTheme: (_t: string) => {} } // Placeholder for theme management
   const { data: profile, isLoading, error, refetch } = useProfile()
 
   async function handleLogOut() {

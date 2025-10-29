@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { ChevronDownIcon, PlusIcon, RotateCwIcon } from 'lucide-react'
-import { useFolders } from '@/hooks/folders/use-folders'
+import { folderListQuery } from '@/lib/tanstack-queries/folders-queries'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   SidebarGroup,
@@ -14,7 +15,7 @@ import { CreateFolderDialog } from '../../dialogs/folders/create-folder'
 import { NavFolderItem } from './nav-folder-item'
 
 export function NavFolders() {
-  const { data: folders, isLoading, error, refetch } = useFolders()
+  const { data: folders, isLoading, error, refetch } = useQuery(folderListQuery())
 
   return (
     <Collapsible defaultOpen className="group/collapsible">

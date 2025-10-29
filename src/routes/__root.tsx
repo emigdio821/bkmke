@@ -2,7 +2,8 @@
 
 import { devtools } from '@/integrations/tanstack-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
+import type { QueryClient } from '@tanstack/react-query'
+import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import appCss from '@/styles/app.css?url'
 
@@ -31,7 +32,11 @@ import appCss from '@/styles/app.css?url'
 //   width: 'device-width',
 // }
 
-export const Route = createRootRoute({
+interface RouterContext {
+  queryClient: QueryClient
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -48,12 +53,13 @@ export const Route = createRootRoute({
       },
     ],
   }),
-  component: RootLayout,
+
+  shellComponent: RootLayout,
 })
 
 function RootLayout() {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

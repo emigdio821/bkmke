@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
 import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -15,8 +16,8 @@ import {
 } from '@/lib/constants'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
 import { useDialogStore } from '@/lib/stores/dialog'
+import { folderListQuery } from '@/lib/tanstack-queries/folders-queries'
 import { cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
 import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
@@ -40,7 +41,7 @@ export function CreateAutomaticForm() {
 
   const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const form = useForm<z.infer<typeof createAutomaticBookmarkSchema>>({
     resolver: zodResolver(createAutomaticBookmarkSchema),
     defaultValues: {

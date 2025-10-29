@@ -14,7 +14,6 @@ import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
 
 export const Route = createFileRoute('/_authenticated/tags/$tagId')({
-  component: RouteComponent,
   loader: async ({ params }) => {
     const { tagId } = params
     const tagDetails = await getTagDetails({
@@ -23,6 +22,8 @@ export const Route = createFileRoute('/_authenticated/tags/$tagId')({
 
     return tagDetails
   },
+  component: RouteComponent,
+  pendingComponent: () => <Loader msg="Fetching tag details" />,
 })
 
 function RouteComponent() {
