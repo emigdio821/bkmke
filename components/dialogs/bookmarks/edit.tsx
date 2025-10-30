@@ -27,20 +27,13 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  MAX_DESC_LENGTH,
-  MAX_NAME_LENGTH,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 
 interface EditBookmarkDialogProps {
@@ -53,7 +46,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
   const [openDialog, setOpenDialog] = useState(false)
   const { invalidateQueries } = useInvalidateQueries()
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
-  const { data: tags, isLoading: tagsLoading } = useTags()
+  const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
   const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const supabase = createClient()
   const tagItems = bookmark.tag_items
@@ -128,9 +121,9 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
       await supabase.from('tag_items').delete().eq('bookmark_id', bookmark.id)
     }
 
-    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [TAG_ITEMS_QUERY], [TAGS_QUERY], [FAV_BOOKMARKS_QUERY]]
+    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY]]
 
-    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
     await invalidateQueries(queryKeysToInvalidate)
     form.reset(values)
     setOpenDialog(false)

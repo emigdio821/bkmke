@@ -1,10 +1,12 @@
+/** biome-ignore-all lint/performance/noImgElement: Next.js does not support Image component here */
+
 import type { NextRequest } from 'next/server'
 import { ImageResponse } from 'next/og'
 import { siteConfig } from '@/config/site'
 
 export const runtime = 'edge'
 
-const fontReq = fetch(new URL('../../../public/fonts/Figtree-Bold.ttf', import.meta.url)).then(
+const fontReq = fetch(new URL('../../../public/fonts/Geist-Bold.ttf', import.meta.url)).then(
   async (res) => await res.arrayBuffer(),
 )
 
@@ -24,11 +26,11 @@ export async function GET(req: NextRequest) {
             display: 'flex',
             color: '#ededed',
             textAlign: 'center',
-            fontFamily: 'Figtree',
             alignItems: 'center',
             flexDirection: 'column',
             justifyContent: 'center',
             backgroundColor: '#09090b',
+            fontFamily: 'Geist Bold, sans-serif',
             backgroundImage: 'url("https://bkmke.vercel.app/images/og-bg.png")',
           }}
         >
@@ -82,7 +84,7 @@ export async function GET(req: NextRequest) {
         height: 600,
         fonts: [
           {
-            name: 'Figtree',
+            name: 'Geist Bold',
             data: fontData,
             style: 'normal',
           },

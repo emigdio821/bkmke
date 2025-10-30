@@ -1,5 +1,3 @@
-import type { Folder } from '@/types'
-import type { Tables } from '@/types/database.types'
 import type { QueryOptionsWithoutKeyAndFn } from './types'
 import { queryOptions } from '@tanstack/react-query'
 import { getFolderDetails, getFolderItems, listFolders } from '@/lib/server-actions/folders'
@@ -7,10 +5,11 @@ import { getFolderDetails, getFolderItems, listFolders } from '@/lib/server-acti
 export const FOLDERS_QUERY_KEY = 'folders'
 export const FOLDER_ITEMS_QUERY_KEY = 'folder-items'
 
-type FolderDetailsData = Tables<'folders'> | null
-type FolderItemsData = Awaited<ReturnType<typeof getFolderItems>>
+export type FolderListData = Awaited<ReturnType<typeof listFolders>>
+export type FolderDetailsData = Awaited<ReturnType<typeof getFolderDetails>>
+export type FolderItemsData = Awaited<ReturnType<typeof getFolderItems>>
 
-export const folderListQuery = (options?: QueryOptionsWithoutKeyAndFn<Folder[]>) =>
+export const folderListQuery = (options?: QueryOptionsWithoutKeyAndFn<FolderListData>) =>
   queryOptions({
     queryKey: [FOLDERS_QUERY_KEY],
     queryFn: listFolders,

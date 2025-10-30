@@ -1,6 +1,6 @@
 'use client'
 
-import type { Tables } from '@/types/database.types'
+import type { FolderDetailsData } from '@/lib/ts-queries/folders'
 import { useQuery } from '@tanstack/react-query'
 import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
 import Link from 'next/link'
@@ -18,14 +18,14 @@ import { folderDetailsQuery, folderItemsQuery } from '@/lib/ts-queries/folders'
 
 interface FolderItemsClientPageProps {
   folderId: string
-  folderDetails: Tables<'folders'> | null
+  folderDetails: FolderDetailsData | null
 }
 
 export function FolderItemsClientPage({ folderId, folderDetails }: FolderItemsClientPageProps) {
-  const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
-  const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
   const { data: folderItems, isLoading, refetch, error } = useQuery(folderItemsQuery(folderId))
   const { data: folder } = useQuery(folderDetailsQuery(folderId, { initialData: folderDetails }))
+  const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
+  const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
 
   useEffect(() => {
     if (folder) {

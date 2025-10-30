@@ -10,7 +10,6 @@ const getCachedFolderDetails = cache(getFolderDetails)
 
 export async function generateMetadata(props: FolderItemsProps) {
   const params = await props.params
-
   const folderDetails = await getCachedFolderDetails(params.id)
   const title = folderDetails?.name || 'Folder items'
 

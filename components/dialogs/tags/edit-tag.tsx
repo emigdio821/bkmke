@@ -22,9 +22,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, MAX_NAME_LENGTH, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 
 interface EditTagDialogProps {
@@ -56,7 +57,8 @@ export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
       description: 'Tag has been updated.',
     })
 
-    await invalidateQueries([TAGS_QUERY, BOOKMARKS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
+    await invalidateQueries([TAGS_QUERY_KEY], { exact: false })
+    await invalidateQueries([BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY])
     setOpenDialog(false)
   }
 

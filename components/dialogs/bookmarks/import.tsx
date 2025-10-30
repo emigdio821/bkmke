@@ -31,19 +31,13 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { InlineCode } from '@/components/ui/typography'
-import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { createBookmark } from '@/lib/api'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  NAV_ITEMS_COUNT_QUERY,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, NAV_ITEMS_COUNT_QUERY } from '@/lib/constants'
 import { importBookmarksSchema } from '@/lib/schemas/form'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn, formatBytes } from '@/lib/utils'
 
 const messages = {
@@ -56,7 +50,7 @@ let completedCount = 0
 export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode }) {
   const modEnabled = useModEnabled()
   const [openDialog, setOpenDialog] = useState(false)
-  const { data: tags, isLoading: tagsLoading } = useTags()
+  const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
   const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const [progress, setProgress] = useState(0)
   const { invalidateQueries } = useInvalidateQueries()
@@ -150,15 +144,9 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
     const settledPromises = await Promise.allSettled(importPromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    const queryKeysToInvalidate = [
-      [BOOKMARKS_QUERY],
-      [FAV_BOOKMARKS_QUERY],
-      [TAGS_QUERY],
-      [TAG_ITEMS_QUERY],
-      [NAV_ITEMS_COUNT_QUERY],
-    ]
+    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY], [NAV_ITEMS_COUNT_QUERY]]
 
-    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
     await invalidateQueries(queryKeysToInvalidate)
 
     if (errors.length > 0) {

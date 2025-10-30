@@ -1,4 +1,5 @@
 import type { Bookmark } from '@/types'
+import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { MultiSelect } from '@/components/multi-select'
@@ -17,11 +18,11 @@ import {
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useTags } from '@/hooks/tags/use-tags'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 
 interface SingleBookmark {
@@ -41,14 +42,14 @@ type UpdateTagsDialogProps = (SingleBookmark | MultipleBookmarks) & {
 let completedCount = 0
 
 export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDialogProps) {
-  const modEnabled = useModEnabled()
-  const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
-  const [isLoading, setLoading] = useState(false)
+  const modEnabled = useModEnabled()
   const { invalidateQueries } = useInvalidateQueries()
-  const [selectValue, setSelectValue] = useState<string[]>(getInitialItems())
-  const { data: tags, isLoading: tagsLoading } = useTags()
+  const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
   const [progress, setProgress] = useState(0)
+  const [isLoading, setLoading] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false)
+  const [selectValue, setSelectValue] = useState<string[]>(getInitialItems())
 
   const bookmarkName = bookmark?.name || (bookmarks?.length === 1 ? bookmarks[0].name : 'Multiple bookmarks')
 
@@ -94,8 +95,9 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
     if (errors.length > 0) {
       toast.error('Error', { description: 'Unable to update tags at this time, try again.' })
     } else {
-      const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [TAG_ITEMS_QUERY], [TAGS_QUERY], [FAV_BOOKMARKS_QUERY]]
+      const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY]]
 
+      await invalidateQueries([TAGS_QUERY_KEY], { exact: false })
       await invalidateQueries(queryKeysToInvalidate)
       toast.success('Success', { description: 'Tags have been updated.' })
     }

@@ -1,5 +1,7 @@
 'use client'
 
+import type { TagDetailsData } from '@/lib/ts-queries/tags'
+import { useQuery } from '@tanstack/react-query'
 import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCw, WindIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect } from 'react'
@@ -11,26 +13,26 @@ import { Loader } from '@/components/loader'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { TypographyH4 } from '@/components/ui/typography'
-import { useTagItems } from '@/hooks/tags/use-tag-items'
-import { useTags } from '@/hooks/tags/use-tags'
 import { useHeaderTitleStore } from '@/lib/stores/header-title'
+import { tagDetailsQuery, tagItemsQuery } from '@/lib/ts-queries/tags'
 
-export function TagitemsClientPage({ id }: { id: string }) {
-  const tagId = id
-  const { data: tagItems, isLoading, refetch, error } = useTagItems(tagId)
-  const { data: tag, isLoading: tagLoading, error: tagError } = useTags(tagId)
+interface TagitemsClientPageProps {
+  tagId: string
+  tagDetails: TagDetailsData | null
+}
+
+export function TagitemsClientPage({ tagId, tagDetails }: TagitemsClientPageProps) {
+  const { data: tag, error: tagError } = useQuery(tagDetailsQuery(tagId, { initialData: tagDetails }))
+  const { data: tagItems, isLoading, refetch, error } = useQuery(tagItemsQuery(tagId))
   const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
   const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
 
   useEffect(() => {
     if (tag) {
-      updateHeaderTitle(tag[0]?.name || 'Tag items')
+      updateHeaderTitle(tag.name || 'Tag items')
+      setLoadingHeaderTitle(false)
     }
-  }, [tag, updateHeaderTitle])
-
-  useEffect(() => {
-    setLoadingHeaderTitle(tagLoading)
-  }, [tagLoading, setLoadingHeaderTitle])
+  }, [tag, updateHeaderTitle, setLoadingHeaderTitle])
 
   if (error || tagError)
     return (

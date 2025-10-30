@@ -1,15 +1,10 @@
 import type { Bookmark } from '@/types'
 import { useState } from 'react'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  NAV_ITEMS_COUNT_QUERY,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, NAV_ITEMS_COUNT_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 
 let completedCount = 0
 
@@ -38,15 +33,9 @@ export function useRemoveBookmarks() {
     const settledErrors = settledPromises.filter((p) => p.status === 'rejected')
     setErrors(settledErrors)
 
-    const queryKeysToInvalidate = [
-      [BOOKMARKS_QUERY],
-      [FAV_BOOKMARKS_QUERY],
-      [TAG_ITEMS_QUERY],
-      [TAGS_QUERY],
-      [NAV_ITEMS_COUNT_QUERY],
-    ]
+    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY], [NAV_ITEMS_COUNT_QUERY]]
 
-    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
     await invalidateQueries(queryKeysToInvalidate)
     setProgress(0)
   }
