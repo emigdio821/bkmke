@@ -23,10 +23,11 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
+import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createManualBookmarkSchema } from '@/lib/schemas/form'
 import { useDialogStore } from '@/lib/stores/dialog'
 import { createClient } from '@/lib/supabase/client'
+import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
@@ -106,7 +107,11 @@ export function CreateManualForm() {
       return
     }
 
-    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY], [SIDEBAR_ITEM_COUNT_QUERY_KEY]]
+    const queryKeysToInvalidate = [
+      [BOOKMARKS_QUERY_KEY],
+      [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY],
+      [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+    ]
 
     await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
     await invalidateQueries(queryKeysToInvalidate)

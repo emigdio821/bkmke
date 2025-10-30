@@ -2,7 +2,7 @@ import type { Bookmark } from '@/types'
 import { useOptimistic } from 'react'
 import { toast } from 'sonner'
 import { toggleFavorite } from '@/lib/api'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
 import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
@@ -25,7 +25,11 @@ export function useToggleFavorite(bookmark: Bookmark) {
       return
     }
 
-    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY], [SIDEBAR_ITEM_COUNT_QUERY_KEY]]
+    const queryKeysToInvalidate = [
+      [BOOKMARKS_QUERY_KEY],
+      [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY],
+      [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+    ]
 
     await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
     await invalidateQueries(queryKeysToInvalidate)

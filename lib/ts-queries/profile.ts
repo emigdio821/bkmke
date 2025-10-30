@@ -10,5 +10,7 @@ export const loggedInUserProfileQuery = (options?: QueryOptionsWithoutKeyAndFn<l
   queryOptions({
     queryKey: [LOGGED_IN_USER_PROFILE_QUERY_KEY],
     queryFn: getLoggedInUserProfile,
+    staleTime: Number.POSITIVE_INFINITY,
+    gcTime: Number.POSITIVE_INFINITY,
     ...options,
   })

@@ -10,5 +10,7 @@ export const appSidebarItemCountQuery = (options?: QueryOptionsWithoutKeyAndFn<S
   queryOptions({
     queryKey: [SIDEBAR_ITEM_COUNT_QUERY_KEY],
     queryFn: getAppSidebarItemCount,
+    staleTime: Number.POSITIVE_INFINITY,
+    gcTime: Number.POSITIVE_INFINITY,
     ...options,
   })

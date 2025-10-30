@@ -28,8 +28,8 @@ import {
 } from '@/components/ui/sidebar'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
+import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 import { AlertActionDialog } from '../dialogs/alert-action'
@@ -68,7 +68,7 @@ export function NavTags() {
     })
 
     await invalidateQueries([TAGS_QUERY_KEY], { exact: false })
-    await invalidateQueries([BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY])
+    await invalidateQueries([[BOOKMARKS_QUERY_KEY], [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY]])
   }
 
   return (

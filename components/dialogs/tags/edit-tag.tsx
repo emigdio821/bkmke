@@ -22,9 +22,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, MAX_NAME_LENGTH } from '@/lib/constants'
+import { MAX_NAME_LENGTH } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 
@@ -58,7 +59,7 @@ export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
     })
 
     await invalidateQueries([TAGS_QUERY_KEY], { exact: false })
-    await invalidateQueries([BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY])
+    await invalidateQueries([[BOOKMARKS_QUERY_KEY], [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY]])
     setOpenDialog(false)
   }
 

@@ -23,9 +23,10 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
+import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
+import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { cn } from '@/lib/utils'
 
@@ -56,7 +57,7 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
     }
 
     await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
-    await invalidateQueries([[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY]])
+    await invalidateQueries([[BOOKMARKS_QUERY_KEY], [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY]])
 
     setOpenDialog(false)
 
