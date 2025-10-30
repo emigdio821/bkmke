@@ -9,11 +9,11 @@ import {
   TagIcon,
 } from 'lucide-react'
 import { useTableLayoutStore } from '@/lib/stores/table-layout'
-import { CreateBookmarkDialog } from './dialogs/bookmarks/create'
-import { ImportBookmarksDialog } from './dialogs/bookmarks/import'
-import { CreateFolderDialog } from './dialogs/folders/create-folder'
-import { CreateTagDialog } from './dialogs/tags/create-tag'
-import { Button } from './ui/button'
+import { CreateBookmarkDialog } from '../dialogs/bookmarks/create'
+import { ImportBookmarksDialog } from '../dialogs/bookmarks/import'
+import { CreateFolderDialog } from '../dialogs/folders/create-folder'
+import { CreateTagDialog } from '../dialogs/tags/create-tag'
+import { Button } from '../ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -27,7 +27,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu'
+} from '../ui/dropdown-menu'
 
 export function AppHeaderActions() {
   const layout = useTableLayoutStore((state) => state.layout)

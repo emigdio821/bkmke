@@ -1,5 +1,7 @@
 'use client'
 
+import type { SidebarItemCountData } from '@/lib/ts-queries/sidebar'
+import { useQuery } from '@tanstack/react-query'
 import { BookmarkIcon, HeartIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -14,14 +16,18 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar'
-import { useNavItemsCount } from '@/hooks/use-nav-items-count'
-import { NavFolders } from './navs/folders/nav-folders'
-import { NavTags } from './navs/nav-tags'
-import { NavUser } from './navs/nav-user'
+import { appSidebarItemCountQuery } from '@/lib/ts-queries/sidebar'
+import { NavFolders } from '../navs/folders/nav-folders'
+import { NavTags } from '../navs/nav-tags'
+import { NavUser } from '../navs/nav-user'
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarClientProps extends React.ComponentProps<typeof Sidebar> {
+  itemCount?: SidebarItemCountData
+}
+
+export function AppSidebarClient({ itemCount, ...props }: AppSidebarClientProps) {
   const pathname = usePathname()
-  const { data: navItemsCount } = useNavItemsCount()
+  const { data: navItemsCount } = useQuery(appSidebarItemCountQuery({ initialData: itemCount }))
   const favsCount = navItemsCount?.favoritesCount
   const bksCount = navItemsCount?.bookmarksCount
 
@@ -30,7 +36,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+            <SidebarMenuButton size="lg" asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
               <Link href="/">
                 <div className="bg-secondary text-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   bk

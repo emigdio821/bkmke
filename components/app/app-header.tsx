@@ -5,11 +5,11 @@ import { Suspense, useEffect } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { useHeaderTitleStore } from '@/lib/stores/header-title'
 import { getHeaderTitleFromPath } from '@/lib/utils'
+import { SidebarTrigger } from '../ui/sidebar'
+import { Skeleton } from '../ui/skeleton'
+import { TypographyH4 } from '../ui/typography'
 import { AppHeaderActions } from './app-header-actions'
 import { AppHeaderSearch } from './app-header-search'
-import { SidebarTrigger } from './ui/sidebar'
-import { Skeleton } from './ui/skeleton'
-import { TypographyH4 } from './ui/typography'
 
 const ACTIONS_DISABLED_PATHS = ['/settings']
 
