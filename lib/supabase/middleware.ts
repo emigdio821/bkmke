@@ -1,6 +1,7 @@
-import { NextResponse, type NextRequest } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
 import type { Database } from '@/types/database.types'
+import type { NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
+import { NextResponse } from 'next/server'
 import { envClientSchema } from '@/lib/schemas/client-env'
 
 export async function updateSession(request: NextRequest) {

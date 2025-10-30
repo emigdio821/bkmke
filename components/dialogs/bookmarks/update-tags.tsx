@@ -1,19 +1,8 @@
-import { useState } from 'react'
 import type { Bookmark } from '@/types'
+import { useState } from 'react'
 import { toast } from 'sonner'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
-import { useTags } from '@/hooks/tags/use-tags'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { MultiSelect } from '@/components/multi-select'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -28,8 +17,12 @@ import {
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
-import { MultiSelect } from '@/components/multi-select'
-import { Spinner } from '@/components/spinner'
+import { useTags } from '@/hooks/tags/use-tags'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
+import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 
 interface SingleBookmark {
   bookmark: Bookmark
@@ -101,14 +94,9 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
     if (errors.length > 0) {
       toast.error('Error', { description: 'Unable to update tags at this time, try again.' })
     } else {
-      await invalidateQueries([
-        FOLDERS_QUERY,
-        BOOKMARKS_QUERY,
-        FOLDER_ITEMS_QUERY,
-        TAG_ITEMS_QUERY,
-        TAGS_QUERY,
-        FAV_BOOKMARKS_QUERY,
-      ])
+      const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [TAG_ITEMS_QUERY], [TAGS_QUERY], [FAV_BOOKMARKS_QUERY]]
+
+      await invalidateQueries(queryKeysToInvalidate)
       toast.success('Success', { description: 'Tags have been updated.' })
     }
   }
@@ -155,7 +143,7 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
           ) : (
             <>
               <div className="flex h-8 items-center gap-2">
-                <Label htmlFor="select-tags">Folder</Label>
+                <Label htmlFor="select-tags">Tags</Label>
               </div>
               {tags && (
                 <MultiSelect

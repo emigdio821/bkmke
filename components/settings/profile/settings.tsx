@@ -2,14 +2,14 @@
 
 import { useQueryClient } from '@tanstack/react-query'
 import { RotateCwIcon } from 'lucide-react'
-import { PROFILE_QUERY } from '@/lib/constants'
-import { useProfileStore } from '@/lib/stores/profile'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { EditProfileDialog } from '@/components/dialogs/profile/edit'
+import { SettingsProfileSkeleton } from '@/components/skeletons'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { EditProfileDialog } from '@/components/dialogs/profile/edit'
-import { SettingsProfileSkeleton } from '@/components/skeletons'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { PROFILE_QUERY } from '@/lib/constants'
+import { useProfileStore } from '@/lib/stores/profile'
 
 export function ProfileSettings() {
   const modEnabled = useModEnabled()

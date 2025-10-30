@@ -1,28 +1,18 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
 import { FileUpIcon, PlusIcon, Trash2Icon } from 'lucide-react'
+import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import { createBookmark } from '@/lib/api'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  NAV_ITEMS_COUNT_QUERY,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
-import { importBookmarksSchema } from '@/lib/schemas/form'
-import { cn, formatBytes } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
-import { useTags } from '@/hooks/tags/use-tags'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
+import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
+import { MultiSelect } from '@/components/multi-select'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -41,11 +31,20 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { InlineCode } from '@/components/ui/typography'
-import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
-import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
-import { FolderSelectItems } from '@/components/folders/folder-select-items'
-import { MultiSelect } from '@/components/multi-select'
-import { Spinner } from '@/components/spinner'
+import { useTags } from '@/hooks/tags/use-tags'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { createBookmark } from '@/lib/api'
+import {
+  BOOKMARKS_QUERY,
+  FAV_BOOKMARKS_QUERY,
+  NAV_ITEMS_COUNT_QUERY,
+  TAG_ITEMS_QUERY,
+  TAGS_QUERY,
+} from '@/lib/constants'
+import { importBookmarksSchema } from '@/lib/schemas/form'
+import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { cn, formatBytes } from '@/lib/utils'
 
 const messages = {
   default: 'Unable to import bookmarks at this time, try again.',
@@ -58,7 +57,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
   const modEnabled = useModEnabled()
   const [openDialog, setOpenDialog] = useState(false)
   const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const [progress, setProgress] = useState(0)
   const { invalidateQueries } = useInvalidateQueries()
   const [dndFiles, setDndFiles] = useState<File[]>([])
@@ -151,15 +150,16 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
     const settledPromises = await Promise.allSettled(importPromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    await invalidateQueries([
-      FOLDERS_QUERY,
-      BOOKMARKS_QUERY,
-      FOLDER_ITEMS_QUERY,
-      TAGS_QUERY,
-      TAG_ITEMS_QUERY,
-      FAV_BOOKMARKS_QUERY,
-      NAV_ITEMS_COUNT_QUERY,
-    ])
+    const queryKeysToInvalidate = [
+      [BOOKMARKS_QUERY],
+      [FAV_BOOKMARKS_QUERY],
+      [TAGS_QUERY],
+      [TAG_ITEMS_QUERY],
+      [NAV_ITEMS_COUNT_QUERY],
+    ]
+
+    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries(queryKeysToInvalidate)
 
     if (errors.length > 0) {
       toast.error('Error', {

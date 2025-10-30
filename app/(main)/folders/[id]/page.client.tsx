@@ -1,38 +1,40 @@
 'use client'
 
-import { useEffect } from 'react'
-import Link from 'next/link'
+import type { Tables } from '@/types/database.types'
+import { useQuery } from '@tanstack/react-query'
 import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
-import { useHeaderTitleStore } from '@/lib/stores/header-title'
-import { useFolder } from '@/hooks/folders/use-folder'
-import { useFolderItems } from '@/hooks/folders/use-folder-items'
-import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { TypographyH4 } from '@/components/ui/typography'
+import Link from 'next/link'
+import { useEffect } from 'react'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
+import { Button } from '@/components/ui/button'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { TypographyH4 } from '@/components/ui/typography'
+import { useHeaderTitleStore } from '@/lib/stores/header-title'
+import { folderDetailsQuery, folderItemsQuery } from '@/lib/ts-queries/folders'
 
-export function FolderItemsClientPage({ id }: { id: string }) {
-  const folderId = id
-  const { data: folderItems, isLoading, refetch, error } = useFolderItems(folderId)
-  const { data: folder, isLoading: folderLoading, error: folderError } = useFolder(folderId)
+interface FolderItemsClientPageProps {
+  folderId: string
+  folderDetails: Tables<'folders'> | null
+}
+
+export function FolderItemsClientPage({ folderId, folderDetails }: FolderItemsClientPageProps) {
   const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
   const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
+  const { data: folderItems, isLoading, refetch, error } = useQuery(folderItemsQuery(folderId))
+  const { data: folder } = useQuery(folderDetailsQuery(folderId, { initialData: folderDetails }))
 
   useEffect(() => {
     if (folder) {
-      updateHeaderTitle(folder[0]?.name || 'Folder items')
+      updateHeaderTitle(folder.name || 'Folder items')
+      setLoadingHeaderTitle(false)
     }
-  }, [folder, updateHeaderTitle])
+  }, [folder, updateHeaderTitle, setLoadingHeaderTitle])
 
-  useEffect(() => {
-    setLoadingHeaderTitle(folderLoading)
-  }, [folderLoading, setLoadingHeaderTitle])
-
-  if (error || folderError)
+  if (error)
     return (
       <Card>
         <CardHeader className="flex flex-col items-center justify-center">

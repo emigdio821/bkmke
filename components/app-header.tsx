@@ -1,10 +1,10 @@
 'use client'
 
-import { Suspense } from 'react'
 import { usePathname } from 'next/navigation'
+import { Suspense, useEffect } from 'react'
+import { Separator } from '@/components/ui/separator'
 import { useHeaderTitleStore } from '@/lib/stores/header-title'
 import { getHeaderTitleFromPath } from '@/lib/utils'
-import { Separator } from '@/components/ui/separator'
 import { AppHeaderActions } from './app-header-actions'
 import { AppHeaderSearch } from './app-header-search'
 import { SidebarTrigger } from './ui/sidebar'
@@ -26,7 +26,16 @@ export function AppHeader() {
   const pathname = usePathname()
   const titleFromPath = getHeaderTitleFromPath(pathname)
   const headerTitle = useHeaderTitleStore((state) => state.title)
+  const updateTitle = useHeaderTitleStore((state) => state.updateTitle)
   const isTitleLoading = useHeaderTitleStore((state) => state.isLoading)
+  const setLoadingTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
+
+  useEffect(() => {
+    if (titleFromPath) {
+      updateTitle(titleFromPath)
+      setLoadingTitle(false)
+    }
+  }, [setLoadingTitle, updateTitle, titleFromPath])
 
   return (
     <header className="bg-background sticky top-0 z-50 flex h-16 w-full items-center border-b">
@@ -34,7 +43,7 @@ export function AppHeader() {
         <SidebarTrigger />
         <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
 
-        {isTitleLoading ? (
+        {isTitleLoading && !titleFromPath ? (
           <Skeleton className="h-7 w-32" />
         ) : (
           <TypographyH4 className="truncate">{titleFromPath || headerTitle}</TypographyH4>

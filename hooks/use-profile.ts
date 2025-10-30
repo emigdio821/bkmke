@@ -1,7 +1,7 @@
 import type { UserProfile } from '@/types'
+import type { Tables } from '@/types/database.types'
 import { useQuery } from '@tanstack/react-query'
 import { jwtDecode } from 'jwt-decode'
-import type { Tables } from '@/types/database.types'
 import { PROFILE_QUERY } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 

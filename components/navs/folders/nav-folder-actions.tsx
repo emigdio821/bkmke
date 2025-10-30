@@ -1,16 +1,9 @@
 import type { Folder } from '@/types'
 import { Edit2Icon, FolderPlusIcon, MoreHorizontalIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  TAG_ITEMS_QUERY,
-} from '@/lib/constants'
-import { createClient } from '@/lib/supabase/client'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { AlertActionDialog } from '@/components/dialogs/alert-action'
+import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
+import { EditFolderDialog } from '@/components/dialogs/folders/edit-folder'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,9 +13,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenuAction } from '@/components/ui/sidebar'
-import { AlertActionDialog } from '@/components/dialogs/alert-action'
-import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
-import { EditFolderDialog } from '@/components/dialogs/folders/edit-folder'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import { createClient } from '@/lib/supabase/client'
+import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 
 interface NavFolderActionsProps {
   folder: Folder
@@ -49,7 +44,10 @@ export function NavFolderActions({ folder, className }: NavFolderActionsProps) {
       ),
     })
 
-    await invalidateQueries([FOLDERS_QUERY, BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
+    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY], [TAG_ITEMS_QUERY]]
+
+    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries(queryKeysToInvalidate)
   }
 
   return (
@@ -60,7 +58,7 @@ export function NavFolderActions({ folder, className }: NavFolderActionsProps) {
         </SidebarMenuAction>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 break-words">{folder.name}</DropdownMenuLabel>
+        <DropdownMenuLabel className="mx-2 my-1.5 line-clamp-2 p-0 wrap-break-word">{folder.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <EditFolderDialog
           folder={folder}

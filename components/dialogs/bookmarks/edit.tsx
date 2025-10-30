@@ -1,27 +1,15 @@
 'use client'
 
-import { useState } from 'react'
 import type { BkOGInfo, Bookmark } from '@/types'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  MAX_DESC_LENGTH,
-  MAX_NAME_LENGTH,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
-import { editBookmarkSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
-import { useTags } from '@/hooks/tags/use-tags'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
+import { MultiSelect } from '@/components/multi-select'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -39,9 +27,21 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { FolderSelectItems } from '@/components/folders/folder-select-items'
-import { MultiSelect } from '@/components/multi-select'
-import { Spinner } from '@/components/spinner'
+import { useTags } from '@/hooks/tags/use-tags'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import {
+  BOOKMARKS_QUERY,
+  FAV_BOOKMARKS_QUERY,
+  MAX_DESC_LENGTH,
+  MAX_NAME_LENGTH,
+  TAG_ITEMS_QUERY,
+  TAGS_QUERY,
+} from '@/lib/constants'
+import { editBookmarkSchema } from '@/lib/schemas/form'
+import { createClient } from '@/lib/supabase/client'
+import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { cn } from '@/lib/utils'
 
 interface EditBookmarkDialogProps {
   bookmark: Bookmark
@@ -54,7 +54,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
   const { invalidateQueries } = useInvalidateQueries()
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
   const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const supabase = createClient()
   const tagItems = bookmark.tag_items
     .map((item) => item.tag?.id)
@@ -128,7 +128,10 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
       await supabase.from('tag_items').delete().eq('bookmark_id', bookmark.id)
     }
 
-    await invalidateQueries([BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY, FAV_BOOKMARKS_QUERY])
+    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [TAG_ITEMS_QUERY], [TAGS_QUERY], [FAV_BOOKMARKS_QUERY]]
+
+    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries(queryKeysToInvalidate)
     form.reset(values)
     setOpenDialog(false)
     toast.success('Success', { description: 'Bookmark has been updated.' })

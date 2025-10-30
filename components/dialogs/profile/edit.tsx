@@ -1,16 +1,13 @@
 'use client'
 
-import { useState } from 'react'
 import type { UserProfile } from '@/types'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import { PROFILE_QUERY } from '@/lib/constants'
-import { editUserSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { Spinner } from '@/components/spinner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,7 +22,10 @@ import {
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Spinner } from '@/components/spinner'
+import { PROFILE_QUERY } from '@/lib/constants'
+import { editUserSchema } from '@/lib/schemas/form'
+import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 
 interface EditProfileDialogProps {
   profile: UserProfile

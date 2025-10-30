@@ -1,9 +1,8 @@
 'use client'
 
+import { BookmarkIcon, HeartIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookmarkIcon, HeartIcon } from 'lucide-react'
-import { useNavItemsCount } from '@/hooks/use-nav-items-count'
 import {
   Sidebar,
   SidebarContent,
@@ -15,6 +14,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar'
+import { useNavItemsCount } from '@/hooks/use-nav-items-count'
 import { NavFolders } from './navs/folders/nav-folders'
 import { NavTags } from './navs/nav-tags'
 import { NavUser } from './navs/nav-user'

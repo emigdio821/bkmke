@@ -1,17 +1,32 @@
 'use client'
 
 import type { OGInfo } from '@/types'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
+import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
+import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
+import { MultiSelect } from '@/components/multi-select'
+import { Spinner } from '@/components/spinner'
+import { Button } from '@/components/ui/button'
+import { DialogClose, DialogFooter } from '@/components/ui/dialog'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Switch } from '@/components/ui/switch'
+import { Textarea } from '@/components/ui/textarea'
+import { useTags } from '@/hooks/tags/use-tags'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
 import {
   BOOKMARKS_QUERY,
   FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
   MAX_DESC_LENGTH,
   MAX_NAME_LENGTH,
   NAV_ITEMS_COUNT_QUERY,
@@ -21,24 +36,8 @@ import {
 import { createManualBookmarkSchema } from '@/lib/schemas/form'
 import { useDialogStore } from '@/lib/stores/dialog'
 import { createClient } from '@/lib/supabase/client'
+import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
-import { useTags } from '@/hooks/tags/use-tags'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { Button } from '@/components/ui/button'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Switch } from '@/components/ui/switch'
-import { Textarea } from '@/components/ui/textarea'
-import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
-import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
-import { FolderSelectItems } from '@/components/folders/folder-select-items'
-import { MultiSelect } from '@/components/multi-select'
-import { Spinner } from '@/components/spinner'
 
 export function CreateManualForm() {
   const modEnabled = useModEnabled()
@@ -48,7 +47,7 @@ export function CreateManualForm() {
   const supabase = createClient()
   const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const form = useForm<z.infer<typeof createManualBookmarkSchema>>({
     resolver: zodResolver(createManualBookmarkSchema),
     defaultValues: {
@@ -114,15 +113,16 @@ export function CreateManualForm() {
       return
     }
 
-    await invalidateQueries([
-      BOOKMARKS_QUERY,
-      FOLDERS_QUERY,
-      FOLDER_ITEMS_QUERY,
-      FAV_BOOKMARKS_QUERY,
-      TAG_ITEMS_QUERY,
-      TAGS_QUERY,
-      NAV_ITEMS_COUNT_QUERY,
-    ])
+    const queryKeysToInvalidate = [
+      [BOOKMARKS_QUERY],
+      [FAV_BOOKMARKS_QUERY],
+      [TAGS_QUERY],
+      [TAG_ITEMS_QUERY],
+      [NAV_ITEMS_COUNT_QUERY],
+    ]
+
+    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries(queryKeysToInvalidate)
 
     toggleDialog(false)
     toggleDialogLoading(false)

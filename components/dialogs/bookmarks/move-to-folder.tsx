@@ -1,18 +1,9 @@
-import { useState } from 'react'
 import type { Bookmark } from '@/types'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { toast } from 'sonner'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  TAG_ITEMS_QUERY,
-} from '@/lib/constants'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -28,8 +19,12 @@ import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
-import { FolderSelectItems } from '@/components/folders/folder-select-items'
-import { Spinner } from '@/components/spinner'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import { createClient } from '@/lib/supabase/client'
+import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { cn } from '@/lib/utils'
 
 interface SingleBookmark {
   bookmark: Bookmark
@@ -61,7 +56,7 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
   const [isLoading, setLoading] = useState(false)
   const { invalidateQueries } = useInvalidateQueries()
   const [selectValue, setSelectValue] = useState(initialFolderId)
-  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const bookmarkName = bookmark?.name || (bookmarks?.length === 1 ? bookmarks[0].name : 'Multiple bookmarks')
   const [progress, setProgress] = useState(0)
 
@@ -91,7 +86,11 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
     const settledPromises = await Promise.allSettled(movePromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    await invalidateQueries([FOLDERS_QUERY, BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, FAV_BOOKMARKS_QUERY])
+    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [TAG_ITEMS_QUERY], [FAV_BOOKMARKS_QUERY]]
+
+    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries(queryKeysToInvalidate)
+
     setOpenDialog(false)
     setLoading(false)
 

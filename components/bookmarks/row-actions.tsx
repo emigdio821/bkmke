@@ -1,4 +1,4 @@
-import { startTransition } from 'react'
+import type { ButtonProps } from '@/components/ui/button'
 import type { Bookmark } from '@/types'
 import {
   BookTextIcon,
@@ -12,12 +12,14 @@ import {
   TagIcon,
   Trash2Icon,
 } from 'lucide-react'
+import { startTransition } from 'react'
 import { toast } from 'sonner'
-import { handleCopyToClipboard } from '@/lib/utils'
-import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
-import { useToggleFavorite } from '@/hooks/bookmarks/use-toggle-favorite'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { Button, type ButtonProps } from '@/components/ui/button'
+import { AlertActionDialog } from '@/components/dialogs/alert-action'
+import { BookmarkDetailsDialog } from '@/components/dialogs/bookmarks/details'
+import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
+import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
+import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,11 +28,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { AlertActionDialog } from '@/components/dialogs/alert-action'
-import { BookmarkDetailsDialog } from '@/components/dialogs/bookmarks/details'
-import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
-import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
-import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
+import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
+import { useToggleFavorite } from '@/hooks/bookmarks/use-toggle-favorite'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { handleCopyToClipboard } from '@/lib/utils'
 
 interface RowActionsProps extends ButtonProps {
   bookmark: Bookmark

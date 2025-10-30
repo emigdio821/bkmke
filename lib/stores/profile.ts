@@ -1,5 +1,6 @@
 import type { UserProfile } from '@/types'
-import { create, type StateCreator } from 'zustand'
+import type { StateCreator } from 'zustand'
+import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 export interface StoreState {

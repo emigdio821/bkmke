@@ -1,7 +1,7 @@
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppHeader } from '@/components/app-header'
 import { AppSidebar } from '@/components/app-sidebar'
 import { ProfileInitializer } from '@/components/profile-initializer'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 
 interface MainLayoutProps {
   children: React.ReactNode

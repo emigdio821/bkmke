@@ -1,5 +1,5 @@
-import type { NextRequest } from 'next/server'
 import type { OGInfo } from '@/types'
+import type { NextRequest } from 'next/server'
 import ogs from 'open-graph-scraper'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { truncateString } from '@/lib/utils'

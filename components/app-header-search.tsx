@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
 import { SearchIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useGlobalSearch } from '@/hooks/use-global-search'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Button } from './ui/button'

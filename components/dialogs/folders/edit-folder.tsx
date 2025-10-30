@@ -1,17 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import type { Tables } from '@/types/database.types'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import type { Tables } from '@/types/database.types'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDERS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
-import { createFolderSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -26,7 +21,13 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Spinner } from '@/components/spinner'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
+import { createFolderSchema } from '@/lib/schemas/form'
+import { createClient } from '@/lib/supabase/client'
+import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { cn } from '@/lib/utils'
 
 interface EditFolderDialogProps {
   folder: Tables<'folders'>
@@ -54,7 +55,8 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
       return
     }
 
-    await invalidateQueries([FOLDERS_QUERY, BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY])
+    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries([[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY]])
 
     setOpenDialog(false)
 

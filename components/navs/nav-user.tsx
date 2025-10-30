@@ -1,7 +1,5 @@
 'use client'
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import {
   BookmarkIcon,
@@ -17,9 +15,9 @@ import {
   TagIcon,
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { createClient } from '@/lib/supabase/client'
-import { useProfile } from '@/hooks/use-profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -36,6 +34,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
+import { useProfile } from '@/hooks/use-profile'
+import { createClient } from '@/lib/supabase/client'
 import { CreateBookmarkDialog } from '../dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from '../dialogs/bookmarks/import'
 import { CreateFolderDialog } from '../dialogs/folders/create-folder'

@@ -1,27 +1,16 @@
 'use client'
 
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
 import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import { createBookmark } from '@/lib/api'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  NAV_ITEMS_COUNT_QUERY,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
-import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
-import { useDialogStore } from '@/lib/stores/dialog'
-import { cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
-import { useTags } from '@/hooks/tags/use-tags'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
+import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
+import { MultiSelect } from '@/components/multi-select'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -29,20 +18,30 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
-import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
-import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
-import { FolderSelectItems } from '@/components/folders/folder-select-items'
-import { MultiSelect } from '@/components/multi-select'
-import { Spinner } from '@/components/spinner'
+import { useTags } from '@/hooks/tags/use-tags'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { createBookmark } from '@/lib/api'
+import {
+  BOOKMARKS_QUERY,
+  FAV_BOOKMARKS_QUERY,
+  NAV_ITEMS_COUNT_QUERY,
+  TAG_ITEMS_QUERY,
+  TAGS_QUERY,
+} from '@/lib/constants'
+import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
+import { useDialogStore } from '@/lib/stores/dialog'
+import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { cn } from '@/lib/utils'
 
 export function CreateAutomaticForm() {
   const modEnabled = useModEnabled()
+  const { invalidateQueries } = useInvalidateQueries()
+  const { data: tags, isLoading: tagsLoading } = useTags()
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const toggleDialog = useDialogStore((state) => state.toggle)
   const toggleDialogLoading = useDialogStore((state) => state.toggleLoading)
 
-  const { invalidateQueries } = useInvalidateQueries()
-  const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
   const form = useForm<z.infer<typeof createAutomaticBookmarkSchema>>({
     resolver: zodResolver(createAutomaticBookmarkSchema),
     defaultValues: {
@@ -63,15 +62,16 @@ export function CreateAutomaticForm() {
       return
     }
 
-    await invalidateQueries([
-      BOOKMARKS_QUERY,
-      FOLDERS_QUERY,
-      FOLDER_ITEMS_QUERY,
-      FAV_BOOKMARKS_QUERY,
-      TAGS_QUERY,
-      TAG_ITEMS_QUERY,
-      NAV_ITEMS_COUNT_QUERY,
-    ])
+    const queryKeysToInvalidate = [
+      [BOOKMARKS_QUERY],
+      [FAV_BOOKMARKS_QUERY],
+      [TAGS_QUERY],
+      [TAG_ITEMS_QUERY],
+      [NAV_ITEMS_COUNT_QUERY],
+    ]
+
+    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries(queryKeysToInvalidate)
 
     toggleDialog(false)
     toggleDialogLoading(false)

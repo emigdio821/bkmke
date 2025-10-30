@@ -1,15 +1,9 @@
-import { useOptimistic } from 'react'
 import type { Bookmark } from '@/types'
+import { useOptimistic } from 'react'
 import { toast } from 'sonner'
 import { toggleFavorite } from '@/lib/api'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  NAV_ITEMS_COUNT_QUERY,
-  TAG_ITEMS_QUERY,
-} from '@/lib/constants'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, NAV_ITEMS_COUNT_QUERY, TAG_ITEMS_QUERY } from '@/lib/constants'
+import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { useInvalidateQueries } from '../use-invalidate-queries'
 
 export function useToggleFavorite(bookmark: Bookmark) {
@@ -29,14 +23,10 @@ export function useToggleFavorite(bookmark: Bookmark) {
       return
     }
 
-    await invalidateQueries([
-      FOLDERS_QUERY,
-      BOOKMARKS_QUERY,
-      FOLDER_ITEMS_QUERY,
-      TAG_ITEMS_QUERY,
-      NAV_ITEMS_COUNT_QUERY,
-      FAV_BOOKMARKS_QUERY,
-    ])
+    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY], [TAG_ITEMS_QUERY], [NAV_ITEMS_COUNT_QUERY]]
+
+    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
+    await invalidateQueries(queryKeysToInvalidate)
   }
 
   return { optimisticBk, handleToggleFavorite }

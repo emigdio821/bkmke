@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useProfileStore } from '@/lib/stores/profile'
 import { useProfile } from '@/hooks/use-profile'
+import { useProfileStore } from '@/lib/stores/profile'
 
 export function ProfileInitializer() {
   const { data: profile, isLoading } = useProfile()

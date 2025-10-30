@@ -1,7 +1,7 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Bookmark } from '@/types'
+import type { ColumnDef, ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -9,12 +9,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import type { ColumnDef, ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table'
-import { useTableLayoutStore } from '@/lib/stores/table-layout'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { DataTablePagination } from '@/components/data-table/pagination'
 import { useQueryPagination } from '@/hooks/table/use-query-pagination'
 import { useDebounceFn } from '@/hooks/use-debounce-fn'
 import { useGlobalSearch } from '@/hooks/use-global-search'
-import { DataTablePagination } from '@/components/data-table/pagination'
+import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { DataTableHeaders } from './data-table-header'
 import { MasonryLayout } from './masonry-layout'
 import { TableLayout } from './table-layout'

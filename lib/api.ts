@@ -1,7 +1,7 @@
 import type { Bookmark, OGInfo } from '@/types'
-import axios from 'axios'
 import type { z } from 'zod'
 import type { createAutomaticBookmarkSchema } from './schemas/form'
+import axios from 'axios'
 import { createClient } from './supabase/client'
 
 export async function createBookmark(values: z.infer<typeof createAutomaticBookmarkSchema>) {
