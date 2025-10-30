@@ -21,10 +21,11 @@ import { Switch } from '@/components/ui/switch'
 import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { createBookmark } from '@/lib/api'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, NAV_ITEMS_COUNT_QUERY } from '@/lib/constants'
+import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY } from '@/lib/constants'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
 import { useDialogStore } from '@/lib/stores/dialog'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 
@@ -56,7 +57,7 @@ export function CreateAutomaticForm() {
       return
     }
 
-    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY], [NAV_ITEMS_COUNT_QUERY]]
+    const queryKeysToInvalidate = [[BOOKMARKS_QUERY], [FAV_BOOKMARKS_QUERY], [SIDEBAR_ITEM_COUNT_QUERY_KEY]]
 
     await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
     await invalidateQueries(queryKeysToInvalidate)

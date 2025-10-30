@@ -2,7 +2,7 @@ import type { QueryOptionsWithoutKeyAndFn } from './types'
 import { queryOptions } from '@tanstack/react-query'
 import { getAppSidebarItemCount } from '../server-actions/sidebar'
 
-export const SIDEBAR_ITEM_COUNT_QUERY_KEY = 'sidebar-item-count'
+export const SIDEBAR_ITEM_COUNT_QUERY_KEY = 'sidebar_item_count'
 
 export type SidebarItemCountData = Awaited<ReturnType<typeof getAppSidebarItemCount>>
 

@@ -1,23 +1,15 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useProfile } from '@/hooks/use-profile'
-import { useProfileStore } from '@/lib/stores/profile'
+import type { loggedInUserProfileData } from '@/lib/ts-queries/profile'
+import { useQuery } from '@tanstack/react-query'
+import { loggedInUserProfileQuery } from '@/lib/ts-queries/profile'
 
-export function ProfileInitializer() {
-  const { data: profile, isLoading } = useProfile()
-  const updateProfile = useProfileStore((state) => state.updateProfile)
-  const setLoadingProfile = useProfileStore((state) => state.setLoadingProfile)
+interface ProfileInitializerProps {
+  profileData?: loggedInUserProfileData
+}
 
-  useEffect(() => {
-    if (profile) {
-      updateProfile(profile)
-    }
-  }, [profile, updateProfile])
-
-  useEffect(() => {
-    setLoadingProfile(isLoading)
-  }, [isLoading, setLoadingProfile])
+export function ProfileInitializer({ profileData }: ProfileInitializerProps) {
+  useQuery(loggedInUserProfileQuery({ initialData: profileData }))
 
   return null
 }

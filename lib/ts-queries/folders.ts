@@ -3,7 +3,7 @@ import { queryOptions } from '@tanstack/react-query'
 import { getFolderDetails, getFolderItems, listFolders } from '@/lib/server-actions/folders'
 
 export const FOLDERS_QUERY_KEY = 'folders'
-export const FOLDER_ITEMS_QUERY_KEY = 'folder-items'
+export const FOLDER_ITEMS_QUERY_KEY = 'folder_items'
 
 export type FolderListData = Awaited<ReturnType<typeof listFolders>>
 export type FolderDetailsData = Awaited<ReturnType<typeof getFolderDetails>>

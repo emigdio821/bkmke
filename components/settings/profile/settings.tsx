@@ -1,6 +1,6 @@
 'use client'
 
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { RotateCwIcon } from 'lucide-react'
 import { EditProfileDialog } from '@/components/dialogs/profile/edit'
 import { SettingsProfileSkeleton } from '@/components/skeletons'
@@ -8,24 +8,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { PROFILE_QUERY } from '@/lib/constants'
-import { useProfileStore } from '@/lib/stores/profile'
+import { loggedInUserProfileQuery } from '@/lib/ts-queries/profile'
 
 export function ProfileSettings() {
+  const { data: profile, isLoading, refetch } = useQuery(loggedInUserProfileQuery())
   const modEnabled = useModEnabled()
-  const queryClient = useQueryClient()
-  const profile = useProfileStore((state) => state.profile)
-  const isProfileLoading = useProfileStore((state) => state.isLoading)
 
-  async function handleRefetchProfile() {
-    try {
-      await queryClient.invalidateQueries({ queryKey: [PROFILE_QUERY] })
-    } catch (err) {
-      console.error('Failed to refetch profile', err)
-    }
-  }
-
-  if (isProfileLoading) return <SettingsProfileSkeleton />
+  if (isLoading) return <SettingsProfileSkeleton />
 
   return (
     <Card>
@@ -62,7 +51,7 @@ export function ProfileSettings() {
             </Avatar>
             <div>
               <p>Unable to fetch your profile at this time</p>
-              <Button variant="outline" size="sm" onClick={handleRefetchProfile}>
+              <Button variant="outline" size="sm" onClick={() => refetch()}>
                 Refetch <RotateCwIcon className="size-4" />
               </Button>
             </div>

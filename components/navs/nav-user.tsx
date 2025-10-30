@@ -1,6 +1,6 @@
 'use client'
 
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   BookmarkIcon,
   BookmarkPlusIcon,
@@ -34,8 +34,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
-import { useProfile } from '@/hooks/use-profile'
 import { createClient } from '@/lib/supabase/client'
+import { loggedInUserProfileQuery } from '@/lib/ts-queries/profile'
 import { CreateBookmarkDialog } from '../dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from '../dialogs/bookmarks/import'
 import { CreateFolderDialog } from '../dialogs/folders/create-folder'
@@ -47,7 +47,7 @@ export function NavUser() {
   const supabase = createClient()
   const queryClient = useQueryClient()
   const { setTheme, theme } = useTheme()
-  const { data: profile, isLoading, error, refetch } = useProfile()
+  const { data: profile, isLoading, error, refetch } = useQuery(loggedInUserProfileQuery())
 
   async function handleLogOut() {
     const { error } = await supabase.auth.signOut()
