@@ -23,7 +23,7 @@ interface FolderItemsClientPageProps {
 
 export function FolderItemsClientPage({ folderId, folderDetails }: FolderItemsClientPageProps) {
   const { data: folderItems, isLoading, refetch, error } = useQuery(folderItemsQuery(folderId))
-  const { data: folder } = useQuery(folderDetailsQuery(folderId, { initialData: folderDetails }))
+  const { data: folder } = useQuery({ ...folderDetailsQuery(folderId), initialData: folderDetails })
   const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
   const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
 

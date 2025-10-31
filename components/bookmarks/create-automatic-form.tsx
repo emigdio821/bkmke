@@ -55,7 +55,12 @@ export function CreateAutomaticForm() {
 
   const { mutate: createBookmarkMutate } = useMutation({
     mutationFn: async () => {
-      const response = await createBookmark(form.getValues())
+      const values = form.getValues()
+      const response = await createBookmark({
+        ...values,
+        name: '',
+        description: '',
+      })
       if (response?.error) {
         throw response.error
       }

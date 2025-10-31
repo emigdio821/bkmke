@@ -9,7 +9,7 @@ interface ProfileInitializerProps {
 }
 
 export function ProfileInitializer({ profileData }: ProfileInitializerProps) {
-  useQuery(loggedInUserProfileQuery({ initialData: profileData }))
+  useQuery({ ...loggedInUserProfileQuery(), initialData: profileData })
 
   return null
 }

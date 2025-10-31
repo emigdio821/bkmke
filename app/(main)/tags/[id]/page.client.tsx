@@ -22,7 +22,7 @@ interface TagitemsClientPageProps {
 }
 
 export function TagitemsClientPage({ tagId, tagDetails }: TagitemsClientPageProps) {
-  const { data: tag, error: tagError } = useQuery(tagDetailsQuery(tagId, { initialData: tagDetails }))
+  const { data: tag, error: tagError } = useQuery({ ...tagDetailsQuery(tagId), initialData: tagDetails })
   const { data: tagItems, isLoading, refetch, error } = useQuery(tagItemsQuery(tagId))
   const updateHeaderTitle = useHeaderTitleStore((state) => state.updateTitle)
   const setLoadingHeaderTitle = useHeaderTitleStore((state) => state.setLoadingTitle)
