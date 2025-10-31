@@ -10,7 +10,7 @@ import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { bookmarksDeleteMutation } from '@/lib/ts-mutations/bookmarks'
+import { deleteBookmark } from '@/lib/server-actions/bookmarks'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
@@ -36,36 +36,33 @@ export function DataTableHeaderActions({ table, refetch }: DataTableHeaderAction
   const selectedRows = table.getSelectedRowModel().rows
   const selectedBookmarkIds = selectedRows.map((row) => row.original.id)
 
-  const { mutateAsync: removeBookmarksMutation } = useMutation(
-    bookmarksDeleteMutation(selectedBookmarkIds, {
-      onProgress: (completed, total) => {
-        setProgress((completed / total) * 100)
-      },
-      onSuccess: async (result) => {
-        table.toggleAllRowsSelected(false)
-        await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+  const { mutateAsync: removeBookmarksMutation } = useMutation({
+    mutationFn: async () => {
+      const total = selectedBookmarkIds.length
+      let completed = 0
 
-        if (result.failedBookmarks.length > 0) {
-          toast.error('Error', {
-            description: `Removed ${result.successCount} of ${result.totalCount} bookmark(s). ${result.failedBookmarks.length} failed.`,
-          })
-        } else {
-          toast.success('Success', {
-            description: 'Selected bookmarks have been removed.',
-          })
-        }
-      },
-      onError: (error) => {
-        console.error('Unable to remove selected bookmarks', error)
-        toast.error('Error', {
-          description: 'Unable to remove selected bookmarks at this time, try again.',
-        })
-      },
-      onSettled: () => {
-        setProgress(0)
-      },
-    }),
-  )
+      for (const bookmarkId of selectedBookmarkIds) {
+        await deleteBookmark(bookmarkId)
+        completed++
+        setProgress((completed / total) * 100)
+      }
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+
+      toast.success('Success', {
+        description: 'Selected bookmarks have been removed.',
+      })
+
+      table.resetRowSelection()
+      setProgress(0)
+    },
+    onError: (error) => {
+      console.error('Unable to remove bookmarks', error)
+      toast.error('Error', { description: 'Unable to remove bookmarks at this time, try again.' })
+      setProgress(0)
+    },
+  })
 
   return (
     <div className="flex items-center gap-2">
