@@ -57,7 +57,10 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
 
   const { mutateAsync: removeBookmarkMutation } = useMutation({
-    mutationFn: () => deleteBookmark(bookmark.id),
+    mutationFn: async () => {
+      const { error } = await deleteBookmark(bookmark.id)
+      if (error) throw error
+    },
     onSuccess: async () => {
       await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
 
