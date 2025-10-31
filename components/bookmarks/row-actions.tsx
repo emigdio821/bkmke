@@ -56,7 +56,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
   const queryClient = useQueryClient()
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
 
-  const { mutateAsync: removeBookmarkMutation } = useMutation({
+  const { mutateAsync: removeBookmarkMutate } = useMutation({
     mutationFn: async () => {
       const { error } = await deleteBookmark(bookmark.id)
       if (error) throw error
@@ -158,7 +158,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
             <AlertActionDialog
               destructive
               title="Delete bookmark?"
-              action={async () => await removeBookmarkMutation()}
+              action={async () => await removeBookmarkMutate()}
               trigger={
                 <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
                   <Trash2Icon className="size-4" />

@@ -36,7 +36,7 @@ export function DataTableHeaderActions({ table, refetch }: DataTableHeaderAction
   const selectedRows = table.getSelectedRowModel().rows
   const selectedBookmarkIds = selectedRows.map((row) => row.original.id)
 
-  const { mutateAsync: removeBookmarksMutation } = useMutation({
+  const { mutateAsync: removeBookmarksMutate } = useMutation({
     mutationFn: async () => {
       const total = selectedBookmarkIds.length
       let completed = 0
@@ -81,7 +81,7 @@ export function DataTableHeaderActions({ table, refetch }: DataTableHeaderAction
                     {progress > 0 && <Progress className="mt-4" value={progress} />}
                   </>
                 }
-                action={async () => await removeBookmarksMutation()}
+                action={async () => await removeBookmarksMutate()}
                 trigger={
                   <TooltipTrigger asChild>
                     <Button size="icon-sm" type="button" variant="outline">

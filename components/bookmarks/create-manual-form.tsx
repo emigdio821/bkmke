@@ -4,7 +4,6 @@ import type { OGInfo } from '@/types'
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
 import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -24,6 +23,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createManualBookmarkSchema } from '@/lib/schemas/form'
+import { getOgInfo } from '@/lib/server-actions/og-info'
 import { useDialogStore } from '@/lib/stores/dialog'
 import { createClient } from '@/lib/supabase/client'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
@@ -67,7 +67,7 @@ export function CreateManualForm() {
     let ogInfoPayload = null
 
     try {
-      const { data: ogInfo } = await axios.get<OGInfo>('/api/og-info', { params: { url } })
+      const ogInfo = await getOgInfo(url)
 
       ogInfoPayload = {
         title: ogInfo.title,

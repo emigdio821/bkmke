@@ -2,7 +2,7 @@
 
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -19,8 +19,8 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { createBookmark } from '@/lib/api'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
+import { createBookmark } from '@/lib/server-actions/bookmarks'
 import { useDialogStore } from '@/lib/stores/dialog'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
@@ -53,21 +53,32 @@ export function CreateAutomaticForm() {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof createAutomaticBookmarkSchema>) {
-    toggleDialogLoading(true)
-    const response = await createBookmark(values)
-
-    if (response?.error) {
+  const { mutate: createBookmarkMutate } = useMutation({
+    mutationFn: async () => {
+      const response = await createBookmark(form.getValues())
+      if (response?.error) {
+        throw response.error
+      }
+    },
+    onMutate: () => {
+      toggleDialogLoading(true)
+    },
+    onSuccess: async () => {
+      await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
+      toggleDialog(false)
       toggleDialogLoading(false)
-      toast.error('Error', { description: response.error })
-      return
-    }
+      toast.success('Success', { description: 'Bookmark has been created.' })
+    },
+    onError: (error) => {
+      toast.error('Error', {
+        description: error instanceof Error ? error.message : 'Unable to create bookmark at this time, try again.',
+      })
+      toggleDialogLoading(false)
+    },
+  })
 
-    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
-
-    toggleDialog(false)
-    toggleDialogLoading(false)
-    toast.success('Success', { description: 'Bookmark has been created.' })
+  async function onSubmit() {
+    createBookmarkMutate()
   }
 
   return (
