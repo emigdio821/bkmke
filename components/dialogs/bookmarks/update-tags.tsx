@@ -93,7 +93,7 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
     const settledPromises = await Promise.allSettled(updatePromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
 
     if (errors.length > 0) {
       toast.error('Error', { description: 'Unable to update tags at this time, try again.' })

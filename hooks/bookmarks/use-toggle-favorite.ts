@@ -1,8 +1,7 @@
 import type { Bookmark } from '@/types'
 import { useQueryClient } from '@tanstack/react-query'
-import { useOptimistic } from 'react'
 import { toast } from 'sonner'
-import { toggleFavorite } from '@/lib/api'
+import { toggleFavoriteBookmark } from '@/lib/server-actions/bookmarks'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
@@ -17,23 +16,17 @@ const QUERY_KEYS_TO_INVALIDATE = [
 
 export function useToggleFavorite(bookmark: Bookmark) {
   const queryClient = useQueryClient()
-  const [optimisticBk, addOptimisticBk] = useOptimistic(bookmark, (state, favStatus: boolean) => ({
-    ...state,
-    is_favorite: favStatus,
-  }))
 
   async function handleToggleFavorite() {
-    addOptimisticBk(!bookmark.is_favorite)
-    const response = await toggleFavorite(bookmark)
+    const { error } = await toggleFavoriteBookmark(bookmark)
 
-    if (response?.error) {
-      addOptimisticBk(bookmark.is_favorite)
+    if (error) {
       toast.error('Unable to toggle favorite at this time, try again.')
       return
     }
 
-    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
   }
 
-  return { optimisticBk, handleToggleFavorite }
+  return { optimisticBk: bookmark, handleToggleFavorite }
 }

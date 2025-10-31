@@ -123,7 +123,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
       await supabase.from('tag_items').delete().eq('bookmark_id', bookmark.id)
     }
 
-    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
 
     form.reset(values)
     setOpenDialog(false)

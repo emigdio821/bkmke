@@ -1,4 +1,4 @@
-import type { Bookmark, OGInfo } from '@/types'
+import type { OGInfo } from '@/types'
 import type { z } from 'zod'
 import type { createAutomaticBookmarkSchema } from './schemas/form'
 import axios from 'axios'
@@ -59,26 +59,6 @@ export async function createBookmark(values: z.infer<typeof createAutomaticBookm
 
     await Promise.all(tagItemsPromises)
   }
-
-  if (error) {
-    return { error: error.message }
-  }
-}
-
-export async function toggleFavorite(bookmark: Bookmark) {
-  const supabase = createClient()
-
-  const { error } = await supabase
-    .from('bookmarks')
-    .update({
-      url: bookmark.url,
-      name: bookmark.name,
-      description: bookmark.description,
-      folder_id: bookmark.folder_id,
-      og_info: bookmark.og_info,
-      is_favorite: !bookmark.is_favorite,
-    })
-    .eq('id', bookmark.id)
 
   if (error) {
     return { error: error.message }

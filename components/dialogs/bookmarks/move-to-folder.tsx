@@ -88,7 +88,7 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
     const settledPromises = await Promise.allSettled(movePromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
 
     setOpenDialog(false)
     setLoading(false)

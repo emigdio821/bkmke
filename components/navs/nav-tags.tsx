@@ -60,7 +60,7 @@ export function NavTags() {
       throw new Error(error.message)
     }
 
-    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
 
     toast.success('Success', {
       description: (

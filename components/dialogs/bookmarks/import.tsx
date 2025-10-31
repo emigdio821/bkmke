@@ -151,7 +151,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
     const settledPromises = await Promise.allSettled(importPromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
 
     if (errors.length > 0) {
       toast.error('Error', {

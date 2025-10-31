@@ -47,7 +47,7 @@ export function NavFolderActions({ folder, className }: NavFolderActionsProps) {
       ),
     })
 
-    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
   }
 
   return (

@@ -1,5 +1,6 @@
 'use server'
 
+import type { Bookmark } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 
 const ALL_BOOKMARKS_SELECT = `
@@ -48,4 +49,20 @@ export async function deleteBookmark(bookmarkId: string) {
   const supabase = await createClient()
 
   return supabase.from('bookmarks').delete().eq('id', bookmarkId)
+}
+
+export async function toggleFavoriteBookmark(bookmark: Bookmark) {
+  const supabase = await createClient()
+
+  return supabase
+    .from('bookmarks')
+    .update({
+      url: bookmark.url,
+      name: bookmark.name,
+      description: bookmark.description,
+      folder_id: bookmark.folder_id,
+      og_info: bookmark.og_info,
+      is_favorite: !bookmark.is_favorite,
+    })
+    .eq('id', bookmark.id)
 }
