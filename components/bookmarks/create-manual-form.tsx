@@ -3,7 +3,7 @@
 import type { OGInfo } from '@/types'
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -21,25 +21,31 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createManualBookmarkSchema } from '@/lib/schemas/form'
 import { useDialogStore } from '@/lib/stores/dialog'
 import { createClient } from '@/lib/supabase/client'
-import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 
+const QUERY_KEYS_TO_INVALIDATE = [
+  [BOOKMARKS_QUERY_KEY],
+  [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+  [FOLDERS_QUERY_KEY],
+  [TAGS_QUERY_KEY],
+]
+
 export function CreateManualForm() {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const toggleDialog = useDialogStore((state) => state.toggle)
   const toggleDialogLoading = useDialogStore((state) => state.toggleLoading)
 
   const supabase = createClient()
-  const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
   const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const form = useForm<z.infer<typeof createManualBookmarkSchema>>({
@@ -107,14 +113,7 @@ export function CreateManualForm() {
       return
     }
 
-    const queryKeysToInvalidate = [
-      [BOOKMARKS_QUERY_KEY],
-      [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY],
-      [SIDEBAR_ITEM_COUNT_QUERY_KEY],
-    ]
-
-    await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
-    await invalidateQueries(queryKeysToInvalidate)
+    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
 
     toggleDialog(false)
     toggleDialogLoading(false)

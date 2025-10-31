@@ -1,6 +1,6 @@
 import type { ButtonProps } from '@/components/ui/button'
 import type { Bookmark } from '@/types'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   BookTextIcon,
   CopyIcon,
@@ -30,9 +30,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useToggleFavorite } from '@/hooks/bookmarks/use-toggle-favorite'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { bookmarkDeleteMutation } from '@/lib/ts-mutations/bookmarks'
+import { deleteBookmark } from '@/lib/server-actions/bookmarks'
 import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
@@ -48,35 +47,33 @@ const QUERY_KEYS_TO_INVALIDATE = [
   [BOOKMARKS_QUERY_KEY],
   [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY],
   [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+  [FOLDERS_QUERY_KEY],
+  [TAGS_QUERY_KEY],
 ]
-
-const QUERY_KEYS_TO_INVALIDATE_NO_EXACT = [[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]]
 
 export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps) {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
-  const { invalidateQueries } = useInvalidateQueries()
 
-  const { mutateAsync: removeBookmarkMutation } = useMutation(
-    bookmarkDeleteMutation(bookmark.id, {
-      onSuccess: async () => {
-        await invalidateQueries(QUERY_KEYS_TO_INVALIDATE)
-        await invalidateQueries(QUERY_KEYS_TO_INVALIDATE_NO_EXACT, { exact: false })
+  const { mutateAsync: removeBookmarkMutation } = useMutation({
+    mutationFn: () => deleteBookmark(bookmark.id),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
 
-        toast.success('Success', {
-          description: (
-            <div>
-              Bookmark <span className="font-semibold">{bookmark.name}</span> has been removed.
-            </div>
-          ),
-        })
-      },
-      onError: (error) => {
-        console.error('Unable to remove bookmark', error)
-        toast.error('Error', { description: 'Unable to remove bookmark at this time, try again' })
-      },
-    }),
-  )
+      toast.success('Success', {
+        description: (
+          <div>
+            Bookmark <span className="font-semibold">{bookmark.name}</span> has been removed.
+          </div>
+        ),
+      })
+    },
+    onError: (error) => {
+      console.error('Unable to remove bookmark', error)
+      toast.error('Error', { description: 'Unable to remove bookmark at this time, try again' })
+    },
+  })
 
   return (
     <DropdownMenu>

@@ -3,6 +3,7 @@
 import type { UserProfile } from '@/types'
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -21,7 +22,6 @@ import {
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { editUserSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
 import { LOGGED_IN_USER_PROFILE_QUERY_KEY } from '@/lib/ts-queries/profile'
@@ -33,9 +33,9 @@ interface EditProfileDialogProps {
 }
 
 export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) {
-  const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
-  const { invalidateQueries } = useInvalidateQueries()
+  const queryClient = useQueryClient()
+  const [openDialog, setOpenDialog] = useState(false)
 
   const form = useForm<z.infer<typeof editUserSchema>>({
     shouldUnregister: true,
@@ -74,7 +74,8 @@ export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) 
       return
     }
 
-    await invalidateQueries([LOGGED_IN_USER_PROFILE_QUERY_KEY])
+    await queryClient.invalidateQueries({ queryKey: [LOGGED_IN_USER_PROFILE_QUERY_KEY] })
+
     form.reset(values)
     setOpenDialog(false)
     toast.success('Success', { description: 'Profile has been updated.' })

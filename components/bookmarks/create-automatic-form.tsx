@@ -2,7 +2,7 @@
 
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -18,20 +18,26 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { createBookmark } from '@/lib/api'
 import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
 import { useDialogStore } from '@/lib/stores/dialog'
-import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 
+const QUERY_KEYS_TO_INVALIDATE = [
+  [BOOKMARKS_QUERY_KEY],
+  [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+  [FOLDERS_QUERY_KEY],
+  [TAGS_QUERY_KEY],
+]
+
 export function CreateAutomaticForm() {
   const modEnabled = useModEnabled()
-  const { invalidateQueries } = useInvalidateQueries()
+  const queryClient = useQueryClient()
   const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
   const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const toggleDialog = useDialogStore((state) => state.toggle)
@@ -57,14 +63,7 @@ export function CreateAutomaticForm() {
       return
     }
 
-    const queryKeysToInvalidate = [
-      [BOOKMARKS_QUERY_KEY],
-      [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY],
-      [SIDEBAR_ITEM_COUNT_QUERY_KEY],
-    ]
-
-    await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
-    await invalidateQueries(queryKeysToInvalidate)
+    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
 
     toggleDialog(false)
     toggleDialogLoading(false)

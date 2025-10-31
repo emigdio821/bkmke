@@ -1,7 +1,7 @@
 'use client'
 
 import type { Tables } from '@/types/database.types'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   ChevronDownIcon,
   Edit2Icon,
@@ -26,10 +26,9 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from '@/components/ui/sidebar'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { createClient } from '@/lib/supabase/client'
-import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 import { AlertActionDialog } from '../dialogs/alert-action'
@@ -45,10 +44,12 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
 
+const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [TAGS_QUERY_KEY]]
+
 export function NavTags() {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const pathname = usePathname()
-  const { invalidateQueries } = useInvalidateQueries()
   const { data: tags, isLoading, error, refetch } = useQuery(tagListQuery())
 
   async function handleDeleteTag(tag: Tables<'tags'>) {
@@ -59,6 +60,8 @@ export function NavTags() {
       throw new Error(error.message)
     }
 
+    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+
     toast.success('Success', {
       description: (
         <div>
@@ -67,8 +70,7 @@ export function NavTags() {
       ),
     })
 
-    await invalidateQueries([TAGS_QUERY_KEY], { exact: false })
-    await invalidateQueries([[BOOKMARKS_QUERY_KEY], [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY]])
+    await queryClient.invalidateQueries()
   }
 
   return (

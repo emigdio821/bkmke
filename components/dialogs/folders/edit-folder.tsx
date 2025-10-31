@@ -3,6 +3,7 @@
 import type { Tables } from '@/types/database.types'
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -21,12 +22,11 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { cn } from '@/lib/utils'
 
@@ -35,11 +35,14 @@ interface EditFolderDialogProps {
   trigger: React.ReactNode
 }
 
+const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [FOLDERS_QUERY_KEY]]
+
 export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
-  const { invalidateQueries } = useInvalidateQueries()
+
   const form = useForm<z.infer<typeof createFolderSchema>>({
     resolver: zodResolver(createFolderSchema),
     defaultValues: {
@@ -56,8 +59,7 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
       return
     }
 
-    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
-    await invalidateQueries([[BOOKMARKS_QUERY_KEY], [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY]])
+    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
 
     setOpenDialog(false)
 

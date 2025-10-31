@@ -2,7 +2,7 @@
 
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { FileUpIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -31,11 +31,10 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { InlineCode } from '@/components/ui/typography'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { createBookmark } from '@/lib/api'
 import { importBookmarksSchema } from '@/lib/schemas/form'
-import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
@@ -48,13 +47,20 @@ const messages = {
 
 let completedCount = 0
 
+const QUERY_KEYS_TO_INVALIDATE = [
+  [BOOKMARKS_QUERY_KEY],
+  [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+  [FOLDERS_QUERY_KEY],
+  [TAGS_QUERY_KEY],
+]
+
 export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode }) {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
   const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
   const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const [progress, setProgress] = useState(0)
-  const { invalidateQueries } = useInvalidateQueries()
   const [dndFiles, setDndFiles] = useState<File[]>([])
 
   const form = useForm<z.infer<typeof importBookmarksSchema>>({
@@ -145,14 +151,7 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
     const settledPromises = await Promise.allSettled(importPromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    const queryKeysToInvalidate = [
-      [BOOKMARKS_QUERY_KEY],
-      [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY],
-      [SIDEBAR_ITEM_COUNT_QUERY_KEY],
-    ]
-
-    await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
-    await invalidateQueries(queryKeysToInvalidate)
+    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
 
     if (errors.length > 0) {
       toast.error('Error', {

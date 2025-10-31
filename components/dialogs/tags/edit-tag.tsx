@@ -3,6 +3,7 @@
 import type { Tables } from '@/types/database.types'
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -20,12 +21,11 @@ import {
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_NAME_LENGTH } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 
@@ -34,11 +34,14 @@ interface EditTagDialogProps {
   tag: Tables<'tags'>
 }
 
+const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [TAGS_QUERY_KEY]]
+
 export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
-  const { invalidateQueries } = useInvalidateQueries()
+
   const form = useForm<z.infer<typeof createTagSchema>>({
     resolver: zodResolver(createTagSchema),
     defaultValues: {
@@ -54,12 +57,12 @@ export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
       return
     }
 
+    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+
     toast.success('Success', {
       description: 'Tag has been updated.',
     })
 
-    await invalidateQueries([TAGS_QUERY_KEY], { exact: false })
-    await invalidateQueries([[BOOKMARKS_QUERY_KEY], [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY]])
     setOpenDialog(false)
   }
 

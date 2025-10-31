@@ -1,4 +1,5 @@
 import type { Folder } from '@/types'
+import { useQueryClient } from '@tanstack/react-query'
 import { Edit2Icon, FolderPlusIcon, MoreHorizontalIcon, Trash2Icon } from 'lucide-react'
 import { toast } from 'sonner'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
@@ -13,10 +14,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenuAction } from '@/components/ui/sidebar'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { createClient } from '@/lib/supabase/client'
-import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 
@@ -25,10 +25,12 @@ interface NavFolderActionsProps {
   className?: string
 }
 
+const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]]
+
 export function NavFolderActions({ folder, className }: NavFolderActionsProps) {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const supabase = createClient()
-  const { invalidateQueries } = useInvalidateQueries()
 
   async function handleDeleteFolder(id: string) {
     const { error } = await supabase.from('folders').delete().eq('id', id)
@@ -45,10 +47,7 @@ export function NavFolderActions({ folder, className }: NavFolderActionsProps) {
       ),
     })
 
-    const queryKeysToInvalidate = [[BOOKMARKS_QUERY_KEY], [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY]]
-
-    await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
-    await invalidateQueries(queryKeysToInvalidate)
+    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
   }
 
   return (

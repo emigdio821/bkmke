@@ -1,6 +1,6 @@
 import type { Bookmark } from '@/types'
 import type { Table } from '@tanstack/react-table'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FolderIcon, RotateCwIcon, TagIcon, Trash2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -9,10 +9,9 @@ import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folde
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { bookmarksDeleteMutation } from '@/lib/ts-mutations/bookmarks'
-import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
 import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
@@ -25,16 +24,15 @@ interface DataTableHeaderActionsProps {
 
 const QUERY_KEYS_TO_INVALIDATE = [
   [BOOKMARKS_QUERY_KEY],
-  [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY],
   [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+  [FOLDERS_QUERY_KEY],
+  [TAGS_QUERY_KEY],
 ]
-
-const QUERY_KEYS_TO_INVALIDATE_NO_EXACT = [[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]]
 
 export function DataTableHeaderActions({ table, refetch }: DataTableHeaderActionsProps) {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const [progress, setProgress] = useState(0)
-  const { invalidateQueries } = useInvalidateQueries()
   const selectedRows = table.getSelectedRowModel().rows
   const selectedBookmarkIds = selectedRows.map((row) => row.original.id)
 
@@ -45,8 +43,7 @@ export function DataTableHeaderActions({ table, refetch }: DataTableHeaderAction
       },
       onSuccess: async (result) => {
         table.toggleAllRowsSelected(false)
-        await invalidateQueries(QUERY_KEYS_TO_INVALIDATE)
-        await invalidateQueries(QUERY_KEYS_TO_INVALIDATE_NO_EXACT)
+        await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
 
         if (result.failedBookmarks.length > 0) {
           toast.error('Error', {

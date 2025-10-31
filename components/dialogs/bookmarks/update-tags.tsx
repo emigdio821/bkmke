@@ -1,5 +1,5 @@
 import type { Bookmark } from '@/types'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { MultiSelect } from '@/components/multi-select'
@@ -18,10 +18,9 @@ import {
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { createClient } from '@/lib/supabase/client'
-import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 
@@ -41,10 +40,12 @@ type UpdateTagsDialogProps = (SingleBookmark | MultipleBookmarks) & {
 
 let completedCount = 0
 
+const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [TAGS_QUERY_KEY]]
+
 export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDialogProps) {
   const supabase = createClient()
   const modEnabled = useModEnabled()
-  const { invalidateQueries } = useInvalidateQueries()
+  const queryClient = useQueryClient()
   const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
   const [progress, setProgress] = useState(0)
   const [isLoading, setLoading] = useState(false)
@@ -92,13 +93,11 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
     const settledPromises = await Promise.allSettled(updatePromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
+    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
+
     if (errors.length > 0) {
       toast.error('Error', { description: 'Unable to update tags at this time, try again.' })
     } else {
-      const queryKeysToInvalidate = [[BOOKMARKS_QUERY_KEY], [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY]]
-
-      await invalidateQueries([TAGS_QUERY_KEY], { exact: false })
-      await invalidateQueries(queryKeysToInvalidate)
       toast.success('Success', { description: 'Tags have been updated.' })
     }
   }

@@ -2,6 +2,7 @@
 
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -20,7 +21,6 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
@@ -34,10 +34,10 @@ interface CreateFolderDialogProps {
 }
 
 export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDialogProps) {
-  const modEnabled = useModEnabled()
-  const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
-  const { invalidateQueries } = useInvalidateQueries()
+  const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
+  const [openDialog, setOpenDialog] = useState(false)
 
   const form = useForm<z.infer<typeof createFolderSchema>>({
     resolver: zodResolver(createFolderSchema),
@@ -58,6 +58,8 @@ export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDial
       return
     }
 
+    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY_KEY] })
+
     toast.success('Success', {
       description: (
         <div>
@@ -66,7 +68,6 @@ export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDial
       ),
     })
 
-    await invalidateQueries([FOLDERS_QUERY_KEY], { exact: false })
     setOpenDialog(false)
   }
 

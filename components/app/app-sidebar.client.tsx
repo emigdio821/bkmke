@@ -27,7 +27,7 @@ interface AppSidebarClientProps extends React.ComponentProps<typeof Sidebar> {
 
 export function AppSidebarClient({ itemCount, ...props }: AppSidebarClientProps) {
   const pathname = usePathname()
-  const { data: navItemsCount } = useQuery(appSidebarItemCountQuery({ initialData: itemCount }))
+  const { data: navItemsCount } = useQuery({ ...appSidebarItemCountQuery(), initialData: itemCount })
   const favsCount = navItemsCount?.favoritesCount
   const bksCount = navItemsCount?.bookmarksCount
 

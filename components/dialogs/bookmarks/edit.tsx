@@ -3,7 +3,7 @@
 import type { BkOGInfo, Bookmark } from '@/types'
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -27,12 +27,11 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
 import { createClient } from '@/lib/supabase/client'
-import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
@@ -42,10 +41,12 @@ interface EditBookmarkDialogProps {
   trigger: React.ReactNode
 }
 
+const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]]
+
 export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProps) {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
-  const { invalidateQueries } = useInvalidateQueries()
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
   const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
   const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
@@ -122,10 +123,8 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
       await supabase.from('tag_items').delete().eq('bookmark_id', bookmark.id)
     }
 
-    const queryKeysToInvalidate = [[BOOKMARKS_QUERY_KEY], [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY]]
+    await queryClient.invalidateQueries({ queryKey: QUERY_KEYS_TO_INVALIDATE })
 
-    await invalidateQueries([[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]], { exact: false })
-    await invalidateQueries(queryKeysToInvalidate)
     form.reset(values)
     setOpenDialog(false)
     toast.success('Success', { description: 'Bookmark has been updated.' })
