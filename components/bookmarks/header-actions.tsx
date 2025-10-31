@@ -1,44 +1,74 @@
 import type { Bookmark } from '@/types'
 import type { Table } from '@tanstack/react-table'
+import { useMutation } from '@tanstack/react-query'
 import { FolderIcon, RotateCwIcon, TagIcon, Trash2Icon } from 'lucide-react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
 import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
 import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
+import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { bookmarksDeleteMutation } from '@/lib/ts-mutations/bookmarks'
+import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
+import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
+import { Progress } from '../ui/progress'
 
 interface DataTableHeaderActionsProps {
   table: Table<Bookmark>
   refetch: () => void
 }
 
+const QUERY_KEYS_TO_INVALIDATE = [
+  [BOOKMARKS_QUERY_KEY],
+  [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY],
+  [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+]
+
+const QUERY_KEYS_TO_INVALIDATE_NO_EXACT = [[FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]]
+
 export function DataTableHeaderActions({ table, refetch }: DataTableHeaderActionsProps) {
   const modEnabled = useModEnabled()
+  const [progress, setProgress] = useState(0)
+  const { invalidateQueries } = useInvalidateQueries()
   const selectedRows = table.getSelectedRowModel().rows
-  const { handleRemoveBookmarks, progress, errors } = useRemoveBookmarks()
+  const selectedBookmarkIds = selectedRows.map((row) => row.original.id)
 
-  async function handleRemoveBks() {
-    try {
-      await handleRemoveBookmarks(selectedRows.map((row) => row.original))
-      table.toggleAllRowsSelected(false)
-      if (errors && errors.length > 0) throw new Error('Unable to remove some bookmarks')
+  const { mutateAsync: removeBookmarksMutation } = useMutation(
+    bookmarksDeleteMutation(selectedBookmarkIds, {
+      onProgress: (completed, total) => {
+        setProgress((completed / total) * 100)
+      },
+      onSuccess: async (result) => {
+        table.toggleAllRowsSelected(false)
+        await invalidateQueries(QUERY_KEYS_TO_INVALIDATE)
+        await invalidateQueries(QUERY_KEYS_TO_INVALIDATE_NO_EXACT)
 
-      toast.success('Success', {
-        description: 'Selected bookmarks have been removed.',
-      })
-    } catch (err) {
-      console.error('Unable to remove selected bookmarks', err)
-      const errMsg =
-        errors && errors.length > 0
-          ? 'Unable to remove some bookmarks, try again.'
-          : 'Unable to remove selected bookmarks at this time, try again.'
-      toast.error('Error', { description: errMsg })
-    }
-  }
+        if (result.failedBookmarks.length > 0) {
+          toast.error('Error', {
+            description: `Removed ${result.successCount} of ${result.totalCount} bookmark(s). ${result.failedBookmarks.length} failed.`,
+          })
+        } else {
+          toast.success('Success', {
+            description: 'Selected bookmarks have been removed.',
+          })
+        }
+      },
+      onError: (error) => {
+        console.error('Unable to remove selected bookmarks', error)
+        toast.error('Error', {
+          description: 'Unable to remove selected bookmarks at this time, try again.',
+        })
+      },
+      onSettled: () => {
+        setProgress(0)
+      },
+    }),
+  )
 
   return (
     <div className="flex items-center gap-2">
@@ -57,7 +87,7 @@ export function DataTableHeaderActions({ table, refetch }: DataTableHeaderAction
                     {progress > 0 && <Progress className="mt-4" value={progress} />}
                   </>
                 }
-                action={async () => await handleRemoveBks()}
+                action={async () => await removeBookmarksMutation()}
                 trigger={
                   <TooltipTrigger asChild>
                     <Button size="icon-sm" type="button" variant="outline">

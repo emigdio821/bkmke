@@ -2,29 +2,35 @@
 
 import type { UserProfile } from '@/types'
 import type { Tables } from '@/types/database.types'
-import { jwtDecode } from 'jwt-decode'
 import { createClient } from '../supabase/server'
 
 export async function getLoggedInUserProfile() {
   const supabase = await createClient()
 
   const {
-    data: { session },
-    error,
-  } = await supabase.auth.getSession()
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
 
-  if (error) {
-    console.log('Unable to fetch your profile', error.message)
-    throw new Error(error?.message)
+  const { data: claimsData, error: claimsError } = await supabase.auth.getClaims()
+
+  if (userError) {
+    console.error('Unable to fetch your user', userError.message)
   }
 
-  if (!session) {
-    console.log('Unable to fetch your session')
-    throw new Error('Unable to fetch your session')
+  if (claimsError) {
+    console.error('Unable to fetch your session claims', claimsError.message)
   }
-  const { user } = session
-  const jwt = jwtDecode<{ user_role: Tables<'role_permissions'>['role'] | null }>(session.access_token)
-  const userRole = jwt.user_role
+
+  if (!user) {
+    console.error('Unable to fetch your user')
+    throw new Error('Unable to fetch your user')
+  }
+
+  if (!claimsData) {
+    console.error('Unable to fetch your session claims')
+    throw new Error('Unable to fetch your session claims')
+  }
 
   const { data: profile, error: profilesError } = await supabase.from('profiles').select().eq('id', user.id).single()
 
@@ -33,7 +39,11 @@ export async function getLoggedInUserProfile() {
     throw new Error(profilesError.message)
   }
 
-  const profileData: UserProfile = { email: user.email, user_role: userRole, ...profile }
+  const profileData: UserProfile = {
+    email: user.email,
+    user_role: claimsData.claims.user_role as Tables<'role_permissions'>['role'],
+    ...profile,
+  }
 
   return profileData
 }

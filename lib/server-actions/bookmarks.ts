@@ -43,3 +43,9 @@ export async function listFavoriteBookmarks() {
 
   return data || []
 }
+
+export async function deleteBookmark(bookmarkId: string) {
+  const supabase = await createClient()
+
+  return supabase.from('bookmarks').delete().eq('id', bookmarkId)
+}
