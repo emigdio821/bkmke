@@ -37,9 +37,9 @@ export const createManualBookmarkSchema = object({
 })
 
 export const createAutomaticBookmarkSchema = object({
-  folderId: optionalString,
   url: url(),
   tags: optionalString.array(),
+  folderId: optionalString,
   isFavorite: boolean(),
 })
 

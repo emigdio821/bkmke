@@ -2,7 +2,7 @@
 
 import type { Bookmark, OGInfo } from '@/types'
 import type { z } from 'zod'
-import type { createAutomaticBookmarkSchema } from '../schemas/form'
+import type { createManualBookmarkSchema } from '../schemas/form'
 import { createClient } from '@/lib/supabase/server'
 import { getOgInfo } from './og-info'
 
@@ -12,11 +12,11 @@ const ALL_BOOKMARKS_SELECT = `
   folder:folders(name)
 `
 
-type CreateBookmarkValues = z.infer<typeof createAutomaticBookmarkSchema>
+export type CreateBookmarkValues = z.infer<typeof createManualBookmarkSchema>
 
 export async function createBookmark(bookmarkValues: CreateBookmarkValues) {
   const supabase = await createClient()
-  const { folderId, tags: tagIds, url, isFavorite } = bookmarkValues
+  const { folderId, tags: tagIds, url, isFavorite, name, description } = bookmarkValues
 
   if (!url) {
     return { error: 'Missing URL value' }
@@ -29,9 +29,9 @@ export async function createBookmark(bookmarkValues: CreateBookmarkValues) {
 
     bookmarkPayload = {
       url,
-      name: ogInfo.title,
+      name: name || ogInfo.title,
       is_favorite: isFavorite,
-      description: ogInfo.description,
+      description: description || ogInfo.description,
       folder_id: folderId || null,
       og_info: {
         title: ogInfo.title,

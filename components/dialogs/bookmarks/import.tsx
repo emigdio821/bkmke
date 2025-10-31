@@ -133,9 +133,11 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
       const importPromises = bookmarkUrls.map((url) =>
         createBookmark({
           url,
+          name: '',
+          description: '',
           tags: values.tags,
-          folderId: values.folderId,
           isFavorite: false,
+          folderId: values.folderId,
         }).then((result) => {
           if (result?.error) throw new Error(result.error)
           completed++
