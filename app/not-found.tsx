@@ -1,10 +1,10 @@
-import Link from 'next/link'
 import type { Metadata } from 'next/types'
 import { GhostIcon } from 'lucide-react'
-import { siteConfig } from '@/config/site'
+import Link from 'next/link'
+import { Footer } from '@/components/footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Footer } from '@/components/footer'
+import { siteConfig } from '@/config/site'
 
 export const metadata: Metadata = {
   title: {

@@ -1,9 +1,8 @@
-import { useCallback } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import type { Folder } from '@/types'
 import { ChevronRightIcon, FolderIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useCallback } from 'react'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   SidebarMenuAction,
@@ -14,6 +13,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
+import { cn } from '@/lib/utils'
 import { NavFolderActions } from './nav-folder-actions'
 
 interface FolderItemProps {

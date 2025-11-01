@@ -1,28 +1,18 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FileUpIcon, PlusIcon, Trash2Icon } from 'lucide-react'
+import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import { createBookmark } from '@/lib/api'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  NAV_ITEMS_COUNT_QUERY,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
-import { importBookmarksSchema } from '@/lib/schemas/form'
-import { cn, formatBytes } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
-import { useTags } from '@/hooks/tags/use-tags'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
+import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
+import { MultiSelect } from '@/components/multi-select'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -41,26 +31,34 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { InlineCode } from '@/components/ui/typography'
-import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
-import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
-import { FolderSelectItems } from '@/components/folders/folder-select-items'
-import { MultiSelect } from '@/components/multi-select'
-import { Spinner } from '@/components/spinner'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { importBookmarksSchema } from '@/lib/schemas/form'
+import { createBookmark } from '@/lib/server-actions/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
+import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
+import { cn, formatBytes } from '@/lib/utils'
 
 const messages = {
   default: 'Unable to import bookmarks at this time, try again.',
   multipleFailure: 'Some bookmarks failed to import, try again.',
 }
 
-let completedCount = 0
+const QUERY_KEYS_TO_INVALIDATE = [
+  [BOOKMARKS_QUERY_KEY],
+  [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+  [FOLDERS_QUERY_KEY],
+  [TAGS_QUERY_KEY],
+]
 
 export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode }) {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
-  const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const [progress, setProgress] = useState(0)
-  const { invalidateQueries } = useInvalidateQueries()
   const [dndFiles, setDndFiles] = useState<File[]>([])
 
   const form = useForm<z.infer<typeof importBookmarksSchema>>({
@@ -120,73 +118,78 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
     }
   }
 
-  async function onSubmit(values: z.infer<typeof importBookmarksSchema>) {
-    setProgress(0)
-    completedCount = 0
+  const { mutate: importBookmarksMutate, isPending } = useMutation({
+    mutationFn: async () => {
+      let completed = 0
+      const values = form.getValues()
 
-    const bookmarkUrls = values.bookmarks
-      .split('\n')
-      .filter((url) => url.trim() !== '')
-      .map((url) => url.trim())
+      const bookmarkUrls = values.bookmarks
+        .split('\n')
+        .filter((url) => url.trim() !== '')
+        .map((url) => url.trim())
 
-    if (bookmarkUrls.length === 0) {
-      toast.info('Info', { description: 'There are no URLs, try again.' })
-      return
-    }
+      const total = bookmarkUrls.length
 
-    const importPromises = bookmarkUrls.map((url) =>
-      createBookmark({
-        url,
-        tags: values.tags,
-        folderId: values.folderId,
-        isFavorite: false,
-      }).then((result) => {
-        if (result?.error) throw new Error(result.error)
-        completedCount++
-        bookmarkUrls.length > 1 && setProgress((completedCount / totalOperations) * 100)
-      }),
-    )
+      const importPromises = bookmarkUrls.map((url) =>
+        createBookmark({
+          url,
+          name: '',
+          description: '',
+          tags: values.tags,
+          isFavorite: false,
+          folderId: values.folderId,
+        }).then((result) => {
+          if (result?.error) throw new Error(result.error)
+          completed++
+          bookmarkUrls.length > 1 && setProgress((completed / total) * 100)
+        }),
+      )
 
-    const totalOperations = importPromises.length
-    const settledPromises = await Promise.allSettled(importPromises)
-    const errors = settledPromises.filter((p) => p.status === 'rejected')
+      const settledPromises = await Promise.allSettled(importPromises)
+      const errors = settledPromises.filter((p) => p.status === 'rejected')
 
-    await invalidateQueries([
-      FOLDERS_QUERY,
-      BOOKMARKS_QUERY,
-      FOLDER_ITEMS_QUERY,
-      TAGS_QUERY,
-      TAG_ITEMS_QUERY,
-      FAV_BOOKMARKS_QUERY,
-      NAV_ITEMS_COUNT_QUERY,
-    ])
+      if (errors.length > 0) {
+        const errMsg = completed > 1 ? messages.multipleFailure : messages.default
+        throw new Error(errMsg)
+      }
 
-    if (errors.length > 0) {
-      toast.error('Error', {
-        description: completedCount > 1 ? messages.multipleFailure : messages.default,
+      return {
+        completed,
+      }
+    },
+    onSuccess: async ({ completed }) => {
+      setOpenDialog(false)
+      toast.success('Success', {
+        description:
+          completed > 1 ? (
+            <>
+              <span className="font-semibold">{completed}</span> bookmarks have been imported.
+            </>
+          ) : (
+            'Bookmark has been imported.'
+          ),
       })
+    },
+    onError: (error) => {
+      toast.error('Error', {
+        description: error.message || messages.default,
+      })
+    },
+    onSettled: async () => {
+      await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
+      setProgress(0)
+    },
+  })
 
-      return
-    }
-
-    setOpenDialog(false)
-    toast.success('Success', {
-      description:
-        completedCount > 1 ? (
-          <>
-            <span className="font-semibold">{completedCount}</span> bookmarks have been imported.
-          </>
-        ) : (
-          'Bookmark has been imported.'
-        ),
-    })
+  function onSubmit() {
+    importBookmarksMutate()
   }
 
   return (
     <Dialog
       open={openDialog}
       onOpenChange={(isOpen) => {
-        if (form.formState.isSubmitting) return
+        if (isPending) return
         setOpenDialog(isOpen)
       }}
     >
@@ -360,9 +363,9 @@ export function ImportBookmarksDialog({ trigger }: { trigger: React.ReactNode })
             </Button>
           </DialogClose>
           {modEnabled && (
-            <Button type="submit" form="import-bk-form" disabled={form.formState.isSubmitting}>
-              <span className={cn(form.formState.isSubmitting && 'invisible')}>Import</span>
-              {form.formState.isSubmitting && <Spinner className="absolute" />}
+            <Button type="submit" form="import-bk-form" disabled={isPending}>
+              <span className={cn(isPending && 'invisible')}>Import</span>
+              {isPending && <Spinner className="absolute" />}
             </Button>
           )}
         </DialogFooter>

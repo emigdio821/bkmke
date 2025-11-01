@@ -1,6 +1,6 @@
-import { Fragment } from 'react'
 import type { Folder } from '@/types'
 import { ChevronRightIcon } from 'lucide-react'
+import { Fragment } from 'react'
 import { SelectItem } from '@/components/ui/select'
 
 interface FolderSelectItemsProps {

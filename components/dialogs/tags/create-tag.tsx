@@ -1,16 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import { MAX_NAME_LENGTH, TAG_ITEMS_QUERY, TAGS_QUERY } from '@/lib/constants'
-import { createTagSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -24,13 +20,19 @@ import {
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Spinner } from '@/components/spinner'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { MAX_NAME_LENGTH } from '@/lib/constants'
+import { createTagSchema } from '@/lib/schemas/form'
+import { createClient } from '@/lib/supabase/client'
+import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
+import { cn } from '@/lib/utils'
 
 export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
-  const modEnabled = useModEnabled()
   const supabase = createClient()
+  const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
-  const { invalidateQueries } = useInvalidateQueries()
+
   const form = useForm<z.infer<typeof createTagSchema>>({
     shouldUnregister: true,
     resolver: zodResolver(createTagSchema),
@@ -47,6 +49,8 @@ export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
       return
     }
 
+    await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] })
+
     toast.success('Success', {
       description: (
         <div>
@@ -55,7 +59,6 @@ export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
       ),
     })
 
-    await invalidateQueries([TAGS_QUERY, TAG_ITEMS_QUERY])
     setOpenDialog(false)
   }
 

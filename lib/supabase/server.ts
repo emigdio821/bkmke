@@ -1,6 +1,6 @@
-import { cookies } from 'next/headers'
-import { createServerClient } from '@supabase/ssr'
 import type { Database } from '@/types/database.types'
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 import { envClientSchema } from '@/lib/schemas/client-env'
 
 export async function createClient() {

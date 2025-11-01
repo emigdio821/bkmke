@@ -1,4 +1,5 @@
-import { create, type StateCreator } from 'zustand'
+import type { StateCreator } from 'zustand'
+import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 export interface StoreState {
@@ -10,7 +11,7 @@ export interface StoreState {
 
 const storeCreator: StateCreator<StoreState> = (set) => ({
   title: null,
-  isLoading: false,
+  isLoading: true,
   updateTitle: (title) => {
     set(() => ({ title }))
   },

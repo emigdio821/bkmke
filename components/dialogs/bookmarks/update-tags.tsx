@@ -1,19 +1,9 @@
-import { useState } from 'react'
 import type { Bookmark } from '@/types'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { toast } from 'sonner'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
-import { useTags } from '@/hooks/tags/use-tags'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { MultiSelect } from '@/components/multi-select'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -28,8 +18,11 @@ import {
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
-import { MultiSelect } from '@/components/multi-select'
-import { Spinner } from '@/components/spinner'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { createClient } from '@/lib/supabase/client'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
+import { cn } from '@/lib/utils'
 
 interface SingleBookmark {
   bookmark: Bookmark
@@ -47,15 +40,17 @@ type UpdateTagsDialogProps = (SingleBookmark | MultipleBookmarks) & {
 
 let completedCount = 0
 
+const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [TAGS_QUERY_KEY]]
+
 export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDialogProps) {
-  const modEnabled = useModEnabled()
-  const [openDialog, setOpenDialog] = useState(false)
   const supabase = createClient()
-  const [isLoading, setLoading] = useState(false)
-  const { invalidateQueries } = useInvalidateQueries()
-  const [selectValue, setSelectValue] = useState<string[]>(getInitialItems())
-  const { data: tags, isLoading: tagsLoading } = useTags()
+  const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
+  const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
   const [progress, setProgress] = useState(0)
+  const [isLoading, setLoading] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false)
+  const [selectValue, setSelectValue] = useState<string[]>(getInitialItems())
 
   const bookmarkName = bookmark?.name || (bookmarks?.length === 1 ? bookmarks[0].name : 'Multiple bookmarks')
 
@@ -98,17 +93,11 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
     const settledPromises = await Promise.allSettled(updatePromises)
     const errors = settledPromises.filter((p) => p.status === 'rejected')
 
+    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
+
     if (errors.length > 0) {
       toast.error('Error', { description: 'Unable to update tags at this time, try again.' })
     } else {
-      await invalidateQueries([
-        FOLDERS_QUERY,
-        BOOKMARKS_QUERY,
-        FOLDER_ITEMS_QUERY,
-        TAG_ITEMS_QUERY,
-        TAGS_QUERY,
-        FAV_BOOKMARKS_QUERY,
-      ])
       toast.success('Success', { description: 'Tags have been updated.' })
     }
   }
@@ -155,7 +144,7 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
           ) : (
             <>
               <div className="flex h-8 items-center gap-2">
-                <Label htmlFor="select-tags">Folder</Label>
+                <Label htmlFor="select-tags">Tags</Label>
               </div>
               {tags && (
                 <MultiSelect

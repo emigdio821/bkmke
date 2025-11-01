@@ -1,6 +1,7 @@
 'use client'
 
-import { useDialogStore } from '@/lib/stores/dialog'
+import { CreateAutomaticForm } from '@/components/bookmarks/create-automatic-form'
+import { CreateManualForm } from '@/components/bookmarks/create-manual-form'
 import {
   Dialog,
   DialogContent,
@@ -10,8 +11,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CreateAutomaticForm } from '@/components/bookmarks/create-automatic-form'
-import { CreateManualForm } from '@/components/bookmarks/create-manual-form'
+import { useDialogStore } from '@/lib/stores/dialog'
 
 export function CreateBookmarkDialog({ trigger }: { trigger: React.ReactNode }) {
   const open = useDialogStore((state) => state.open)

@@ -1,5 +1,6 @@
-import { startTransition } from 'react'
+import type { ButtonProps } from '@/components/ui/button'
 import type { Bookmark } from '@/types'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   BookTextIcon,
   CopyIcon,
@@ -12,12 +13,14 @@ import {
   TagIcon,
   Trash2Icon,
 } from 'lucide-react'
+import { startTransition } from 'react'
 import { toast } from 'sonner'
-import { handleCopyToClipboard } from '@/lib/utils'
-import { useRemoveBookmarks } from '@/hooks/bookmarks/use-remove-bookmarks'
-import { useToggleFavorite } from '@/hooks/bookmarks/use-toggle-favorite'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { Button, type ButtonProps } from '@/components/ui/button'
+import { AlertActionDialog } from '@/components/dialogs/alert-action'
+import { BookmarkDetailsDialog } from '@/components/dialogs/bookmarks/details'
+import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
+import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
+import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,25 +29,41 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { AlertActionDialog } from '@/components/dialogs/alert-action'
-import { BookmarkDetailsDialog } from '@/components/dialogs/bookmarks/details'
-import { EditBookmarkDialog } from '@/components/dialogs/bookmarks/edit'
-import { MoveToFolderDialog } from '@/components/dialogs/bookmarks/move-to-folder'
-import { UpdateTagsDialog } from '@/components/dialogs/bookmarks/update-tags'
+import { useToggleFavorite } from '@/hooks/bookmarks/use-toggle-favorite'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { deleteBookmark } from '@/lib/server-actions/bookmarks'
+import { BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
+import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
+import { handleCopyToClipboard } from '@/lib/utils'
 
 interface RowActionsProps extends ButtonProps {
   bookmark: Bookmark
   hideDetails?: boolean
 }
 
+const QUERY_KEYS_TO_INVALIDATE = [
+  [BOOKMARKS_QUERY_KEY],
+  [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY],
+  [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+  [FOLDERS_QUERY_KEY],
+  [TAGS_QUERY_KEY],
+]
+
 export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps) {
   const modEnabled = useModEnabled()
-  const { handleRemoveBookmarks } = useRemoveBookmarks()
+  const queryClient = useQueryClient()
   const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
 
-  async function handleRemoveBk() {
-    try {
-      await handleRemoveBookmarks([bookmark])
+  const { mutateAsync: removeBookmarkMutate } = useMutation({
+    mutationFn: async () => {
+      const { error } = await deleteBookmark(bookmark.id)
+      if (error) throw error
+    },
+    onSuccess: async () => {
+      await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
+
       toast.success('Success', {
         description: (
           <div>
@@ -52,11 +71,12 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
           </div>
         ),
       })
-    } catch (err) {
-      console.error('Unable to remove bookmark', err)
+    },
+    onError: (error) => {
+      console.error('Unable to remove bookmark', error)
       toast.error('Error', { description: 'Unable to remove bookmark at this time, try again' })
-    }
-  }
+    },
+  })
 
   return (
     <DropdownMenu>
@@ -138,7 +158,7 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
             <AlertActionDialog
               destructive
               title="Delete bookmark?"
-              action={async () => await handleRemoveBk()}
+              action={async () => await removeBookmarkMutate()}
               trigger={
                 <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
                   <Trash2Icon className="size-4" />

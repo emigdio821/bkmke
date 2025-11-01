@@ -1,12 +1,12 @@
 'use client'
 
 import { toast } from 'sonner'
-import { siteConfig } from '@/config/site'
-import { createClient } from '@/lib/supabase/client'
+import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { InlineCode } from '@/components/ui/typography'
-import { AlertActionDialog } from '@/components/dialogs/alert-action'
+import { siteConfig } from '@/config/site'
+import { createClient } from '@/lib/supabase/client'
 
 export function ExportBookmarks() {
   const supabase = createClient()

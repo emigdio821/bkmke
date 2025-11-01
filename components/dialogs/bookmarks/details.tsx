@@ -1,9 +1,11 @@
 'use client'
 
-import Link from 'next/link'
 import type { Bookmark, OGInfo } from '@/types'
 import { CalendarIcon, ExternalLinkIcon, FolderIcon, TagIcon } from 'lucide-react'
-import { formatDateFromString, simplifiedURL } from '@/lib/utils'
+import Link from 'next/link'
+import { BlurImage } from '@/components/blur-image'
+import { RowActions } from '@/components/bookmarks/row-actions'
+import { ToggleFavBtn } from '@/components/bookmarks/toggle-fav-btn'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,9 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { BlurImage } from '@/components/blur-image'
-import { RowActions } from '@/components/bookmarks/row-actions'
-import { ToggleFavBtn } from '@/components/bookmarks/toggle-fav-btn'
+import { formatDateFromString, simplifiedURL } from '@/lib/utils'
 
 interface BookmarkDetailsDialogProps {
   bookmark: Bookmark

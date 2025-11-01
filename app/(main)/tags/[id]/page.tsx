@@ -1,15 +1,17 @@
-import { createClient } from '@/lib/supabase/server'
+import { cache } from 'react'
+import { getTagDetails } from '@/lib/server-actions/tags'
 import { TagitemsClientPage } from './page.client'
 
 interface TagItemsProps {
   params: Promise<{ id: string }>
 }
 
+const getCachedTagDetails = cache(getTagDetails)
+
 export async function generateMetadata(props: TagItemsProps) {
   const params = await props.params
-  const supabase = await createClient()
-  const { data } = await supabase.from('tags').select().eq('id', params.id).order('name')
-  const title = data?.[0]?.name || 'Tag items'
+  const tagDetails = await getCachedTagDetails(params.id)
+  const title = tagDetails?.name || 'Tag items'
 
   return {
     title,
@@ -18,5 +20,7 @@ export async function generateMetadata(props: TagItemsProps) {
 
 export default async function TagItemsPage(props: TagItemsProps) {
   const params = await props.params
-  return <TagitemsClientPage id={params.id} />
+  const tagDetails = await getCachedTagDetails(params.id)
+
+  return <TagitemsClientPage tagId={params.id} tagDetails={tagDetails} />
 }

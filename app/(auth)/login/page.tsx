@@ -1,7 +1,7 @@
-import { siteConfig } from '@/config/site'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { DemoPopover } from '@/components/demo-popover'
 import { LoginForm } from '@/components/login/login-form'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { siteConfig } from '@/config/site'
 
 export default function LoginPage() {
   return (

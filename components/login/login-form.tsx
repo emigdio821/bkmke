@@ -1,19 +1,19 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import { loginSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Spinner } from '@/components/spinner'
+import { loginSchema } from '@/lib/schemas/form'
+import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 
 export function LoginForm() {
   const supabase = createClient()

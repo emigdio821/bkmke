@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist } from 'next/font/google'
+import { Providers } from '@/components/providers'
 import { siteConfig } from '@/config/site'
 import { cn } from '@/lib/utils'
-import { Providers } from '@/components/providers'
 import '@/styles/globals.css'
 
 interface RootLayoutProps {

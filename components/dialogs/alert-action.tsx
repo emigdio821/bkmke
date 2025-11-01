@@ -1,8 +1,8 @@
-import { useState } from 'react'
 import type { GenericFn } from '@/types'
 import { AlertCircleIcon } from 'lucide-react'
+import { useState } from 'react'
 import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
+import { Spinner } from '@/components/spinner'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +15,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { Spinner } from '@/components/spinner'
+import { cn } from '@/lib/utils'
 
 interface AlertActionDialogProps<T> {
   title?: React.ReactNode

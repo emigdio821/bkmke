@@ -1,18 +1,19 @@
 'use client'
 
-import Link from 'next/link'
+import { useQuery } from '@tanstack/react-query'
 import { BookmarkIcon, BookmarkPlusIcon, BugIcon, RotateCwIcon, WindIcon } from 'lucide-react'
-import { useFavoriteBookmarks } from '@/hooks/bookmarks/use-favorite-bookmarks'
-import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { TypographyH4 } from '@/components/ui/typography'
+import Link from 'next/link'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { Loader } from '@/components/loader'
+import { Button } from '@/components/ui/button'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { TypographyH4 } from '@/components/ui/typography'
+import { favoriteBookmarkListQuery } from '@/lib/ts-queries/bookmarks'
 
 export function FavoritesClientPage() {
-  const { data: bookmarks, isLoading, refetch, error } = useFavoriteBookmarks()
+  const { data: bookmarks, isLoading, refetch, error } = useQuery(favoriteBookmarkListQuery())
 
   if (isLoading) return <Loader msg="Fetching your favorite bookmarks" />
 

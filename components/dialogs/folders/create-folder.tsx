@@ -1,16 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import { FOLDERS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
-import { createFolderSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -25,7 +21,12 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Spinner } from '@/components/spinner'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
+import { createFolderSchema } from '@/lib/schemas/form'
+import { createClient } from '@/lib/supabase/client'
+import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { cn } from '@/lib/utils'
 
 interface CreateFolderDialogProps {
   parentFolderId?: string
@@ -33,10 +34,10 @@ interface CreateFolderDialogProps {
 }
 
 export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDialogProps) {
-  const modEnabled = useModEnabled()
-  const [openDialog, setOpenDialog] = useState(false)
-  const queryClient = useQueryClient()
   const supabase = createClient()
+  const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
+  const [openDialog, setOpenDialog] = useState(false)
 
   const form = useForm<z.infer<typeof createFolderSchema>>({
     resolver: zodResolver(createFolderSchema),
@@ -57,6 +58,8 @@ export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDial
       return
     }
 
+    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY_KEY] })
+
     toast.success('Success', {
       description: (
         <div>
@@ -64,7 +67,7 @@ export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDial
         </div>
       ),
     })
-    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY] })
+
     setOpenDialog(false)
   }
 

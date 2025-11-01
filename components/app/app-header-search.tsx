@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
 import { SearchIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useGlobalSearch } from '@/hooks/use-global-search'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
-import { InputGroup, InputGroupAddon, InputGroupInput } from './ui/input-group'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 
 export function AppHeaderSearch() {
   const isMobile = useIsMobile(640)

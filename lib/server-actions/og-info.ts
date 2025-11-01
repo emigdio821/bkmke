@@ -1,4 +1,5 @@
-import type { NextRequest } from 'next/server'
+'use server'
+
 import type { OGInfo } from '@/types'
 import ogs from 'open-graph-scraper'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
@@ -31,16 +32,15 @@ async function fetchOgData(url: string) {
   } satisfies OGInfo
 }
 
-export async function GET(request: NextRequest) {
-  const url = request.nextUrl.searchParams.get('url')
-
-  if (!url) return Response.json({ error: 'Missing URL param' }, { status: 400 })
+export async function getOgInfo(url: string) {
+  if (!url) throw new Error('Missing URL param')
 
   const encodedUrl = encodeURI(url)
 
   try {
     const response = await fetchOgData(encodedUrl)
-    return Response.json(response, { status: 200 })
+
+    return response
   } catch {
     const faviconUrl = getFaviconFromGoogle(encodedUrl)
     const response: OGInfo = {
@@ -50,6 +50,6 @@ export async function GET(request: NextRequest) {
       faviconUrl,
     }
 
-    return Response.json(response, { status: 200 })
+    return response
   }
 }

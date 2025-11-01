@@ -1,7 +1,7 @@
 import type { Bookmark } from '@/types'
 import type { Table } from '@tanstack/react-table'
-import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { MasonryFilter } from '@/components/data-table/masonry-filter'
+import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { DataTableHeaderActions } from './header-actions'
 
 interface DataTableHeadersProps {
