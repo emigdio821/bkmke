@@ -80,3 +80,54 @@ export async function getTagItems(tagId: string) {
 
   return formattedData || []
 }
+
+export async function deleteTag(tagId: string) {
+  const supabase = await createClient()
+  return supabase.from('tags').delete().eq('id', tagId)
+}
+
+interface UpdateBookmarkTagsValues {
+  bookmarkId: string
+  tagId: string
+  tagIds: string[]
+  isDelete: boolean
+}
+export async function updateBookmarkTags(values: UpdateBookmarkTagsValues) {
+  const supabase = await createClient()
+  const { bookmarkId, tagId, tagIds, isDelete } = values
+
+  const { error } = await supabase.from('tag_items').upsert(
+    {
+      bookmark_id: bookmarkId,
+      tag_id: tagId,
+    },
+    { onConflict: 'bookmark_id, tag_id' },
+  )
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  if (isDelete) {
+    const remainingTags = tagIds.join(',')
+    const { error } = await supabase
+      .from('tag_items')
+      .delete()
+      .eq('bookmark_id', bookmarkId)
+      .not('tag_id', 'in', `(${remainingTags})`)
+
+    if (error) {
+      throw new Error(error.message)
+    }
+  }
+}
+
+export async function createTag(name: string) {
+  const supabase = await createClient()
+  return supabase.from('tags').insert({ name })
+}
+
+export async function editTag(tagId: string, values: { name: string }) {
+  const supabase = await createClient()
+  return supabase.from('tags').update(values).eq('id', tagId)
+}

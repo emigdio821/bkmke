@@ -1,6 +1,6 @@
 'use client'
 
-import type { z } from 'zod'
+import type { SignInWithPassValues } from '@/lib/server-actions/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -12,15 +12,14 @@ import { CardContent, CardFooter } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { loginSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
+import { signInWithPassword } from '@/lib/server-actions/auth'
 import { cn } from '@/lib/utils'
 
 export function LoginForm() {
-  const supabase = createClient()
   const router = useRouter()
   const [isLoading, setLoading] = useState(false)
 
-  const form = useForm<z.infer<typeof loginSchema>>({
+  const form = useForm<SignInWithPassValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
@@ -28,9 +27,9 @@ export function LoginForm() {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof loginSchema>) {
+  async function onSubmit(values: SignInWithPassValues) {
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword(values)
+    const { error } = await signInWithPassword(values)
 
     if (error) {
       toast.error('Error', { description: error.message })

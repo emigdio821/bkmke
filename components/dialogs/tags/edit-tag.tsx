@@ -24,7 +24,7 @@ import { Input } from '@/components/ui/input'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_NAME_LENGTH } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
+import { editTag } from '@/lib/server-actions/tags'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
@@ -40,7 +40,6 @@ export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
   const modEnabled = useModEnabled()
   const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
-  const supabase = createClient()
 
   const form = useForm<z.infer<typeof createTagSchema>>({
     resolver: zodResolver(createTagSchema),
@@ -50,7 +49,7 @@ export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
   })
 
   async function onSubmit(values: z.infer<typeof createTagSchema>) {
-    const { error } = await supabase.from('tags').update(values).eq('id', tag.id)
+    const { error } = await editTag(tag.id, values)
 
     if (error) {
       toast.error('Error', { description: error.message })

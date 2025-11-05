@@ -23,12 +23,11 @@ import { Input } from '@/components/ui/input'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_NAME_LENGTH } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
+import { createTag } from '@/lib/server-actions/tags'
 import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
 
 export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
-  const supabase = createClient()
   const modEnabled = useModEnabled()
   const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
@@ -42,7 +41,7 @@ export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
   })
 
   async function onSubmit(values: z.infer<typeof createTagSchema>) {
-    const { error } = await supabase.from('tags').insert(values)
+    const { error } = await createTag(values.name)
 
     if (error) {
       toast.error('Error', { description: error.message })

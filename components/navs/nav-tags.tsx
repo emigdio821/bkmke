@@ -27,7 +27,7 @@ import {
   SidebarMenuSkeleton,
 } from '@/components/ui/sidebar'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { createClient } from '@/lib/supabase/client'
+import { deleteTag } from '@/lib/server-actions/tags'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
@@ -53,8 +53,7 @@ export function NavTags() {
   const { data: tags, isLoading, error, refetch } = useQuery(tagListQuery())
 
   async function handleDeleteTag(tag: Tables<'tags'>) {
-    const supabase = createClient()
-    const { error } = await supabase.from('tags').delete().eq('id', tag.id)
+    const { error } = await deleteTag(tag.id)
 
     if (error) {
       throw new Error(error.message)

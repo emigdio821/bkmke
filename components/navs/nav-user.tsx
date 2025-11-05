@@ -34,7 +34,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
-import { createClient } from '@/lib/supabase/client'
+import { signOut } from '@/lib/server-actions/auth'
 import { loggedInUserProfileQuery } from '@/lib/ts-queries/profile'
 import { CreateBookmarkDialog } from '../dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from '../dialogs/bookmarks/import'
@@ -44,13 +44,12 @@ import { Skeleton } from '../ui/skeleton'
 
 export function NavUser() {
   const router = useRouter()
-  const supabase = createClient()
   const queryClient = useQueryClient()
   const { setTheme, theme } = useTheme()
   const { data: profile, isLoading, error, refetch } = useQuery(loggedInUserProfileQuery())
 
   async function handleLogOut() {
-    const { error } = await supabase.auth.signOut()
+    const { error } = await signOut()
     if (error) {
       toast.error('Error', { description: error.message })
       return

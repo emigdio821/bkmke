@@ -19,7 +19,7 @@ import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { createClient } from '@/lib/supabase/client'
+import { updateBookmarkTags } from '@/lib/server-actions/tags'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
@@ -43,7 +43,6 @@ let completedCount = 0
 const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [TAGS_QUERY_KEY]]
 
 export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDialogProps) {
-  const supabase = createClient()
   const modEnabled = useModEnabled()
   const queryClient = useQueryClient()
   const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
@@ -69,20 +68,12 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
     const updatePromises = bookmarksToUpdate.map(async (bk) => {
       return await Promise.allSettled(
         selectValue.map(async (tagId) => {
-          const { error } = await supabase.from('tag_items').upsert(
-            {
-              bookmark_id: bk.id,
-              tag_id: tagId,
-            },
-            { onConflict: 'bookmark_id, tag_id' },
-          )
-
-          if (isDelete) {
-            const remainingTags = selectValue.join(',')
-            await supabase.from('tag_items').delete().eq('bookmark_id', bk.id).not('tag_id', 'in', `(${remainingTags})`)
-          }
-
-          if (error) throw new Error(error.message)
+          await updateBookmarkTags({
+            bookmarkId: bk.id,
+            tagId,
+            tagIds: selectValue,
+            isDelete,
+          })
           completedCount++
           bookmarksToUpdate.length > 1 && setProgress((completedCount / totalOperations) * 100)
         }),
