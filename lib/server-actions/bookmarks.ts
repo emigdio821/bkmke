@@ -1,6 +1,6 @@
 'use server'
 
-import type { Bookmark, OGInfo } from '@/types'
+import type { BkOGInfo, Bookmark, OGInfo } from '@/types'
 import type { z } from 'zod'
 import type { createManualBookmarkSchema } from '../schemas/form'
 import { createClient } from '@/lib/supabase/server'
@@ -137,4 +137,28 @@ export async function toggleFavoriteBookmark(bookmark: Bookmark) {
       is_favorite: !bookmark.is_favorite,
     })
     .eq('id', bookmark.id)
+}
+
+export async function exportBookmarkUrls() {
+  const supabase = await createClient()
+  return supabase.from('bookmarks').select('url')
+}
+
+interface EditBookmarkValues {
+  url: string
+  name: string
+  description: string
+  og_info: BkOGInfo
+  is_favorite: boolean
+  folder_id: string | null
+}
+
+export async function editBookmark(bookmarkId: string, values: EditBookmarkValues) {
+  const supabase = await createClient()
+  return supabase.from('bookmarks').update(values).eq('id', bookmarkId).select()
+}
+
+export async function getBookmarkById(bookmarkId: string) {
+  const supabase = await createClient()
+  return supabase.from('bookmarks').select(ALL_BOOKMARKS_SELECT).eq('id', bookmarkId).single()
 }

@@ -30,7 +30,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
+import { editBookmark } from '@/lib/server-actions/bookmarks'
+import { syncTagItems } from '@/lib/server-actions/tag-items'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
@@ -50,7 +51,6 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
   const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
   const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
-  const supabase = createClient()
   const tagItems = bookmark.tag_items
     .map((item) => item.tag?.id)
     .filter((id) => id !== undefined)
@@ -98,29 +98,21 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
       folder_id: folderId || null,
     }
 
-    const { data: bookmarkData, error } = await supabase
-      .from('bookmarks')
-      .update(bookmarkPayload)
-      .eq('id', bookmark.id)
-      .select()
+    const { data: bookmarkData, error } = await editBookmark(bookmark.id, bookmarkPayload)
 
     if (error) {
       toast.error('Error', { description: error.message })
       return
     }
 
-    if (bookmarkData.length && tagIds.length > 0) {
+    if (bookmarkData.length) {
       const bookmarkId = bookmarkData[0].id
-      const tagItemsPayload = tagIds.map((tagId) => ({
-        tag_id: tagId,
-        bookmark_id: bookmarkId,
-      }))
+      const { error: tagError } = await syncTagItems({ bookmarkId, tagIds })
 
-      await supabase.from('tag_items').upsert(tagItemsPayload, { onConflict: 'bookmark_id, tag_id' })
-      const remainingTags = tagIds.join(',')
-      await supabase.from('tag_items').delete().eq('bookmark_id', bookmarkId).not('tag_id', 'in', `(${remainingTags})`)
-    } else {
-      await supabase.from('tag_items').delete().eq('bookmark_id', bookmark.id)
+      if (tagError) {
+        toast.error('Error', { description: tagError })
+        return
+      }
     }
 
     await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))

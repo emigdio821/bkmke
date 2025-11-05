@@ -19,7 +19,7 @@ import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { updateBookmarkTags } from '@/lib/server-actions/tags'
+import { syncTagItems } from '@/lib/server-actions/tag-items'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
@@ -61,28 +61,27 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
       .map((id) => id.toString())
   }
 
-  async function handleTagUpdate(bookmarksToUpdate: Bookmark[], isDelete: boolean) {
+  async function handleTagUpdate(bookmarksToUpdate: Bookmark[]) {
     setProgress(0)
     completedCount = 0
+    const totalOperations = bookmarksToUpdate.length
 
     const updatePromises = bookmarksToUpdate.map(async (bk) => {
-      return await Promise.allSettled(
-        selectValue.map(async (tagId) => {
-          await updateBookmarkTags({
-            bookmarkId: bk.id,
-            tagId,
-            tagIds: selectValue,
-            isDelete,
-          })
-          completedCount++
-          bookmarksToUpdate.length > 1 && setProgress((completedCount / totalOperations) * 100)
-        }),
-      )
+      const result = await syncTagItems({
+        bookmarkId: bk.id,
+        tagIds: selectValue,
+      })
+
+      completedCount++
+      if (bookmarksToUpdate.length > 1) {
+        setProgress((completedCount / totalOperations) * 100)
+      }
+
+      return result
     })
 
-    const totalOperations = bookmarksToUpdate.length
     const settledPromises = await Promise.allSettled(updatePromises)
-    const errors = settledPromises.filter((p) => p.status === 'rejected')
+    const errors = settledPromises.filter((p) => p.status === 'rejected' || (p.status === 'fulfilled' && p.value.error))
 
     await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
 
@@ -104,7 +103,7 @@ export function UpdateTagsDialog({ bookmark, bookmarks, trigger }: UpdateTagsDia
 
     setLoading(true)
     setProgress(0)
-    await handleTagUpdate(bookmarksToUpdate, selectValue.length > 0)
+    await handleTagUpdate(bookmarksToUpdate)
     setOpenDialog(false)
     setLoading(false)
   }

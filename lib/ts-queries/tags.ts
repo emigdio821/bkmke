@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
-import { getTagDetails, getTagItems, listTags } from '@/lib/server-actions/tags'
+import { getTagDetails, listTags } from '@/lib/server-actions/tags'
+import { getTagItems } from '../server-actions/tag-items'
 
 export const TAGS_QUERY_KEY = 'tags'
 export const TAG_ITEMS_QUERY_KEY = 'tag_items'
