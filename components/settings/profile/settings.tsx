@@ -28,7 +28,7 @@ export function ProfileSettings() {
           <div className="flex flex-col items-start gap-2 sm:flex-row">
             <Avatar className="size-16">
               <AvatarImage src={profile.avatar_url || ''} alt="User avatar" />
-              <AvatarFallback />
+              <AvatarFallback className="rounded-lg" />
             </Avatar>
             <div className="text-sm">
               <div className="flex max-w-xs items-center gap-2">

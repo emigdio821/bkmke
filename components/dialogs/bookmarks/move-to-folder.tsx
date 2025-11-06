@@ -20,7 +20,7 @@ import { Progress } from '@/components/ui/progress'
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { createClient } from '@/lib/supabase/client'
+import { moveToFolder } from '@/lib/server-actions/folders'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
@@ -49,7 +49,6 @@ let completedCount = 0
 const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]]
 
 export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolderDialogProps) {
-  const supabase = createClient()
   const modEnabled = useModEnabled()
   const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
@@ -68,20 +67,18 @@ export function MoveToFolderDialog({ bookmark, bookmarks, trigger }: MoveToFolde
       return
     }
 
+    if (!selectValue) return
+
     setLoading(true)
     setProgress(0)
     completedCount = 0
 
     const movePromises = bookmarksToMove.map((bk) =>
-      supabase
-        .from('bookmarks')
-        .update({ folder_id: selectValue || null })
-        .eq('id', bk.id)
-        .then((result) => {
-          if (result.error) throw new Error(result.error.message)
-          completedCount++
-          bookmarksToMove.length > 1 && setProgress((completedCount / totalOperations) * 100)
-        }),
+      moveToFolder(selectValue, bk.id).then((result) => {
+        if (result.error) throw new Error(result.error.message)
+        completedCount++
+        bookmarksToMove.length > 1 && setProgress((completedCount / totalOperations) * 100)
+      }),
     )
 
     const totalOperations = movePromises.length

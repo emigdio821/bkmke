@@ -53,7 +53,7 @@ export function CreateAutomaticForm() {
     },
   })
 
-  const { mutate: createBookmarkMutate } = useMutation({
+  const { mutate: createBookmarkMutate, isPending } = useMutation({
     mutationFn: async () => {
       const values = form.getValues()
       const response = await createBookmark({
@@ -210,9 +210,9 @@ export function CreateAutomaticForm() {
           </Button>
         </DialogClose>
         {modEnabled && (
-          <Button type="submit" form="create-auto-bk-form" disabled={form.formState.isSubmitting}>
-            <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
-            {form.formState.isSubmitting && <Spinner className="absolute" />}
+          <Button type="submit" form="create-auto-bk-form" disabled={isPending}>
+            <span className={cn(isPending && 'invisible')}>Create</span>
+            {isPending && <Spinner className="absolute" />}
           </Button>
         )}
       </DialogFooter>

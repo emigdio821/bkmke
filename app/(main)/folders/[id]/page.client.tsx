@@ -31,6 +31,9 @@ export function FolderItemsClientPage({ folderId, folderDetails }: FolderItemsCl
     if (folder) {
       updateHeaderTitle(folder.name || 'Folder items')
       setLoadingHeaderTitle(false)
+    } else {
+      updateHeaderTitle('Unknown folder')
+      setLoadingHeaderTitle(false)
     }
   }, [folder, updateHeaderTitle, setLoadingHeaderTitle])
 
@@ -54,6 +57,28 @@ export function FolderItemsClientPage({ folderId, folderDetails }: FolderItemsCl
         </CardFooter>
       </Card>
     )
+
+  if (!folderDetails) {
+    return (
+      <Card>
+        <CardHeader className="flex flex-col items-center justify-center gap-2">
+          <CardTitle className="mb-2">
+            <WindIcon className="size-6" />
+          </CardTitle>
+          <TypographyH4>404</TypographyH4>
+          <CardDescription className="text-center">Seems like this folder does not exist.</CardDescription>
+        </CardHeader>
+        <CardFooter className="justify-center gap-2">
+          <Button variant="outline" asChild>
+            <Link href="/">
+              <BookmarkIcon className="size-4" />
+              Bookmarks
+            </Link>
+          </Button>
+        </CardFooter>
+      </Card>
+    )
+  }
 
   return (
     <>

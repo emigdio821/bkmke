@@ -23,7 +23,7 @@ import {
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { editUserSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
+import { updateProfile } from '@/lib/server-actions/profile'
 import { LOGGED_IN_USER_PROFILE_QUERY_KEY } from '@/lib/ts-queries/profile'
 import { cn } from '@/lib/utils'
 
@@ -33,7 +33,6 @@ interface EditProfileDialogProps {
 }
 
 export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) {
-  const supabase = createClient()
   const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
 
@@ -49,25 +48,7 @@ export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) 
   })
 
   async function onSubmit(values: z.infer<typeof editUserSchema>) {
-    if (values.password) {
-      const { error } = await supabase.auth.updateUser({
-        password: values.password,
-      })
-
-      if (error) {
-        toast.error('Error', { description: error.message })
-        return
-      }
-    }
-
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        first_name: values.firstName,
-        last_name: values.lastName,
-        avatar_url: values.avatarUrl,
-      })
-      .eq('id', profile.id)
+    const { error } = await updateProfile(values, profile.id)
 
     if (error) {
       toast.error('Error', { description: error.message })

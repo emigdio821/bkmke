@@ -1,6 +1,8 @@
 'use server'
 
 import type { Folder } from '@/types'
+import type { z } from 'zod'
+import type { createFolderSchema } from '../schemas/form'
 import { createClient } from '@/lib/supabase/server'
 
 function buildFolderTree(folders: Array<Omit<Folder, 'children'>>): Folder[] {
@@ -81,4 +83,36 @@ export async function getFolderItems(folderId: string) {
   }
 
   return data || []
+}
+
+export async function moveToFolder(folderId: string, bookmarkId: string) {
+  const supabase = await createClient()
+
+  return supabase
+    .from('bookmarks')
+    .update({ folder_id: folderId || null })
+    .eq('id', bookmarkId)
+}
+
+type CreateFolderValues = z.infer<typeof createFolderSchema>
+
+export async function createFolder(values: CreateFolderValues, parentId?: string) {
+  const supabase = await createClient()
+
+  return supabase.from('folders').insert({
+    ...values,
+    parent_id: parentId || null,
+  })
+}
+
+export async function editFolder(values: CreateFolderValues, folderId: string) {
+  const supabase = await createClient()
+
+  return supabase.from('folders').update(values).eq('id', folderId)
+}
+
+export async function deleteFolder(folderId: string) {
+  const supabase = await createClient()
+
+  return supabase.from('folders').delete().eq('id', folderId)
 }

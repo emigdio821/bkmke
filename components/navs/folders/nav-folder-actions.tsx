@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenuAction } from '@/components/ui/sidebar'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
-import { createClient } from '@/lib/supabase/client'
+import { deleteFolder } from '@/lib/server-actions/folders'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
@@ -30,10 +30,9 @@ const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [FOLDERS_QUERY_KEY], [T
 export function NavFolderActions({ folder, className }: NavFolderActionsProps) {
   const modEnabled = useModEnabled()
   const queryClient = useQueryClient()
-  const supabase = createClient()
 
   async function handleDeleteFolder(id: string) {
-    const { error } = await supabase.from('folders').delete().eq('id', id)
+    const { error } = await deleteFolder(id)
 
     if (error) {
       throw new Error(error.message)

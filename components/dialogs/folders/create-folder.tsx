@@ -24,7 +24,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
+import { createFolder } from '@/lib/server-actions/folders'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { cn } from '@/lib/utils'
 
@@ -34,7 +34,6 @@ interface CreateFolderDialogProps {
 }
 
 export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDialogProps) {
-  const supabase = createClient()
   const modEnabled = useModEnabled()
   const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
@@ -48,10 +47,7 @@ export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDial
   })
 
   async function onSubmit(values: z.infer<typeof createFolderSchema>) {
-    const { error } = await supabase.from('folders').insert({
-      ...values,
-      parent_id: parentFolderId || null,
-    })
+    const { error } = await createFolder(values, parentFolderId)
 
     if (error) {
       toast.error('Error', { description: error.message })

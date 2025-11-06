@@ -25,7 +25,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { createFolderSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
+import { editFolder } from '@/lib/server-actions/folders'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { cn } from '@/lib/utils'
@@ -41,7 +41,6 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
   const modEnabled = useModEnabled()
   const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
-  const supabase = createClient()
 
   const form = useForm<z.infer<typeof createFolderSchema>>({
     resolver: zodResolver(createFolderSchema),
@@ -52,7 +51,7 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
   })
 
   async function onSubmit(values: z.infer<typeof createFolderSchema>) {
-    const { error } = await supabase.from('folders').update(values).eq('id', folder.id)
+    const { error } = await editFolder(values, folder.id)
 
     if (error) {
       toast.error('Error', { description: error.message })
