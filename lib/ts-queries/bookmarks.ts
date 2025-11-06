@@ -1,20 +1,29 @@
+import type { Bookmark } from '@/types'
 import { queryOptions } from '@tanstack/react-query'
-import { listBookmarks, listFavoriteBookmarks } from '@/lib/server-actions/bookmarks'
 
 export const BOOKMARKS_QUERY_KEY = 'bookmarks'
 export const FAV_BOOKMARKS_QUERY_KEY = 'favorite_bookmarks'
 
-export type BookmarkListData = Awaited<ReturnType<typeof listBookmarks>>
-export type FavoriteBookmarkListData = Awaited<ReturnType<typeof listFavoriteBookmarks>>
-
 export const bookmarkListQuery = () =>
   queryOptions({
     queryKey: [BOOKMARKS_QUERY_KEY],
-    queryFn: listBookmarks,
+    queryFn: async (): Promise<Bookmark[]> => {
+      const response = await fetch('/api/bookmarks')
+      if (!response.ok) {
+        throw new Error('Failed to fetch bookmarks')
+      }
+      return response.json()
+    },
   })
 
 export const favoriteBookmarkListQuery = () =>
   queryOptions({
     queryKey: [BOOKMARKS_QUERY_KEY, FAV_BOOKMARKS_QUERY_KEY],
-    queryFn: listFavoriteBookmarks,
+    queryFn: async (): Promise<Bookmark[]> => {
+      const response = await fetch('/api/bookmarks/favorite')
+      if (!response.ok) {
+        throw new Error('Failed to fetch favorite bookmarks')
+      }
+      return response.json()
+    },
   })
