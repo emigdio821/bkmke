@@ -105,7 +105,7 @@ export async function createFolder(values: CreateFolderValues, parentId?: string
   })
 }
 
-export async function editFolder(values: CreateFolderValues, folderId: string) {
+export async function updateFolder(values: CreateFolderValues, folderId: string) {
   const supabase = await createClient()
 
   return supabase.from('folders').update(values).eq('id', folderId)

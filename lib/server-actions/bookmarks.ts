@@ -153,7 +153,7 @@ interface EditBookmarkValues {
   folder_id: string | null
 }
 
-export async function editBookmark(bookmarkId: string, values: EditBookmarkValues) {
+export async function updateBookmark(bookmarkId: string, values: EditBookmarkValues) {
   const supabase = await createClient()
   return supabase.from('bookmarks').update(values).eq('id', bookmarkId).select()
 }

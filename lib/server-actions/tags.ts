@@ -50,7 +50,7 @@ export async function createTag(name: string) {
   return supabase.from('tags').insert({ name })
 }
 
-export async function editTag(tagId: string, values: { name: string }) {
+export async function updateTag(tagId: string, values: { name: string }) {
   const supabase = await createClient()
   return supabase.from('tags').update(values).eq('id', tagId)
 }

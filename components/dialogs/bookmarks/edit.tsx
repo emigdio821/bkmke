@@ -30,7 +30,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
 import { editBookmarkSchema } from '@/lib/schemas/form'
-import { editBookmark } from '@/lib/server-actions/bookmarks'
+import { updateBookmark } from '@/lib/server-actions/bookmarks'
 import { syncTagItems } from '@/lib/server-actions/tag-items'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
@@ -98,7 +98,7 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
       folder_id: folderId || null,
     }
 
-    const { data: bookmarkData, error } = await editBookmark(bookmark.id, bookmarkPayload)
+    const { data: bookmarkData, error } = await updateBookmark(bookmark.id, bookmarkPayload)
 
     if (error) {
       toast.error('Error', { description: error.message })

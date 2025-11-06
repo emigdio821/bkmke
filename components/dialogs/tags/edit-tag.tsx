@@ -24,7 +24,7 @@ import { Input } from '@/components/ui/input'
 import { useModEnabled } from '@/hooks/use-mod-enabled'
 import { MAX_NAME_LENGTH } from '@/lib/constants'
 import { createTagSchema } from '@/lib/schemas/form'
-import { editTag } from '@/lib/server-actions/tags'
+import { updateTag } from '@/lib/server-actions/tags'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
 import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 import { cn } from '@/lib/utils'
@@ -49,7 +49,7 @@ export function EditTagDialog({ tag, trigger }: EditTagDialogProps) {
   })
 
   async function onSubmit(values: z.infer<typeof createTagSchema>) {
-    const { error } = await editTag(tag.id, values)
+    const { error } = await updateTag(tag.id, values)
 
     if (error) {
       toast.error('Error', { description: error.message })
