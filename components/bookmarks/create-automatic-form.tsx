@@ -1,27 +1,16 @@
 'use client'
 
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import { createBookmark } from '@/lib/api'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  NAV_ITEMS_COUNT_QUERY,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
-import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
-import { useDialogStore } from '@/lib/stores/dialog'
-import { cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
-import { useTags } from '@/hooks/tags/use-tags'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
+import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
+import { MultiSelect } from '@/components/multi-select'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -29,20 +18,31 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
-import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
-import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
-import { FolderSelectItems } from '@/components/folders/folder-select-items'
-import { MultiSelect } from '@/components/multi-select'
-import { Spinner } from '@/components/spinner'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { createAutomaticBookmarkSchema } from '@/lib/schemas/form'
+import { createBookmark } from '@/lib/server-actions/bookmarks'
+import { useDialogStore } from '@/lib/stores/dialog'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
+import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
+import { cn } from '@/lib/utils'
+
+const QUERY_KEYS_TO_INVALIDATE = [
+  [BOOKMARKS_QUERY_KEY],
+  [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+  [FOLDERS_QUERY_KEY],
+  [TAGS_QUERY_KEY],
+]
 
 export function CreateAutomaticForm() {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
+  const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const toggleDialog = useDialogStore((state) => state.toggle)
   const toggleDialogLoading = useDialogStore((state) => state.toggleLoading)
 
-  const { invalidateQueries } = useInvalidateQueries()
-  const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
   const form = useForm<z.infer<typeof createAutomaticBookmarkSchema>>({
     resolver: zodResolver(createAutomaticBookmarkSchema),
     defaultValues: {
@@ -53,29 +53,37 @@ export function CreateAutomaticForm() {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof createAutomaticBookmarkSchema>) {
-    toggleDialogLoading(true)
-    const response = await createBookmark(values)
-
-    if (response?.error) {
+  const { mutate: createBookmarkMutate, isPending } = useMutation({
+    mutationFn: async () => {
+      const values = form.getValues()
+      const response = await createBookmark({
+        ...values,
+        name: '',
+        description: '',
+      })
+      if (response?.error) {
+        throw response.error
+      }
+    },
+    onMutate: () => {
+      toggleDialogLoading(true)
+    },
+    onSuccess: async () => {
+      await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
+      toggleDialog(false)
       toggleDialogLoading(false)
-      toast.error('Error', { description: response.error })
-      return
-    }
+      toast.success('Success', { description: 'Bookmark has been created.' })
+    },
+    onError: (error) => {
+      toast.error('Error', {
+        description: error instanceof Error ? error.message : 'Unable to create bookmark at this time, try again.',
+      })
+      toggleDialogLoading(false)
+    },
+  })
 
-    await invalidateQueries([
-      BOOKMARKS_QUERY,
-      FOLDERS_QUERY,
-      FOLDER_ITEMS_QUERY,
-      FAV_BOOKMARKS_QUERY,
-      TAGS_QUERY,
-      TAG_ITEMS_QUERY,
-      NAV_ITEMS_COUNT_QUERY,
-    ])
-
-    toggleDialog(false)
-    toggleDialogLoading(false)
-    toast.success('Success', { description: 'Bookmark has been created.' })
+  async function onSubmit() {
+    createBookmarkMutate()
   }
 
   return (
@@ -202,9 +210,9 @@ export function CreateAutomaticForm() {
           </Button>
         </DialogClose>
         {modEnabled && (
-          <Button type="submit" form="create-auto-bk-form" disabled={form.formState.isSubmitting}>
-            <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
-            {form.formState.isSubmitting && <Spinner className="absolute" />}
+          <Button type="submit" form="create-auto-bk-form" disabled={isPending}>
+            <span className={cn(isPending && 'invisible')}>Create</span>
+            {isPending && <Spinner className="absolute" />}
           </Button>
         )}
       </DialogFooter>

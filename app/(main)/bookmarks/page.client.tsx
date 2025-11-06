@@ -1,18 +1,19 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import { BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
-import { useBookmarks } from '@/hooks/bookmarks/use-bookmarks'
-import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { TypographyH4 } from '@/components/ui/typography'
 import { columns } from '@/components/bookmarks/columns'
 import { DataTable } from '@/components/bookmarks/data-table'
 import { CreateBookmarkDialog } from '@/components/dialogs/bookmarks/create'
 import { ImportBookmarksDialog } from '@/components/dialogs/bookmarks/import'
 import { Loader } from '@/components/loader'
+import { Button } from '@/components/ui/button'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { TypographyH4 } from '@/components/ui/typography'
+import { bookmarkListQuery } from '@/lib/ts-queries/bookmarks'
 
 export function BookmarksClientPage() {
-  const { data: bookmarks, isLoading, refetch, error } = useBookmarks()
+  const { data: bookmarks, isLoading, refetch, error } = useQuery(bookmarkListQuery())
 
   if (isLoading) return <Loader msg="Fetching your bookmarks" />
 

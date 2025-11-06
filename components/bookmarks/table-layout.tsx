@@ -1,5 +1,6 @@
 import type { Bookmark } from '@/types'
-import { flexRender, type Table as ReactTable } from '@tanstack/react-table'
+import type { Table as ReactTable } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 interface TableLayoutProps {

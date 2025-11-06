@@ -1,17 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import type { Tables } from '@/types/database.types'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import type { Tables } from '@/types/database.types'
-import { BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY, FOLDERS_QUERY, MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
-import { createFolderSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -26,18 +22,26 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Spinner } from '@/components/spinner'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
+import { createFolderSchema } from '@/lib/schemas/form'
+import { updateFolder } from '@/lib/server-actions/folders'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { cn } from '@/lib/utils'
 
 interface EditFolderDialogProps {
   folder: Tables<'folders'>
   trigger: React.ReactNode
 }
 
+const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [FOLDERS_QUERY_KEY]]
+
 export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
-  const supabase = createClient()
-  const { invalidateQueries } = useInvalidateQueries()
+
   const form = useForm<z.infer<typeof createFolderSchema>>({
     resolver: zodResolver(createFolderSchema),
     defaultValues: {
@@ -47,14 +51,14 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
   })
 
   async function onSubmit(values: z.infer<typeof createFolderSchema>) {
-    const { error } = await supabase.from('folders').update(values).eq('id', folder.id)
+    const { error } = await updateFolder(values, folder.id)
 
     if (error) {
       toast.error('Error', { description: error.message })
       return
     }
 
-    await invalidateQueries([FOLDERS_QUERY, BOOKMARKS_QUERY, FAV_BOOKMARKS_QUERY])
+    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
 
     setOpenDialog(false)
 

@@ -1,43 +1,60 @@
-import { useOptimistic } from 'react'
 import type { Bookmark } from '@/types'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { toggleFavorite } from '@/lib/api'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  NAV_ITEMS_COUNT_QUERY,
-  TAG_ITEMS_QUERY,
-} from '@/lib/constants'
-import { useInvalidateQueries } from '../use-invalidate-queries'
+import { toggleFavoriteBookmark } from '@/lib/server-actions/bookmarks'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
+import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
+
+const QUERY_KEYS_TO_INVALIDATE = [
+  [BOOKMARKS_QUERY_KEY],
+  [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+  [FOLDERS_QUERY_KEY],
+  [TAGS_QUERY_KEY],
+]
 
 export function useToggleFavorite(bookmark: Bookmark) {
-  const { invalidateQueries } = useInvalidateQueries()
-  const [optimisticBk, addOptimisticBk] = useOptimistic(bookmark, (state, favStatus: boolean) => ({
-    ...state,
-    is_favorite: favStatus,
-  }))
+  const queryClient = useQueryClient()
 
-  async function handleToggleFavorite() {
-    addOptimisticBk(!bookmark.is_favorite)
-    const response = await toggleFavorite(bookmark)
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const { error } = await toggleFavoriteBookmark(bookmark)
+      if (error) throw error
+    },
+    onMutate: async () => {
+      await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.cancelQueries({ queryKey })))
 
-    if (response?.error) {
-      addOptimisticBk(bookmark.is_favorite)
-      toast.error('Unable to toggle favorite at this time, try again.')
-      return
-    }
+      const previousData = QUERY_KEYS_TO_INVALIDATE.map((queryKey) => ({
+        queryKey,
+        data: queryClient.getQueryData(queryKey),
+      }))
 
-    await invalidateQueries([
-      FOLDERS_QUERY,
-      BOOKMARKS_QUERY,
-      FOLDER_ITEMS_QUERY,
-      TAG_ITEMS_QUERY,
-      NAV_ITEMS_COUNT_QUERY,
-      FAV_BOOKMARKS_QUERY,
-    ])
-  }
+      queryClient.setQueriesData({ queryKey: [BOOKMARKS_QUERY_KEY] }, (old: Bookmark[] | undefined) => {
+        if (!old) return old
+        return old.map((bk) => (bk.id === bookmark.id ? { ...bk, is_favorite: !bk.is_favorite } : bk))
+      })
 
-  return { optimisticBk, handleToggleFavorite }
+      return { previousData }
+    },
+    onError: (error, _, context) => {
+      if (context?.previousData) {
+        context.previousData.forEach(({ queryKey, data }) => {
+          queryClient.setQueryData(queryKey, data)
+        })
+      }
+
+      toast.error('Error', { description: 'Unable to toggle favorite at this time, try again.' })
+      console.error('Toggle favorite error:', error)
+    },
+    onSettled: () => {
+      QUERY_KEYS_TO_INVALIDATE.forEach((queryKey) => {
+        queryClient.invalidateQueries({ queryKey })
+      })
+    },
+  })
+
+  const optimisticBk: Bookmark = mutation.isPending ? { ...bookmark, is_favorite: !bookmark.is_favorite } : bookmark
+
+  return { optimisticBk, handleToggleFavorite: mutation.mutate }
 }

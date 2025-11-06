@@ -1,31 +1,17 @@
 'use client'
 
-import type { OGInfo } from '@/types'
+import type { CreateBookmarkValues } from '@/lib/server-actions/bookmarks'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  FOLDERS_QUERY,
-  MAX_DESC_LENGTH,
-  MAX_NAME_LENGTH,
-  NAV_ITEMS_COUNT_QUERY,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
-import { createManualBookmarkSchema } from '@/lib/schemas/form'
-import { useDialogStore } from '@/lib/stores/dialog'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
-import { useTags } from '@/hooks/tags/use-tags'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
+import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
+import { MultiSelect } from '@/components/multi-select'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -34,21 +20,33 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { CreateFolderDialog } from '@/components/dialogs/folders/create-folder'
-import { CreateTagDialog } from '@/components/dialogs/tags/create-tag'
-import { FolderSelectItems } from '@/components/folders/folder-select-items'
-import { MultiSelect } from '@/components/multi-select'
-import { Spinner } from '@/components/spinner'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
+import { createManualBookmarkSchema } from '@/lib/schemas/form'
+import { createBookmark } from '@/lib/server-actions/bookmarks'
+import { useDialogStore } from '@/lib/stores/dialog'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
+import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
+import { cn } from '@/lib/utils'
+
+const QUERY_KEYS_TO_INVALIDATE = [
+  [BOOKMARKS_QUERY_KEY],
+  [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+  [FOLDERS_QUERY_KEY],
+  [TAGS_QUERY_KEY],
+]
 
 export function CreateManualForm() {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const toggleDialog = useDialogStore((state) => state.toggle)
   const toggleDialogLoading = useDialogStore((state) => state.toggleLoading)
 
-  const supabase = createClient()
-  const { invalidateQueries } = useInvalidateQueries()
-  const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
+  const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
+
   const form = useForm<z.infer<typeof createManualBookmarkSchema>>({
     resolver: zodResolver(createManualBookmarkSchema),
     defaultValues: {
@@ -61,72 +59,43 @@ export function CreateManualForm() {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof createManualBookmarkSchema>) {
-    toggleDialogLoading(true)
-    const { name, description, url, tags: tagIds, folderId } = values
+  const { mutate: createBookmarkMutate, isPending } = useMutation({
+    mutationFn: async () => {
+      const values = form.getValues()
+      const { name, description, url, tags: tagIds, folderId, isFavorite } = values
 
-    let ogInfoPayload = null
-
-    try {
-      const { data: ogInfo } = await axios.get<OGInfo>('/api/og-info', { params: { url } })
-
-      ogInfoPayload = {
-        title: ogInfo.title,
-        imageUrl: ogInfo.imageUrl,
-        faviconUrl: ogInfo.faviconUrl,
-        description: ogInfo.description,
-      } satisfies OGInfo
-    } catch (err) {
-      ogInfoPayload = {
-        title: name,
+      const bookmarkPayload = {
+        url,
+        name,
+        folderId,
         description,
-        imageUrl: '',
-        faviconUrl: '',
-      } satisfies OGInfo
-      console.log('Get og info error:', err)
-    }
+        tags: tagIds,
+        isFavorite,
+      } satisfies CreateBookmarkValues
 
-    const bookmarkPayload = {
-      url,
-      name,
-      description,
-      folder_id: folderId || null,
-      og_info: ogInfoPayload,
-    }
-
-    const { data: bookmark, error } = await supabase.from('bookmarks').insert(bookmarkPayload).select()
-
-    if (bookmark && bookmark.length > 0 && tagIds.length > 0) {
-      const tagItemsPromises = []
-
-      for (const tagId of tagIds) {
-        const tagItemsPayload = { bookmark_id: bookmark[0].id, tag_id: tagId }
-
-        tagItemsPromises.push(supabase.from('tag_items').insert(tagItemsPayload))
+      const result = await createBookmark(bookmarkPayload)
+      if (result?.error) {
+        throw new Error(result.error)
       }
-
-      await Promise.all(tagItemsPromises)
-    }
-
-    if (error) {
-      toggleDialogLoading(false)
+    },
+    onMutate: () => {
+      toggleDialogLoading(true)
+    },
+    onSuccess: async () => {
+      await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
+      toggleDialog(false)
+      toast.success('Success', { description: 'Bookmark has been created.' })
+    },
+    onError: (error) => {
       toast.error('Error', { description: error.message })
-      return
-    }
+    },
+    onSettled: () => {
+      toggleDialogLoading(false)
+    },
+  })
 
-    await invalidateQueries([
-      BOOKMARKS_QUERY,
-      FOLDERS_QUERY,
-      FOLDER_ITEMS_QUERY,
-      FAV_BOOKMARKS_QUERY,
-      TAG_ITEMS_QUERY,
-      TAGS_QUERY,
-      NAV_ITEMS_COUNT_QUERY,
-    ])
-
-    toggleDialog(false)
-    toggleDialogLoading(false)
-    toast.success('Success', { description: 'Bookmark has been created.' })
+  function onSubmit() {
+    createBookmarkMutate()
   }
 
   return (
@@ -296,9 +265,9 @@ export function CreateManualForm() {
           </Button>
         </DialogClose>
         {modEnabled && (
-          <Button type="submit" form="create-manual-bk-form" disabled={form.formState.isSubmitting}>
-            <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
-            {form.formState.isSubmitting && <Spinner className="absolute" />}
+          <Button type="submit" form="create-manual-bk-form" disabled={isPending}>
+            <span className={cn(isPending && 'invisible')}>Create</span>
+            {isPending && <Spinner className="absolute" />}
           </Button>
         )}
       </DialogFooter>

@@ -1,7 +1,8 @@
-import { useProfileStore } from '@/lib/stores/profile'
+import { useQuery } from '@tanstack/react-query'
+import { loggedInUserProfileQuery } from '@/lib/ts-queries/profile'
 
 export function useModEnabled() {
-  const profile = useProfileStore((state) => state.profile)
+  const { data: profile } = useQuery(loggedInUserProfileQuery())
 
   if (!profile) return false
 

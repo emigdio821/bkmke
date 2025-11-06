@@ -1,27 +1,15 @@
 'use client'
 
-import { useState } from 'react'
 import type { BkOGInfo, Bookmark } from '@/types'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import {
-  BOOKMARKS_QUERY,
-  FAV_BOOKMARKS_QUERY,
-  FOLDER_ITEMS_QUERY,
-  MAX_DESC_LENGTH,
-  MAX_NAME_LENGTH,
-  TAG_ITEMS_QUERY,
-  TAGS_QUERY,
-} from '@/lib/constants'
-import { editBookmarkSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
-import { useFolders } from '@/hooks/folders/use-folders'
-import { useTags } from '@/hooks/tags/use-tags'
-import { useInvalidateQueries } from '@/hooks/use-invalidate-queries'
-import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { FolderSelectItems } from '@/components/folders/folder-select-items'
+import { MultiSelect } from '@/components/multi-select'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -39,23 +27,30 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { FolderSelectItems } from '@/components/folders/folder-select-items'
-import { MultiSelect } from '@/components/multi-select'
-import { Spinner } from '@/components/spinner'
+import { useModEnabled } from '@/hooks/use-mod-enabled'
+import { MAX_DESC_LENGTH, MAX_NAME_LENGTH } from '@/lib/constants'
+import { editBookmarkSchema } from '@/lib/schemas/form'
+import { updateBookmark } from '@/lib/server-actions/bookmarks'
+import { syncTagItems } from '@/lib/server-actions/tag-items'
+import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
+import { folderListQuery, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { tagListQuery, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
+import { cn } from '@/lib/utils'
 
 interface EditBookmarkDialogProps {
   bookmark: Bookmark
   trigger: React.ReactNode
 }
 
+const QUERY_KEYS_TO_INVALIDATE = [[BOOKMARKS_QUERY_KEY], [FOLDERS_QUERY_KEY], [TAGS_QUERY_KEY]]
+
 export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProps) {
   const modEnabled = useModEnabled()
+  const queryClient = useQueryClient()
   const [openDialog, setOpenDialog] = useState(false)
-  const { invalidateQueries } = useInvalidateQueries()
   const ogInfo = bookmark.og_info as unknown as BkOGInfo
-  const { data: tags, isLoading: tagsLoading } = useTags()
-  const { data: folders, isLoading: foldersLoading } = useFolders()
-  const supabase = createClient()
+  const { data: tags, isLoading: tagsLoading } = useQuery(tagListQuery())
+  const { data: folders, isLoading: foldersLoading } = useQuery(folderListQuery())
   const tagItems = bookmark.tag_items
     .map((item) => item.tag?.id)
     .filter((id) => id !== undefined)
@@ -103,32 +98,25 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
       folder_id: folderId || null,
     }
 
-    const { data: bookmarkData, error } = await supabase
-      .from('bookmarks')
-      .update(bookmarkPayload)
-      .eq('id', bookmark.id)
-      .select()
+    const { data: bookmarkData, error } = await updateBookmark(bookmark.id, bookmarkPayload)
 
     if (error) {
       toast.error('Error', { description: error.message })
       return
     }
 
-    if (bookmarkData.length && tagIds.length > 0) {
+    if (bookmarkData.length) {
       const bookmarkId = bookmarkData[0].id
-      const tagItemsPayload = tagIds.map((tagId) => ({
-        tag_id: tagId,
-        bookmark_id: bookmarkId,
-      }))
+      const { error: tagError } = await syncTagItems({ bookmarkId, tagIds })
 
-      await supabase.from('tag_items').upsert(tagItemsPayload, { onConflict: 'bookmark_id, tag_id' })
-      const remainingTags = tagIds.join(',')
-      await supabase.from('tag_items').delete().eq('bookmark_id', bookmarkId).not('tag_id', 'in', `(${remainingTags})`)
-    } else {
-      await supabase.from('tag_items').delete().eq('bookmark_id', bookmark.id)
+      if (tagError) {
+        toast.error('Error', { description: tagError })
+        return
+      }
     }
 
-    await invalidateQueries([BOOKMARKS_QUERY, FOLDER_ITEMS_QUERY, TAG_ITEMS_QUERY, TAGS_QUERY, FAV_BOOKMARKS_QUERY])
+    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
+
     form.reset(values)
     setOpenDialog(false)
     toast.success('Success', { description: 'Bookmark has been updated.' })

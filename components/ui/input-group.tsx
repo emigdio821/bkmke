@@ -1,10 +1,11 @@
 'use client'
 
-import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
+import type { VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
 
 function InputGroup({ className, ...props }: React.ComponentProps<'fieldset'>) {
   return (

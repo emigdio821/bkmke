@@ -1,16 +1,13 @@
 'use client'
 
-import { useState } from 'react'
 import type { UserProfile } from '@/types'
+import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
-import { PROFILE_QUERY } from '@/lib/constants'
-import { editUserSchema } from '@/lib/schemas/form'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { Spinner } from '@/components/spinner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,7 +22,10 @@ import {
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Spinner } from '@/components/spinner'
+import { editUserSchema } from '@/lib/schemas/form'
+import { updateProfile } from '@/lib/server-actions/profile'
+import { LOGGED_IN_USER_PROFILE_QUERY_KEY } from '@/lib/ts-queries/profile'
+import { cn } from '@/lib/utils'
 
 interface EditProfileDialogProps {
   profile: UserProfile
@@ -33,9 +33,8 @@ interface EditProfileDialogProps {
 }
 
 export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) {
-  const [openDialog, setOpenDialog] = useState(false)
-  const supabase = createClient()
   const queryClient = useQueryClient()
+  const [openDialog, setOpenDialog] = useState(false)
 
   const form = useForm<z.infer<typeof editUserSchema>>({
     shouldUnregister: true,
@@ -49,32 +48,15 @@ export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) 
   })
 
   async function onSubmit(values: z.infer<typeof editUserSchema>) {
-    if (values.password) {
-      const { error } = await supabase.auth.updateUser({
-        password: values.password,
-      })
-
-      if (error) {
-        toast.error('Error', { description: error.message })
-        return
-      }
-    }
-
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        first_name: values.firstName,
-        last_name: values.lastName,
-        avatar_url: values.avatarUrl,
-      })
-      .eq('id', profile.id)
+    const { error } = await updateProfile(values, profile.id)
 
     if (error) {
       toast.error('Error', { description: error.message })
       return
     }
 
-    await queryClient.invalidateQueries({ queryKey: [PROFILE_QUERY] })
+    await queryClient.invalidateQueries({ queryKey: [LOGGED_IN_USER_PROFILE_QUERY_KEY] })
+
     form.reset(values)
     setOpenDialog(false)
     toast.success('Success', { description: 'Profile has been updated.' })

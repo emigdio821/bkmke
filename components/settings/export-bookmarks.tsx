@@ -1,18 +1,16 @@
 'use client'
 
 import { toast } from 'sonner'
-import { siteConfig } from '@/config/site'
-import { createClient } from '@/lib/supabase/client'
+import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { InlineCode } from '@/components/ui/typography'
-import { AlertActionDialog } from '@/components/dialogs/alert-action'
+import { siteConfig } from '@/config/site'
+import { exportBookmarkUrls } from '@/lib/server-actions/bookmarks'
 
 export function ExportBookmarks() {
-  const supabase = createClient()
-
   async function handleExportBookmarks() {
-    const { data, error } = await supabase.from('bookmarks').select('url')
+    const { data, error } = await exportBookmarkUrls()
 
     if (error) {
       console.error(error.message)
