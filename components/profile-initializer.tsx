@@ -1,15 +1,15 @@
 'use client'
 
-import type { loggedInUserProfileData } from '@/lib/ts-queries/profile'
+import type { UserProfile } from '@/types'
 import { useQuery } from '@tanstack/react-query'
 import { loggedInUserProfileQuery } from '@/lib/ts-queries/profile'
 
 interface ProfileInitializerProps {
-  profileData?: loggedInUserProfileData
+  profileData?: UserProfile | null
 }
 
 export function ProfileInitializer({ profileData }: ProfileInitializerProps) {
-  useQuery({ ...loggedInUserProfileQuery(), initialData: profileData })
+  useQuery({ ...loggedInUserProfileQuery(), initialData: profileData || undefined })
 
   return null
 }
