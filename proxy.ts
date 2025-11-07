@@ -1,16 +1,10 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-// import { updateSession } from '@/lib/supabase/middleware'
-import { serverEnv } from './lib/env'
-import { SupabaseSafeSession } from './lib/supabase-safe-session'
 import { createClient } from './lib/supabase/server'
 
 export async function proxy(req: NextRequest) {
-  // return await updateSession(req)
-
   const supabase = await createClient()
-  const safeSession = new SupabaseSafeSession(supabase, serverEnv.SUPABASE_SECRET)
-  const { data, error } = await safeSession.getUser()
+  const { data, error } = await supabase.auth.getClaims()
 
   if (req.nextUrl.pathname === '/login' && data) {
     return NextResponse.redirect(new URL('/', req.url))
