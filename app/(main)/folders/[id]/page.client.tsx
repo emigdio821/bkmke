@@ -1,6 +1,6 @@
 'use client'
 
-import type { FolderDetailsData } from '@/lib/ts-queries/folders'
+import type { Tables } from '@/types/database.types'
 import { useQuery } from '@tanstack/react-query'
 import { BookmarkIcon, BookmarkPlusIcon, BugIcon, FileUpIcon, RotateCwIcon, WindIcon } from 'lucide-react'
 import Link from 'next/link'
@@ -18,7 +18,7 @@ import { folderDetailsQuery, folderItemsQuery } from '@/lib/ts-queries/folders'
 
 interface FolderItemsClientPageProps {
   folderId: string
-  folderDetails: FolderDetailsData | null
+  folderDetails?: Tables<'folders'>
 }
 
 export function FolderItemsClientPage({ folderId, folderDetails }: FolderItemsClientPageProps) {

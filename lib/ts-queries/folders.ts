@@ -1,27 +1,42 @@
+import type { Bookmark, Folder } from '@/types'
+import type { Tables } from '@/types/database.types'
 import { queryOptions } from '@tanstack/react-query'
-import { getFolderDetails, getFolderItems, listFolders } from '@/lib/server-actions/folders'
 
 export const FOLDERS_QUERY_KEY = 'folders'
 export const FOLDER_ITEMS_QUERY_KEY = 'folder_items'
 
-export type FolderListData = Awaited<ReturnType<typeof listFolders>>
-export type FolderDetailsData = Awaited<ReturnType<typeof getFolderDetails>>
-export type FolderItemsData = Awaited<ReturnType<typeof getFolderItems>>
-
 export const folderListQuery = () =>
   queryOptions({
     queryKey: [FOLDERS_QUERY_KEY],
-    queryFn: listFolders,
+    queryFn: async (): Promise<Folder[]> => {
+      const response = await fetch('/api/folders')
+      if (!response.ok) {
+        throw new Error('Failed to fetch folders')
+      }
+      return response.json()
+    },
   })
 
 export const folderDetailsQuery = (folderId: string) =>
   queryOptions({
     queryKey: [FOLDERS_QUERY_KEY, folderId],
-    queryFn: () => getFolderDetails(folderId),
+    queryFn: async (): Promise<Tables<'folders'>> => {
+      const response = await fetch(`/api/folders/${folderId}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch folder details')
+      }
+      return response.json()
+    },
   })
 
 export const folderItemsQuery = (folderId: string) =>
   queryOptions({
     queryKey: [FOLDERS_QUERY_KEY, FOLDER_ITEMS_QUERY_KEY, folderId],
-    queryFn: () => getFolderItems(folderId),
+    queryFn: async (): Promise<Bookmark[]> => {
+      const response = await fetch(`/api/folders/${folderId}/items`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch folder items')
+      }
+      return response.json()
+    },
   })

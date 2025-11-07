@@ -1,4 +1,4 @@
-import { getLoggedInUserProfile } from '@/lib/server-actions/profile'
+import { getProfileData } from '@/lib/data/profile'
 import { getAppSidebarItemCount } from '@/lib/server-actions/sidebar'
 import { ProfileInitializer } from '../profile-initializer'
 import { SidebarInset, SidebarProvider } from '../ui/sidebar'
@@ -7,11 +7,11 @@ import { AppSidebarClient } from './app-sidebar.client'
 
 export async function AppSidebar({ children }: { children: React.ReactNode }) {
   const itemCount = await getAppSidebarItemCount()
-  const loggedInUserProfileData = await getLoggedInUserProfile()
+  const profileData = await getProfileData()
 
   return (
     <>
-      <ProfileInitializer profileData={loggedInUserProfileData} />
+      <ProfileInitializer profileData={profileData} />
       <SidebarProvider>
         <AppSidebarClient itemCount={itemCount} />
         <SidebarInset>
