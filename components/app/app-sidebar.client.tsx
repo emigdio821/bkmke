@@ -1,6 +1,5 @@
 'use client'
 
-import type { SidebarItemCountData } from '@/lib/ts-queries/sidebar'
 import { useQuery } from '@tanstack/react-query'
 import { BookmarkIcon, HeartIcon } from 'lucide-react'
 import Link from 'next/link'
@@ -20,14 +19,11 @@ import { appSidebarItemCountQuery } from '@/lib/ts-queries/sidebar'
 import { NavFolders } from '../navs/folders/nav-folders'
 import { NavTags } from '../navs/nav-tags'
 import { NavUser } from '../navs/nav-user'
+import { Skeleton } from '../ui/skeleton'
 
-interface AppSidebarClientProps extends React.ComponentProps<typeof Sidebar> {
-  itemCount?: SidebarItemCountData
-}
-
-export function AppSidebarClient({ itemCount, ...props }: AppSidebarClientProps) {
+export function AppSidebarClient({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
-  const { data: navItemsCount } = useQuery({ ...appSidebarItemCountQuery(), initialData: itemCount })
+  const { data: navItemsCount, isLoading } = useQuery(appSidebarItemCountQuery())
   const favsCount = navItemsCount?.favoritesCount
   const bksCount = navItemsCount?.bookmarksCount
 
@@ -57,7 +53,13 @@ export function AppSidebarClient({ itemCount, ...props }: AppSidebarClientProps)
                 <span>Favorites</span>
               </Link>
             </SidebarMenuButton>
-            {favsCount && <SidebarMenuBadge>{favsCount}</SidebarMenuBadge>}
+            {isLoading ? (
+              <SidebarMenuBadge>
+                <Skeleton className="bg-highlight size-5" />
+              </SidebarMenuBadge>
+            ) : (
+              favsCount && favsCount > 0 && <SidebarMenuBadge>{favsCount}</SidebarMenuBadge>
+            )}
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton isActive={pathname === '/'} asChild>
@@ -66,7 +68,13 @@ export function AppSidebarClient({ itemCount, ...props }: AppSidebarClientProps)
                 <span>Bookmarks</span>
               </Link>
             </SidebarMenuButton>
-            {bksCount && <SidebarMenuBadge>{bksCount}</SidebarMenuBadge>}
+            {isLoading ? (
+              <SidebarMenuBadge>
+                <Skeleton className="bg-highlight size-5" />
+              </SidebarMenuBadge>
+            ) : (
+              bksCount && bksCount > 0 && <SidebarMenuBadge>{bksCount}</SidebarMenuBadge>
+            )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

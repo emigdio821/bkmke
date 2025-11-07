@@ -1,6 +1,5 @@
 'use server'
 
-import type { Bookmark } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 
 interface SyncTagItemsOptions {
@@ -52,44 +51,4 @@ export async function syncTagItems({ bookmarkId, tagIds = [] }: SyncTagItemsOpti
   } catch (error) {
     return { error: error instanceof Error ? error.message : 'Failed to sync tag items' }
   }
-}
-
-export async function getTagItems(tagId: string) {
-  if (!tagId) {
-    console.error('getTagItems: tagId is required')
-    return []
-  }
-
-  const supabase = await createClient()
-
-  const { data, error } = await supabase
-    .from('tag_items')
-    .select(
-      `
-          bookmark:bookmarks!bookmark_id (
-            *,
-            tag_items!bookmark_id(id, tag:tags(id,name)),
-            folder:folders(name)
-          )
-        `,
-    )
-    .eq('tag_id', tagId)
-
-  if (error) {
-    console.error('Unable to fetch tag items:', error.message)
-    return []
-  }
-
-  const formattedData: Bookmark[] =
-    data?.map((item) => (Array.isArray(item.bookmark) ? item.bookmark[0] : item.bookmark)) || null
-
-  if (formattedData) {
-    formattedData.sort((a, b) => {
-      if (a.name < b.name) return -1
-      if (a.name > b.name) return 1
-      return 0
-    })
-  }
-
-  return formattedData || []
 }

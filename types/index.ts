@@ -48,3 +48,8 @@ export interface UserProfile extends Tables<'profiles'> {
   email?: string
   user_role: Tables<'role_permissions'>['role'] | null
 }
+
+export interface SidebarItemCountData {
+  bookmarksCount: number
+  favoritesCount: number
+}

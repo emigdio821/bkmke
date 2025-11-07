@@ -18,7 +18,7 @@ import { tagDetailsQuery, tagItemsQuery } from '@/lib/ts-queries/tags'
 
 interface TagitemsClientPageProps {
   tagId: string
-  tagDetails: TagDetailsData | null
+  tagDetails?: TagDetailsData
 }
 
 export function TagitemsClientPage({ tagId, tagDetails }: TagitemsClientPageProps) {
