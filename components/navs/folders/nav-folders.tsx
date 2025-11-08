@@ -41,8 +41,6 @@ export function NavFolders() {
         <CollapsibleContent className="pt-1" asChild>
           <SidebarGroupContent>
             <SidebarMenu>
-              {isLoading &&
-                Array.from(Array(3).keys()).map((n) => <SidebarMenuSkeleton key={`${n}-folders-skeleton`} showIcon />)}
               {error && (
                 <SidebarMenuButton onClick={() => refetch()}>
                   <div className="grid flex-1 text-left text-sm leading-tight">
@@ -51,9 +49,13 @@ export function NavFolders() {
                   <RotateCwIcon className="ml-auto size-4" />
                 </SidebarMenuButton>
               )}
-              {folders?.map((folder) => (
-                <NavFolderItem key={folder.id} folder={folder} />
-              ))}
+              {isLoading ? (
+                Array.from(Array(3).keys()).map((n) => <SidebarMenuSkeleton key={`${n}-folders-skeleton`} showIcon />)
+              ) : folders && folders.length > 0 ? (
+                folders.map((folder) => <NavFolderItem key={folder.id} folder={folder} />)
+              ) : (
+                <p className="text-muted-foreground text-xs">Folders are empty.</p>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </CollapsibleContent>

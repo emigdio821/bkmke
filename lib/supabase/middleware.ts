@@ -28,13 +28,13 @@ export async function updateSession(request: NextRequest) {
     },
   })
 
-  const user = await supabase.auth.getUser()
+  const { data, error } = await supabase.auth.getClaims()
 
-  if (request.nextUrl.pathname === '/login' && user.data.user) {
+  if (request.nextUrl.pathname === '/login' && data) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  if (request.nextUrl.pathname !== '/login' && user.error) {
+  if (request.nextUrl.pathname !== '/login' && (error || !data)) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 

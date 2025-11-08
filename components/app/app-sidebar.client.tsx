@@ -58,7 +58,7 @@ export function AppSidebarClient({ ...props }: React.ComponentProps<typeof Sideb
                 <Skeleton className="bg-highlight size-5" />
               </SidebarMenuBadge>
             ) : (
-              favsCount && favsCount > 0 && <SidebarMenuBadge>{favsCount}</SidebarMenuBadge>
+              !!favsCount && favsCount > 0 && <SidebarMenuBadge>{favsCount}</SidebarMenuBadge>
             )}
           </SidebarMenuItem>
           <SidebarMenuItem>
@@ -73,7 +73,7 @@ export function AppSidebarClient({ ...props }: React.ComponentProps<typeof Sideb
                 <Skeleton className="bg-highlight size-5" />
               </SidebarMenuBadge>
             ) : (
-              bksCount && bksCount > 0 && <SidebarMenuBadge>{bksCount}</SidebarMenuBadge>
+              !!bksCount && bksCount > 0 && <SidebarMenuBadge>{bksCount}</SidebarMenuBadge>
             )}
           </SidebarMenuItem>
         </SidebarMenu>
