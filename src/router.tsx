@@ -9,7 +9,7 @@ export const getRouter = () => {
 
   const router = createRouter({
     routeTree,
-    defaultPreload: 'intent',
+    defaultPreload: false,
     context: { ...rqContext },
     defaultNotFoundComponent: () => <NotFound />,
     Wrap: (props: { children: React.ReactNode }) => {

@@ -1,4 +1,4 @@
-import { getAuthUser } from '@/server-functions/get-auth-user'
+import { getAuthClaims } from '@/server-functions/get-auth-claims'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppHeader } from '@/components/app-header'
@@ -7,16 +7,14 @@ import { ProfileInitializer } from '@/components/profile-initializer'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async (context) => {
-    const user = await getAuthUser()
+    const claims = await getAuthClaims()
 
-    if (!user) {
+    if (!claims) {
       throw redirect({
         to: '/login',
         params: context.location.href,
       })
     }
-
-    return { user }
   },
   component: RouteComponent,
 })

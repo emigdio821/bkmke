@@ -1,13 +1,13 @@
 import { createServerFn } from '@tanstack/react-start'
 import { createClient } from '@/lib/supabase/server'
 
-export const getAuthUser = createServerFn().handler(async () => {
+export const getAuthClaims = createServerFn().handler(async () => {
   const supabase = await createClient()
-  const { data, error } = await supabase.auth.getUser()
+  const { data, error } = await supabase.auth.getClaims()
 
-  if (!data.user || error) {
+  if (!data || error) {
     return null
   }
 
-  return data.user
+  return data.claims
 })

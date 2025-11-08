@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Bookmark } from '@/types'
+import type { ColumnDef, ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -7,7 +8,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import type { ColumnDef, ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table'
 import { useTableLayoutStore } from '@/lib/stores/table-layout'
 import { useQueryPagination } from '@/hooks/table/use-query-pagination'
 import { useDebounceFn } from '@/hooks/use-debounce-fn'
@@ -74,22 +74,20 @@ export function DataTable({ columns, data, refetch }: DataTableProps) {
     (value: string) => {
       table.getColumn('name')?.setFilterValue(value)
     },
-    [table.getColumn, table],
+    [table],
   )
 
-  const handleSearchFilter = useCallback(
-    (value: string) => {
-      filterTable(value)
-    },
-    [filterTable],
-  )
-
-  const debouncedFilter = useDebounceFn(handleSearchFilter)
+  const debouncedFilter = useDebounceFn(filterTable)
 
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false
       filterTable(search)
+      return
+    }
+
+    if (search === '') {
+      filterTable('')
     } else {
       debouncedFilter(search)
     }
