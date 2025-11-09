@@ -3,7 +3,7 @@
 import type { BkOGInfo, Bookmark } from '@/types'
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -72,61 +72,72 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
     },
   })
 
-  async function onSubmit(values: z.infer<typeof editBookmarkSchema>) {
-    const { name, description, isFavorite, url, tags: tagIds, folderId, updateOG, faviconUrl, imageUrl } = values
+  const updateBookmarkMutation = useMutation({
+    mutationFn: async (values: z.infer<typeof editBookmarkSchema>) => {
+      const { name, description, isFavorite, url, tags: tagIds, folderId, updateOG, faviconUrl, imageUrl } = values
 
-    let ogInfoPayload = null
+      let ogInfoPayload = null
 
-    if (updateOG) {
-      ogInfoPayload = {
-        imageUrl,
-        faviconUrl,
-      } satisfies BkOGInfo
-    } else {
-      ogInfoPayload = {
-        imageUrl: ogInfo.imageUrl,
-        faviconUrl: ogInfo.faviconUrl,
+      if (updateOG) {
+        ogInfoPayload = {
+          imageUrl,
+          faviconUrl,
+        } satisfies BkOGInfo
+      } else {
+        ogInfoPayload = {
+          imageUrl: ogInfo.imageUrl,
+          faviconUrl: ogInfo.faviconUrl,
+        }
       }
-    }
 
-    const bookmarkPayload = {
-      url,
-      name,
-      description,
-      og_info: ogInfoPayload,
-      is_favorite: isFavorite,
-      folder_id: folderId || null,
-    }
+      const bookmarkPayload = {
+        url,
+        name,
+        description,
+        og_info: ogInfoPayload,
+        is_favorite: isFavorite,
+        folder_id: folderId || null,
+      }
 
-    const { data: bookmarkData, error } = await updateBookmark(bookmark.id, bookmarkPayload)
+      const { data: bookmarkData, error } = await updateBookmark(bookmark.id, bookmarkPayload)
 
-    if (error) {
-      toast.error('Error', { description: error.message })
-      return
-    }
+      if (error) {
+        throw new Error(error.message)
+      }
 
-    if (bookmarkData.length) {
+      if (!bookmarkData.length) {
+        throw new Error('No bookmark data returned')
+      }
+
       const bookmarkId = bookmarkData[0].id
       const { error: tagError } = await syncTagItems({ bookmarkId, tagIds })
 
       if (tagError) {
-        toast.error('Error', { description: tagError })
-        return
+        throw new Error(tagError)
       }
-    }
 
-    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
+      return { values, bookmarkId }
+    },
+    onSuccess: async ({ values }) => {
+      await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
+      form.reset(values)
+      setOpenDialog(false)
+      toast.success('Success', { description: 'Bookmark has been updated.' })
+    },
+    onError: (error: Error) => {
+      toast.error('Error', { description: error.message })
+    },
+  })
 
-    form.reset(values)
-    setOpenDialog(false)
-    toast.success('Success', { description: 'Bookmark has been updated.' })
+  function onSubmit(values: z.infer<typeof editBookmarkSchema>) {
+    updateBookmarkMutation.mutate(values)
   }
 
   return (
     <Dialog
       open={openDialog}
       onOpenChange={(isOpen) => {
-        if (form.formState.isSubmitting) return
+        if (updateBookmarkMutation.isPending) return
         setOpenDialog(isOpen)
       }}
     >
@@ -345,9 +356,9 @@ export function EditBookmarkDialog({ bookmark, trigger }: EditBookmarkDialogProp
             </Button>
           </DialogClose>
           {modEnabled && (
-            <Button type="submit" form="edit-bk-form" disabled={form.formState.isSubmitting}>
-              <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
-              {form.formState.isSubmitting && <Spinner className="absolute" />}
+            <Button type="submit" form="edit-bk-form" disabled={updateBookmarkMutation.isPending}>
+              <span className={cn(updateBookmarkMutation.isPending && 'invisible')}>Save</span>
+              {updateBookmarkMutation.isPending && <Spinner className="absolute" />}
             </Button>
           )}
         </DialogFooter>

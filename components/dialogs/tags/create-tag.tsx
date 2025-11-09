@@ -2,7 +2,7 @@
 
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -40,32 +40,43 @@ export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof createTagSchema>) {
-    const { error } = await createTag(values.name)
+  const createTagMutation = useMutation({
+    mutationFn: async (values: z.infer<typeof createTagSchema>) => {
+      const { error } = await createTag(values.name)
 
-    if (error) {
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return values
+    },
+    onSuccess: async (values) => {
+      await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] })
+
+      toast.success('Success', {
+        description: (
+          <div>
+            Tag <span className="font-semibold">{values.name}</span> has been created.
+          </div>
+        ),
+      })
+
+      setOpenDialog(false)
+    },
+    onError: (error: Error) => {
       toast.error('Error', { description: error.message })
-      return
-    }
+    },
+  })
 
-    await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] })
-
-    toast.success('Success', {
-      description: (
-        <div>
-          Tag <span className="font-semibold">{values.name}</span> has been created.
-        </div>
-      ),
-    })
-
-    setOpenDialog(false)
+  function onSubmit(values: z.infer<typeof createTagSchema>) {
+    createTagMutation.mutate(values)
   }
 
   return (
     <Dialog
       open={openDialog}
       onOpenChange={(isOpen) => {
-        if (form.formState.isSubmitting) return
+        if (createTagMutation.isPending) return
         setOpenDialog(isOpen)
       }}
     >
@@ -114,9 +125,9 @@ export function CreateTagDialog({ trigger }: { trigger: React.ReactNode }) {
             </Button>
           </DialogClose>
           {modEnabled && (
-            <Button type="submit" form="create-tag-form" disabled={form.formState.isSubmitting}>
-              <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
-              {form.formState.isSubmitting && <Spinner className="absolute" />}
+            <Button type="submit" form="create-tag-form" disabled={createTagMutation.isPending}>
+              <span className={cn(createTagMutation.isPending && 'invisible')}>Create</span>
+              {createTagMutation.isPending && <Spinner className="absolute" />}
             </Button>
           )}
         </DialogFooter>

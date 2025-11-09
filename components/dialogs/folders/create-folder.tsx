@@ -2,7 +2,7 @@
 
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -46,32 +46,43 @@ export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDial
     },
   })
 
-  async function onSubmit(values: z.infer<typeof createFolderSchema>) {
-    const { error } = await createFolder(values, parentFolderId)
+  const createFolderMutation = useMutation({
+    mutationFn: async (values: z.infer<typeof createFolderSchema>) => {
+      const { error } = await createFolder(values, parentFolderId)
 
-    if (error) {
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return values
+    },
+    onSuccess: async (values) => {
+      await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY_KEY] })
+
+      toast.success('Success', {
+        description: (
+          <div>
+            Folder <span className="font-semibold">{values.name}</span> has been created.
+          </div>
+        ),
+      })
+
+      setOpenDialog(false)
+    },
+    onError: (error: Error) => {
       toast.error('Error', { description: error.message })
-      return
-    }
+    },
+  })
 
-    await queryClient.invalidateQueries({ queryKey: [FOLDERS_QUERY_KEY] })
-
-    toast.success('Success', {
-      description: (
-        <div>
-          Folder <span className="font-semibold">{values.name}</span> has been created.
-        </div>
-      ),
-    })
-
-    setOpenDialog(false)
+  function onSubmit(values: z.infer<typeof createFolderSchema>) {
+    createFolderMutation.mutate(values)
   }
 
   return (
     <Dialog
       open={openDialog}
       onOpenChange={(isOpen) => {
-        if (form.formState.isSubmitting) return
+        if (createFolderMutation.isPending) return
         setOpenDialog(isOpen)
       }}
     >
@@ -135,9 +146,9 @@ export function CreateFolderDialog({ parentFolderId, trigger }: CreateFolderDial
             </Button>
           </DialogClose>
           {modEnabled && (
-            <Button type="submit" form="create-folder-form" disabled={form.formState.isSubmitting}>
-              <span className={cn(form.formState.isSubmitting && 'invisible')}>Create</span>
-              {form.formState.isSubmitting && <Spinner className="absolute" />}
+            <Button type="submit" form="create-folder-form" disabled={createFolderMutation.isPending}>
+              <span className={cn(createFolderMutation.isPending && 'invisible')}>Create</span>
+              {createFolderMutation.isPending && <Spinner className="absolute" />}
             </Button>
           )}
         </DialogFooter>

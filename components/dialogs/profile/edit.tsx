@@ -3,7 +3,7 @@
 import type { UserProfile } from '@/types'
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -47,26 +47,37 @@ export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) 
     },
   })
 
-  async function onSubmit(values: z.infer<typeof editUserSchema>) {
-    const { error } = await updateProfile(values, profile.id)
+  const updateProfileMutation = useMutation({
+    mutationFn: async (values: z.infer<typeof editUserSchema>) => {
+      const { error } = await updateProfile(values, profile.id)
 
-    if (error) {
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return values
+    },
+    onSuccess: async (values) => {
+      await queryClient.invalidateQueries({ queryKey: [LOGGED_IN_USER_PROFILE_QUERY_KEY] })
+
+      form.reset(values)
+      setOpenDialog(false)
+      toast.success('Success', { description: 'Profile has been updated.' })
+    },
+    onError: (error: Error) => {
       toast.error('Error', { description: error.message })
-      return
-    }
+    },
+  })
 
-    await queryClient.invalidateQueries({ queryKey: [LOGGED_IN_USER_PROFILE_QUERY_KEY] })
-
-    form.reset(values)
-    setOpenDialog(false)
-    toast.success('Success', { description: 'Profile has been updated.' })
+  function onSubmit(values: z.infer<typeof editUserSchema>) {
+    updateProfileMutation.mutate(values)
   }
 
   return (
     <Dialog
       open={openDialog}
       onOpenChange={(isOpen) => {
-        if (form.formState.isSubmitting) return
+        if (updateProfileMutation.isPending) return
         setOpenDialog(isOpen)
       }}
     >
@@ -147,9 +158,9 @@ export function EditProfileDialog({ profile, trigger }: EditProfileDialogProps) 
               Cancel
             </Button>
           </DialogClose>
-          <Button type="submit" form="update-profile-form" disabled={form.formState.isSubmitting}>
-            <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
-            {form.formState.isSubmitting && <Spinner className="absolute" />}
+          <Button type="submit" form="update-profile-form" disabled={updateProfileMutation.isPending}>
+            <span className={cn(updateProfileMutation.isPending && 'invisible')}>Save</span>
+            {updateProfileMutation.isPending && <Spinner className="absolute" />}
           </Button>
         </DialogFooter>
       </DialogContent>

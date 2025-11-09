@@ -3,7 +3,7 @@
 import type { Tables } from '@/types/database.types'
 import type { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -50,28 +50,39 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof createFolderSchema>) {
-    const { error } = await updateFolder(values, folder.id)
+  const updateFolderMutation = useMutation({
+    mutationFn: async (values: z.infer<typeof createFolderSchema>) => {
+      const { error } = await updateFolder(values, folder.id)
 
-    if (error) {
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return values
+    },
+    onSuccess: async () => {
+      await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
+
+      setOpenDialog(false)
+
+      toast.success('Success', {
+        description: 'Folder has been updated.',
+      })
+    },
+    onError: (error: Error) => {
       toast.error('Error', { description: error.message })
-      return
-    }
+    },
+  })
 
-    await Promise.all(QUERY_KEYS_TO_INVALIDATE.map((queryKey) => queryClient.invalidateQueries({ queryKey })))
-
-    setOpenDialog(false)
-
-    toast.success('Success', {
-      description: 'Folder has been updated.',
-    })
+  function onSubmit(values: z.infer<typeof createFolderSchema>) {
+    updateFolderMutation.mutate(values)
   }
 
   return (
     <Dialog
       open={openDialog}
       onOpenChange={(isOpen) => {
-        if (form.formState.isSubmitting) return
+        if (updateFolderMutation.isPending) return
         setOpenDialog(isOpen)
       }}
     >
@@ -141,9 +152,9 @@ export function EditFolderDialog({ folder, trigger }: EditFolderDialogProps) {
             </Button>
           </DialogClose>
           {modEnabled && (
-            <Button type="submit" form="edit-folder-form" disabled={form.formState.isSubmitting}>
-              <span className={cn(form.formState.isSubmitting && 'invisible')}>Save</span>
-              {form.formState.isSubmitting && <Spinner className="absolute" />}
+            <Button type="submit" form="edit-folder-form" disabled={updateFolderMutation.isPending}>
+              <span className={cn(updateFolderMutation.isPending && 'invisible')}>Save</span>
+              {updateFolderMutation.isPending && <Spinner className="absolute" />}
             </Button>
           )}
         </DialogFooter>
