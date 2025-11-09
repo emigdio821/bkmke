@@ -86,8 +86,8 @@ export function BookmarkDetailsDialog({ bookmark, trigger }: BookmarkDetailsDial
 
         <DialogFooter className="flex-row justify-end">
           <div className="flex justify-center gap-2">
-            <ToggleFavBtn bookmark={bookmark} variant="outline" />
-            <RowActions bookmark={bookmark} variant="outline" />
+            <ToggleFavBtn bookmark={bookmark} variant="outline" size="icon" />
+            <RowActions bookmark={bookmark} variant="outline" size="icon" />
           </div>
           <DialogClose asChild>
             <Button type="button">Close</Button>
