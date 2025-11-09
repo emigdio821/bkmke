@@ -13,7 +13,6 @@ import {
   TagIcon,
   Trash2Icon,
 } from 'lucide-react'
-import { startTransition } from 'react'
 import { toast } from 'sonner'
 import { AlertActionDialog } from '@/components/dialogs/alert-action'
 import { BookmarkDetailsDialog } from '@/components/dialogs/bookmarks/details'
@@ -54,7 +53,7 @@ const QUERY_KEYS_TO_INVALIDATE = [
 export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps) {
   const modEnabled = useModEnabled()
   const queryClient = useQueryClient()
-  const { handleToggleFavorite, optimisticBk } = useToggleFavorite(bookmark)
+  const { toggleFavMutation } = useToggleFavorite(bookmark)
 
   const { mutateAsync: removeBookmarkMutate } = useMutation({
     mutationFn: async () => {
@@ -138,8 +137,8 @@ export function RowActions({ bookmark, hideDetails, ...props }: RowActionsProps)
           }
         />
         {modEnabled && (
-          <DropdownMenuItem onSelect={() => startTransition(handleToggleFavorite)}>
-            {optimisticBk.is_favorite ? (
+          <DropdownMenuItem onSelect={() => toggleFavMutation.mutate()}>
+            {bookmark.is_favorite ? (
               <>
                 <HeartOffIcon className="size-4" />
                 Remove from favorites

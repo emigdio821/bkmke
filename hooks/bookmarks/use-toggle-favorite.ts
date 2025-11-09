@@ -3,15 +3,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { toggleFavoriteBookmark } from '@/lib/server-actions/bookmarks'
 import { BOOKMARKS_QUERY_KEY } from '@/lib/ts-queries/bookmarks'
-import { FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
+import { FOLDER_ITEMS_QUERY_KEY, FOLDERS_QUERY_KEY } from '@/lib/ts-queries/folders'
 import { SIDEBAR_ITEM_COUNT_QUERY_KEY } from '@/lib/ts-queries/sidebar'
-import { TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
+import { TAG_ITEMS_QUERY_KEY, TAGS_QUERY_KEY } from '@/lib/ts-queries/tags'
 
 const QUERY_KEYS_TO_INVALIDATE = [
   [BOOKMARKS_QUERY_KEY],
   [SIDEBAR_ITEM_COUNT_QUERY_KEY],
-  [FOLDERS_QUERY_KEY],
-  [TAGS_QUERY_KEY],
+  [FOLDERS_QUERY_KEY, FOLDER_ITEMS_QUERY_KEY],
+  [TAGS_QUERY_KEY, TAG_ITEMS_QUERY_KEY],
 ]
 
 export function useToggleFavorite(bookmark: Bookmark) {
@@ -30,10 +30,32 @@ export function useToggleFavorite(bookmark: Bookmark) {
         data: queryClient.getQueryData(queryKey),
       }))
 
-      queryClient.setQueriesData({ queryKey: [BOOKMARKS_QUERY_KEY] }, (old: Bookmark[] | undefined) => {
-        if (!old) return old
-        return old.map((bk) => (bk.id === bookmark.id ? { ...bk, is_favorite: !bk.is_favorite } : bk))
+      // Update bookmarks in all relevant queries (bookmarks, folder items, tag items)
+      const bookmarkQueryKeys = [
+        [BOOKMARKS_QUERY_KEY],
+        [FOLDERS_QUERY_KEY, FOLDER_ITEMS_QUERY_KEY],
+        [TAGS_QUERY_KEY, TAG_ITEMS_QUERY_KEY],
+      ]
+
+      bookmarkQueryKeys.forEach((queryKey) => {
+        queryClient.setQueriesData({ queryKey }, (old: Bookmark[] | undefined) => {
+          if (!old) return old
+          return old.map((bk) => (bk.id === bookmark.id ? { ...bk, is_favorite: !bk.is_favorite } : bk))
+        })
       })
+
+      // Update sidebar item count
+      queryClient.setQueryData(
+        [SIDEBAR_ITEM_COUNT_QUERY_KEY],
+        (old: { bookmarksCount: number; favoritesCount: number } | undefined) => {
+          if (!old) return old
+          const increment = bookmark.is_favorite ? -1 : 1
+          return {
+            ...old,
+            favoritesCount: old.favoritesCount + increment,
+          }
+        },
+      )
 
       return { previousData }
     },
@@ -54,7 +76,5 @@ export function useToggleFavorite(bookmark: Bookmark) {
     },
   })
 
-  const optimisticBk: Bookmark = mutation.isPending ? { ...bookmark, is_favorite: !bookmark.is_favorite } : bookmark
-
-  return { optimisticBk, handleToggleFavorite: mutation.mutate }
+  return { toggleFavMutation: mutation }
 }
