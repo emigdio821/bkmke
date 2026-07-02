@@ -1,5 +1,6 @@
 import { IconExternalLink, IconFolder, IconTag } from '@tabler/icons-react'
 import { useLocation } from '@tanstack/react-router'
+import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { BlurImage } from '@/components/shared/blur-img'
 import { CopyButton } from '@/components/shared/copy-btn'
 import { Badge } from '@/components/ui/badge'
@@ -14,7 +15,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@/components/ui/dialog'
-import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { cn, formatDate, hasWhiteSpaces, simplifiedURL } from '@/lib/utils'
 
 interface BookmarkDetailsDialogProps extends React.ComponentProps<typeof Dialog> {

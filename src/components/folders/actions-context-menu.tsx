@@ -6,10 +6,10 @@ import { useEntityMutation } from '@/hooks/use-entity-mutation'
 import { AlertDialogGeneric } from '../shared/alert-dialog-generic'
 import {
   ContextMenu,
-  ContextMenuContent,
+  ContextMenuPopup,
   ContextMenuGroup,
   ContextMenuItem,
-  ContextMenuLabel,
+  ContextMenuGroupLabel,
   ContextMenuTrigger,
 } from '../ui/context-menu'
 import { EditFolderDialog } from './dialogs/edit'
@@ -59,9 +59,9 @@ export function FolderActionsCtxMenu({ folder, trigger }: ActionsProps) {
 
       <ContextMenu>
         <ContextMenuTrigger>{trigger}</ContextMenuTrigger>
-        <ContextMenuContent>
+        <ContextMenuPopup>
           <ContextMenuGroup>
-            <ContextMenuLabel>{folder.name}</ContextMenuLabel>
+            <ContextMenuGroupLabel>{folder.name}</ContextMenuGroupLabel>
             <ContextMenuItem onClick={() => setEditDialogOpen(true)}>
               <IconEdit />
               Edit
@@ -70,7 +70,7 @@ export function FolderActionsCtxMenu({ folder, trigger }: ActionsProps) {
               <IconTrash /> Delete
             </ContextMenuItem>
           </ContextMenuGroup>
-        </ContextMenuContent>
+        </ContextMenuPopup>
       </ContextMenu>
     </>
   )

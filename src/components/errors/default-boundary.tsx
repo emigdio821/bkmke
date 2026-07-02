@@ -1,5 +1,5 @@
-import { IconBug } from '@tabler/icons-react'
 import type { ErrorComponentProps } from '@tanstack/react-router'
+import { IconBug } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
 import {
   Empty,

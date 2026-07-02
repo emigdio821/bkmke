@@ -1,9 +1,10 @@
+import type React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type React from 'react'
 import { useId } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { updateBookmarkTagsBatch } from '@/api/server-functions/bookmarks'
 import { BOOKMARKS_QUERY_KEY } from '@/api/tanstack-queries/bookmarks'
 import { TAGS_QUERY_KEY } from '@/api/tanstack-queries/tags'
@@ -21,7 +22,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
-import type { Bookmark } from '@/db/schema/zod/bookmarks'
+import { Form } from '@/components/ui/form'
 import { type UpdateBookmarkTagsFormData, updateBookmarkTagsSchema } from '@/lib/form-schemas/bookmarks'
 
 interface UpdateBookmarkTagsDialogProps extends React.ComponentProps<typeof Dialog> {
@@ -57,12 +58,12 @@ export function UpdateBookmarkTagsDialog({
         },
       })
     },
-    onSuccess: (results) => {
+    onSuccess: async (results) => {
       const succeeded = results.filter((r) => r.success).length
       const failed = results.filter((r) => !r.success).length
 
-      queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY_KEY] })
-      queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] })
+      await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY_KEY] })
+      await queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] })
 
       if (failed === 0) {
         toast.success('Success', {
@@ -119,7 +120,7 @@ export function UpdateBookmarkTagsDialog({
         </DialogHeader>
 
         <DialogPanel>
-          <form
+          <Form
             id={createBookmarkFormId}
             className="flex flex-col gap-4"
             aria-label="Update bookmark tags form"
@@ -138,11 +139,11 @@ export function UpdateBookmarkTagsDialog({
                       field.onChange(value || [])
                     }}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
-          </form>
+          </Form>
         </DialogPanel>
 
         <DialogFooter>

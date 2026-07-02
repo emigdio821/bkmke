@@ -7,6 +7,7 @@ import {
   IconTrash,
 } from '@tabler/icons-react'
 import { useState } from 'react'
+import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { deleteBookmark, toggleFavoriteBookmark } from '@/api/server-functions/bookmarks'
 import { BOOKMARKS_QUERY_KEY } from '@/api/tanstack-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/api/tanstack-queries/folders'
@@ -25,7 +26,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { useEntityMutation } from '@/hooks/use-entity-mutation'
 
 interface ActionsProps {

@@ -16,6 +16,7 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { useEntityMutation } from '@/hooks/use-entity-mutation'
 import { authClient } from '@/lib/auth/client'
 import { type UpdatePasswordFormData, updatePasswordSchema } from '@/lib/form-schemas/profile'
+import { Form } from '../ui/form'
 import { InputPassword } from '../ui/input-password'
 import { AlertDialogGeneric } from './alert-dialog-generic'
 
@@ -82,7 +83,7 @@ export function UpdatePasswordDialog({ open, onOpenChange, ...props }: UpdatePas
         </DialogHeader>
 
         <DialogPanel>
-          <form
+          <Form
             id={createFolderFormId}
             className="flex flex-col gap-4"
             aria-label="Update password form"
@@ -102,7 +103,7 @@ export function UpdatePasswordDialog({ open, onOpenChange, ...props }: UpdatePas
                     aria-invalid={fieldState.invalid}
                     disabled={updatePasswordMutation.isPending}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -121,7 +122,7 @@ export function UpdatePasswordDialog({ open, onOpenChange, ...props }: UpdatePas
                     aria-invalid={fieldState.invalid}
                     disabled={updatePasswordMutation.isPending}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -140,11 +141,11 @@ export function UpdatePasswordDialog({ open, onOpenChange, ...props }: UpdatePas
                     aria-invalid={fieldState.invalid}
                     disabled={updatePasswordMutation.isPending}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
-          </form>
+          </Form>
         </DialogPanel>
 
         <DialogFooter>

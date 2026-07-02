@@ -66,7 +66,7 @@ export function BookmarksSettings() {
       const succeeded = results.filter((r) => r.success).length
       const failed = results.filter((r) => !r.success).length
 
-      queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY_KEY] })
+      await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY_KEY] })
 
       if (failed === 0) {
         toast.success('Success', {
@@ -101,8 +101,8 @@ export function BookmarksSettings() {
       <AlertDialogGeneric
         title="Update bookmarks metadata?"
         description="It may take a while depending on the number of bookmarks you have."
-        action={() => {
-          handleUpdateMetadata({ assetsOnly })
+        action={async () => {
+          await handleUpdateMetadata({ assetsOnly })
           setUpdateMetadataDialogOpen(false)
           setAssetsOnly(false)
         }}

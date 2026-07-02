@@ -27,7 +27,7 @@ export function NavUser() {
       fetchOptions: {
         onSuccess: async () => {
           queryClient.clear()
-          navigate({ to: '/login', reloadDocument: true })
+          await navigate({ to: '/login', reloadDocument: true })
         },
         onError: (error) => {
           console.error('Error during sign out:', error)

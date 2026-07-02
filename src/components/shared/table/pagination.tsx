@@ -1,5 +1,5 @@
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
 import type { Table } from '@tanstack/react-table'
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
 import {
   Select,

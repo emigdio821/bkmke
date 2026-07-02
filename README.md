@@ -15,22 +15,26 @@ A simple, open-source, self-hosted bookmark manager.
 ## Setup
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Copy [.env.example](.env.example) to `.env` and configure:
+
 ```bash
 cp .env.example .env
 ```
 
 3. Set up database:
+
 ```bash
 npm run db:push
 npm run db:seed
 ```
 
 4. Run dev server:
+
 ```bash
 npm run dev
 ```

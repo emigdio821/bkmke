@@ -1,8 +1,8 @@
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod'
 import type { z } from 'zod'
-import { bookmarkTags } from '..'
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod'
 import type { BookmarkSelect } from './bookmarks'
 import type { TagSelect } from './tags'
+import { bookmarkTags } from '..'
 
 const bookmarkTagsSelectSchema = createSelectSchema(bookmarkTags)
 const bookmarkTagsInsertSchema = createInsertSchema(bookmarkTags)

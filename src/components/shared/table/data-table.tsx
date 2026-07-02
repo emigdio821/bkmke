@@ -71,9 +71,9 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
     data,
     columns,
     onSortingChange: setSorting,
-    onPaginationChange: (updater) => {
+    onPaginationChange: async (updater) => {
       const newPagination = typeof updater === 'function' ? updater({ pageIndex, pageSize }) : updater
-      setPagination(newPagination)
+      await setPagination(newPagination)
     },
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
@@ -106,7 +106,7 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
   useEffect(() => {
     const maxPage = Math.max(0, Math.ceil(data.length / pageSize) - 1)
     if (pageIndex > maxPage) {
-      setPagination({ pageIndex: maxPage, pageSize })
+      void setPagination({ pageIndex: maxPage, pageSize })
     }
   }, [data.length, pageIndex, pageSize, setPagination])
 

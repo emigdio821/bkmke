@@ -1,6 +1,6 @@
+import type React from 'react'
 import { IconChevronRight, IconReload, IconSearch, IconSelector } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
-import type React from 'react'
 import { useMemo } from 'react'
 import type { FolderTreeNode } from '@/api/server-functions/folders'
 import { foldersQueryOptions } from '@/api/tanstack-queries/folders'
@@ -20,8 +20,10 @@ const NULL_OPTION_LABEL = 'Select folder'
 
 export type FoldersComboboxValue = string | null
 
-interface FoldersComboboxProps
-  extends Omit<React.ComponentProps<typeof Combobox>, 'multiple' | 'value' | 'defaultValue'> {
+interface FoldersComboboxProps extends Omit<
+  React.ComponentProps<typeof Combobox>,
+  'multiple' | 'value' | 'defaultValue'
+> {
   value?: FoldersComboboxValue
   defaultValue?: FoldersComboboxValue
   includeNullOption?: boolean

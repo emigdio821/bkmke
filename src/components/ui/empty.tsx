@@ -1,29 +1,6 @@
+import type React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
-
 import { cn } from '@/lib/utils'
-
-function Empty({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      className={cn(
-        'flex min-w-0 flex-1 flex-col items-center justify-center gap-6 text-balance p-6 text-center md:p-12',
-        className,
-      )}
-      data-slot="empty"
-      {...props}
-    />
-  )
-}
-
-function EmptyHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      className={cn('flex max-w-sm flex-col items-center text-center', className)}
-      data-slot="empty-header"
-      {...props}
-    />
-  )
-}
 
 const emptyMediaVariants = cva(
   'flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0',
@@ -40,11 +17,34 @@ const emptyMediaVariants = cva(
   },
 )
 
-function EmptyMedia({
+export function Empty({ className, ...props }: React.ComponentProps<'div'>): React.ReactElement {
+  return (
+    <div
+      className={cn(
+        'flex min-w-0 flex-1 flex-col items-center justify-center gap-6 text-balance px-6 py-12 text-center md:py-20',
+        className,
+      )}
+      data-slot="empty"
+      {...props}
+    />
+  )
+}
+
+export function EmptyHeader({ className, ...props }: React.ComponentProps<'div'>): React.ReactElement {
+  return (
+    <div
+      className={cn('flex max-w-sm flex-col items-center text-center', className)}
+      data-slot="empty-header"
+      {...props}
+    />
+  )
+}
+
+export function EmptyMedia({
   className,
   variant = 'default',
   ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof emptyMediaVariants>) {
+}: React.ComponentProps<'div'> & VariantProps<typeof emptyMediaVariants>): React.ReactElement {
   return (
     <div className={cn('relative mb-6', className)} data-slot="empty-media" data-variant={variant} {...props}>
       {variant === 'icon' && (
@@ -70,13 +70,13 @@ function EmptyMedia({
   )
 }
 
-function EmptyTitle({ className, ...props }: React.ComponentProps<'div'>) {
+export function EmptyTitle({ className, ...props }: React.ComponentProps<'div'>): React.ReactElement {
   return (
     <div className={cn('font-heading font-semibold text-xl', className)} data-slot="empty-title" {...props} />
   )
 }
 
-function EmptyDescription({ className, ...props }: React.ComponentProps<'p'>) {
+export function EmptyDescription({ className, ...props }: React.ComponentProps<'p'>): React.ReactElement {
   return (
     <div
       className={cn(
@@ -89,7 +89,7 @@ function EmptyDescription({ className, ...props }: React.ComponentProps<'p'>) {
   )
 }
 
-function EmptyContent({ className, ...props }: React.ComponentProps<'div'>) {
+export function EmptyContent({ className, ...props }: React.ComponentProps<'div'>): React.ReactElement {
   return (
     <div
       className={cn(
@@ -101,5 +101,3 @@ function EmptyContent({ className, ...props }: React.ComponentProps<'div'>) {
     />
   )
 }
-
-export { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyContent, EmptyMedia }

@@ -6,12 +6,13 @@ import { z } from 'zod'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { InputPassword } from '@/components/ui/input-password'
 import { authClient } from '@/lib/auth/client'
 import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '@/lib/constants'
 import { LoaderIcon } from '../icons'
+import { Form } from '../ui/form'
 
 const loginSchema = z.object({
   email: z.email().min(1, 'Email is required'),
@@ -66,61 +67,59 @@ export function LoginFormCard() {
   return (
     <Card>
       <CardContent>
-        <form
+        <Form
           id={loginFormId}
           aria-label="Login form"
           className="flex flex-col gap-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <FieldGroup>
-            <Controller
-              name="email"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    Correo <span className="text-destructive">*</span>
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    autoComplete="email"
-                    disabled={isLoading}
-                    aria-invalid={fieldState.invalid}
-                  />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-
-            <Controller
-              name="password"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    Contraseña <span className="text-destructive">*</span>
-                  </FieldLabel>
-                  <InputPassword
-                    {...field}
-                    id={field.name}
-                    aria-invalid={fieldState.invalid}
-                    disabled={isLoading}
-                  />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-
-            {error && (
-              <Alert variant="error">
-                <IconAlertOctagon className="size-4" />
-                <AlertTitle>Something went wrong</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
+          <Controller
+            name="email"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>
+                  Correo <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id={field.name}
+                  autoComplete="email"
+                  disabled={isLoading}
+                  aria-invalid={fieldState.invalid}
+                />
+                <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
+              </Field>
             )}
-          </FieldGroup>
-        </form>
+          />
+
+          <Controller
+            name="password"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>
+                  Contraseña <span className="text-destructive">*</span>
+                </FieldLabel>
+                <InputPassword
+                  {...field}
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
+                  disabled={isLoading}
+                />
+                <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
+              </Field>
+            )}
+          />
+
+          {error && (
+            <Alert variant="error">
+              <IconAlertOctagon className="size-4" />
+              <AlertTitle>Something went wrong</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+        </Form>
       </CardContent>
 
       <CardFooter className="pt-4 text-center">

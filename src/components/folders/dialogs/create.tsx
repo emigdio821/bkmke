@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
+import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useEntityMutation } from '@/hooks/use-entity-mutation'
 import { FOLDER_NAME_MAX_LENGTH } from '@/lib/constants'
@@ -71,7 +72,7 @@ export function CreateFolderDialog({ open, onOpenChange, ...props }: CreateFolde
         </DialogHeader>
 
         <DialogPanel>
-          <form
+          <Form
             id={createFolderFormId}
             className="flex flex-col gap-4"
             aria-label="Create folder form"
@@ -88,8 +89,9 @@ export function CreateFolderDialog({ open, onOpenChange, ...props }: CreateFolde
                   <Input
                     {...field}
                     id={field.name}
-                    maxLength={FOLDER_NAME_MAX_LENGTH}
+                    autoComplete="off"
                     aria-invalid={fieldState.invalid}
+                    maxLength={FOLDER_NAME_MAX_LENGTH}
                     disabled={createFolderMutation.isPending}
                   />
                   <FieldDescription>
@@ -98,7 +100,7 @@ export function CreateFolderDialog({ open, onOpenChange, ...props }: CreateFolde
                     </span>{' '}
                     characters left
                   </FieldDescription>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -114,11 +116,11 @@ export function CreateFolderDialog({ open, onOpenChange, ...props }: CreateFolde
                     value={field.value}
                     onValueChange={(value) => field.onChange(value)}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
-          </form>
+          </Form>
         </DialogPanel>
 
         <DialogFooter>

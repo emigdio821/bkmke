@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
+import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useEntityMutation } from '@/hooks/use-entity-mutation'
 import { TAG_NAME_MAX_LENGTH } from '@/lib/constants'
@@ -69,7 +70,7 @@ export function CreateTagDialog({ open, onOpenChange, ...props }: CreateTagDialo
         </DialogHeader>
 
         <DialogPanel>
-          <form
+          <Form
             id={createTagFormId}
             className="flex flex-col gap-4"
             aria-label="Create tag form"
@@ -94,11 +95,11 @@ export function CreateTagDialog({ open, onOpenChange, ...props }: CreateTagDialo
                     <span className="tabular-nums">{TAG_NAME_MAX_LENGTH - (field.value?.length ?? 0)}</span>{' '}
                     characters left
                   </FieldDescription>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
-          </form>
+          </Form>
         </DialogPanel>
 
         <DialogFooter>

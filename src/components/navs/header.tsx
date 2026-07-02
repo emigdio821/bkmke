@@ -55,8 +55,8 @@ export function HeaderNav({ ...props }: React.ComponentProps<typeof SidebarGroup
           <SidebarMenuButton
             className={cn(totalBookmarks > 0 && 'pe-10')}
             isActive={filters.showAll === true}
-            onClick={() => {
-              setFilters({
+            onClick={async () => {
+              await setFilters({
                 showAll: true,
                 showFavorites: false,
               })
@@ -76,8 +76,8 @@ export function HeaderNav({ ...props }: React.ComponentProps<typeof SidebarGroup
           <SidebarMenuButton
             className={cn(favoritesCount > 0 && 'pe-10')}
             isActive={filters.showFavorites === true}
-            onClick={() => {
-              setFilters({
+            onClick={async () => {
+              await setFilters({
                 showAll: false,
                 showFavorites: true,
               })

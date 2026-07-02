@@ -63,7 +63,7 @@ export async function processConcurrently<T, R>(
       })
 
     const wrapped = promise.then(() => {
-      executing.splice(executing.indexOf(wrapped), 1)
+      void executing.splice(executing.indexOf(wrapped), 1)
     })
 
     executing.push(wrapped)

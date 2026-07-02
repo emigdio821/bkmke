@@ -1,8 +1,8 @@
 import { IconWorld } from '@tabler/icons-react'
 import { useState } from 'react'
+import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { cn, hasWhiteSpaces } from '@/lib/utils'
 import { BookmarkDetailsDialog } from '../dialogs/details'
 

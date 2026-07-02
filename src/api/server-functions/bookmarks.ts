@@ -1,9 +1,9 @@
 import { createServerFn } from '@tanstack/react-start'
 import { and, eq, inArray } from 'drizzle-orm'
-import { db } from '@/db'
-import { bookmarks, bookmarkTags } from '@/db/schema'
 import type { Bookmark, BookmarkInsert } from '@/db/schema/zod/bookmarks'
 import type { CreateBookmarkFormData, UpdateBookmarkFormData } from '@/lib/form-schemas/bookmarks'
+import { db } from '@/db'
+import { bookmarks, bookmarkTags } from '@/db/schema'
 import { processConcurrently } from '@/lib/utils'
 import { authMiddleware } from '@/middleware/auth'
 import { getBookmarkMetadata } from './bookmark-metadata'
@@ -31,7 +31,7 @@ export const getBookmarks = createServerFn({ method: 'GET' })
 
 export const createBookmark = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: CreateBookmarkFormData) => data)
+  .validator((data: CreateBookmarkFormData) => data)
   .handler(async ({ data, context }): Promise<void> => {
     const session = context.session
 
@@ -69,7 +69,7 @@ export interface UpdateBookmarkTagsBatchResult {
 
 export const updateBookmarkTagsBatch = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: { bookmarkIds: string[]; tagIds: string[] }) => data)
+  .validator((data: { bookmarkIds: string[]; tagIds: string[] }) => data)
   .handler(async ({ data, context }): Promise<UpdateBookmarkTagsBatchResult[]> => {
     const session = context.session
     const { bookmarkIds, tagIds } = data
@@ -119,7 +119,7 @@ export const updateBookmarkTagsBatch = createServerFn({ method: 'POST' })
 
 export const updateBookmark = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: { id: string; data: UpdateBookmarkFormData }) => data)
+  .validator((data: { id: string; data: UpdateBookmarkFormData }) => data)
   .handler(async ({ data }): Promise<void> => {
     const { id, data: formData } = data
     const { tags, ...bookmark } = formData
@@ -140,7 +140,7 @@ export const updateBookmark = createServerFn({ method: 'POST' })
 
 export const deleteBookmark = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: string) => data)
+  .validator((data: string) => data)
   .handler(async ({ data }): Promise<void> => {
     await db.delete(bookmarks).where(eq(bookmarks.id, data))
   })
@@ -153,7 +153,7 @@ export interface DeleteBookmarksBatchResult {
 
 export const deleteBookmarksBatch = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: string[]) => data)
+  .validator((data: string[]) => data)
   .handler(async ({ data, context }): Promise<DeleteBookmarksBatchResult[]> => {
     const session = context.session
     const bookmarkIds = data
@@ -183,7 +183,7 @@ export const deleteBookmarksBatch = createServerFn({ method: 'POST' })
 
 export const toggleFavoriteBookmark = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: { id: string; isFavorite: boolean }) => data)
+  .validator((data: { id: string; isFavorite: boolean }) => data)
   .handler(async ({ data, context }): Promise<void> => {
     const session = context.session
     await db
@@ -231,7 +231,7 @@ export interface CreateBookmarksBatchResult {
 
 export const createBookmarksBatch = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: CreateBookmarkFormData[]) => data)
+  .validator((data: CreateBookmarkFormData[]) => data)
   .handler(async ({ data, context }): Promise<CreateBookmarksBatchResult[]> => {
     const session = context.session
     const bookmarksData = data
@@ -286,7 +286,7 @@ export const createBookmarksBatch = createServerFn({ method: 'POST' })
 
 export const resyncBookmarkMetadata = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: { bookmarkId: string; options: { assetsOnly: boolean } }) => data)
+  .validator((data: { bookmarkId: string; options: { assetsOnly: boolean } }) => data)
   .handler(async ({ data, context }): Promise<void> => {
     const session = context.session
     const { bookmarkId, options } = data
@@ -325,7 +325,7 @@ export interface ResyncBookmarksMetadataBatchResult {
 
 export const resyncBookmarksMetadataBatch = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: { bookmarkIds: string[]; options: { assetsOnly: boolean } }) => data)
+  .validator((data: { bookmarkIds: string[]; options: { assetsOnly: boolean } }) => data)
   .handler(async ({ data, context }): Promise<ResyncBookmarksMetadataBatchResult[]> => {
     const session = context.session
     const { bookmarkIds, options } = data
@@ -379,7 +379,7 @@ export interface MoveBookmarksToFolderBatchResult {
 
 export const moveBookmarksToFolderBatch = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: { bookmarkIds: string[]; folderId: string | null }) => data)
+  .validator((data: { bookmarkIds: string[]; folderId: string | null }) => data)
   .handler(async ({ data, context }): Promise<MoveBookmarksToFolderBatchResult[]> => {
     const session = context.session
     const { bookmarkIds, folderId } = data
@@ -419,7 +419,7 @@ export interface ToggleFavoriteBookmarksBatchResult {
 
 export const toggleFavoriteBookmarksBatch = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: { bookmarkIds: string[]; isFavorite: boolean }) => data)
+  .validator((data: { bookmarkIds: string[]; isFavorite: boolean }) => data)
   .handler(async ({ data, context }): Promise<ToggleFavoriteBookmarksBatchResult[]> => {
     const session = context.session
     const { bookmarkIds, isFavorite } = data

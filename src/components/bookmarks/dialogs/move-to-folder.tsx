@@ -1,9 +1,10 @@
+import type React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type React from 'react'
 import { useId } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { moveBookmarksToFolderBatch } from '@/api/server-functions/bookmarks'
 import { BOOKMARKS_QUERY_KEY } from '@/api/tanstack-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/api/tanstack-queries/folders'
@@ -21,7 +22,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
-import type { Bookmark } from '@/db/schema/zod/bookmarks'
+import { Form } from '@/components/ui/form'
 import { type MoveBookmarksToFolderFormData, moveBookmarksToFolderSchema } from '@/lib/form-schemas/bookmarks'
 
 interface MoveBookmarksToFolderDialogProps extends React.ComponentProps<typeof Dialog> {
@@ -76,7 +77,7 @@ export function MoveBookmarksToFolderDialog({
 
       keysToInvalidate().forEach((key) => {
         const queryKey = Array.isArray(key) ? key : [key]
-        queryClient.invalidateQueries({ queryKey })
+        void queryClient.invalidateQueries({ queryKey })
       })
 
       if (failed === 0) {
@@ -135,7 +136,7 @@ export function MoveBookmarksToFolderDialog({
         </DialogHeader>
 
         <DialogPanel>
-          <form
+          <Form
             id={moveBookmarksFormId}
             className="flex flex-col gap-4"
             aria-label="Move bookmarks to folder form"
@@ -154,11 +155,11 @@ export function MoveBookmarksToFolderDialog({
                       field.onChange(value)
                     }}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
-          </form>
+          </Form>
         </DialogPanel>
 
         <DialogFooter>

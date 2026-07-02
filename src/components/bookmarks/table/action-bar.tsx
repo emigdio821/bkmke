@@ -1,14 +1,14 @@
+import type { Table } from '@tanstack/react-table'
 import { IconFolder, IconHeart, IconTag, IconTrash, IconX } from '@tabler/icons-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { Table } from '@tanstack/react-table'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { deleteBookmarksBatch, toggleFavoriteBookmarksBatch } from '@/api/server-functions/bookmarks'
 import { BOOKMARKS_QUERY_KEY } from '@/api/tanstack-queries/bookmarks'
 import { AlertDialogGeneric } from '@/components/shared/alert-dialog-generic'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { MoveBookmarksToFolderDialog } from '../dialogs/move-to-folder'
 import { UpdateBookmarkTagsDialog } from '../dialogs/update-tags'
 
@@ -32,11 +32,11 @@ export function BookmarksActionBar({ table }: BookmarksActionBarProps) {
     mutationFn: async (bookmarkIds: string[]) => {
       return await deleteBookmarksBatch({ data: bookmarkIds })
     },
-    onSuccess: (results) => {
+    onSuccess: async (results) => {
       const succeeded = results.filter((r) => r.success).length
       const failed = results.filter((r) => !r.success).length
 
-      queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY_KEY] })
+      await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY_KEY] })
 
       if (failed === 0) {
         toast.success('Success', {
@@ -68,11 +68,11 @@ export function BookmarksActionBar({ table }: BookmarksActionBarProps) {
     mutationFn: async ({ bookmarkIds, isFavorite }: { bookmarkIds: string[]; isFavorite: boolean }) => {
       return await toggleFavoriteBookmarksBatch({ data: { bookmarkIds, isFavorite } })
     },
-    onSuccess: (results, variables) => {
+    onSuccess: async (results, variables) => {
       const succeeded = results.filter((r) => r.success).length
       const failed = results.filter((r) => !r.success).length
 
-      queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY_KEY] })
+      await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY_KEY] })
 
       if (failed === 0) {
         toast.success('Success', {

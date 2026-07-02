@@ -14,15 +14,21 @@ interface BaseEntityMutationConfig<TData, TVariables, TQueryData = TData> {
   }
 }
 
-interface EntityMutationConfigWithToast<TData, TVariables, TQueryData = TData>
-  extends BaseEntityMutationConfig<TData, TVariables, TQueryData> {
+interface EntityMutationConfigWithToast<
+  TData,
+  TVariables,
+  TQueryData = TData,
+> extends BaseEntityMutationConfig<TData, TVariables, TQueryData> {
   showSuccessToast?: true
   successTitle?: React.ReactNode
   successDescription?: React.ReactNode
 }
 
-interface EntityMutationConfigWithoutToast<TData, TVariables, TQueryData = TData>
-  extends BaseEntityMutationConfig<TData, TVariables, TQueryData> {
+interface EntityMutationConfigWithoutToast<
+  TData,
+  TVariables,
+  TQueryData = TData,
+> extends BaseEntityMutationConfig<TData, TVariables, TQueryData> {
   showSuccessToast: false
   successTitle?: React.ReactNode
   successDescription?: React.ReactNode
@@ -68,7 +74,7 @@ export function useEntityMutation<TData = unknown, TVariables = unknown, TQueryD
     onSuccess: (data) => {
       invalidateKeys.forEach((key) => {
         const queryKey = Array.isArray(key) ? key : [key]
-        queryClient.invalidateQueries({ queryKey })
+        void queryClient.invalidateQueries({ queryKey })
       })
 
       if (showSuccessToast) {
@@ -92,9 +98,9 @@ export function useEntityMutation<TData = unknown, TVariables = unknown, TQueryD
 
       customOnError?.(error)
     },
-    onSettled: () => {
+    onSettled: async () => {
       if (optimisticUpdate) {
-        queryClient.invalidateQueries({ queryKey: optimisticUpdate.queryKey })
+        await queryClient.invalidateQueries({ queryKey: optimisticUpdate.queryKey })
       }
     },
   })

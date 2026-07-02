@@ -1,13 +1,23 @@
+'use client'
+
+import type * as React from 'react'
 import { Field as FieldPrimitive } from '@base-ui/react/field'
 import { mergeProps } from '@base-ui/react/merge-props'
 import { cn } from '@/lib/utils'
 
-type TextareaProps = React.ComponentProps<'textarea'> & {
-  size?: 'sm' | 'default' | 'lg' | number
-  unstyled?: boolean
-}
+export type TextareaProps = React.ComponentPropsWithoutRef<'textarea'> &
+  React.RefAttributes<HTMLTextAreaElement> & {
+    size?: 'sm' | 'default' | 'lg' | number
+    unstyled?: boolean
+  }
 
-function Textarea({ className, size = 'default', unstyled = false, ...props }: TextareaProps) {
+export function Textarea({
+  className,
+  size = 'default',
+  unstyled = false,
+  ref,
+  ...props
+}: TextareaProps): React.ReactElement {
   return (
     <span
       className={
@@ -21,7 +31,13 @@ function Textarea({ className, size = 'default', unstyled = false, ...props }: T
       data-slot="textarea-control"
     >
       <FieldPrimitive.Control
-        render={(defaultProps) => (
+        ref={ref}
+        value={props.value}
+        defaultValue={props.defaultValue}
+        disabled={props.disabled}
+        id={props.id}
+        name={props.name}
+        render={(defaultProps: React.ComponentProps<'textarea'>) => (
           <textarea
             className={cn(
               'field-sizing-content min-h-17.5 w-full rounded-[inherit] px-[calc(--spacing(3)-1px)] py-[calc(--spacing(1.5)-1px)] outline-none max-sm:min-h-20.5',
@@ -38,4 +54,4 @@ function Textarea({ className, size = 'default', unstyled = false, ...props }: T
   )
 }
 
-export { Textarea, type TextareaProps }
+export { FieldPrimitive }

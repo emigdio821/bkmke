@@ -1,13 +1,23 @@
+'use client'
+
+import type * as React from 'react'
 import { Input as InputPrimitive } from '@base-ui/react/input'
 import { cn } from '@/lib/utils'
 
-type InputProps = Omit<InputPrimitive.Props & React.RefAttributes<HTMLInputElement>, 'size'> & {
+export type InputProps = Omit<InputPrimitive.Props & React.RefAttributes<HTMLInputElement>, 'size'> & {
   size?: 'sm' | 'default' | 'lg' | number
   unstyled?: boolean
   nativeInput?: boolean
 }
 
-function Input({ className, size = 'default', unstyled = false, nativeInput = false, ...props }: InputProps) {
+export function Input({
+  className,
+  size = 'default',
+  unstyled = false,
+  nativeInput = false,
+  style,
+  ...props
+}: InputProps): React.ReactElement {
   const inputClassName = cn(
     'h-8.5 w-full min-w-0 rounded-[inherit] px-[calc(--spacing(3)-1px)] leading-8.5 outline-none [transition:background-color_5000000s_ease-in-out_0s] placeholder:text-muted-foreground/72 sm:h-7.5 sm:leading-7.5',
     size === 'sm' && 'h-7.5 px-[calc(--spacing(2.5)-1px)] leading-7.5 sm:h-6.5 sm:leading-6.5',
@@ -35,6 +45,7 @@ function Input({ className, size = 'default', unstyled = false, nativeInput = fa
           className={inputClassName}
           data-slot="input"
           size={typeof size === 'number' ? size : undefined}
+          style={typeof style === 'function' ? undefined : style}
           {...props}
         />
       ) : (
@@ -42,6 +53,7 @@ function Input({ className, size = 'default', unstyled = false, nativeInput = fa
           className={inputClassName}
           data-slot="input"
           size={typeof size === 'number' ? size : undefined}
+          style={style}
           {...props}
         />
       )}
@@ -49,4 +61,4 @@ function Input({ className, size = 'default', unstyled = false, nativeInput = fa
   )
 }
 
-export { Input, type InputProps }
+export { InputPrimitive }

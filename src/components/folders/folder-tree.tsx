@@ -30,9 +30,9 @@ export function FolderTree({ folder }: { folder: FolderTreeNode }) {
             <SidebarMenuButton
               className={cn(hasFolders && 'pe-10')}
               isActive={selectedFolder === folder.id}
-              onClick={() => {
+              onClick={async () => {
                 if (isMobile) setOpenMobile(false)
-                setSelectedFolder((prev) => (prev === folder.id ? '' : folder.id))
+                await setSelectedFolder((prev) => (prev === folder.id ? '' : folder.id))
               }}
             >
               <IconFolder />
@@ -64,9 +64,9 @@ export function FolderTree({ folder }: { folder: FolderTreeNode }) {
 
             <SidebarMenuButton
               isActive={selectedFolder === folder.id}
-              onClick={() => {
+              onClick={async () => {
                 if (isMobile) setOpenMobile(false)
-                setSelectedFolder((prev) => (prev === folder.id ? '' : folder.id))
+                await setSelectedFolder((prev) => (prev === folder.id ? '' : folder.id))
               }}
               className="truncate ps-7"
             >

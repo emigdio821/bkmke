@@ -1,21 +1,24 @@
+'use client'
+
+import type React from 'react'
 import { Collapsible as CollapsiblePrimitive } from '@base-ui/react/collapsible'
 import { cn } from '@/lib/utils'
 
-function Collapsible({ ...props }: CollapsiblePrimitive.Root.Props) {
+export function Collapsible({ ...props }: CollapsiblePrimitive.Root.Props): React.ReactElement {
   return <CollapsiblePrimitive.Root data-slot="collapsible" {...props} />
 }
 
-function CollapsibleTrigger({ className, ...props }: CollapsiblePrimitive.Trigger.Props) {
-  return (
-    <CollapsiblePrimitive.Trigger
-      className={cn('cursor-pointer', className)}
-      data-slot="collapsible-trigger"
-      {...props}
-    />
-  )
+export function CollapsibleTrigger({
+  className,
+  ...props
+}: CollapsiblePrimitive.Trigger.Props): React.ReactElement {
+  return <CollapsiblePrimitive.Trigger className={className} data-slot="collapsible-trigger" {...props} />
 }
 
-function CollapsiblePanel({ className, ...props }: CollapsiblePrimitive.Panel.Props) {
+export function CollapsiblePanel({
+  className,
+  ...props
+}: CollapsiblePrimitive.Panel.Props): React.ReactElement {
   return (
     <CollapsiblePrimitive.Panel
       className={cn(
@@ -28,4 +31,4 @@ function CollapsiblePanel({ className, ...props }: CollapsiblePrimitive.Panel.Pr
   )
 }
 
-export { Collapsible, CollapsibleTrigger, CollapsiblePanel, CollapsiblePanel as CollapsibleContent }
+export { CollapsiblePanel as CollapsibleContent, CollapsiblePrimitive }

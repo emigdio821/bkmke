@@ -1,6 +1,6 @@
+import type React from 'react'
 import { IconReload, IconSearch, IconSelector } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
-import type React from 'react'
 import { useMemo } from 'react'
 import { tagsQueryOptions } from '@/api/tanstack-queries/tags'
 import { Button } from '@/components/ui/button'
@@ -17,8 +17,10 @@ import {
 
 export type TagsComboboxValue = string[] | null
 
-interface TagsComboboxProps
-  extends Omit<React.ComponentProps<typeof Combobox>, 'multiple' | 'value' | 'defaultValue'> {
+interface TagsComboboxProps extends Omit<
+  React.ComponentProps<typeof Combobox>,
+  'multiple' | 'value' | 'defaultValue'
+> {
   value?: TagsComboboxValue
   defaultValue?: TagsComboboxValue
 }

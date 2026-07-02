@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { IconInfoCircle } from '@tabler/icons-react'
 import { useId } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { updateBookmark } from '@/api/server-functions/bookmarks'
 import { BOOKMARKS_QUERY_KEY } from '@/api/tanstack-queries/bookmarks'
 import { FOLDERS_QUERY_KEY } from '@/api/tanstack-queries/folders'
@@ -21,12 +22,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
+import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupTextarea } from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Switch } from '@/components/ui/switch'
-import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { useEntityMutation } from '@/hooks/use-entity-mutation'
 import { BOOKMARK_NAME_MAX_LENGTH, DESCRIPTION_MAX_LENGTH } from '@/lib/constants'
 import { type UpdateBookmarkFormData, updateBookmarkSchema } from '@/lib/form-schemas/bookmarks'
@@ -117,7 +118,7 @@ export function EditBookmarkDialog({ bookmark, open, onOpenChange, ...props }: E
         </DialogHeader>
 
         <DialogPanel>
-          <form
+          <Form
             id={editBookmarkFormId}
             className="flex flex-col gap-4"
             aria-label="Edit bookmark form"
@@ -138,7 +139,7 @@ export function EditBookmarkDialog({ bookmark, open, onOpenChange, ...props }: E
                     aria-invalid={fieldState.invalid}
                     disabled={updateBookmarkMutation.isPending}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -181,7 +182,7 @@ export function EditBookmarkDialog({ bookmark, open, onOpenChange, ...props }: E
                     </span>{' '}
                     characters left
                   </FieldDescription>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -226,7 +227,7 @@ export function EditBookmarkDialog({ bookmark, open, onOpenChange, ...props }: E
                     </span>{' '}
                     characters left
                   </FieldDescription>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -242,7 +243,7 @@ export function EditBookmarkDialog({ bookmark, open, onOpenChange, ...props }: E
                     value={field.value}
                     onValueChange={(value) => field.onChange(value)}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -260,7 +261,7 @@ export function EditBookmarkDialog({ bookmark, open, onOpenChange, ...props }: E
                       field.onChange(value || [])
                     }}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -290,11 +291,11 @@ export function EditBookmarkDialog({ bookmark, open, onOpenChange, ...props }: E
                       }}
                     />
                   </Label>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
-          </form>
+          </Form>
         </DialogPanel>
 
         <DialogFooter>

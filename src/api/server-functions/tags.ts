@@ -1,9 +1,9 @@
 import { createServerFn } from '@tanstack/react-start'
 import { and, count, eq } from 'drizzle-orm'
-import { db } from '@/db'
-import { bookmarkTags, tags } from '@/db/schema'
 import type { TagWithBookmarkCount } from '@/db/schema/zod/tags'
 import type { UpdateTagFormData } from '@/lib/form-schemas/tags'
+import { db } from '@/db'
+import { bookmarkTags, tags } from '@/db/schema'
 import { authMiddleware } from '@/middleware/auth'
 
 export const getTags = createServerFn({ method: 'GET' })
@@ -31,7 +31,7 @@ export const getTags = createServerFn({ method: 'GET' })
 
 export const createTag = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: string) => data)
+  .validator((data: string) => data)
   .handler(async ({ data, context }): Promise<void> => {
     const session = context.session
     await db.insert(tags).values({ name: data, userId: session.user.id }).returning()
@@ -39,7 +39,7 @@ export const createTag = createServerFn({ method: 'POST' })
 
 export const updateTag = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: UpdateTagFormData) => data)
+  .validator((data: UpdateTagFormData) => data)
   .handler(async ({ data, context }): Promise<void> => {
     const session = context.session
     await db
@@ -50,7 +50,7 @@ export const updateTag = createServerFn({ method: 'POST' })
 
 export const deleteTag = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: string) => data)
+  .validator((data: string) => data)
   .handler(async ({ data, context }): Promise<void> => {
     const session = context.session
     await db.delete(tags).where(and(eq(tags.id, data), eq(tags.userId, session.user.id)))

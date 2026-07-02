@@ -1,5 +1,5 @@
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod'
 import type { z } from 'zod'
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod'
 import { folders } from '..'
 
 const folderSelectSchema = createSelectSchema(folders)

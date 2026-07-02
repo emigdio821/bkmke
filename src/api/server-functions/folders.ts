@@ -1,9 +1,9 @@
 import { createServerFn } from '@tanstack/react-start'
 import { and, count, eq } from 'drizzle-orm'
-import { db } from '@/db'
-import { bookmarks, folders } from '@/db/schema'
 import type { FolderSelect } from '@/db/schema/zod/folders'
 import type { CreateFolderFormData, UpdateFolderFormData } from '@/lib/form-schemas/folders'
+import { db } from '@/db'
+import { bookmarks, folders } from '@/db/schema'
 import { authMiddleware } from '@/middleware/auth'
 
 export type FolderTreeNode = FolderSelect & {
@@ -68,7 +68,7 @@ export const getFolders = createServerFn({ method: 'GET' })
 
 export const createFolder = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: CreateFolderFormData) => data)
+  .validator((data: CreateFolderFormData) => data)
   .handler(async ({ data, context }): Promise<void> => {
     const session = context.session
     await db.insert(folders).values({
@@ -80,7 +80,7 @@ export const createFolder = createServerFn({ method: 'POST' })
 
 export const updateFolder = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: UpdateFolderFormData) => data)
+  .validator((data: UpdateFolderFormData) => data)
   .handler(async ({ data, context }): Promise<void> => {
     const session = context.session
     await db
@@ -94,7 +94,7 @@ export const updateFolder = createServerFn({ method: 'POST' })
 
 export const deleteFolder = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .inputValidator((data: string) => data)
+  .validator((data: string) => data)
   .handler(async ({ data, context }): Promise<void> => {
     const session = context.session
     await db.delete(folders).where(and(eq(folders.id, data), eq(folders.userId, session.user.id)))

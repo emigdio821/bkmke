@@ -1,7 +1,7 @@
+import type React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconUpload } from '@tabler/icons-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type React from 'react'
 import { useId, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -24,6 +24,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
+import { Form } from '@/components/ui/form'
 import { InputGroup, InputGroupAddon, InputGroupTextarea } from '@/components/ui/input-group'
 import {
   Progress,
@@ -79,11 +80,11 @@ export function ImportBookmarkDialog({ open, onOpenChange, ...props }: ImportBoo
 
       return allResults
     },
-    onSuccess: (results) => {
+    onSuccess: async (results) => {
       const succeeded = results.filter((r) => r.success).length
       const failed = results.filter((r) => !r.success).length
 
-      queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY_KEY] })
+      await queryClient.invalidateQueries({ queryKey: [BOOKMARKS_QUERY_KEY] })
 
       if (failed === 0) {
         toast.success('Success', {
@@ -200,7 +201,7 @@ export function ImportBookmarkDialog({ open, onOpenChange, ...props }: ImportBoo
             onChange={handleFileChange}
             aria-label="Upload .txt file"
           />
-          <form
+          <Form
             id={importBookmarksFormId}
             className="flex flex-col gap-4"
             aria-label="Create bookmark form"
@@ -254,7 +255,7 @@ export function ImportBookmarkDialog({ open, onOpenChange, ...props }: ImportBoo
                       </Tooltip>
                     </InputGroupAddon>
                   </InputGroup>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -271,7 +272,7 @@ export function ImportBookmarkDialog({ open, onOpenChange, ...props }: ImportBoo
                     disabled={batchImportMutation.isPending}
                     onValueChange={(value) => field.onChange(value)}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -290,11 +291,11 @@ export function ImportBookmarkDialog({ open, onOpenChange, ...props }: ImportBoo
                       field.onChange(value || [])
                     }}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
-          </form>
+          </Form>
 
           {batchImportMutation.isPending && (
             <Progress className="mt-4" value={progress}>

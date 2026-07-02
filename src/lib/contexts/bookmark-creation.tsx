@@ -19,7 +19,7 @@ interface BookmarkCreationProviderProps {
   value: BookmarkCreationContextValue
 }
 
-export function BookmarkCreationProvider({ children, value = {} }: BookmarkCreationProviderProps) {
+export function BookmarkCreationProvider({ children, value }: BookmarkCreationProviderProps) {
   return <BookmarkCreationContext.Provider value={value}>{children}</BookmarkCreationContext.Provider>
 }
 

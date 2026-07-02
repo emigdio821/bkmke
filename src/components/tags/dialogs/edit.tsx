@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useId } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import type { TagWithBookmarkCount } from '@/db/schema/zod/tags'
 import { updateTag } from '@/api/server-functions/tags'
 import { TAGS_QUERY_KEY } from '@/api/tanstack-queries/tags'
 import { LoaderIcon } from '@/components/icons'
@@ -16,8 +17,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
+import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import type { TagWithBookmarkCount } from '@/db/schema/zod/tags'
 import { useEntityMutation } from '@/hooks/use-entity-mutation'
 import { TAG_NAME_MAX_LENGTH } from '@/lib/constants'
 import { type UpdateTagFormData, updateTagSchema } from '@/lib/form-schemas/tags'
@@ -74,7 +75,7 @@ export function EditTagDialog({ open, onOpenChange, tag, ...props }: EditTagDial
         </DialogHeader>
 
         <DialogPanel>
-          <form
+          <Form
             id={editTagFormId}
             className="flex flex-col gap-4"
             aria-label="Edit tag form"
@@ -99,11 +100,11 @@ export function EditTagDialog({ open, onOpenChange, tag, ...props }: EditTagDial
                     <span className="tabular-nums">{TAG_NAME_MAX_LENGTH - (field.value?.length ?? 0)}</span>{' '}
                     characters left
                   </FieldDescription>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
-          </form>
+          </Form>
         </DialogPanel>
 
         <DialogFooter>

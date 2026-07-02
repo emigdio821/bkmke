@@ -1,16 +1,16 @@
 import { IconEdit, IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
+import type { TagWithBookmarkCount } from '@/db/schema/zod/tags'
 import { deleteTag } from '@/api/server-functions/tags'
 import { TAGS_QUERY_KEY } from '@/api/tanstack-queries/tags'
-import type { TagWithBookmarkCount } from '@/db/schema/zod/tags'
 import { useEntityMutation } from '@/hooks/use-entity-mutation'
 import { AlertDialogGeneric } from '../shared/alert-dialog-generic'
 import {
   ContextMenu,
-  ContextMenuContent,
+  ContextMenuPopup,
   ContextMenuGroup,
   ContextMenuItem,
-  ContextMenuLabel,
+  ContextMenuGroupLabel,
   ContextMenuTrigger,
 } from '../ui/context-menu'
 import { EditTagDialog } from './dialogs/edit'
@@ -60,9 +60,9 @@ export function TagsActionsCtxMenu({ tag, trigger }: TagsActionsCtxMenuProps) {
 
       <ContextMenu>
         <ContextMenuTrigger>{trigger}</ContextMenuTrigger>
-        <ContextMenuContent>
+        <ContextMenuPopup>
           <ContextMenuGroup>
-            <ContextMenuLabel>{tag.name}</ContextMenuLabel>
+            <ContextMenuGroupLabel>{tag.name}</ContextMenuGroupLabel>
             <ContextMenuItem onClick={() => setEditDialogOpen(true)}>
               <IconEdit />
               Edit
@@ -71,7 +71,7 @@ export function TagsActionsCtxMenu({ tag, trigger }: TagsActionsCtxMenuProps) {
               <IconTrash /> Delete
             </ContextMenuItem>
           </ContextMenuGroup>
-        </ContextMenuContent>
+        </ContextMenuPopup>
       </ContextMenu>
     </>
   )

@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
+import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useEntityMutation } from '@/hooks/use-entity-mutation'
 import { FOLDER_NAME_MAX_LENGTH } from '@/lib/constants'
@@ -75,7 +76,7 @@ export function EditFolderDialog({ open, onOpenChange, folder, ...props }: EditF
         </DialogHeader>
 
         <DialogPanel>
-          <form
+          <Form
             id={editFolderFormId}
             className="flex flex-col gap-4"
             aria-label="Edit folder form"
@@ -102,7 +103,7 @@ export function EditFolderDialog({ open, onOpenChange, folder, ...props }: EditF
                     </span>{' '}
                     characters left
                   </FieldDescription>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -119,11 +120,11 @@ export function EditFolderDialog({ open, onOpenChange, folder, ...props }: EditF
                     excludeOptions={[folder.id]}
                     onValueChange={(value) => field.onChange(value)}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
-          </form>
+          </Form>
         </DialogPanel>
 
         <DialogFooter>

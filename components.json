@@ -1,27 +1,25 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "aliases": {
-    "components": "@/components",
-    "hooks": "@/hooks",
-    "lib": "@/lib",
-    "ui": "@/components/ui",
-    "utils": "@/lib/utils"
-  },
-  "iconLibrary": "tabler",
-  "menuAccent": "subtle",
-  "menuColor": "default",
-  "registries": {
-    "@coss": "https://coss.com/ui/r/{name}.json"
-  },
-  "rsc": true,
-  "rtl": false,
-  "style": "base-nova",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
   "tailwind": {
-    "baseColor": "neutral",
     "config": "",
     "css": "src/styles.css",
+    "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
-  "tsx": true
+  "iconLibrary": "lucide",
+  "rtl": false,
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "registries": {
+    "@coss": "https://coss.com/ui/r/{name}.json"
+  }
 }

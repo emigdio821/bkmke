@@ -1,6 +1,6 @@
+import type React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconInfoCircle } from '@tabler/icons-react'
-import type React from 'react'
 import { Activity, useId } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { createBookmark } from '@/api/server-functions/bookmarks'
@@ -22,6 +22,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
+import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupTextarea } from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
@@ -101,7 +102,7 @@ export function CreateBookmarkDialog({ open, onOpenChange, ...props }: CreateMan
         </DialogHeader>
 
         <DialogPanel>
-          <form
+          <Form
             id={createBookmarkFormId}
             className="flex flex-col gap-4"
             aria-label="Create bookmark form"
@@ -121,7 +122,7 @@ export function CreateBookmarkDialog({ open, onOpenChange, ...props }: CreateMan
                     aria-invalid={fieldState.invalid}
                     disabled={createBookmarkMutation.isPending}
                   />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -164,7 +165,7 @@ export function CreateBookmarkDialog({ open, onOpenChange, ...props }: CreateMan
                     </span>{' '}
                     characters left
                   </FieldDescription>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -209,7 +210,7 @@ export function CreateBookmarkDialog({ open, onOpenChange, ...props }: CreateMan
                     </span>{' '}
                     characters left
                   </FieldDescription>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                 </Field>
               )}
             />
@@ -226,7 +227,7 @@ export function CreateBookmarkDialog({ open, onOpenChange, ...props }: CreateMan
                       value={field.value}
                       onValueChange={(value) => field.onChange(value)}
                     />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                   </Field>
                 )}
               />
@@ -246,7 +247,7 @@ export function CreateBookmarkDialog({ open, onOpenChange, ...props }: CreateMan
                         field.onChange(value || [])
                       }}
                     />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                   </Field>
                 )}
               />
@@ -281,12 +282,12 @@ export function CreateBookmarkDialog({ open, onOpenChange, ...props }: CreateMan
                         }}
                       />
                     </Label>
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    <FieldError match={!!fieldState.error}>{fieldState.error?.message}</FieldError>
                   </Field>
                 )}
               />
             </Activity>
-          </form>
+          </Form>
         </DialogPanel>
 
         <DialogFooter>

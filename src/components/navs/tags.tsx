@@ -92,9 +92,9 @@ export function NavTags({ ...props }: React.ComponentProps<typeof SidebarGroup>)
                     <button
                       type="button"
                       className="text-xs"
-                      onClick={() => {
+                      onClick={async () => {
                         if (isMobile) setOpenMobile(false)
-                        setSelectedTags((prev) => {
+                        await setSelectedTags((prev) => {
                           if (prev.includes(tag.id)) {
                             return prev.filter((id) => id !== tag.id)
                           } else {
