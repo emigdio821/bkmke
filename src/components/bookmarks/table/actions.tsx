@@ -1,11 +1,4 @@
-import {
-  IconDotsVertical,
-  IconEdit,
-  IconHeart,
-  IconHeartFilled,
-  IconInfoCircle,
-  IconTrash,
-} from '@tabler/icons-react'
+import { EllipsisVerticalIcon, HeartIcon, InfoIcon, PencilIcon, Trash2Icon } from 'lucide-react'
 import { useState } from 'react'
 import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { deleteBookmark, toggleFavoriteBookmark } from '@/api/server-functions/bookmarks'
@@ -141,9 +134,9 @@ export function BookmarksTableActions({ bookmark }: ActionsProps) {
                 aria-label="Toggle favorite"
               >
                 {bookmark.isFavorite ? (
-                  <IconHeartFilled className="size-4" />
+                  <HeartIcon className="size-4 fill-current" />
                 ) : (
-                  <IconHeart className="size-4" />
+                  <HeartIcon className="size-4" />
                 )}
               </Button>
             }
@@ -157,30 +150,30 @@ export function BookmarksTableActions({ bookmark }: ActionsProps) {
           <DropdownMenuTrigger
             render={
               <Button aria-label="Table actions" size="icon" variant="ghost">
-                <IconDotsVertical className="size-4" />
+                <EllipsisVerticalIcon className="size-4" />
               </Button>
             }
           />
           <DropdownMenuContent align="end" className="max-w-42">
             <DropdownMenuGroup>
-              <DropdownMenuLabel className="wrap-break-word my-1.5 line-clamp-2 py-0">
+              <DropdownMenuLabel className="my-1.5 line-clamp-2 py-0 wrap-break-word">
                 {bookmark.name}
               </DropdownMenuLabel>
 
               <DropdownMenuItem onClick={() => setDetailsDialogOpen(true)}>
-                <IconInfoCircle className="size-4" />
+                <InfoIcon className="size-4" />
                 Details
               </DropdownMenuItem>
 
               <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
-                <IconEdit className="size-4" />
+                <PencilIcon className="size-4" />
                 Edit
               </DropdownMenuItem>
 
               <DropdownMenuSeparator />
 
               <DropdownMenuItem variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
-                <IconTrash className="size-4" />
+                <Trash2Icon className="size-4" />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuGroup>

@@ -1,6 +1,6 @@
-import { IconLogout, IconRefresh, IconSelector, IconSettings } from '@tabler/icons-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
+import { ChevronsUpDownIcon, LogOutIcon, RefreshCwIcon, SettingsIcon } from 'lucide-react'
 import { loggedUserQueryOptions } from '@/api/tanstack-queries/logged-user'
 import {
   DropdownMenu,
@@ -53,7 +53,7 @@ export function NavUser() {
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate font-medium">Refetch profile</span>
         </div>
-        <IconRefresh className="ml-auto size-4" />
+        <RefreshCwIcon className="ml-auto size-4" />
       </SidebarMenuButton>
     )
 
@@ -74,10 +74,10 @@ export function NavUser() {
                   </Avatar>
                   <div>
                     <p className="truncate font-medium">{user.name.split(' ')[0]}</p>
-                    <p className="truncate text-muted-foreground text-xs">{user.email}</p>
+                    <p className="truncate text-xs text-muted-foreground">{user.email}</p>
                   </div>
                 </div>
-                <IconSelector className="ml-auto size-4 text-muted-foreground" />
+                <ChevronsUpDownIcon className="ml-auto size-4 text-muted-foreground" />
               </SidebarMenuButton>
             }
           />
@@ -90,14 +90,14 @@ export function NavUser() {
               <DropdownMenuItem
                 render={
                   <Link to="/settings">
-                    <IconSettings className="size-4" />
+                    <SettingsIcon className="size-4" />
                     Settings
                   </Link>
                 }
               />
 
               <DropdownMenuItem onClick={handleLogOut}>
-                <IconLogout className="size-4" />
+                <LogOutIcon className="size-4" />
                 Logout
               </DropdownMenuItem>
             </DropdownMenuGroup>

@@ -1,11 +1,11 @@
-import type { Icon } from '@tabler/icons-react'
+import type { LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 interface DataTableIconHeaderProps extends ButtonProps {
   tipContent: React.ReactNode
-  icon: React.ReactElement<Icon>
+  icon: React.ReactElement<LucideIcon>
 }
 
 export function DataTableIconHeader({ icon, tipContent, ...buttonProps }: DataTableIconHeaderProps) {

@@ -13,7 +13,7 @@ export function AppHeader() {
       <div className="mx-auto flex w-full items-center gap-2 px-6 md:max-w-xl lg:max-w-5xl xl:max-w-7xl">
         <SidebarTrigger className="-ml-1 sm:-ml-2" />
         <Separator orientation="vertical" className="h-4" />
-        <h1 className="font-medium text-base">{title}</h1>
+        <h1 className="text-base font-medium">{title}</h1>
 
         {!isSettingsPage && (
           <div className="ml-auto">

@@ -1,5 +1,5 @@
 import type { ErrorComponentProps } from '@tanstack/react-router'
-import { IconBug } from '@tabler/icons-react'
+import { BugIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Empty,
@@ -15,11 +15,11 @@ export function DefaultErrorBoundary({ error }: ErrorComponentProps) {
     <Empty>
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <IconBug />
+          <BugIcon />
         </EmptyMedia>
         <EmptyTitle>Error</EmptyTitle>
         <EmptyDescription>
-          <code className="wrap-break-word block max-h-96 w-full overflow-auto rounded-md bg-muted p-2 font-mono text-xs">
+          <code className="block max-h-96 w-full overflow-auto rounded-md bg-muted p-2 font-mono text-xs wrap-break-word">
             {error.message}
           </code>
         </EmptyDescription>

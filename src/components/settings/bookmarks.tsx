@@ -117,7 +117,7 @@ export function BookmarksSettings() {
             >
               <div className="flex flex-col">
                 <p className="text-sm">Assets only</p>
-                <p className="font-normal text-muted-foreground text-sm">
+                <p className="text-sm font-normal text-muted-foreground">
                   Update favicon and preview images only.
                 </p>
               </div>

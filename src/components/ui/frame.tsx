@@ -35,13 +35,13 @@ export function FrameHeader({ className, ...props }: React.ComponentProps<'heade
 }
 
 export function FrameTitle({ className, ...props }: React.ComponentProps<'div'>): React.ReactElement {
-  return <div className={cn('font-semibold text-sm', className)} data-slot="frame-panel-title" {...props} />
+  return <div className={cn('text-sm font-semibold', className)} data-slot="frame-panel-title" {...props} />
 }
 
 export function FrameDescription({ className, ...props }: React.ComponentProps<'div'>): React.ReactElement {
   return (
     <div
-      className={cn('text-muted-foreground text-sm', className)}
+      className={cn('text-sm text-muted-foreground', className)}
       data-slot="frame-panel-description"
       {...props}
     />

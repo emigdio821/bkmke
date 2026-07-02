@@ -1,5 +1,5 @@
-import { IconBookmark, IconFolder, IconInfoCircle, IconSearch, IconTag } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
+import { BookmarkIcon, FolderIcon, InfoIcon, SearchIcon, TagIcon } from 'lucide-react'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useState } from 'react'
 import { bookmarksQueryOptions } from '@/api/tanstack-queries/bookmarks'
@@ -42,7 +42,7 @@ export function HeaderActions() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <InputGroupAddon>
-            <IconSearch className="size-4" />
+            <SearchIcon className="size-4" />
           </InputGroupAddon>
 
           <InputGroupAddon align="inline-end">
@@ -51,7 +51,7 @@ export function HeaderActions() {
                 openOnHover
                 render={<Button aria-label="Password requirements" size="icon-xs" variant="ghost" />}
               >
-                <IconInfoCircle />
+                <InfoIcon />
               </PopoverTrigger>
               <PopoverContent side="top" tooltipStyle>
                 <p>Search by name or description</p>
@@ -66,15 +66,15 @@ export function HeaderActions() {
           <DropdownMenuContent align="end">
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={() => setCreateBookmarkOpen(true)}>
-                <IconBookmark />
+                <BookmarkIcon />
                 Bookmark
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setCreateFolderOpen(true)}>
-                <IconFolder />
+                <FolderIcon />
                 Folder
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setCreateTagOpen(true)}>
-                <IconTag />
+                <TagIcon />
                 Tag
               </DropdownMenuItem>
             </DropdownMenuGroup>

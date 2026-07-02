@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconAlertOctagon } from '@tabler/icons-react'
+import { OctagonAlertIcon } from 'lucide-react'
 import { useId, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -114,7 +114,7 @@ export function LoginFormCard() {
 
           {error && (
             <Alert variant="error">
-              <IconAlertOctagon className="size-4" />
+              <OctagonAlertIcon className="size-4" />
               <AlertTitle>Something went wrong</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>

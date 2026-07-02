@@ -21,8 +21,8 @@ export default defineConfig({
     ],
   },
   sortTailwindcss: {
-    preserveWhitespace: true,
-    stylesheet: './src/app/globals.css',
+    preserveWhitespace: false,
+    stylesheet: './src/styles.css',
     functions: ['clsx', 'cva', 'tw', 'tw.*', 'cn'],
     attributes: ['className', 'iconClassName', 'class'],
   },

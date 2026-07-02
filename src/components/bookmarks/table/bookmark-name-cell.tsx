@@ -1,4 +1,4 @@
-import { IconWorld } from '@tabler/icons-react'
+import { GlobeIcon } from 'lucide-react'
 import { useState } from 'react'
 import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -17,16 +17,16 @@ export function BookmarkNameCell({ bookmark }: BookmarkNameCellProps) {
     <>
       <BookmarkDetailsDialog bookmark={bookmark} open={isSheetOpen} onOpenChange={setIsSheetOpen} />
 
-      <Button variant="plain" className="min-w-0 max-w-full text-left" onClick={() => setIsSheetOpen(true)}>
+      <Button variant="plain" className="max-w-full min-w-0 text-left" onClick={() => setIsSheetOpen(true)}>
         {bookmark.favicon ? (
           <Avatar className="size-4 shrink-0">
             <AvatarImage src={bookmark.favicon} alt={bookmark.name} />
             <AvatarFallback>
-              <IconWorld className="size-4 text-muted-foreground" />
+              <GlobeIcon className="size-4 text-muted-foreground" />
             </AvatarFallback>
           </Avatar>
         ) : (
-          <IconWorld className="size-4 text-muted-foreground" />
+          <GlobeIcon className="size-4 text-muted-foreground" />
         )}
 
         <p

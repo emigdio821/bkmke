@@ -1,5 +1,5 @@
 import type { Column } from '@tanstack/react-table'
-import { IconArrowNarrowDown, IconArrowNarrowUp, IconArrowsSort } from '@tabler/icons-react'
+import { ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -33,9 +33,9 @@ export function DataTableSortableHeader<TData, TValue>({
         <DropdownMenuTrigger
           render={
             <Button variant="ghost" size="sm" className="gap-1">
-              {isAscSorted && <IconArrowNarrowDown className="size-4" />}
-              {isDescSorted && <IconArrowNarrowUp className="size-4" />}
-              {!column.getIsSorted() && <IconArrowsSort className="size-4" />}
+              {isAscSorted && <ArrowDownIcon className="size-4" />}
+              {isDescSorted && <ArrowUpIcon className="size-4" />}
+              {!column.getIsSorted() && <ArrowUpDownIcon className="size-4" />}
               <span className="text-sm">{title}</span>
             </Button>
           }

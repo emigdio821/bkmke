@@ -1,5 +1,5 @@
-import { IconExternalLink, IconFolder, IconTag } from '@tabler/icons-react'
 import { useLocation } from '@tanstack/react-router'
+import { ExternalLinkIcon, FolderIcon, TagIcon } from 'lucide-react'
 import type { Bookmark } from '@/db/schema/zod/bookmarks'
 import { BlurImage } from '@/components/shared/blur-img'
 import { CopyButton } from '@/components/shared/copy-btn'
@@ -48,14 +48,14 @@ export function BookmarkDetailsDialog({
             <div className="space-y-2">
               {bookmark.folder && folderHref && (
                 <div className="flex items-center gap-2">
-                  <IconFolder className="size-4 text-muted-foreground" />
+                  <FolderIcon className="size-4 text-muted-foreground" />
                   <Badge variant="outline">{bookmark.folder.name}</Badge>
                 </div>
               )}
 
               {bookmark.bookmarkTags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                  <IconTag className="size-4 text-muted-foreground" />
+                  <TagIcon className="size-4 text-muted-foreground" />
                   {bookmark.bookmarkTags.map((bt) => {
                     const tagHref: `/tags/${string}` = `/tags/${bt.tag.id}`
                     const isCurrentTag = tagHref === pathname
@@ -93,14 +93,14 @@ export function BookmarkDetailsDialog({
               </div>
             </div>
 
-            <div className="flex justify-between text-muted-foreground text-xs">
+            <div className="flex justify-between text-xs text-muted-foreground">
               <span>Created</span>
               <span className="text-foreground">
                 {formatDate(bookmark.createdAt, { timeStyle: 'short' })}
               </span>
             </div>
 
-            <div className="flex justify-between text-muted-foreground text-xs">
+            <div className="flex justify-between text-xs text-muted-foreground">
               <span>Last updated</span>
               <span className="text-foreground">{formatDate(bookmark.updatedAt)}</span>
             </div>
@@ -110,7 +110,7 @@ export function BookmarkDetailsDialog({
         <DialogFooter>
           <DialogClose render={<Button variant="outline">Close</Button>} />
           <Button onClick={() => window.open(bookmark.url, '_blank')}>
-            <IconExternalLink className="size-4" />
+            <ExternalLinkIcon className="size-4" />
             Open
           </Button>
         </DialogFooter>

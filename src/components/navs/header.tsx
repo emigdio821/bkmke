@@ -1,6 +1,6 @@
-import { IconBookmark, IconHeart } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
+import { BookmarkIcon, HeartIcon } from 'lucide-react'
 import { parseAsBoolean, useQueryStates } from 'nuqs'
 import { bookmarksQueryOptions } from '@/api/tanstack-queries/bookmarks'
 import { appName } from '@/lib/config'
@@ -41,10 +41,10 @@ export function HeaderNav({ ...props }: React.ComponentProps<typeof SidebarGroup
                 </div>
 
                 <div className="grid flex-1 text-left text-sm leading-none">
-                  <span className="truncate font-heading font-semibold text-sidebar-accent-foreground text-sm leading-none">
+                  <span className="truncate font-heading text-sm leading-none font-semibold text-sidebar-accent-foreground">
                     {appName}
                   </span>
-                  <span className="truncate text-sidebar-foreground text-xs">Bookmark manager</span>
+                  <span className="truncate text-xs text-sidebar-foreground">Bookmark manager</span>
                 </div>
               </Link>
             }
@@ -63,7 +63,7 @@ export function HeaderNav({ ...props }: React.ComponentProps<typeof SidebarGroup
               if (isMobile) setOpenMobile(false)
             }}
           >
-            <IconBookmark className="size-4" />
+            <BookmarkIcon className="size-4" />
             <span className="truncate">All bookmarks</span>
           </SidebarMenuButton>
 
@@ -84,7 +84,7 @@ export function HeaderNav({ ...props }: React.ComponentProps<typeof SidebarGroup
               if (isMobile) setOpenMobile(false)
             }}
           >
-            <IconHeart className="size-4" />
+            <HeartIcon className="size-4" />
             <span className="truncate">Favorites</span>
           </SidebarMenuButton>
 

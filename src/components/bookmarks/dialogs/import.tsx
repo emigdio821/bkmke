@@ -1,7 +1,7 @@
 import type React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconUpload } from '@tabler/icons-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { UploadIcon } from 'lucide-react'
 import { useId, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -249,7 +249,7 @@ export function ImportBookmarkDialog({ open, onOpenChange, ...props }: ImportBoo
                             />
                           }
                         >
-                          <IconUpload />
+                          <UploadIcon />
                         </TooltipTrigger>
                         <TooltipContent>Upload .txt file</TooltipContent>
                       </Tooltip>

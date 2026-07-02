@@ -115,7 +115,7 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
       {header && <div>{header(table)}</div>}
 
       <Frame className="w-full">
-        <Table>
+        <Table variant="card">
           {caption && <TableCaption>{caption}</TableCaption>}
 
           <TableHeader>

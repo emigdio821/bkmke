@@ -1,5 +1,5 @@
-import { IconRefresh } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
+import { RefreshCwIcon } from 'lucide-react'
 import { useState } from 'react'
 import { loggedUserQueryOptions } from '@/api/tanstack-queries/logged-user'
 import { getAvatarFallback } from '@/lib/utils'
@@ -30,7 +30,7 @@ export function ProfileSettings() {
         <div className="flex h-12 items-center gap-2">
           <Button variant="outline" onClick={() => refetch()} size="lg">
             Refetch profile
-            <IconRefresh className="ml-auto size-4" />
+            <RefreshCwIcon className="ml-auto size-4" />
           </Button>
         </div>
       )
@@ -43,8 +43,8 @@ export function ProfileSettings() {
           <AvatarFallback>{getAvatarFallback(user.name)}</AvatarFallback>
         </Avatar>
         <div>
-          <p className="font-medium text-base">{user.name}</p>
-          <p className="text-muted-foreground text-sm">{user.email}</p>
+          <p className="text-base font-medium">{user.name}</p>
+          <p className="text-sm text-muted-foreground">{user.email}</p>
         </div>
       </div>
     )

@@ -1,6 +1,6 @@
 import type { Table } from '@tanstack/react-table'
-import { IconFolder, IconHeart, IconTag, IconTrash, IconX } from '@tabler/icons-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { FolderIcon, HeartIcon, TagIcon, Trash2Icon, XIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import type { Bookmark } from '@/db/schema/zod/bookmarks'
@@ -173,22 +173,22 @@ export function BookmarksActionBar({ table }: BookmarksActionBarProps) {
         </p>
 
         <Button size="sm" variant="outline" onClick={() => setToggleFavoriteDialogOpen(true)}>
-          <IconHeart className="size-4" />
+          <HeartIcon className="size-4" />
           Favorite
         </Button>
 
         <Button size="sm" variant="outline" onClick={() => setMoveToFolderDialogOpen(true)}>
-          <IconFolder className="size-4" />
+          <FolderIcon className="size-4" />
           Move
         </Button>
 
         <Button size="sm" variant="outline" onClick={() => setUpdateTagsDialogOpen(true)}>
-          <IconTag className="size-4" />
+          <TagIcon className="size-4" />
           Tag
         </Button>
 
         <Button size="sm" variant="destructive-outline" onClick={() => setDeleteDialogOpen(true)}>
-          <IconTrash className="size-4" />
+          <Trash2Icon className="size-4" />
           Delete
         </Button>
 
@@ -201,7 +201,7 @@ export function BookmarksActionBar({ table }: BookmarksActionBarProps) {
                 aria-label="Clear selection"
                 onClick={() => table.resetRowSelection()}
               >
-                <IconX className="size-4" />
+                <XIcon className="size-4" />
               </Button>
             }
           />

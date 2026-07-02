@@ -28,21 +28,21 @@ export function AppThemeSettings() {
               <Radio value="light" />
               <div className="flex flex-col gap-1">
                 <p>Light</p>
-                <p className="text-muted-foreground text-xs">Use the light theme.</p>
+                <p className="text-xs text-muted-foreground">Use the light theme.</p>
               </div>
             </Label>
             <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
               <Radio value="dark" />
               <div className="flex flex-col gap-1">
                 <p>Dark</p>
-                <p className="text-muted-foreground text-xs">Use the dark theme.</p>
+                <p className="text-xs text-muted-foreground">Use the dark theme.</p>
               </div>
             </Label>
             <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
               <Radio value="system" />
               <div className="flex flex-col gap-1">
                 <p>System</p>
-                <p className="text-muted-foreground text-xs">It follows the system theme.</p>
+                <p className="text-xs text-muted-foreground">It follows the system theme.</p>
               </div>
             </Label>
           </RadioGroup>

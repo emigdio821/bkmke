@@ -1,4 +1,4 @@
-import { IconCheck, IconCopy } from '@tabler/icons-react'
+import { CheckIcon, CopyIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { cn } from '@/lib/utils'
@@ -42,9 +42,9 @@ export function CopyButton(props: CopyButtonProps) {
         }
       >
         {isCopied ? (
-          <IconCheck className={cn('size-4', iconClassName)} />
+          <CheckIcon className={cn('size-4', iconClassName)} />
         ) : (
-          <IconCopy className={cn('size-4', iconClassName)} />
+          <CopyIcon className={cn('size-4', iconClassName)} />
         )}
       </TooltipTrigger>
       <TooltipContent>

@@ -1,5 +1,5 @@
 import type { Table } from '@tanstack/react-table'
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -20,8 +20,8 @@ export const DEFAULT_TABLE_PAGE_SIZE = 10
 export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
   return (
     <>
-      <div className="md:justify-baseline flex w-full items-center justify-start gap-2">
-        <p className="text-muted-foreground text-sm">Viewing</p>
+      <div className="flex w-full items-center justify-start gap-2 md:justify-baseline">
+        <p className="text-sm text-muted-foreground">Viewing</p>
         <Select
           items={Array.from({ length: table.getPageCount() }, (_, i) => {
             const start = i * table.getState().pagination.pageSize + 1
@@ -34,7 +34,7 @@ export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
           }}
           value={table.getState().pagination.pageIndex + 1}
         >
-          <SelectTrigger aria-label="Select result range" className="w-fit min-w-none" size="sm">
+          <SelectTrigger aria-label="Select result range" className="min-w-none w-fit" size="sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -52,7 +52,7 @@ export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <p className="text-muted-foreground text-sm">
+        <p className="text-sm text-muted-foreground">
           of <strong className="font-medium text-foreground">{table.getRowCount()}</strong> results
         </p>
       </div>
@@ -66,7 +66,7 @@ export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
             aria-label="Ir a la página anterior"
             disabled={!table.getCanPreviousPage()}
           >
-            <IconChevronLeft className="size-4" />
+            <ChevronLeftIcon className="size-4" />
           </Button>
 
           <Button
@@ -76,7 +76,7 @@ export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
             aria-label="Ir a la página siguiente"
             disabled={!table.getCanNextPage()}
           >
-            <IconChevronRight className="size-4" />
+            <ChevronRightIcon className="size-4" />
           </Button>
         </div>
       </div>

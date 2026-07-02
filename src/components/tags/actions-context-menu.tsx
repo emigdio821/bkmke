@@ -1,4 +1,4 @@
-import { IconEdit, IconTrash } from '@tabler/icons-react'
+import { PencilIcon, Trash2Icon } from 'lucide-react'
 import { useState } from 'react'
 import type { TagWithBookmarkCount } from '@/db/schema/zod/tags'
 import { deleteTag } from '@/api/server-functions/tags'
@@ -64,11 +64,11 @@ export function TagsActionsCtxMenu({ tag, trigger }: TagsActionsCtxMenuProps) {
           <ContextMenuGroup>
             <ContextMenuGroupLabel>{tag.name}</ContextMenuGroupLabel>
             <ContextMenuItem onClick={() => setEditDialogOpen(true)}>
-              <IconEdit />
+              <PencilIcon />
               Edit
             </ContextMenuItem>
             <ContextMenuItem variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
-              <IconTrash /> Delete
+              <Trash2Icon /> Delete
             </ContextMenuItem>
           </ContextMenuGroup>
         </ContextMenuPopup>

@@ -1,4 +1,4 @@
-import { IconBug } from '@tabler/icons-react'
+import { BugIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Empty,
@@ -22,7 +22,7 @@ export function TSQueryGenericError(props: TSQueryGenericErrorProps) {
     <Empty className="flex-0 rounded-xl bg-muted/72" {...emptyProps}>
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <IconBug />
+          <BugIcon />
         </EmptyMedia>
         <EmptyTitle>{errorTitle}</EmptyTitle>
         <EmptyDescription>{errorDescription}</EmptyDescription>

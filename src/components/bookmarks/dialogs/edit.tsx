@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconInfoCircle } from '@tabler/icons-react'
+import { InfoIcon } from 'lucide-react'
 import { useId } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import type { Bookmark } from '@/db/schema/zod/bookmarks'
@@ -167,7 +167,7 @@ export function EditBookmarkDialog({ bookmark, open, onOpenChange, ...props }: E
                             <Button aria-label="Bookmark name field info" size="icon-xs" variant="ghost" />
                           }
                         >
-                          <IconInfoCircle />
+                          <InfoIcon />
                         </PopoverTrigger>
                         <PopoverContent side="top" tooltipStyle>
                           <p>Leave it empty to use the title from the website metadata</p>
@@ -213,7 +213,7 @@ export function EditBookmarkDialog({ bookmark, open, onOpenChange, ...props }: E
                             />
                           }
                         >
-                          <IconInfoCircle />
+                          <InfoIcon />
                         </PopoverTrigger>
                         <PopoverContent side="top" tooltipStyle>
                           <p>Leave it empty to use the description from the website metadata</p>
@@ -272,12 +272,12 @@ export function EditBookmarkDialog({ bookmark, open, onOpenChange, ...props }: E
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <Label
-                    className="flex items-center gap-6 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50"
+                    className="flex w-full items-center gap-6 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50"
                     htmlFor={field.name}
                   >
                     <div className="flex flex-col">
                       <p className="text-sm">Favorite</p>
-                      <p className="font-normal text-muted-foreground text-sm">
+                      <p className="text-sm font-normal text-muted-foreground">
                         Add this bookmark to the favorites list.
                       </p>
                     </div>

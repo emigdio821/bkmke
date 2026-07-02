@@ -1,6 +1,6 @@
 import type React from 'react'
-import { IconReload, IconSearch, IconSelector } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
+import { ChevronsUpDownIcon, RotateCcwIcon, SearchIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import { tagsQueryOptions } from '@/api/tanstack-queries/tags'
 import { Button } from '@/components/ui/button'
@@ -38,7 +38,7 @@ export function TagsMultiCombobox({ disabled, ...comboboxProps }: TagsComboboxPr
     return (
       <Button variant="outline" onClick={() => refetch()} className="w-full justify-between font-normal">
         Error loading tags. Click to retry.
-        <IconReload className="-me-1!" />
+        <RotateCcwIcon className="-me-1!" />
       </Button>
     )
   }
@@ -69,7 +69,7 @@ export function TagsMultiCombobox({ disabled, ...comboboxProps }: TagsComboboxPr
     <Combobox disabled={tags.length === 0 || disabled} multiple items={items} {...comboboxProps}>
       <ComboboxTrigger render={<Button className="w-full justify-between font-normal" variant="outline" />}>
         <ComboboxValue>{renderValue}</ComboboxValue>
-        <IconSelector className="-me-1!" />
+        <ChevronsUpDownIcon className="-me-1!" />
       </ComboboxTrigger>
       <ComboboxPopup aria-label="Select tags">
         {items.length > 15 && (
@@ -77,7 +77,7 @@ export function TagsMultiCombobox({ disabled, ...comboboxProps }: TagsComboboxPr
             <ComboboxInput
               placeholder="Search"
               showTrigger={false}
-              startAddon={<IconSearch />}
+              startAddon={<SearchIcon />}
               className="rounded-md before:rounded-[calc(var(--radius-md)-1px)]"
             />
           </div>

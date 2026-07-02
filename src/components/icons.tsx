@@ -1,4 +1,4 @@
-import { IconLoader } from '@tabler/icons-react'
+import { LoaderIcon as LucideLoaderIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type IconProps = React.SVGProps<SVGSVGElement>
@@ -23,7 +23,7 @@ export const TaheiIcon = (props: IconProps) => (
 )
 
 export const LoaderIcon = ({ className, ...props }: IconProps) => (
-  <IconLoader className={cn('size-4 animate-spin', className)} {...props} />
+  <LucideLoaderIcon className={cn('size-4 animate-spin', className)} {...props} />
 )
 
 export const IndeterminateIcon = (props: IconProps) => (

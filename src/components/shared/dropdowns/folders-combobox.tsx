@@ -1,6 +1,6 @@
 import type React from 'react'
-import { IconChevronRight, IconReload, IconSearch, IconSelector } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
+import { ChevronRightIcon, ChevronsUpDownIcon, RotateCcwIcon, SearchIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import type { FolderTreeNode } from '@/api/server-functions/folders'
 import { foldersQueryOptions } from '@/api/tanstack-queries/folders'
@@ -64,8 +64,8 @@ function buildFolderDisplayName(folder: FlatFolder): React.ReactNode {
   if (folder.path.length === 1) {
     return (
       <span className="flex items-center gap-1 truncate">
-        <span className="text-muted-foreground text-xs">{folder.path[0]}</span>
-        <IconChevronRight className="size-3 text-muted-foreground" />
+        <span className="text-xs text-muted-foreground">{folder.path[0]}</span>
+        <ChevronRightIcon className="size-3 text-muted-foreground" />
         <span className="text-sm">{folder.name}</span>
       </span>
     )
@@ -73,10 +73,10 @@ function buildFolderDisplayName(folder: FlatFolder): React.ReactNode {
 
   return (
     <span className="flex items-center gap-1">
-      <span className="text-muted-foreground text-xs">{folder.path[0]}</span>
-      <IconChevronRight className="size-3 text-muted-foreground" />
-      <span className="text-muted-foreground text-xs">...</span>
-      <IconChevronRight className="size-3 text-muted-foreground" />
+      <span className="text-xs text-muted-foreground">{folder.path[0]}</span>
+      <ChevronRightIcon className="size-3 text-muted-foreground" />
+      <span className="text-xs text-muted-foreground">...</span>
+      <ChevronRightIcon className="size-3 text-muted-foreground" />
       <span className="text-sm">{folder.name}</span>
     </span>
   )
@@ -111,7 +111,7 @@ export function FoldersCombobox({
     return (
       <Button variant="outline" onClick={() => refetch()} className="w-full justify-between font-normal">
         Error loading folders. Click to retry.
-        <IconReload className="-me-1!" />
+        <RotateCcwIcon className="-me-1!" />
       </Button>
     )
   }
@@ -141,7 +141,7 @@ export function FoldersCombobox({
     <Combobox disabled={items.length === 0 || disabled} items={items} {...comboboxProps}>
       <ComboboxTrigger render={<Button className="w-full justify-between font-normal" variant="outline" />}>
         <ComboboxValue>{renderValue}</ComboboxValue>
-        <IconSelector className="-me-1!" />
+        <ChevronsUpDownIcon className="-me-1!" />
       </ComboboxTrigger>
       <ComboboxPopup aria-label={NULL_OPTION_LABEL} className="max-w-(--anchor-width)">
         {items.length > 15 && (
@@ -149,7 +149,7 @@ export function FoldersCombobox({
             <ComboboxInput
               placeholder="Search"
               showTrigger={false}
-              startAddon={<IconSearch />}
+              startAddon={<SearchIcon />}
               className="rounded-md before:rounded-[calc(var(--radius-md)-1px)]"
             />
           </div>

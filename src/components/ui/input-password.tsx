@@ -1,4 +1,4 @@
-import { IconEye, IconEyeOff } from '@tabler/icons-react'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useState } from 'react'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -30,7 +30,7 @@ export function InputPassword(props: InputProps) {
               />
             }
           >
-            {showPassword ? <IconEyeOff /> : <IconEye />}
+            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
           </TooltipTrigger>
           <TooltipContent>{showPassword ? 'Hide password' : 'Show password'}</TooltipContent>
         </Tooltip>

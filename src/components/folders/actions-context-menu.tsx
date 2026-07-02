@@ -1,4 +1,4 @@
-import { IconEdit, IconTrash } from '@tabler/icons-react'
+import { PencilIcon, Trash2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { deleteFolder, type FolderTreeNode } from '@/api/server-functions/folders'
 import { FOLDERS_QUERY_KEY } from '@/api/tanstack-queries/folders'
@@ -63,11 +63,11 @@ export function FolderActionsCtxMenu({ folder, trigger }: ActionsProps) {
           <ContextMenuGroup>
             <ContextMenuGroupLabel>{folder.name}</ContextMenuGroupLabel>
             <ContextMenuItem onClick={() => setEditDialogOpen(true)}>
-              <IconEdit />
+              <PencilIcon />
               Edit
             </ContextMenuItem>
             <ContextMenuItem variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
-              <IconTrash /> Delete
+              <Trash2Icon /> Delete
             </ContextMenuItem>
           </ContextMenuGroup>
         </ContextMenuPopup>

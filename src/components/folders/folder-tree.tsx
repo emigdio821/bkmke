@@ -1,4 +1,4 @@
-import { IconChevronRight, IconFolder } from '@tabler/icons-react'
+import { ChevronRightIcon, FolderIcon } from 'lucide-react'
 import { parseAsString, useQueryState } from 'nuqs'
 import type { FolderTreeNode } from '@/api/server-functions/folders'
 import { cn } from '@/lib/utils'
@@ -35,7 +35,7 @@ export function FolderTree({ folder }: { folder: FolderTreeNode }) {
                 await setSelectedFolder((prev) => (prev === folder.id ? '' : folder.id))
               }}
             >
-              <IconFolder />
+              <FolderIcon />
               <span className="truncate">{folder.name}</span>
             </SidebarMenuButton>
 
@@ -57,7 +57,7 @@ export function FolderTree({ folder }: { folder: FolderTreeNode }) {
             <CollapsibleTrigger
               render={
                 <SidebarMenuAction className="left-1 text-sidebar-accent-foreground aria-expanded:[&_svg]:rotate-90">
-                  <IconChevronRight className="size-4 transition-transform" />
+                  <ChevronRightIcon className="size-4 transition-transform" />
                 </SidebarMenuAction>
               }
             />
