@@ -89,7 +89,7 @@ export function BookmarkDetailsDialog({
               <span className="text-muted-foreground">URL</span>
               <div className="flex items-center gap-1.5">
                 <span>{simplifiedURL(bookmark.url)}</span>
-                <CopyButton size="icon-xs" variant="plain" value={bookmark.url} tooltipText="Copy full URL" />
+                <CopyButton size="icon-xs" variant="ghost" value={bookmark.url} tooltipText="Copy full URL" />
               </div>
             </div>
 
